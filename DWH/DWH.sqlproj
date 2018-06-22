@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DWH</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{093abd4e-ab16-4f98-8b6f-5d45cd4ab6bd}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>DWH</RootNamespace>
+    <AssemblyName>DWH</AssemblyName>
+    <ModelCollation>1033,CS</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CS_AS</DefaultCollation>
+    <Recovery>SIMPLE</Recovery>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="WEB\" />
+    <Folder Include="WEB\Tables\" />
+    <Folder Include="TRANS\" />
+    <Folder Include="TRANS\Tables\" />
+    <Folder Include="TPX7\" />
+    <Folder Include="TPX7\Tables\" />
+    <Folder Include="SCHAEFER\" />
+    <Folder Include="SCHAEFER\Tables\" />
+    <Folder Include="MANH\" />
+    <Folder Include="MANH\Tables\" />
+    <Folder Include="KEWILL\" />
+    <Folder Include="KEWILL\Tables\" />
+    <Folder Include="IFS\" />
+    <Folder Include="IFS\Tables\" />
+    <Folder Include="FORECAST\" />
+    <Folder Include="FORECAST\Tables\" />
+    <Folder Include="EXTRA\" />
+    <Folder Include="EXTRA\Tables\" />
+    <Folder Include="DOC\" />
+    <Folder Include="DOC\Tables\" />
+    <Folder Include="ATIMO\" />
+    <Folder Include="ATIMO\Tables\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="FDV\" />
+    <Folder Include="FDV\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="WEB\Tables\Pickers.sql" />
+    <Build Include="WEB\Tables\OF_Issues.sql" />
+    <Build Include="WEB\Tables\Transporter_Manual.sql" />
+    <Build Include="WEB\Tables\Messages.sql" />
+    <Build Include="WEB\Tables\Holiday.sql" />
+    <Build Include="WEB\Tables\QAScansBI.sql" />
+    <Build Include="WEB\Tables\Pallet_ForeCast.sql" />
+    <Build Include="WEB\Tables\ActiveDirectoryUsers.sql" />
+    <Build Include="WEB\Tables\ActiveDirectoryObjectsUsers.sql" />
+    <Build Include="WEB\Tables\ActiveDirectoryObjects.sql" />
+    <Build Include="WEB\Tables\Transporter_URL.sql" />
+    <Build Include="WEB\Tables\Transporter_Status.sql" />
+    <Build Include="WEB\Tables\Complaints.sql" />
+    <Build Include="WEB\Tables\Customer.sql" />
+    <Build Include="WEB\Tables\Sensor.sql" />
+    <Build Include="TRANS\Tables\INCOTERM.sql" />
+    <Build Include="TRANS\Tables\HUB_SERVICE.sql" />
+    <Build Include="TRANS\Tables\HUB_INTERFACE.sql" />
+    <Build Include="TRANS\Tables\HUB_FORWARDER_RANGE.sql" />
+    <Build Include="TRANS\Tables\HUB_FORWARDER.sql" />
+    <Build Include="TRANS\Tables\HUB_DSN.sql" />
+    <Build Include="TRANS\Tables\FTP_FILE.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS_SUBCATEGORY.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS_RUN.sql" />
+    <Build Include="TRANS\Tables\PN_UPD_LOOKUP.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS.sql" />
+    <Build Include="TRANS\Tables\KIALA_DEPOT_ZIP.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS_FILE.sql" />
+    <Build Include="TRANS\Tables\KIALA_DEPOT_OLD_2.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS_CODE.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_STATUS_CATEGORY.sql" />
+    <Build Include="TRANS\Tables\ADDRESS.sql" />
+    <Build Include="TRANS\Tables\FORWARDER_POD.sql" />
+    <Build Include="TRANS\Tables\FORWARDER.sql" />
+    <Build Include="TRANS\Tables\FD_FORWARDER.sql" />
+    <Build Include="TRANS\Tables\EDI_SHIPMENT.sql" />
+    <Build Include="TRANS\Tables\EDI_INFO.sql" />
+    <Build Include="TRANS\Tables\EDI.sql" />
+    <Build Include="TRANS\Tables\DSN.sql" />
+    <Build Include="TRANS\Tables\DPD_SERVICE_LOOKUP.sql" />
+    <Build Include="TRANS\Tables\DPD_SERVICE.sql" />
+    <Build Include="TRANS\Tables\DPD_ROUTE.sql" />
+    <Build Include="TRANS\Tables\DPD_META_DATA.sql" />
+    <Build Include="TRANS\Tables\DPD_DEPOT.sql" />
+    <Build Include="TRANS\Tables\DPD_COUNTRY.sql" />
+    <Build Include="TRANS\Tables\DHL_DESTINATION.sql" />
+    <Build Include="TRANS\Tables\DEBUG.sql" />
+    <Build Include="TRANS\Tables\CUSTOMS_DOCUMENT.sql" />
+    <Build Include="TRANS\Tables\COUNTRY_EXT.sql" />
+    <Build Include="TRANS\Tables\COUNTRY.sql" />
+    <Build Include="TRANS\Tables\CONSIGNMENT_RANGE.sql" />
+    <Build Include="TRANS\Tables\CONNOTE.sql" />
+    <Build Include="TRANS\Tables\CONFIG_KEY.sql" />
+    <Build Include="TRANS\Tables\CONFIG.sql" />
+    <Build Include="TRANS\Tables\CATEGORY.sql" />
+    <Build Include="TRANS\Tables\CARGO_LIST.sql" />
+    <Build Include="TRANS\Tables\CARGO_ITEM.sql" />
+    <Build Include="TRANS\Tables\BRING_FORWARDER_REF.sql" />
+    <Build Include="TRANS\Tables\XML_INVOICE.sql" />
+    <Build Include="TRANS\Tables\XML_FILE_SHIPMENT.sql" />
+    <Build Include="TRANS\Tables\XML_FILE_SHIP_CONFIRM.sql" />
+    <Build Include="TRANS\Tables\TX_PROC.sql" />
+    <Build Include="TRANS\Tables\SHIPMENT_LINE.sql" />
+    <Build Include="TRANS\Tables\SHIPMENT_CONSOLIDATED.sql" />
+    <Build Include="TRANS\Tables\SHIPMENT_AUX.sql" />
+    <Build Include="TRANS\Tables\SHIPMENT.sql" />
+    <Build Include="TRANS\Tables\SHIP_CONFIRM_OLPN.sql" />
+    <Build Include="TRANS\Tables\PROJECT.sql" />
+    <Build Include="TRANS\Tables\PRODUCT.sql" />
+    <Build Include="TRANS\Tables\PRINTER_LOOKUP.sql" />
+    <Build Include="TRANS\Tables\POSTNORD_DEPOT_ZIP.sql" />
+    <Build Include="TRANS\Tables\POSTNORD_DEPOT.sql" />
+    <Build Include="TRANS\Tables\OUTPUT_COMMAND.sql" />
+    <Build Include="TRANS\Tables\OLPN_LOOKUP.sql" />
+    <Build Include="TRANS\Tables\MANIFEST.sql" />
+    <Build Include="TRANS\Tables\LABEL_REPRINT.sql" />
+    <Build Include="TRANS\Tables\LABEL.sql" />
+    <Build Include="TRANS\Tables\KIALA_DEPOT_OLD.sql" />
+    <Build Include="TRANS\Tables\KIALA_DEPOT.sql" />
+    <Build Include="TRANS\Tables\INFO_ENTRY_FILE.sql" />
+    <Build Include="TRANS\Tables\INFO_ENTRY.sql" />
+    <Build Include="TPX7\Tables\VW_SHIPMENT_PACKAGE.sql" />
+    <Build Include="TPX7\Tables\VW_SHIPMENT_EVENT.sql" />
+    <Build Include="TPX7\Tables\VW_SHIPMENT.sql" />
+    <Build Include="TPX7\Tables\VW_FORWARDER_STATUS.sql" />
+    <Build Include="TPX7\Tables\VW_FORWARDER_EVENT.sql" />
+    <Build Include="TPX7\Tables\VW_FORWARDER.sql" />
+    <Build Include="SCHAEFER\Tables\UserStatistic.sql" />
+    <Build Include="SCHAEFER\Tables\Repack.sql" />
+    <Build Include="MANH\Tables\ITEM_CBO.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS_LINE_STATUS.sql" />
+    <Build Include="MANH\Tables\INVN_VARI_HDR.sql" />
+    <Build Include="MANH\Tables\INVN_NEED_TYPE.sql" />
+    <Build Include="MANH\Tables\POSTCODES.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENTS.sql" />
+    <Build Include="MANH\Tables\POSTCODE.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENT_TYPE.sql" />
+    <Build Include="MANH\Tables\PKT_CONSOL_ATTR_SUMM.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENT_STATUS.sql" />
+    <Build Include="MANH\Tables\PIX_TRAN_CODE_DTL.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENT_OBJECTS.sql" />
+    <Build Include="MANH\Tables\PIX_REF_GRP_MASTER.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\PIX_REF_CODE_MASTER.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\PARAM_GROUP.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_CONFIG.sql" />
+    <Build Include="MANH\Tables\OUTPT_ORDERS.sql" />
+    <Build Include="MANH\Tables\DO_TYPE.sql" />
+    <Build Include="MANH\Tables\OUTPT_ORDER_LINE_ITEM.sql" />
+    <Build Include="MANH\Tables\DO_STATUS.sql" />
+    <Build Include="MANH\Tables\OUTPT_LPN_DETAIL.sql" />
+    <Build Include="MANH\Tables\CNT_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\OUTPT_LPN.sql" />
+    <Build Include="MANH\Tables\CNT_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\ORDER_WMS_STATUS.sql" />
+    <Build Include="MANH\Tables\BATCH_MASTER.sql" />
+    <Build Include="MANH\Tables\MSG_TYPE.sql" />
+    <Build Include="MANH\Tables\ASN_TYPE.sql" />
+    <Build Include="MANH\Tables\MSG_LOG.sql" />
+    <Build Include="MANH\Tables\ASN_STATUS.sql" />
+    <Build Include="MANH\Tables\MOVE_TYPE.sql" />
+    <Build Include="MANH\Tables\ASN_DETAIL.sql" />
+    <Build Include="MANH\Tables\MOVEMENT_TYPE.sql" />
+    <Build Include="MANH\Tables\ASN.sql" />
+    <Build Include="MANH\Tables\LRF_EVENT_HISTORY.sql" />
+    <Build Include="MANH\Tables\APPOINTMENT_TYPE.sql" />
+    <Build Include="MANH\Tables\LRF_EVENT.sql" />
+    <Build Include="MANH\Tables\ALLOC_PARM.sql" />
+    <Build Include="MANH\Tables\LPN_STATUS.sql" />
+    <Build Include="MANH\Tables\ALLOC_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\LPN_MOVEMENT.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_CMNT.sql" />
+    <Build Include="MANH\Tables\USER_TYPE.sql" />
+    <Build Include="MANH\Tables\LOCN_WIZ_HDR.sql" />
+    <Build Include="MANH\Tables\PKT_HDR.sql" />
+    <Build Include="MANH\Tables\LPN_INBOUND.sql" />
+    <Build Include="MANH\Tables\UN_NUMBER.sql" />
+    <Build Include="MANH\Tables\LOCN_WIZ_DTL.sql" />
+    <Build Include="MANH\Tables\PKT_DTL.sql" />
+    <Build Include="MANH\Tables\LPN_OUTBOUND.sql" />
+    <Build Include="MANH\Tables\UCL_USER.sql" />
+    <Build Include="MANH\Tables\LABEL_DISPLAY.sql" />
+    <Build Include="MANH\Tables\PKT_CONSOL_LOCN.sql" />
+    <Build Include="MANH\Tables\SYS_CODE_TYPE.sql" />
+    <Build Include="MANH\Tables\LABEL.sql" />
+    <Build Include="MANH\Tables\ITEM_FACILITY_MAPPING_WMS.sql" />
+    <Build Include="MANH\Tables\SYS_CODE_PARM.sql" />
+    <Build Include="MANH\Tables\ILM_YARD_ACTIVITY.sql" />
+    <Build Include="MANH\Tables\FACILITY_CONTACT.sql" />
+    <Build Include="MANH\Tables\STATE_PROV.sql" />
+    <Build Include="MANH\Tables\CNTR_TYPE.sql" />
+    <Build Include="MANH\Tables\ER_USER_TASK_GRP.sql" />
+    <Build Include="MANH\Tables\SYS_CODE.sql" />
+    <Build Include="MANH\Tables\ILM_TASK_TYPES.sql" />
+    <Build Include="MANH\Tables\ER_USER_PROFILE.sql" />
+    <Build Include="MANH\Tables\SERVICE_LEVEL.sql" />
+    <Build Include="MANH\Tables\CL_MESSAGE_STATUS.sql" />
+    <Build Include="MANH\Tables\ER_USER_NAVIGATION.sql" />
+    <Build Include="MANH\Tables\SIZE_UOM.sql" />
+    <Build Include="MANH\Tables\ILM_TASK_STATUS.sql" />
+    <Build Include="MANH\Tables\ER_RESV_LOCN_HDR.sql" />
+    <Build Include="MANH\Tables\LRF_PRINT_STATUS.sql" />
+    <Build Include="MANH\Tables\CL_MESSAGE.sql" />
+    <Build Include="MANH\Tables\SHIP_VIA.sql" />
+    <Build Include="MANH\Tables\ILM_TASKS.sql" />
+    <Build Include="MANH\Tables\ER_ITEM_FACILITY_MAPPING_WMS.sql" />
+    <Build Include="MANH\Tables\FACILITY_TYPE.sql" />
+    <Build Include="MANH\Tables\CD_SYS_CODE.sql" />
+    <Build Include="MANH\Tables\ER_ITEM_CBO.sql" />
+    <Build Include="MANH\Tables\LOCN_HDR.sql" />
+    <Build Include="MANH\Tables\ILM_TASK_EVENTS.sql" />
+    <Build Include="MANH\Tables\EQUIPMENT_TYPE.sql" />
+    <Build Include="MANH\Tables\COUNTRY.sql" />
+    <Build Include="MANH\Tables\LOCALE.sql" />
+    <Build Include="MANH\Tables\EVENT_PARM.sql" />
+    <Build Include="MANH\Tables\CARRIER_TYPE.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_DTL.sql" />
+    <Build Include="MANH\Tables\LANGUAGE.sql" />
+    <Build Include="MANH\Tables\EVENT_MESSAGE_HISTORY.sql" />
+    <Build Include="MANH\Tables\WAVE_WORK_TYPE_STATS.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_HDR.sql" />
+    <Build Include="MANH\Tables\ILM_STATUS.sql" />
+    <Build Include="MANH\Tables\EVENT_MESSAGE.sql" />
+    <Build Include="MANH\Tables\WAVE_TASK_CRIT.sql" />
+    <Build Include="MANH\Tables\FACILITY_ALIAS.sql" />
+    <Build Include="MANH\Tables\DO_WMPROCESSINFO.sql" />
+    <Build Include="MANH\Tables\WAVE_RULE_PARM.sql" />
+    <Build Include="MANH\Tables\FACILITY.sql" />
+    <Build Include="MANH\Tables\DOCK_DOOR_REF.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_WORK_ORD_BKP.sql" />
+    <Build Include="MANH\Tables\EQUIPMENT.sql" />
+    <Build Include="MANH\Tables\CUSTOM_FIELD.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_WORK_ORD.sql" />
+    <Build Include="MANH\Tables\DOCK_DOOR.sql" />
+    <Build Include="MANH\Tables\CONS_RUN_DTL.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_PKT_BKP.sql" />
+    <Build Include="MANH\Tables\DOCK.sql" />
+    <Build Include="MANH\Tables\DIVRT_HIST.sql" />
+    <Build Include="MANH\Tables\CONS_RUN.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_PKT.sql" />
+    <Build Include="MANH\Tables\COMPANY.sql" />
+    <Build Include="MANH\Tables\CL_ENDPOINT_QUEUE.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_BKP.sql" />
+    <Build Include="MANH\Tables\CARRIER_CODE.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_WORK_ORD.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_STAT.sql" />
+    <Build Include="MANH\Tables\TRAN_PARM.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_SHIP.sql" />
+    <Build Include="MANH\Tables\TRAN_MASTER_PARM.sql" />
+    <Build Include="MANH\Tables\TRAN_MASTER.sql" />
+    <Build Include="MANH\Tables\WM_INVENTORY.sql" />
+    <Build Include="MANH\Tables\WHSE_SYS_CODE.sql" />
+    <Build Include="MANH\Tables\WAVE_PARM.sql" />
+    <Build Include="MANH\Tables\TRAN_LOG.sql" />
+    <Build Include="MANH\Tables\TASK_HDR.sql" />
+    <Build Include="MANH\Tables\TASK_RULE_PARM.sql" />
+    <Build Include="MANH\Tables\TASK_DTL.sql" />
+    <Build Include="MANH\Tables\TASK_PRT_SORT_DTL.sql" />
+    <Build Include="MANH\Tables\SHIPMENT_TYPE.sql" />
+    <Build Include="MANH\Tables\PICK_LOCN_HDR.sql" />
+    <Build Include="MANH\Tables\TASK_PARM.sql" />
+    <Build Include="MANH\Tables\SHIPMENT_STATUS.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS_LINE_ITEM.sql" />
+    <Build Include="MANH\Tables\PICK_LOCN_DTL.sql" />
+    <Build Include="MANH\Tables\STOP.sql" />
+    <Build Include="MANH\Tables\SHIPMENT.sql" />
+    <Build Include="MANH\Tables\SIZE_DESC.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS.sql" />
+    <Build Include="MANH\Tables\SHIP_WAVE_PARM.sql" />
+    <Build Include="MANH\Tables\PROD_TRKG_TRAN.sql" />
+    <Build Include="MANH\Tables\SHIPMENT_WMS_STATUS.sql" />
+    <Build Include="MANH\Tables\PIX_TRAN_CODE.sql" />
+    <Build Include="MANH\Tables\SHIPMENT_EVENT.sql" />
+    <Build Include="MANH\Tables\PIX_TRAN.sql" />
+    <Build Include="MANH\Tables\SHIPMENT_COMMODITY.sql" />
+    <Build Include="MANH\Tables\PHYS_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\RULE_SORT_DTL.sql" />
+    <Build Include="MANH\Tables\RULE_SEL_DTL.sql" />
+    <Build Include="MANH\Tables\ORDER_NOTE.sql" />
+    <Build Include="MANH\Tables\RULE_HDR.sql" />
+    <Build Include="MANH\Tables\ER_LPN_LOCK.sql" />
+    <Build Include="MANH\Tables\ORDER_LINE_ITEM.sql" />
+    <Build Include="MANH\Tables\RULE_COLM_REF.sql" />
+    <Build Include="MANH\Tables\LPN_LOCK.sql" />
+    <Build Include="MANH\Tables\RESV_LOCN_HDR.sql" />
+    <Build Include="MANH\Tables\LPN_FACILITY_STATUS.sql" />
+    <Build Include="MANH\Tables\PUTWY_ZONE_PRTY.sql" />
+    <Build Include="MANH\Tables\LPN_DETAIL.sql" />
+    <Build Include="MANH\Tables\PUTWY_ZONE_ITEM.sql" />
+    <Build Include="MANH\Tables\PUTWY_TYPE_PRTY.sql" />
+    <Build Include="MANH\Tables\LOCN_GRP.sql" />
+    <Build Include="MANH\Tables\ORDERS.sql" />
+    <Build Include="MANH\Tables\PUTWY_METHOD_PRTY.sql" />
+    <Build Include="MANH\Tables\ITEM_WMS.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS_TYPE.sql" />
+    <Build Include="MANH\Tables\ITEM_PACKAGE_CBO.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS_STATUS.sql" />
+    <Build Include="KEWILL\Tables\tseecb.sql" />
+    <Build Include="KEWILL\Tables\vrpalo.sql" />
+    <Build Include="KEWILL\Tables\vrfvrd.sql" />
+    <Build Include="KEWILL\Tables\vrdloc.sql" />
+    <Build Include="KEWILL\Tables\vrarst.sql" />
+    <Build Include="KEWILL\Tables\vrarsf.sql" />
+    <Build Include="KEWILL\Tables\tsvvdo.sql" />
+    <Build Include="KEWILL\Tables\tspakm.sql" />
+    <Build Include="KEWILL\Tables\tsmopd.sql" />
+    <Build Include="KEWILL\Tables\tsloth.sql" />
+    <Build Include="KEWILL\Tables\tsfire.sql" />
+    <Build Include="KEWILL\Tables\tsdsmd.sql" />
+    <Build Include="KEWILL\Tables\tsdnaw.sql" />
+    <Build Include="KEWILL\Tables\tsccpc.sql" />
+    <Build Include="KEWILL\Tables\tsartc.sql" />
+    <Build Include="KEWILL\Tables\partyn.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_UNIT_COST_SUM.sql" />
+    <Build Include="FORECAST\Tables\Realize_Sales.sql" />
+    <Build Include="FORECAST\Tables\Office_Facility.sql" />
+    <Build Include="FORECAST\Tables\ComboPack.sql" />
+    <Build Include="EXTRA\Tables\CUSTOMER.sql" />
+    <Build Include="EXTRA\Tables\CL_MESSAGE_PLUS.sql" />
+    <Build Include="DOC\Tables\Documents.sql" />
+    <Build Include="ATIMO\Tables\timewize.sql" />
+    <Build Include="ATIMO\Tables\emplstam.sql" />
+    <Build Include="ATIMO\Tables\hourtypes.sql" />
+    <Build Include="ATIMO\Tables\costcenters.sql" />
+    <Build Include="dbo\Views\VW_T_LPN.sql" />
+    <Build Include="dbo\Views\VW_ODS_Shipment.sql" />
+    <Build Include="dbo\Views\VW_ODS_ParcelDetail.sql" />
+    <Build Include="dbo\Views\VW_ODS_Parcel.sql" />
+    <Build Include="dbo\Views\VW_ODS_Order.sql" />
+    <Build Include="dbo\Views\VW_ODS_Item.sql" />
+    <Build Include="dbo\Views\VW_F_Time_Registration.sql" />
+    <Build Include="dbo\Views\VW_F_Stock_Act.sql" />
+    <Build Include="dbo\Views\VW_F_Stock.sql" />
+    <Build Include="dbo\Views\VW_F_Parcel_Status.sql" />
+    <Build Include="dbo\Views\VW_F_Paid_Productivity.sql" />
+    <Build Include="dbo\Views\VW_F_Outbound.sql" />
+    <Build Include="dbo\Views\VW_F_OF_Productivity.sql" />
+    <Build Include="dbo\Views\VW_F_OF_Activity.sql" />
+    <Build Include="dbo\Views\VW_F_OF.sql" />
+    <Build Include="dbo\Views\VW_D_WHS_Location.sql" />
+    <Build Include="dbo\Views\VW_D_Transporter.sql" />
+    <Build Include="dbo\Views\VW_D_SKU.sql" />
+    <Build Include="dbo\Views\VW_D_Shipment.sql" />
+    <Build Include="dbo\Views\VW_D_Sensor.sql" />
+    <Build Include="dbo\Views\VW_D_Pickers.sql" />
+    <Build Include="dbo\Views\VW_D_Order_Type.sql" />
+    <Build Include="dbo\Views\VW_D_Order.sql" />
+    <Build Include="dbo\Views\VW_D_OLPN.sql" />
+    <Build Include="dbo\Views\VW_D_OF_Issues.sql" />
+    <Build Include="dbo\Views\VW_D_OF_Complaints.sql" />
+    <Build Include="dbo\Views\VW_D_Lot.sql" />
+    <Build Include="dbo\Views\VW_D_Lane.sql" />
+    <Build Include="dbo\Views\VW_D_ILPN.sql" />
+    <Build Include="dbo\Views\VW_D_HourType.sql" />
+    <Build Include="dbo\Views\VW_D_ForeCast_Sales.sql" />
+    <Build Include="dbo\Views\VW_D_ForeCast_Combo.sql" />
+    <Build Include="dbo\Views\VW_D_Facility.sql" />
+    <Build Include="dbo\Views\VW_D_Employee.sql" />
+    <Build Include="dbo\Views\VW_D_Department.sql" />
+    <Build Include="dbo\Views\VW_D_Cycle_Count.sql" />
+    <Build Include="dbo\Views\VW_D_Customer.sql" />
+    <Build Include="dbo\Views\VW_D_Country.sql" />
+    <Build Include="dbo\Views\VW_D_Calendar.sql" />
+    <Build Include="dbo\Views\VW_D_Aging_Category.sql" />
+    <Build Include="dbo\Views\VW_D_ActivityType.sql" />
+    <Build Include="dbo\Views\VW_C_ParcelDetail.sql" />
+    <Build Include="dbo\Views\VW_C_Parcel.sql" />
+    <Build Include="dbo\Views\VW_C_Order.sql" />
+    <Build Include="dbo\Views\VW_C_Item.sql" />
+    <Build Include="dbo\Views\CUSTOMER.sql" />
+    <Build Include="dbo\Functions\fn_StripCharacters.sql" />
+    <Build Include="dbo\Functions\Fun_F_Order_Tracking.sql" />
+    <Build Include="dbo\Functions\Fun_D_Calendar.sql" />
+    <Build Include="dbo\Functions\Fun_D_Aging_Category.sql" />
+    <Build Include="Security\WEB.sql" />
+    <Build Include="Security\TRANS.sql" />
+    <Build Include="Security\TPX7.sql" />
+    <Build Include="Security\SCHAEFER.sql" />
+    <Build Include="Security\MANH.sql" />
+    <Build Include="Security\KEWILL.sql" />
+    <Build Include="Security\IFS.sql" />
+    <Build Include="Security\FORECAST.sql" />
+    <Build Include="Security\EXTRA.sql" />
+    <Build Include="Security\DOC.sql" />
+    <Build Include="Security\ATIMO.sql" />
+    <Build Include="MANH\Tables\LPN_NOTES.sql" />
+    <Build Include="EXTRA\Tables\ORDERS_SHIP_DATE.sql" />
+    <Build Include="DOC\Tables\PlanetPress.sql" />
+    <Build Include="dbo\Views\VW_ODS_Facility.sql" />
+    <Build Include="FDV\Views\VW_D_Country.sql" />
+    <Build Include="FDV\Views\VW_D_Calendar.sql" />
+    <Build Include="FDV\Views\VW_F_OF_Activity.sql" />
+    <Build Include="FDV\Views\VW_D_Pickers.sql" />
+    <Build Include="FDV\Views\VW_D_Lane.sql" />
+    <Build Include="FDV\Views\VW_D_OLPN.sql" />
+    <Build Include="FDV\Views\VW_D_Customer.sql" />
+    <Build Include="FDV\Views\VW_D_Lot.sql" />
+    <Build Include="FDV\Views\VW_D_ILPN.sql" />
+    <Build Include="FDV\Views\VW_D_Aging_Category.sql" />
+    <Build Include="FDV\Views\VW_F_Stock_Act.sql" />
+    <Build Include="FDV\Views\VW_D_SKU.sql" />
+    <Build Include="FDV\Views\VW_D_WHS_Location.sql" />
+    <Build Include="FDV\Views\VW_D_Order.sql" />
+    <Build Include="FDV\Views\VW_D_Transporter.sql" />
+    <Build Include="Security\FDV.sql" />
+    <Build Include="Security\FOREVERDIRECT_DWHFDDATADEVSA.sql" />
+    <Build Include="Security\FOREVERDIRECT_DWHDataDEVSA.sql" />
+    <Build Include="Security\FOREVERDIRECT_BI DEV TEAM.sql" />
+    <Build Include="WEB\Tables\QAScansPackingIssues.sql" />
+    <Build Include="EXTRA\Tables\ORDERS_INFO.sql" />
+    <Build Include="IFS\Tables\SALES_PART.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_ORDER_LINE.sql" />
+    <Build Include="MANH\Tables\ROLE.sql" />
+    <Build Include="MANH\Tables\ASN_POC_DETAIL.sql" />
+    <Build Include="MANH\Tables\ASN_POC.sql" />
+    <Build Include="MANH\Tables\ACCESS_CONTROL.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_OPERATION.sql" />
+    <Build Include="IFS\Tables\SHOP_ORD.sql" />
+    <Build Include="IFS\Tables\SHOP_MATERIAL_ALLOC.sql" />
+    <Build Include="IFS\Tables\MANUF_STRUCTURE_HEAD.sql" />
+    <Build Include="IFS\Tables\MANUF_STRUCTURE.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_ORDER.sql" />
+    <Build Include="IFS\Tables\MATERIAL_HISTORY.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PRODUCT_FAMILY.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_IN_STOCK.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART.sql" />
+    <Build Include="IFS\Tables\INTFACE_CONV_LIST_COLS.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Datamart\Datamart.sqlproj">
+      <Name>Datamart</Name>
+      <Project>{a270e3e8-da54-4894-a59c-50e5a75ab672}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>Datamart</DatabaseSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\ForeverData01\ForeverData01.sqlproj">
+      <Name>ForeverData01</Name>
+      <Project>{af4170b1-f978-4d58-b021-be216f7f85a9}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>ForeverData01</DatabaseSqlCmdVariable>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="Datamart">
+      <DefaultValue>Datamart</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ForeverData01">
+      <DefaultValue>ForeverData01</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="DWH.refactorlog" />
+  </ItemGroup>
+</Project>

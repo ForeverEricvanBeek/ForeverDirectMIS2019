@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [GenHist]
+    AUTHORIZATION [dbo];
+

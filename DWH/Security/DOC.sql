@@ -1,0 +1,5 @@
+﻿CREATE SCHEMA [DOC]
+    AUTHORIZATION [dbo];
+
+
+

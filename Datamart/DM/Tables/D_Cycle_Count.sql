@@ -1,0 +1,27 @@
+﻿CREATE TABLE [DM].[D_Cycle_Count] (
+    [Cycle_Count_Skey]                  BIGINT          IDENTITY (1, 1) NOT NULL,
+    [Cycle_Count_Physical_Inventory_ID] NVARCHAR (10)   NULL,
+    [Cycle_Count_Location_ID]           NVARCHAR (20)   NULL,
+    [Cycle_Count_Pallet_ID]             NVARCHAR (20)   NULL,
+    [Cycle_Count_LPN_ID]                NVARCHAR (20)   NULL,
+    [Cycle_Count_SKU_Code]              NVARCHAR (100)  NULL,
+    [Cycle_Count_Lot_Code]              NVARCHAR (15)   NULL,
+    [Cycle_Count_Count_Date]            DATETIME2 (7)   NULL,
+    [Cycle_Count_Quantity_Frozen]       NUMERIC (13, 5) NULL,
+    [Cycle_Count_Quantity_Counted]      NUMERIC (15, 5) NULL,
+    [Cycle_Count_Quantity_Diff]         NUMERIC (14, 5) NULL,
+    [CheckSum]                          NVARCHAR (32)   NULL,
+    [CheckSumSCD1]                      NVARCHAR (32)   NULL,
+    [CheckSumSCD2]                      NVARCHAR (32)   NULL,
+    [IsActual]                          INT             NULL,
+    [IsInferred]                        INT             NULL,
+    [IsDeleted]                         INT             NULL,
+    [EffectiveDate]                     DATE            NULL,
+    [ExpiryDate]                        DATE            NULL,
+    [InsertDateTime]                    DATETIME2 (7)   NULL,
+    [UpdateDateTime]                    DATETIME2 (7)   NULL,
+    [BatchID]                           BIGINT          NULL,
+    [ProcessLogID]                      BIGINT          NULL,
+    CONSTRAINT [PK_D_Cycle_Count] PRIMARY KEY CLUSTERED ([Cycle_Count_Skey] ASC) WITH (FILLFACTOR = 80)
+);
+

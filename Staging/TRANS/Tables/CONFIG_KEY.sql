@@ -1,0 +1,8 @@
+﻿CREATE TABLE [TRANS].[CONFIG_KEY] (
+    [CONFIG_KEY]             VARCHAR (20)  NOT NULL,
+    [CONFIG_KEY_DESCRIPTION] VARCHAR (200) NULL,
+    [BatchID]                BIGINT        NULL,
+    [ProcessLogID]           BIGINT        NULL,
+    CONSTRAINT [PK_CONFIG_KEY] PRIMARY KEY CLUSTERED ([CONFIG_KEY] ASC)
+);
+

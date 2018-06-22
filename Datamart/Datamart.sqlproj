@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Datamart</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{a270e3e8-da54-4894-a59c-50e5a75ab672}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Datamart</RootNamespace>
+    <AssemblyName>Datamart</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="DM\" />
+    <Folder Include="DM\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="DM\Tables\F_Parcel_Status.sql" />
+    <Build Include="DM\Tables\F_Outbound.sql" />
+    <Build Include="DM\Tables\D_Sensor.sql" />
+    <Build Include="DM\Tables\F_OF_Productivity.sql" />
+    <Build Include="DM\Tables\D_Order.sql" />
+    <Build Include="DM\Tables\F_Outbound_Complaints_AGG.sql" />
+    <Build Include="DM\Tables\F_OF_Activity.sql" />
+    <Build Include="DM\Tables\D_Lane.sql" />
+    <Build Include="DM\Tables\D_Pickers.sql" />
+    <Build Include="DM\Tables\F_Stock.sql" />
+    <Build Include="DM\Tables\F_Time_Registration.sql" />
+    <Build Include="DM\Tables\F_Paid_Productivity.sql" />
+    <Build Include="DM\Tables\D_Calendar.sql" />
+    <Build Include="DM\Tables\D_OF_Complaints.sql" />
+    <Build Include="DM\Tables\D_ForeCast_Sales.sql" />
+    <Build Include="DM\Tables\D_ForeCast_Combo.sql" />
+    <Build Include="DM\Tables\D_Shipment.sql" />
+    <Build Include="DM\Tables\D_SKU.sql" />
+    <Build Include="DM\Tables\D_Country.sql" />
+    <Build Include="DM\Tables\D_Order_Type.sql" />
+    <Build Include="DM\Tables\D_ILPN.sql" />
+    <Build Include="DM\Tables\F_Stock_Act.sql" />
+    <Build Include="DM\Tables\D_OF_Issues.sql" />
+    <Build Include="DM\Tables\D_Transporter.sql" />
+    <Build Include="DM\Tables\D_Aging_Category.sql" />
+    <Build Include="DM\Tables\D_OLPN.sql" />
+    <Build Include="DM\Tables\D_Lot.sql" />
+    <Build Include="DM\Tables\F_OF.sql" />
+    <Build Include="DM\Tables\D_HourType.sql" />
+    <Build Include="DM\Tables\D_WHS_Location.sql" />
+    <Build Include="DM\Tables\D_Customer.sql" />
+    <Build Include="DM\Tables\ETL.sql" />
+    <Build Include="DM\Tables\D_Employee.sql" />
+    <Build Include="DM\Tables\D_Department.sql" />
+    <Build Include="DM\Tables\D_Facility.sql" />
+    <Build Include="DM\Tables\D_Cycle_Count.sql" />
+    <Build Include="DM\Tables\D_ActivityType.sql" />
+    <Build Include="dbo\Functions\fn_StripCharacters.sql" />
+    <Build Include="Security\DM.sql" />
+  </ItemGroup>
+</Project>

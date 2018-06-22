@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DWH_Control</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{9eed87dd-0496-40b5-b1fc-33ae53aac231}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>DWH_Control</RootNamespace>
+    <AssemblyName>DWH_Control</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Logging\" />
+    <Folder Include="Logging\Tables\" />
+    <Folder Include="GenHist\" />
+    <Folder Include="GenHist\Tables\" />
+    <Folder Include="Generator\" />
+    <Folder Include="Generator\Tables\" />
+    <Folder Include="Control\" />
+    <Folder Include="Control\Tables\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Security\" />
+    <Folder Include="Logging\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Logging\Tables\BatchLog.sql" />
+    <Build Include="Logging\Tables\ProcessMessageLog.sql" />
+    <Build Include="Logging\Tables\XMLLoadLog.sql" />
+    <Build Include="Logging\Tables\XMLFileErrors.sql" />
+    <Build Include="Logging\Tables\FlatFileErrors.sql" />
+    <Build Include="Logging\Tables\ProcessLog.sql" />
+    <Build Include="GenHist\Tables\DatamartColumn.sql" />
+    <Build Include="GenHist\Tables\SourceExtractionTable.sql" />
+    <Build Include="GenHist\Tables\Connection.sql" />
+    <Build Include="GenHist\Tables\SourceExtractionColumn.sql" />
+    <Build Include="GenHist\Tables\DatamartTable.sql" />
+    <Build Include="GenHist\Tables\DataTypeConversion.sql" />
+    <Build Include="GenHist\Tables\SourceExtractionXML.sql" />
+    <Build Include="GenHist\Tables\DWHExtractionColumn.sql" />
+    <Build Include="Generator\Tables\SourceExtractionTable.sql" />
+    <Build Include="Generator\Tables\DatamartColumn.sql" />
+    <Build Include="Generator\Tables\DataTypeConversion.sql" />
+    <Build Include="Generator\Tables\Connection.sql" />
+    <Build Include="Generator\Tables\DWHExtractionColumn.sql" />
+    <Build Include="Generator\Tables\SourceExtractionColumn.sql" />
+    <Build Include="Generator\Tables\SourceExtractionXML.sql" />
+    <Build Include="Generator\Tables\DatamartTable.sql" />
+    <Build Include="Control\Tables\JobControl.sql" />
+    <Build Include="Control\Tables\SourceExtractionControl.sql" />
+    <Build Include="Control\Tables\DWHControl.sql" />
+    <Build Include="Logging\Stored Procedures\PrcLoggingPackageExecution.sql" />
+    <Build Include="Logging\Stored Procedures\PrcLogMessage.sql" />
+    <Build Include="Security\Logging.sql" />
+    <Build Include="Security\GenHist.sql" />
+    <Build Include="Security\Generator.sql" />
+    <Build Include="Security\Control.sql" />
+    <Build Include="Generator\Tables\ForeverData01Table.sql" />
+    <Build Include="Generator\Tables\ForeverData01Column.sql" />
+    <Build Include="dbo\Views\ETL_CHECK.sql" />
+  </ItemGroup>
+</Project>

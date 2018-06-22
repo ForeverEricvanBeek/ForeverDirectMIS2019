@@ -1,0 +1,1992 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/12/2017 9:57:32 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="FDEU-BID01"
+  DTS:CreatorName="FOREVERDIRECT\beek"
+  DTS:DTSID="{9F2171CB-7668-49DA-95E5-4B9EC73213D1}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3002.106"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="loadComplaints"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="87"
+  DTS:VersionGUID="{4A05E518-BDC4-472F-847D-1549111C49CC}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel Connection Manager]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{8DCFC23A-11EA-4290-8D12-C95BD63B4102}"
+      DTS:ObjectName="Excel Connection Manager">
+      <DTS:PropertyExpression
+        DTS:Name="ExcelFilePath">@[User::workingfiletemp]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\Input\Overige\Complaints\tmp\Complaints_tmp.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SMTP Connection Manager]"
+      DTS:CreationName="SMTP"
+      DTS:DTSID="{559BAF4D-5DB3-4EBE-A6DE-5C5F0F500BE0}"
+      DTS:ObjectName="SMTP Connection Manager">
+      <DTS:ObjectData>
+        <SmtpConnectionManager
+          ConnectionString="SmtpServer=FDXEXMP01.foreverdirect.local;UseWindowsAuthentication=True;EnableSsl=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{A84C8B3E-A429-4953-BB1D-E4EB0C8731BA}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::WorkDir] + &quot;\\Overige\\Complaints\\tmp\\Complaints_tmp.xls&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="archivefile">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\tmp\Complaints_tmp.xls</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{87936F52-DA07-4F03-B200-AF0338C0A46A}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="archivelocation">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{2E5B0BFE-D020-4109-A2B7-A5320AA54550}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::WorkDir] + &quot;\\Overige\\Complaints\\Archive&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="DestinationPath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\Archive</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C0EA0D94-742C-4609-ACB7-724BFD7E6600}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::WorkDir] + &quot;\\Overige\\Complaints\\Error&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ErrorPath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\Error</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{339BACE8-839F-43EC-A174-D935B09DEFC4}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::WorkDir] + &quot;\\Overige\\Complaints\\&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="filePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{DDB7A0A1-5022-40D1-BA24-F5A9950C7BB8}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;Uploading the file (&quot;  +  @[User::workingfilename] +  &quot;) failed, please check file and try again&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="sendErrorMessage">
+      <DTS:VariableValue
+        DTS:DataType="8">Uploading the file () failed, please check file and try again</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E1C8226C-DBAD-4EF4-866C-874A7B5439EF}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;Uploading the file (&quot;   + @[User::workingfilename] + &quot;) succeeded&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="SendProcessMessage">
+      <DTS:VariableValue
+        DTS:DataType="8">Uploading the file () succeeded</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{29744D60-E37F-467F-ABBF-49B94F5D4535}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::WorkDir] + &quot;\\Overige\\Complaints\\tmp\\Complaints_tmp.xls&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="workingfile">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\tmp\Complaints_tmp.xls</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{37C86B74-51C8-4C0E-BE8B-88CA168541BF}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="workingfilename">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{065C51D8-0248-4A52-8398-E61513198811}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="workingfiletemp">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\Input\Overige\Complaints\tmp\Complaints_tmp.xls</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\loop through complaints"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{A5473C76-7CD1-41AC-9D20-617A95B6F10C}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:MaxErrorCount="0"
+      DTS:ObjectName="loop through complaints">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{FC354EC1-2B3B-4C38-8585-0E9F9F423843}"
+        DTS:ObjectName="{FC354EC1-2B3B-4C38-8585-0E9F9F423843}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::filePath]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\FDODWHD01\StagingFiles\Input\Overige\Complaints\" />
+            <FEFEProperty
+              FileSpec="Complaints*.xls" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\Archive"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="File System Task"
+          DTS:DTSID="{90FFF6F8-04FE-4D6B-B9F8-3B9B88D33A32}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Archive"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="MoveFile"
+              TaskOverwriteDestFile="True"
+              TaskSourcePath="User::workingfiletemp"
+              TaskIsSourceVariable="True"
+              TaskDestinationPath="User::DestinationPath"
+              TaskIsDestinationVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\Error"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="File System Task"
+          DTS:DTSID="{21B930A0-892B-4CFA-9ECD-CB6598D2223E}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Error"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="MoveFile"
+              TaskOverwriteDestFile="True"
+              TaskSourcePath="User::archivefile"
+              TaskIsSourceVariable="True"
+              TaskDestinationPath="User::ErrorPath"
+              TaskIsDestinationVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\extract data"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{B799F91C-CB1E-4BB2-8C29-DC37C75A0649}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="extract data"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\loop through complaints\extract data\Derived Column"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Derived Column"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[PosNumber]"
+                          cachedDataType="r8"
+                          cachedName="PosNumber"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[OrderNr]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="OrderNr"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[OrderNr]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[Complaint]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Complaint"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Complaint]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[ComplaintDetail]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ComplaintDetail"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintDetail]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[ItemOrdered]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ItemOrdered"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemOrdered]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[Parcelnumber]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Parcelnumber"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Parcelnumber]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[Incomplete]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Incomplete"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Incomplete]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_By]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_By]"
+                          name="Created_By"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_WSTR,255)@[User::workingfilename]</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_WSTR,255)@[User::workingfilename]</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_Date]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_Date]"
+                          name="Created_Date"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[GETDATE]()</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">GETDATE()</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
+                          name="PosNumberOrig"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">PosNumber</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OrderNumberOrig]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OrderNumberOrig]"
+                          name="OrderNumberOrig"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[OrderNr]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">OrderNr</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OLPNNumberOrig]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OLPNNumberOrig]"
+                          name="OLPNNumberOrig"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Parcelnumber]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">Parcelnumber</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ItemOrderedOrig]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ItemOrderedOrig]"
+                          name="ItemOrderedOrig"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemOrdered]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">ItemOrdered</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintOrig]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintOrig]"
+                          name="ComplaintOrig"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Complaint]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">Complaint</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[incompleteNew]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="1"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[incompleteNew]"
+                          name="incompleteNew"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_STR,1,1252)#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Incomplete]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_STR,1,1252)Incomplete</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintDetailNew]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="2000"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintDetailNew]"
+                          name="ComplaintDetailNew"
+                          truncationRowDisposition="IgnoreFailure">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_WSTR,2000)#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintDetail]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_WSTR,2000)ComplaintDetail</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\loop through complaints\extract data\Excel Source"
+                  componentClassID="Microsoft.ExcelSource"
+                  contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Excel Source"
+                  name="Excel Source"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">Complaints$</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mapping from parameters in the SQL command to variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\loop through complaints\extract data\Excel Source.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Excel Connection Manager]"
+                      connectionManagerRefId="Package.ConnectionManagers[Excel Connection Manager]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output]"
+                      name="Excel Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Date]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Date]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Date]"
+                          name="Date"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintNr]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ComplaintNr]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintNr]"
+                          name="ComplaintNr"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[DistributorID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[DistributorID]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[DistributorID]"
+                          name="DistributorID"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[PosNumber]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
+                          name="PosNumber"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[OrderNr]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[OrderNr]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[OrderNr]"
+                          name="OrderNr"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Complaint]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Complaint]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Complaint]"
+                          name="Complaint"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintDetail]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ComplaintDetail]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintDetail]"
+                          name="ComplaintDetail"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported]"
+                          name="ItemReported"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemOrdered]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemOrdered]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemOrdered]"
+                          name="ItemOrdered"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyOrdered]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[QtyOrdered]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyOrdered]"
+                          name="QtyOrdered"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported2]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported2]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported2]"
+                          name="ItemReported2"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReceived]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReceived]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReceived]"
+                          name="ItemReceived"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyReceived]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[QtyReceived]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyReceived]"
+                          name="QtyReceived"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Country]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]"
+                          name="Country"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CustomerServiceOperator]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[CustomerServiceOperator]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CustomerServiceOperator]"
+                          name="CustomerServiceOperator"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CreditNote]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[CreditNote]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CreditNote]"
+                          name="CreditNote"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Service order]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Service order]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Service order]"
+                          name="Service order"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[SchadenKarton]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[SchadenKarton]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[SchadenKarton]"
+                          name="SchadenKarton"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Parcelnumber]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Parcelnumber]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Parcelnumber]"
+                          name="Parcelnumber"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Batch]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Batch]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Batch]"
+                          name="Batch"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Incomplete]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Incomplete]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Incomplete]"
+                          name="Incomplete"
+                          truncationRowDisposition="IgnoreFailure" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Conterminator]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Conterminator]"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Conterminator]"
+                          name="Conterminator"
+                          truncationRowDisposition="IgnoreFailure" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Date]"
+                          dataType="wstr"
+                          length="255"
+                          name="Date" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ComplaintNr]"
+                          dataType="wstr"
+                          length="255"
+                          name="ComplaintNr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[DistributorID]"
+                          dataType="wstr"
+                          length="255"
+                          name="DistributorID" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[PosNumber]"
+                          dataType="r8"
+                          name="PosNumber" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[OrderNr]"
+                          dataType="wstr"
+                          length="255"
+                          name="OrderNr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Complaint]"
+                          dataType="wstr"
+                          length="255"
+                          name="Complaint" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ComplaintDetail]"
+                          dataType="wstr"
+                          length="255"
+                          name="ComplaintDetail" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported]"
+                          dataType="r8"
+                          name="ItemReported" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemOrdered]"
+                          dataType="wstr"
+                          length="255"
+                          name="ItemOrdered" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[QtyOrdered]"
+                          dataType="r8"
+                          name="QtyOrdered" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported2]"
+                          dataType="wstr"
+                          length="255"
+                          name="ItemReported2" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReceived]"
+                          dataType="wstr"
+                          length="255"
+                          name="ItemReceived" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[QtyReceived]"
+                          dataType="wstr"
+                          length="255"
+                          name="QtyReceived" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Country]"
+                          dataType="r8"
+                          name="Country" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[CustomerServiceOperator]"
+                          dataType="wstr"
+                          length="255"
+                          name="CustomerServiceOperator" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[CreditNote]"
+                          dataType="wstr"
+                          length="255"
+                          name="CreditNote" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Service order]"
+                          dataType="r8"
+                          name="Service order" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[SchadenKarton]"
+                          dataType="wstr"
+                          length="255"
+                          name="SchadenKarton" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Parcelnumber]"
+                          dataType="wstr"
+                          length="255"
+                          name="Parcelnumber" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Batch]"
+                          dataType="wstr"
+                          length="255"
+                          name="Batch" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Incomplete]"
+                          dataType="wstr"
+                          length="255"
+                          name="Incomplete" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Conterminator]"
+                          dataType="wstr"
+                          length="255"
+                          name="Conterminator" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output]"
+                      isErrorOut="true"
+                      name="Excel Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Date]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Date]"
+                          name="Date" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ComplaintNr]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ComplaintNr]"
+                          name="ComplaintNr" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[DistributorID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[DistributorID]"
+                          name="DistributorID" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[PosNumber]"
+                          dataType="r8"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[PosNumber]"
+                          name="PosNumber" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[OrderNr]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[OrderNr]"
+                          name="OrderNr" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Complaint]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Complaint]"
+                          name="Complaint" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ComplaintDetail]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ComplaintDetail]"
+                          name="ComplaintDetail" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported]"
+                          dataType="r8"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported]"
+                          name="ItemReported" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemOrdered]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemOrdered]"
+                          name="ItemOrdered" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[QtyOrdered]"
+                          dataType="r8"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[QtyOrdered]"
+                          name="QtyOrdered" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported2]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported2]"
+                          name="ItemReported2" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReceived]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReceived]"
+                          name="ItemReceived" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[QtyReceived]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[QtyReceived]"
+                          name="QtyReceived" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Country]"
+                          dataType="r8"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Country]"
+                          name="Country" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[CustomerServiceOperator]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[CustomerServiceOperator]"
+                          name="CustomerServiceOperator" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[CreditNote]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[CreditNote]"
+                          name="CreditNote" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Service order]"
+                          dataType="r8"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Service order]"
+                          name="Service order" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[SchadenKarton]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[SchadenKarton]"
+                          name="SchadenKarton" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Parcelnumber]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Parcelnumber]"
+                          name="Parcelnumber" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Batch]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Batch]"
+                          name="Batch" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Incomplete]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Incomplete]"
+                          name="Incomplete" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Conterminator]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Conterminator]"
+                          name="Conterminator" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\loop through complaints\extract data\OLE DB Destination"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="OLE DB Destination"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[web].[Complaints]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\loop through complaints\extract data\OLE DB Destination.Connections[OleDbConnection]"
+                      connectionManagerID="{18904562-FBF1-41B4-B2B2-97B083FF7352}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[WEBFORM]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Complaint]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Complaint"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Complaint]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CustomerServiceOperator]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="CustomerServiceOperator"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CustomerServiceOperator]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CustomerServiceOperator]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Conterminator]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Conterminator"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Conterminator]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Conterminator]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Created_By]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Created_By"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Created_By]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_By]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Created_Date]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="Created_Date"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Created_Date]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Created_Date]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Batch]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Batch"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Batch_Ordered]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Batch]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[SchadenKarton]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="SchadenKarton"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CarrierDamage]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[SchadenKarton]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ComplaintDetailNew]"
+                          cachedDataType="wstr"
+                          cachedLength="2000"
+                          cachedName="ComplaintDetailNew"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Details]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintDetailNew]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ComplaintNr]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ComplaintNr"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_nr]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintNr]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CreditNote]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="CreditNote"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Credit_Note]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[CreditNote]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DistributorID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="DistributorID"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Customer_Nr]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[DistributorID]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Date]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Date"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DatumTemp]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Date]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Country]"
+                          cachedDataType="r8"
+                          cachedName="Country"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Facility_ID]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[incompleteNew]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="1"
+                          cachedName="incompleteNew"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Incomplete]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[incompleteNew]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ItemOrdered]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ItemOrdered"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemOrdered]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ItemOrderedOrig]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ItemOrderedOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered_Orig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ItemOrderedOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ItemReported]"
+                          cachedDataType="r8"
+                          cachedName="ItemReported"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered_Reported]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ItemReceived]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ItemReceived"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Received]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReceived]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ItemReported2]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ItemReported2"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Received_Reported]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported2]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OrderNr]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="OrderNr"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Order_Nr]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[OrderNr]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OrderNumberOrig]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="OrderNumberOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Order_Nr_orig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OrderNumberOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumber]"
+                          cachedDataType="r8"
+                          cachedName="PosNumber"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Pos_Nr]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumberOrig]"
+                          cachedDataType="r8"
+                          cachedName="PosNumberOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Pos_Nr_Orig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[QtyOrdered]"
+                          cachedDataType="r8"
+                          cachedName="QtyOrdered"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Quantity_Ordered]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyOrdered]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[QtyReceived]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="QtyReceived"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Quantity_Received]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[QtyReceived]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Service order]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Service order"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Service_order]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Service order]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Parcelnumber]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Parcelnumber"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TrackandTrace]"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Parcelnumber]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OLPNNumberOrig]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="OLPNNumberOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TrackandTrace_Nr_Orig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[OLPNNumberOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ComplaintOrig]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="ComplaintOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Orig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ComplaintOrig]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ID]"
+                          dataType="i8"
+                          name="ID" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Datum]"
+                          dataType="dbTimeStamp2"
+                          name="Datum"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DatumTemp]"
+                          dataType="wstr"
+                          length="50"
+                          name="DatumTemp" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Pos_Nr]"
+                          dataType="wstr"
+                          length="50"
+                          name="Pos_Nr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Order_Nr]"
+                          dataType="wstr"
+                          length="50"
+                          name="Order_Nr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Olpn_Nr]"
+                          dataType="wstr"
+                          length="50"
+                          name="Olpn_Nr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Customer_Nr]"
+                          dataType="wstr"
+                          length="50"
+                          name="Customer_Nr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint]"
+                          dataType="wstr"
+                          length="50"
+                          name="Complaint" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Details]"
+                          dataType="wstr"
+                          length="4000"
+                          name="Complaint_Details" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered]"
+                          dataType="wstr"
+                          length="50"
+                          name="Item_Ordered" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Received]"
+                          dataType="wstr"
+                          length="50"
+                          name="Item_Received" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Quantity_Ordered]"
+                          dataType="i4"
+                          name="Quantity_Ordered" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Quantity_Received]"
+                          dataType="i4"
+                          name="Quantity_Received" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_nr]"
+                          dataType="wstr"
+                          length="50"
+                          name="Complaint_nr" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Facility_ID]"
+                          dataType="wstr"
+                          length="50"
+                          name="Facility_ID" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered_Reported]"
+                          dataType="wstr"
+                          length="50"
+                          name="Item_Ordered_Reported" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Received_Reported]"
+                          dataType="wstr"
+                          length="50"
+                          name="Item_Received_Reported" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Batch_Ordered]"
+                          dataType="wstr"
+                          length="50"
+                          name="Batch_Ordered" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Credit_Note]"
+                          dataType="wstr"
+                          length="255"
+                          name="Credit_Note" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Service_order]"
+                          dataType="wstr"
+                          length="255"
+                          name="Service_order" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CarrierDamage]"
+                          dataType="wstr"
+                          length="255"
+                          name="CarrierDamage" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TrackandTrace]"
+                          dataType="wstr"
+                          length="255"
+                          name="TrackandTrace" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CustomerServiceOperator]"
+                          dataType="wstr"
+                          length="255"
+                          name="CustomerServiceOperator" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Conterminator]"
+                          dataType="wstr"
+                          length="50"
+                          name="Conterminator" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Pos_Nr_Orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="Pos_Nr_Orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Order_Nr_orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="Order_Nr_orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TrackandTrace_Nr_Orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="TrackandTrace_Nr_Orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Item_Ordered_Orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="Item_Ordered_Orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="Complaint_Orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Checked]"
+                          codePage="1252"
+                          dataType="str"
+                          length="1"
+                          name="Checked" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Incomplete]"
+                          codePage="1252"
+                          dataType="str"
+                          length="1"
+                          name="Incomplete" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Created_Date]"
+                          dataType="dbTimeStamp2"
+                          name="Created_Date"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Created_By]"
+                          dataType="wstr"
+                          length="255"
+                          name="Created_By" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Updated_Date]"
+                          dataType="dbTimeStamp2"
+                          name="Updated_Date"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Updated_By]"
+                          dataType="wstr"
+                          length="255"
+                          name="Updated_By" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\loop through complaints\extract data\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\loop through complaints\extract data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\loop through complaints\extract data.Paths[Derived Column Output]"
+                  endId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  name="Derived Column Output"
+                  startId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\loop through complaints\extract data.Paths[Excel Source Output]"
+                  endId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input]"
+                  name="Excel Source Output"
+                  startId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\get file name"
+          DTS:CreationName="Microsoft.ScriptTask"
+          DTS:Description="Script Task"
+          DTS:DTSID="{725D0AE1-54E7-4654-B3B1-AD3C9B1A78C1}"
+          DTS:ExecutableType="Microsoft.ScriptTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="get file name"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ScriptProject
+              Name="ST_213a5b3edd7847eabccbf2f09dae9696"
+              VSTAMajorVersion="14"
+              VSTAMinorVersion="0"
+              Language="CSharp" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\Send error message"
+          DTS:CreationName="Microsoft.SendMailTask"
+          DTS:Description="Send Mail Task"
+          DTS:DTSID="{28A3381A-02FA-46B0-AC83-0342828EBD4C}"
+          DTS:ExecutableType="Microsoft.SendMailTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Send error message"
+          DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SendMailTask:SendMailTaskData
+              SendMailTask:SMTPServer="{559BAF4D-5DB3-4EBE-A6DE-5C5F0F500BE0}"
+              SendMailTask:From="complaints@fd.bi"
+              SendMailTask:To="Lamyae.Allouchi@foreverdirect.eu"
+              SendMailTask:Subject="Complaint message error"
+              SendMailTask:MessageSourceType="Variable"
+              SendMailTask:MessageSource="User::sendErrorMessage" xmlns:SendMailTask="www.microsoft.com/sqlserver/dts/tasks/sendmailtask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\loop through complaints\Send processed message"
+          DTS:CreationName="Microsoft.SendMailTask"
+          DTS:Description="Send Mail Task"
+          DTS:DTSID="{22205D2C-52DB-46E3-A9ED-242FE6CB155B}"
+          DTS:ExecutableType="Microsoft.SendMailTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Send processed message"
+          DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SendMailTask:SendMailTaskData
+              SendMailTask:SMTPServer="{559BAF4D-5DB3-4EBE-A6DE-5C5F0F500BE0}"
+              SendMailTask:From="complaints@fd.bi"
+              SendMailTask:To="Lamyae.Allouchi@foreverdirect.eu"
+              SendMailTask:Subject="Complaint file processed"
+              SendMailTask:MessageSourceType="Variable"
+              SendMailTask:MessageSource="User::SendProcessMessage" xmlns:SendMailTask="www.microsoft.com/sqlserver/dts/tasks/sendmailtask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\loop through complaints.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{77E78AE7-395E-4102-932A-CA6421C8F56F}"
+          DTS:From="Package\loop through complaints\get file name"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\loop through complaints\extract data" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\loop through complaints.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{B69ED8D9-467F-4733-BACA-9D7650F601C7}"
+          DTS:From="Package\loop through complaints\extract data"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\loop through complaints\Archive" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\loop through complaints.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{A0466DF4-B22E-4477-9A9B-2BDF70EF81A2}"
+          DTS:From="Package\loop through complaints\extract data"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\loop through complaints\Error"
+          DTS:Value="1" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\loop through complaints.PrecedenceConstraints[Constraint 3]"
+          DTS:CreationName=""
+          DTS:DTSID="{2A285C25-0481-4F7E-91B5-A388A0FB619E}"
+          DTS:From="Package\loop through complaints\Archive"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 3"
+          DTS:To="Package\loop through complaints\Send processed message" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\loop through complaints.PrecedenceConstraints[Constraint 4]"
+          DTS:CreationName=""
+          DTS:DTSID="{E73FB544-A568-4421-BBC9-225A052DE3BC}"
+          DTS:From="Package\loop through complaints\Error"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 4"
+          DTS:To="Package\loop through complaints\Send error message" />
+      </DTS:PrecedenceConstraints>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{1AF4279A-00C8-4182-8BF2-88421A735293}"
+          DTS:ObjectName="{1AF4279A-00C8-4182-8BF2-88421A735293}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::workingfiletemp" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="115,42"
+          Id="Package\loop through complaints\Archive"
+          TopLeft="42,220" />
+        <NodeLayout
+          Size="104,42"
+          Id="Package\loop through complaints\Error"
+          TopLeft="223,220" />
+        <NodeLayout
+          Size="137,42"
+          Id="Package\loop through complaints\extract data"
+          TopLeft="135,119" />
+        <NodeLayout
+          Size="143,42"
+          Id="Package\loop through complaints\get file name"
+          TopLeft="147,28" />
+        <NodeLayout
+          Size="175,42"
+          Id="Package\loop through complaints\Send error message"
+          TopLeft="248,325" />
+        <NodeLayout
+          Size="199,42"
+          Id="Package\loop through complaints\Send processed message"
+          TopLeft="21,316" />
+        <EdgeLayout
+          Id="Package\loop through complaints.PrecedenceConstraints[Constraint]"
+          TopLeft="218.5,70">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-15,49"
+              Start="0,0"
+              End="-15,41.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.5"
+                    Point2="0,24.5"
+                    Point3="-4,24.5" />
+                  <mssgle:LineSegment
+                    End="-11,24.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-11,24.5"
+                    Point2="-15,24.5"
+                    Point3="-15,28.5" />
+                  <mssgle:LineSegment
+                    End="-15,41.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\loop through complaints.PrecedenceConstraints[Constraint 1]"
+          TopLeft="182,161">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-82.5,59"
+              Start="0,0"
+              End="-82.5,51.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.008658008658" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.008658008658"
+                    Point2="0,24.008658008658"
+                    Point3="-4,24.008658008658" />
+                  <mssgle:LineSegment
+                    End="-78.5,24.008658008658" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-78.5,24.008658008658"
+                    Point2="-82.5,24.008658008658"
+                    Point3="-82.5,28.008658008658" />
+                  <mssgle:LineSegment
+                    End="-82.5,51.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\loop through complaints.PrecedenceConstraints[Constraint 2]"
+          TopLeft="225,161">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="50,59"
+              Start="0,0"
+              End="50,51.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.008658008658" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.008658008658"
+                    Point2="0,24.008658008658"
+                    Point3="4,24.008658008658" />
+                  <mssgle:LineSegment
+                    End="46,24.008658008658" />
+                  <mssgle:CubicBezierSegment
+                    Point1="46,24.008658008658"
+                    Point2="50,24.008658008658"
+                    Point3="50,28.008658008658" />
+                  <mssgle:LineSegment
+                    End="50,51.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="9.75865234375,29.008658008658,30.4826953125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\loop through complaints.PrecedenceConstraints[Constraint 3]"
+          TopLeft="99.5,262">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="21,54"
+              Start="0,0"
+              End="21,46.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,23" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,23"
+                    Point2="0,27"
+                    Point3="4,27" />
+                  <mssgle:LineSegment
+                    End="17,27" />
+                  <mssgle:CubicBezierSegment
+                    Point1="17,27"
+                    Point2="21,27"
+                    Point3="21,31" />
+                  <mssgle:LineSegment
+                    End="21,46.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\loop through complaints.PrecedenceConstraints[Constraint 4]"
+          TopLeft="275,262">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="60.5,63"
+              Start="0,0"
+              End="60.5,55.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,27.5"
+                    Point2="0,31.5"
+                    Point3="4,31.5" />
+                  <mssgle:LineSegment
+                    End="56.5,31.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="56.5,31.5"
+                    Point2="60.5,31.5"
+                    Point3="60.5,35.5" />
+                  <mssgle:LineSegment
+                    End="60.5,55.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="488,430"
+          Size="488,473"
+          Id="Package\loop through complaints"
+          TopLeft="102,16" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\loop through complaints\extract data">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="156,42"
+          Id="Package\loop through complaints\extract data\Derived Column"
+          TopLeft="199,151" />
+        <NodeLayout
+          Size="173,42"
+          Id="Package\loop through complaints\extract data\OLE DB Destination"
+          TopLeft="186,270" />
+        <NodeLayout
+          Size="141,42"
+          Id="Package\loop through complaints\extract data\Excel Source"
+          TopLeft="216,49" />
+        <EdgeLayout
+          Id="Package\loop through complaints\extract data.Paths[Derived Column Output]"
+          TopLeft="274.75,193">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,77"
+              Start="0,0"
+              End="0,69.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,69.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\loop through complaints\extract data.Paths[Excel Source Output]"
+          TopLeft="286.5,91">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-9.5,60"
+              Start="0,0"
+              End="-9.5,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="-4,30" />
+                  <mssgle:LineSegment
+                    End="-5.5,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-5.5,30"
+                    Point2="-9.5,30"
+                    Point3="-9.5,34" />
+                  <mssgle:LineSegment
+                    End="-9.5,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\loop through complaints\extract data\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\loop through complaints\extract data\Excel Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

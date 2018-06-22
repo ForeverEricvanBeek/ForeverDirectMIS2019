@@ -1,0 +1,15 @@
+﻿CREATE TABLE [TRANS].[TX_PROC] (
+    [TX_PROC_ID]      INT            NOT NULL,
+    [TX_PROC_CODE]    NVARCHAR (20)  NULL,
+    [TX_PROC_NAME]    NVARCHAR (100) NULL,
+    [TX_PROC_PATH]    NVARCHAR (260) NULL,
+    [TX_PROC_TYPE]    NVARCHAR (20)  NULL,
+    [TX_PROC_CREATED] DATETIME2 (7)  NULL,
+    [TX_PROC_ENABLED] BIT            NULL,
+    [TX_PROC_SORT]    SMALLINT       NULL,
+    [TX_PROC_LIVE]    BIT            NULL,
+    [BatchID]         BIGINT         NULL,
+    [ProcessLogID]    BIGINT         NULL,
+    CONSTRAINT [PK_TX_PROC] PRIMARY KEY CLUSTERED ([TX_PROC_ID] ASC)
+);
+

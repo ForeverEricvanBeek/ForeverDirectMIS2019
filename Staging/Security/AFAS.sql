@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [AFAS]
+    AUTHORIZATION [dbo];
+

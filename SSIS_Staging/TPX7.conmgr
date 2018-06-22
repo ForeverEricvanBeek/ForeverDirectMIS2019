@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ObjectName="TPX7" DTS:DTSID="{33A01588-718F-41C5-9889-8C0F18055578}" DTS:refId="Package.ConnectionManagers[TPX7]" DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ConnectionString="data source=we-tpx-nl-ss-sql.database.windows.net;initial catalog=WE-FD-NL-DB-TX-ACCP;provider=SQLNCLI11.1;persist security info=False;user id=sql_fd_accp_bi">
+      <DTS:Password DTS:Name="Password" Sensitive="1"></DTS:Password>
+    </DTS:ConnectionManager>
+  </DTS:ObjectData>
+  <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Project::ConTPX7]</DTS:PropertyExpression>
+</DTS:ConnectionManager>

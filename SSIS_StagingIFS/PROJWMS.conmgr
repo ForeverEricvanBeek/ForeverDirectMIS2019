@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ObjectName="PROJWMS" DTS:DTSID="{7BB7B41F-AD7D-4F84-B206-13E81FAA1BA9}" DTS:refId="Package.ConnectionManagers[PROJWMS]" DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ConnectionString="data source=PROJWMS;user id=EVBEEK;provider=OraOLEDB.Oracle.1;persist security info=True;datatypecompatibility=80">
+      <DTS:Password DTS:Name="Password" Sensitive="1"></DTS:Password>
+    </DTS:ConnectionManager>
+  </DTS:ObjectData>
+  <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Project::ConPROJWMS]</DTS:PropertyExpression>
+</DTS:ConnectionManager>

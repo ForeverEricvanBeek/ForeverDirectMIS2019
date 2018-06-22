@@ -1,0 +1,16 @@
+﻿CREATE TABLE [TRANS].[SHIPMENT_AUX] (
+    [INTERFACE_ID]        BIGINT       NOT NULL,
+    [AUX_FORWARDER_CODE]  VARCHAR (5)  NULL,
+    [PU_DEPOT]            VARCHAR (20) NULL,
+    [DY_DEPOT]            VARCHAR (20) NULL,
+    [PU_SORT]             VARCHAR (20) NULL,
+    [DY_SORT]             VARCHAR (20) NULL,
+    [GROUPING_PRIORITY]   VARCHAR (20) NULL,
+    [IATA]                VARCHAR (20) NULL,
+    [DPD_SERVICE_NR]      VARCHAR (20) NULL,
+    [UPS_SHIPMENT_NUMBER] VARCHAR (20) NULL,
+    [BatchID]             BIGINT       NULL,
+    [ProcessLogID]        BIGINT       NULL,
+    CONSTRAINT [PK_LABEL_AUX] PRIMARY KEY CLUSTERED ([INTERFACE_ID] ASC)
+);
+

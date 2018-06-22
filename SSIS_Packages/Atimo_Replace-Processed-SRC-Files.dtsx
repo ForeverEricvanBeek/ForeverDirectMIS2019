@@ -1,0 +1,366 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="3/12/2015 7:55:39 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="FDEU-BID01"
+  DTS:CreatorName="FOREVERDIRECT\wsillevis"
+  DTS:DTSID="{0CD0A831-5161-49CE-850E-96F5E1D87549}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3006.16"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="Replace-Processed-SRC-Files-ATIMO"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="51"
+  DTS:VersionGUID="{41465A11-3DB1-4207-B953-26A242A45A20}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{30E28128-5B52-4D5D-B237-CECC259BC0AF}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::DirImport]  + &quot;\\Atimo\\&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\input\Atimo\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E29861AB-E924-4C64-9A9B-8CDC90A2EC9F}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[User::FileFolder] + &quot;Processed\\&quot;+(DT_WSTR, 8) (YEAR(GETDATE()) *10000+MONTH(GETDATE()) *100 + DAY( GETDATE()))"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileFolderProcessed">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\input\Atimo\Processed\20180430</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{A30F5E60-D9BF-4B48-AC28-E17D184AEB10}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="RIGHT(@[User::FilePath],FINDSTRING(REVERSE(@[User::FilePath]),&quot;\\&quot;,1)-1)"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8">DHW_EXPORT_20150330121312.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E0F38953-AFE0-47B7-8052-936B7F3B5668}"
+      DTS:Expression="@[$Project::DirImport] + &quot;\\Atimo\\Running\\DHW_EXPORT_20150330121312.csv&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\dwhwork\Input\Atimo\Running\DHW_EXPORT_20150330121312.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{15521F46-DA4C-46A9-AE4A-38E1648D8D19}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="REPLACE(  @[User::FilePath],&quot;\\Running&quot;, &quot;&quot; )"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="new2FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\dwhwork\Input\Atimo\DHW_EXPORT_20150330121312.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7AB6F8F3-1B67-4F03-AD4E-B20B7D596199}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="REPLACE( SUBSTRING( @[User::FilePath] , 1, LEN( @[User::FilePath]  ) -19) +SUBSTRING( @[User::FilePath] , LEN( @[User::FilePath]  ) -3,4) ,&quot;\\Running&quot;, &quot;&quot; )"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="NewFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\dwhwork\Input\Atimo\DHW_EXPORT.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{5BB15865-4CE6-4501-A54A-C1FB34B70D6A}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[User::FileFolderProcessed] +&quot;\\&quot;+ @[User::FileName]"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ProcessedFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\input\Atimo\Processed\20180430\DHW_EXPORT_20150330121312.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{905F1488-BECF-438A-BD25-14DF336CD369}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[User::NewFilePath]"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="SrcFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\dwhwork\Input\Atimo\DHW_EXPORT.csv</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create Directory"
+      DTS:CreationName="Microsoft.FileSystemTask"
+      DTS:Description="Create Directory"
+      DTS:DTSID="{35CD2BDB-85CE-4610-91FF-F75D5B796938}"
+      DTS:ExecutableType="Microsoft.FileSystemTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create Directory"
+      DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <FileSystemData
+          TaskOperationType="CreateDirectory"
+          TaskSourcePath="User::FileFolderProcessed"
+          TaskIsSourceVariable="True" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop Container ATIMO copy"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{7F6859C5-6C1B-4160-9D5F-04F8A653ED73}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop Container ATIMO copy">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{2B380FD4-115F-4E1E-B619-E3141E409C5D}"
+        DTS:ObjectName="{2B380FD4-115F-4E1E-B619-E3141E409C5D}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[$Project::DirImport] + "\\Atimo\\"</DTS:PropertyExpression>
+        <DTS:PropertyExpression
+          DTS:Name="Name">@[User::FilePath]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\FDODWHD01\StagingFiles\input\Atimo\" />
+            <FEFEProperty
+              FileSpec="*.csv" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop Container ATIMO copy\Copy ATIMO Files to Archief"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="File System Task"
+          DTS:DTSID="{B0B064F0-D939-497B-BAB2-D138EA77B794}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Copy ATIMO Files to Archief"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FilePath"
+              TaskIsSourceVariable="True"
+              TaskDestinationPath="User::ProcessedFilePath"
+              TaskIsDestinationVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{40DED413-BC54-46D2-B3B4-6AE99E4AA236}"
+          DTS:ObjectName="{40DED413-BC54-46D2-B3B4-6AE99E4AA236}"
+          DTS:ValueIndex="1"
+          DTS:VariableName="User::FilePath" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop Container ATIMO remove"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{4E4C07F5-4EF6-49BB-9BBD-8F60C7EBC851}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop Container ATIMO remove">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{3ADF9555-8694-4C26-9169-E27C3F5BD017}"
+        DTS:ObjectName="{2B380FD4-115F-4E1E-B619-E3141E409C5D}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[$Project::DirImport] + "\\Atimo\\"</DTS:PropertyExpression>
+        <DTS:PropertyExpression
+          DTS:Name="Name">@[User::FilePath]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\FDODWHD01\StagingFiles\input\Atimo\" />
+            <FEFEProperty
+              FileSpec="DWH_EXPORT*" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop Container ATIMO remove\Remove ATIMO Running Files"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="File System Task"
+          DTS:DTSID="{439C4E0D-1D19-4C6C-8644-472BC8A0FCC5}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Remove ATIMO Running Files"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FilePath"
+              TaskIsSourceVariable="True"
+              TaskDestinationPath="User::ArchiveFilePath"
+              TaskIsDestinationVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{DDFF62A0-1E03-4FAB-ABB1-DB54D18D46B7}"
+          DTS:ObjectName="{DDFF62A0-1E03-4FAB-ABB1-DB54D18D46B7}"
+          DTS:ValueIndex="1"
+          DTS:VariableName="User::FilePath" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{D29A1D19-898A-48A2-85BE-626996C2EE59}"
+      DTS:From="Package\Create Directory"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Foreach Loop Container ATIMO copy" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{96A49A6F-C7CB-4493-BD16-26C4A52AB6C8}"
+      DTS:From="Package\Foreach Loop Container ATIMO copy"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Foreach Loop Container ATIMO remove" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="160,42"
+          Id="Package\Create Directory"
+          TopLeft="41.5,5.5" />
+        <NodeLayout
+          Size="219,42"
+          Id="Package\Foreach Loop Container ATIMO copy\Copy ATIMO Files to Archief"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="230,103"
+          Size="230,146"
+          Id="Package\Foreach Loop Container ATIMO copy"
+          TopLeft="6.50000000000003,107.5" />
+        <NodeLayout
+          Size="221,42"
+          Id="Package\Foreach Loop Container ATIMO remove\Remove ATIMO Running Files"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="232,103"
+          Size="288,146"
+          Id="Package\Foreach Loop Container ATIMO remove"
+          TopLeft="5.50000000000006,313.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="121.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="121.5,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="28,60"
+              Start="0,0"
+              End="28,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="4,30" />
+                  <mssgle:LineSegment
+                    End="24,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="24,30"
+                    Point2="28,30"
+                    Point3="28,34" />
+                  <mssgle:LineSegment
+                    End="28,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

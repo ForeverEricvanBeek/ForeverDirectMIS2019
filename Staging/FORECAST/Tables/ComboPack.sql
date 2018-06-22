@@ -1,0 +1,11 @@
+﻿CREATE TABLE [FORECAST].[ComboPack] (
+    [OFFICE]       NVARCHAR (10)  NULL,
+    [CUSTOMER]     NVARCHAR (15)  NULL,
+    [COMBO_NAME]   NVARCHAR (150) NULL,
+    [COMBO_STYLE]  NVARCHAR (10)  NULL,
+    [COMBO_UPDATE] NVARCHAR (50)  NULL,
+    [COMBO_ITEMS]  NVARCHAR (500) NULL,
+    [BatchID]      BIGINT         NULL,
+    [ProcessLogID] BIGINT         NULL
+);
+

@@ -1,0 +1,978 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/15/2015 3:29:38 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="FDEU-BID01"
+  DTS:CreatorName="FOREVERDIRECT\wsillevis"
+  DTS:DTSID="{36A118A7-4005-484C-97F6-4D5BE5CBC9DC}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.0600.250"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="Kewill_End_Remove_files"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="15"
+  DTS:VersionGUID="{C266713C-0AEB-485C-B354-BC8F61507AB5}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{2BB39F18-FAD6-46F2-BC8A-FC272117483F}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[$Project::DirImport]  + &quot;\\Kewill\\&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\DWHWork\Input\Kewill\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{0D6E4307-49CA-4FDC-A041-67C4DE4315F3}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="@[User::FileFolder] + &quot;Processed\\&quot;+(DT_WSTR, 8) (YEAR(GETDATE()) *10000+MONTH(GETDATE()) *100 + DAY( GETDATE()))"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileFolderProcessed">
+      <DTS:VariableValue
+        DTS:DataType="8">\\fdeu-bid01\DWHWork\Input\Kewill\Processed\20180301</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{2C94289F-6B33-4E97-9389-83B68425C806}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FullName">
+      <DTS:VariableValue
+        DTS:DataType="8">test.csv</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create directory"
+      DTS:CreationName="Microsoft.FileSystemTask"
+      DTS:Description="Create directory"
+      DTS:DTSID="{65D4674D-9567-4AD8-8F24-11CD2AB8C5DC}"
+      DTS:ExecutableType="Microsoft.FileSystemTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create directory"
+      DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <FileSystemData
+          TaskOperationType="CreateDirectory"
+          TaskSourcePath="User::FileFolderProcessed"
+          TaskIsSourceVariable="True"
+          TaskIsDestinationVariable="True" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop Container"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{32F03E67-99B0-42CA-8BD8-2DB69436E801}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop Container">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{22E141A8-72B6-4D36-AC9D-A41754D2BFA3}"
+        DTS:ObjectName="{22E141A8-72B6-4D36-AC9D-A41754D2BFA3}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="*.XML" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop Container\Copy file"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Copy file"
+          DTS:DTSID="{5164F90D-81FF-4E6A-906B-59156FF699FD}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Copy file"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True"
+              TaskDestinationPath="User::FileFolderProcessed"
+              TaskIsDestinationVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{CE845021-1CDC-4F5F-A38F-08D85DF1A375}"
+          DTS:ObjectName="{CE845021-1CDC-4F5F-A38F-08D85DF1A375}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsdfire"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsdfire"
+      DTS:DTSID="{DBA2EDF7-471D-4948-95C8-844FC566CD60}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsdfire">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{1899D107-3F02-49D6-B013-7F77B0CC2223}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsfire_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsdfire\Delete tsdfire"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsdfire"
+          DTS:DTSID="{AAD94BC9-82C3-4C9B-9B27-4F24AA0975AE}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsdfire"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{920FC785-A0D5-4477-A2B5-9EA6F840E4E6}"
+          DTS:ObjectName="{920FC785-A0D5-4477-A2B5-9EA6F840E4E6}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsdnaw"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsdsmd"
+      DTS:DTSID="{41FC88B6-B553-4875-931E-D1476C19A175}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsdnaw">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{254D7DAC-E543-43D9-80A5-FF375B7C738F}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsdnaw_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsdnaw\Delete tsdnaw"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsdnaw"
+          DTS:DTSID="{A860B8FB-B00F-4545-9B0E-9B6B79BBA5F6}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsdnaw"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{0C80C0D3-A305-4DB7-9444-CFAF99BDB329}"
+          DTS:ObjectName="{0C80C0D3-A305-4DB7-9444-CFAF99BDB329}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsdsmd"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsdsmd"
+      DTS:DTSID="{01B5B82F-5C01-4BBE-932D-1BDF10B3B3CB}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsdsmd">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{4BC3155A-E797-45E5-9DF0-6534387BFE92}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsdsmd_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsdsmd\Delete tsdsmd"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsdsmd"
+          DTS:DTSID="{ECF963F7-32CF-41E1-891D-C6444FE95BD1}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsdsmd"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{86AA7174-477B-4620-B767-CFAAA95D1DAD}"
+          DTS:ObjectName="{86AA7174-477B-4620-B767-CFAAA95D1DAD}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tseecb"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tseecb"
+      DTS:DTSID="{05447077-29BC-42E9-B595-9CBE165C26D7}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tseecb">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{E5495D12-E7E5-4E49-8960-2EAC1CBB8785}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tseecb_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tseecb\Delete tseecb"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tseecb"
+          DTS:DTSID="{97C1E820-0967-4B7A-811F-F9BD9BC1951F}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tseecb"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{C63965C0-E321-4746-9FB9-B77251B81ACF}"
+          DTS:ObjectName="{C63965C0-E321-4746-9FB9-B77251B81ACF}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsloth"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsloth"
+      DTS:DTSID="{A4ECCF7B-C7CA-4AEC-A128-41590382EDA3}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsloth">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{CEDA3A96-3E21-4F6E-94BD-C15FC35427DD}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsloth_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsloth\Delete tsloth"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsloth"
+          DTS:DTSID="{ECDCC9BE-DBF9-4F82-AE1E-742D475CF6DB}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsloth"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{8B8CB7BB-47FB-481C-88E6-6E91FC7306EC}"
+          DTS:ObjectName="{8B8CB7BB-47FB-481C-88E6-6E91FC7306EC}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsmopd"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsmopd"
+      DTS:DTSID="{7A03900B-D6E6-438D-AAD3-F071943F4DBD}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsmopd">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{84EDB504-5C00-4573-B0CE-306FDCE13F0B}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsmopd_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsmopd\Delete tsmopd"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsmopd"
+          DTS:DTSID="{3359208E-8050-472D-BDCC-41BB3BC6530D}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsmopd"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{4EBDC654-7115-4942-AD35-836DF23FDF26}"
+          DTS:ObjectName="{4EBDC654-7115-4942-AD35-836DF23FDF26}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tspakm"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tspakm"
+      DTS:DTSID="{60346A9B-3DFA-438C-9186-6FDAA2CFD6F4}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tspakm">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{F52608F9-E96A-43B8-82A5-27FC71368862}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tspakm_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tspakm\Delete tspakm"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tspakm"
+          DTS:DTSID="{0159CCED-4C20-40F1-AAAC-ED5D5C783F66}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tspakm"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{EA8CA73A-357D-4256-8350-F8141DC8C299}"
+          DTS:ObjectName="{EA8CA73A-357D-4256-8350-F8141DC8C299}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop tsvvdo"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tsvvdo"
+      DTS:DTSID="{C82CD73A-DBD0-485F-BF4D-3F290F4ED57F}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tsvvdo">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{051DFE31-CBD1-465C-BAE1-57518AC94C4E}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tsvvdo_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tsvvdo\Delete tsvvdo"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tsvvdo"
+          DTS:DTSID="{D085639E-E9BB-4B92-BFBA-B9F43CF30B80}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tsvvdo"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{F36BF836-FF4A-4D7D-8218-3EAC693EB648}"
+          DTS:ObjectName="{F36BF836-FF4A-4D7D-8218-3EAC693EB648}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{2F61F52D-B04A-4CED-AE2E-078DA1C1F1B1}"
+      DTS:From="Package\Create directory"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Foreach Loop Container" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{4D0F9A4D-6645-4223-97E0-007AEAC3D18D}"
+      DTS:From="Package\Foreach Loop Container"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Foreach Loop tsdsmd" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{92419192-A24A-4163-9C5E-303C3025CAB4}"
+      DTS:From="Package\Foreach Loop tsvvdo"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Foreach Loop tsdnaw" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{1E7CCA46-9FF2-4354-A33A-9A6CE94ACAD5}"
+      DTS:From="Package\Foreach Loop tsloth"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Foreach Loop tsdfire" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{633D75E9-B8AE-4E35-BE68-CE2C391BD94D}"
+      DTS:From="Package\Foreach Loop tspakm"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Foreach Loop tsmopd" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{28B8142C-CB14-4C81-A2D1-20092978E885}"
+      DTS:From="Package\Foreach Loop tsdsmd"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Foreach Loop tsvvdo" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{203F51DE-F37F-45DD-991B-9AC3B4F54773}"
+      DTS:From="Package\Foreach Loop tsdnaw"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\Foreach Loop tsloth" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 7]"
+      DTS:CreationName=""
+      DTS:DTSID="{AC004F0D-0CDB-4077-B3EA-7336954B80F4}"
+      DTS:From="Package\Foreach Loop tsdfire"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 7"
+      DTS:To="Package\Foreach Loop tspakm" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 8]"
+      DTS:CreationName=""
+      DTS:DTSID="{1AD6D605-660C-44A7-91F6-2FB8DF5FB572}"
+      DTS:From="Package\Foreach Loop tsmopd"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 8"
+      DTS:To="Package\Foreach Loop tseecb" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Create directory"
+          TopLeft="7.00000000000001,5.5" />
+        <NodeLayout
+          Size="122,42"
+          Id="Package\Foreach Loop Container\Copy file"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="150,103"
+          Size="133,146"
+          Id="Package\Foreach Loop Container"
+          TopLeft="18.5,107.5" />
+        <NodeLayout
+          Size="144,42"
+          Id="Package\Foreach Loop tsdfire\Delete tsdfire"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="155,103"
+          Size="155,146"
+          Id="Package\Foreach Loop tsdfire"
+          TopLeft="7.50000000000017,1137.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tsdnaw\Delete tsdnaw"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tsdnaw"
+          TopLeft="5.50000000000011,725.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tsdsmd\Delete tsdsmd"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tsdsmd"
+          TopLeft="5.50000000000007,313.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tseecb\Delete tseecb"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tseecb"
+          TopLeft="5.50000000000024,1755.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tsloth\Delete tsloth"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tsloth"
+          TopLeft="5.50000000000014,931.5" />
+        <NodeLayout
+          Size="144,42"
+          Id="Package\Foreach Loop tsmopd\Delete tsmopd"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="155,103"
+          Size="155,146"
+          Id="Package\Foreach Loop tsmopd"
+          TopLeft="7.50000000000021,1549.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tspakm\Delete tspakm"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tspakm"
+          TopLeft="5.50000000000018,1343.5" />
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tsvvdo\Delete tsvvdo"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tsvvdo"
+          TopLeft="5.50000000000009,519.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="85,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="85.0000000000001,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="85.0000000000001,665.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="85.0000000000002,1077.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="85.0000000000002,1489.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="85.0000000000001,459.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="85.0000000000001,871.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 7]"
+          TopLeft="85.0000000000002,1283.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 8]"
+          TopLeft="85.0000000000002,1695.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

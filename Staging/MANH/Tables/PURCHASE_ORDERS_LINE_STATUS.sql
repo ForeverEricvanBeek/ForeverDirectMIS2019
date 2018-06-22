@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[PURCHASE_ORDERS_LINE_STATUS] (
+    [PURCHASE_ORDERS_LINE_STATUS] INT           NOT NULL,
+    [DESCRIPTION]                 NVARCHAR (40) NOT NULL,
+    [NOTE]                        NVARCHAR (40) NULL,
+    [BatchID]                     BIGINT        NULL,
+    [ProcessLogID]                BIGINT        NULL,
+    CONSTRAINT [PK_MANH_PURCHASE_ORDERS_LINE_STATUS] PRIMARY KEY CLUSTERED ([PURCHASE_ORDERS_LINE_STATUS] ASC)
+);
+

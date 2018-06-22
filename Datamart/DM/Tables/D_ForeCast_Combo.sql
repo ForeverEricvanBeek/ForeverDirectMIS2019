@@ -1,0 +1,25 @@
+﻿CREATE TABLE [DM].[D_ForeCast_Combo] (
+    [D_ForeCast_Combo_Skey]       BIGINT         IDENTITY (1, 1) NOT NULL,
+    [ForeCast_Combo_Customer]     NVARCHAR (15)  NULL,
+    [ForeCast_Combo_Office]       NVARCHAR (50)  NULL,
+    [ForeCast_Combo_Combo_Name]   NVARCHAR (150) NULL,
+    [ForeCast_Combo_Combo_Style]  NVARCHAR (10)  NULL,
+    [ForeCast_Combo_Combo_Update] NVARCHAR (50)  NULL,
+    [ForeCast_Combo_Combo_Item]   NVARCHAR (128) NULL,
+    [ForeCast_Combo_Combo_Check]  NVARCHAR (128) NULL,
+    [ForeCast_Combo_Quantity]     INT            NULL,
+    [CheckSum]                    NVARCHAR (32)  NULL,
+    [CheckSumSCD1]                NVARCHAR (32)  NULL,
+    [CheckSumSCD2]                NVARCHAR (32)  NULL,
+    [IsActual]                    INT            NOT NULL,
+    [IsInferred]                  INT            NULL,
+    [IsDeleted]                   INT            NULL,
+    [EffectiveDate]               DATE           NOT NULL,
+    [ExpiryDate]                  DATE           NULL,
+    [InsertDateTime]              DATETIME2 (7)  NULL,
+    [UpdateDateTime]              DATETIME2 (7)  NULL,
+    [BatchID]                     BIGINT         NOT NULL,
+    [ProcessLogID]                BIGINT         NULL,
+    CONSTRAINT [PK_D_ForeCast_Combo_1] PRIMARY KEY CLUSTERED ([D_ForeCast_Combo_Skey] ASC) WITH (FILLFACTOR = 80)
+);
+

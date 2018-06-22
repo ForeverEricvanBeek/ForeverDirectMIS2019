@@ -1,0 +1,10 @@
+﻿CREATE TABLE [TRANS].[DEBUG] (
+    [DEBUG_ID]     BIGINT        NOT NULL,
+    [INTERFACE_ID] BIGINT        NOT NULL,
+    [MESSAGE]      VARCHAR (200) NULL,
+    [CREATED]      DATETIME2 (7) DEFAULT (getdate()) NULL,
+    [BatchID]      BIGINT        NULL,
+    [ProcessLogID] BIGINT        NULL,
+    CONSTRAINT [PK_DEBUG] PRIMARY KEY CLUSTERED ([DEBUG_ID] ASC)
+);
+

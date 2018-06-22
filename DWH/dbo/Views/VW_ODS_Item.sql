@@ -1,0 +1,31 @@
+﻿
+CREATE VIEW VW_ODS_Item
+AS
+
+SELECT			I.ITEM_ID				AS ItemID
+				, I.ITEM_NAME			AS ItemName
+				, I.DESCRIPTION			AS ItemDescription
+				, I.UNIT_WEIGHT			AS ItemWeight
+				, S1.DESCRIPTION		AS ItemWeightType
+				, I.UNIT_VOLUME			AS ItemVolume
+				, S2.DESCRIPTION		AS ItemVolumeType
+				, I.UNIT_HEIGHT			AS ItemHeight
+				, I.UNIT_WIDTH			AS ItemWidth
+				, I.UNIT_LENGTH			AS ItemLength
+				, S3.DESCRIPTION		AS ItemDimensionType
+				, I.VARIABLE_WEIGHT		AS ItemIndVariableWeight
+				, UN.UN_NUMBER_VALUE	AS ItemDangerousGood
+FROM			MANH.ITEM_CBO AS I 
+LEFT JOIN		MANH.SIZE_UOM AS S1 
+ON				S1.SIZE_UOM_ID = I.WEIGHT_UOM_ID 
+AND				S1.ActInd = 'Y' 
+LEFT JOIN		MANH.SIZE_UOM AS S2 
+ON				S2.SIZE_UOM_ID = I.VOLUME_UOM_ID 
+AND				S2.ActInd = 'Y' 
+LEFT JOIN		MANH.SIZE_UOM AS S3 
+ON				S3.SIZE_UOM_ID = I.DIMENSION_UOM_ID 
+AND				S3.ActInd = 'Y'
+LEFT JOIN		MANH.UN_NUMBER AS UN
+ON				UN.UN_NUMBER_ID = I.UN_NUMBER_ID
+AND				UN.ActInd = 'Y'
+WHERE			I.ActInd = 'Y'

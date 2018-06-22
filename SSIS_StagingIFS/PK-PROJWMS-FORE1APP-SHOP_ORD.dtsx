@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="06/22/2018 08:02:34" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="FDONB044" DTS:CreatorName="beek" DTS:DTSID="{11BE1FBE-F6C4-4EE2-8690-3AEB295BB379}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1043" DTS:ObjectName="PK-PROJWMS-FORE1APP-SHOP_ORD" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{E52D5458-5998-4DE2-A87C-45F3FCE3FDF0}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{FAB63492-4B18-4B5C-98BE-17BD18A49E95}" DTS:ObjectName="BatchID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">-1</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{37CA3E60-1021-499A-AABF-DC33C59E70CD}" DTS:ObjectName="ProcessLogParentID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{0916FA48-EE4B-44BE-BDEA-71B8658A63C5}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionStart">
+      <DTS:VariableValue DTS:DataType="8">S</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{A24B160C-79A1-482B-9FFB-72D78C4A4DCB}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionNone">
+      <DTS:VariableValue DTS:DataType="8">N</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{3B7D554D-503D-4E9A-91B2-07F6F259DC44}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionFinish">
+      <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{837769CB-A5AC-4697-B0EC-2A4695EECB9B}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionError">
+      <DTS:VariableValue DTS:DataType="8">E</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{CAD64C85-463C-4153-B61C-9D04CCF3216A}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditProcessLogID">
+      <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{67461282-F197-4ADE-883B-2A0CD1920D2F}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchID">
+      <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{0151F142-50AD-413A-8368-BFA7AF3FBE05}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="PackageName">
+      <DTS:VariableValue DTS:DataType="8">PK-PROJWMS-FORE1APP-SHOP_ORD</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{FBA68BC4-D294-4BE2-B989-204300E61095}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountExtract">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{E25B2BCB-316C-4F33-8E1F-B678508D00D6}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountTarget">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{CED17388-F85F-4C98-9E8A-D699166DDBB5}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountError">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{85DDD8F0-2645-4EB4-84F1-D41E5BD560E3}" DTS:IncludeInDebugDump="2345" DTS:Namespace="RC" DTS:ObjectName="MaxIncrementalKey">
+      <DTS:VariableValue DTS:DataType="8">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{E49B3D24-A15C-4242-AEAE-561C49033119}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionDate">
+      <DTS:VariableValue DTS:DataType="8">2000-01-01 00:00:00</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{D8E73D4F-4009-46CE-A91D-378D0862FF67}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionID">
+      <DTS:VariableValue DTS:DataType="8">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{D3B3D038-559A-4D6B-9A8E-3950526368EA}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="ExtractionType">
+      <DTS:VariableValue DTS:DataType="8">MI</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{A071CBD5-BB78-4709-8B93-41435D9CC2B2}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sFullFilePath">
+      <DTS:VariableValue DTS:DataType="8">E:\DWHWork\Input\test.csv</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{7AF1D24C-AC16-4C24-9CFD-9A0DF3CA958E}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sSourceFolder">
+      <DTS:VariableValue DTS:DataType="8"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{3067CBA2-DC8F-4A31-919B-2F136753D781}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="SourceExtractionSQL">
+      <DTS:VariableValue DTS:DataType="8">SELECT CAST(ORDER_NO AS VARCHAR2(12)) AS ORDER_NO, CAST(RELEASE_NO AS VARCHAR2(4)) AS RELEASE_NO, CAST(SEQUENCE_NO AS VARCHAR2(4)) AS SEQUENCE_NO FROM "FORE1APP"."SHOP_ORD" WHERE 1=1 AND CONTRACT = 'FD01'</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{DD7A6446-9A95-4755-9D49-50799DCCAA30}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Start Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SQL Start Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ? ,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?,@ExtractionType = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionStart" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::BatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::ProcessLogParentID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="5" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="6" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="7" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::VersionGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="8" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMajor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="9" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMinor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="10" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::MachineName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="11" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::UserName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="12" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ExecutionInstanceGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="13" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::ExtractionType" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="14" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ResultName="1"></SQLTask:ResultBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{26092862-D84B-4542-ADDE-7A97789F4AC1}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SC Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7E3D35CA-B97F-409F-932E-D9FD83930D78}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Truncate table PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\SQL Truncate table PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="StagingIFS_PK" SQLTask:SqlStatementSource="TRUNCATE TABLE [PROJWMS].[SHOP_ORD]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.Pipeline" DTS:DTSID="{6B89E93F-99A6-4159-8FD7-C8C66937B16D}" DTS:ExecutableType="Microsoft.Pipeline" DTS:LocaleID="-1" DTS:ObjectName="Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <pipeline BLOBTempStoragePath="" bufferTempStoragePath="" name="pipelineXml" version="1">
+              <components>
+                <component componentClassID="Microsoft.OLEDBSource" contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7" name="OLEDB Source PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD" usesDispositions="true" version="7">
+                  <connections>
+                    <connection connectionManagerID="{7BB7B41F-AD7D-4F84-B206-13E81FAA1BA9}:external" connectionManagerRefId="Project.ConnectionManagers[PROJWMS]" description="The OLE DB runtime connection used to access the database." name="OleDbConnection" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Connections[OleDbConnection]"></connection>
+                  </connections>
+                  <outputs>
+                    <output name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]">
+                      <externalMetadataColumns isUsed="True">
+                        <externalMetadataColumn dataType="wstr" length="12" name="ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[ORDER_NO]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="wstr" length="4" name="RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[RELEASE_NO]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="wstr" length="4" name="SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[SEQUENCE_NO]"></externalMetadataColumn>
+                      </externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="RedirectRow" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[ORDER_NO]" length="12" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" name="ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" truncationRowDisposition="RedirectRow"></outputColumn>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="RedirectRow" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[RELEASE_NO]" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" name="RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" truncationRowDisposition="RedirectRow"></outputColumn>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="RedirectRow" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].ExternalColumns[SEQUENCE_NO]" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" name="SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" truncationRowDisposition="RedirectRow"></outputColumn>
+                      </outputColumns>
+                    </output>
+                    <output isErrorOut="true" name="Error" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="wstr" length="12" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ORDER_NO]" name="ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ORDER_NO]"></outputColumn>
+                        <outputColumn dataType="wstr" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[RELEASE_NO]" name="RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[RELEASE_NO]"></outputColumn>
+                        <outputColumn dataType="wstr" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[SEQUENCE_NO]" name="SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[SEQUENCE_NO]"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                  <properties>
+                    <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">0</property>
+                    <property dataType="System.String" description="Specifies the name of the database object used to open a rowset." name="OpenRowset"></property>
+                    <property dataType="System.String" description="Specifies the variable that contains the name of the database object used to open a rowset." name="OpenRowsetVariable"></property>
+                    <property dataType="System.String" description="The SQL command to be executed." name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property dataType="System.String" description="The variable that contains the SQL command to be executed." name="SqlCommandVariable">User::SourceExtractionSQL</property>
+                    <property dataType="System.Int32" description="Specifies the column code page to use when code page information is unavailable from the data source." name="DefaultCodePage">1252</property>
+                    <property dataType="System.Boolean" description="Forces the use of the DefaultCodePage property value when describing character data." name="AlwaysUseDefaultCodePage">false</property>
+                    <property dataType="System.Int32" description="Specifies the mode used to access the database." name="AccessMode" typeConverter="AccessMode">3</property>
+                    <property dataType="System.String" description="The mappings between the parameters in the SQL command and variables." name="ParameterMapping"></property>
+                  </properties>
+                </component>
+                <component componentClassID="Microsoft.DerivedColumn" contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0" name="Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD" usesDispositions="true">
+                  <inputs>
+                    <input name="OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="i4" cachedName="ErrorCode" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD].Columns[ErrorCode]"></inputColumn>
+                        <inputColumn cachedDataType="i4" cachedName="ErrorColumn" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD].Columns[ErrorColumn]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="ORDER_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD].Columns[ORDER_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="RELEASE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD].Columns[RELEASE_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="SEQUENCE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD].Columns[SEQUENCE_NO]"></inputColumn>
+                      </inputColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output exclusionGroup="1" name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" length="1" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]" name="RecordType" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property dataType="System.String" description="Derived Column Expression" name="Expression">(DT_WSTR,1)"E"</property>
+                            <property dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">(DT_WSTR,1)"E"</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" length="200" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]" name="ErrorMessage" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property containsID="true" dataType="System.String" description="Derived Column Expression" name="Expression">(DT_WSTR,6)"Code: " + (DT_WSTR,12)#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]} + (DT_WSTR,10)"; Column: " + (DT_WSTR,2)" (" + (DT_WSTR,4)#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]} + (DT_WSTR,1)")" + " Key: " + (DT_WSTR,50)#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ORDER_NO]}+ "; " + (DT_WSTR,50)#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[RELEASE_NO]}+ "; " + (DT_WSTR,50)#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[SEQUENCE_NO]}</property>
+                            <property containsID="true" dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">(DT_WSTR,6)"Code: " + (DT_WSTR,12)[ErrorCode] + (DT_WSTR,10)"; Column: " + (DT_WSTR,2)" (" + (DT_WSTR,4)[ErrorColumn] + (DT_WSTR,1)")" + " Key: " + (DT_WSTR,50)ORDER_NO+ "; " + (DT_WSTR,50)RELEASE_NO+ "; " + (DT_WSTR,50)SEQUENCE_NO</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                    </output>
+                    <output exclusionGroup="1" isErrorOut="true" name="Error" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component componentClassID="Microsoft.RowCount" contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0" name="RowCount Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD">
+                  <inputs>
+                    <input hasSideEffects="true" name="Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                    </output>
+                  </outputs>
+                  <properties>
+                    <property dataType="System.String" description="Specifies the variable to hold the row count." name="VariableName">RC::RowCountError</property>
+                  </properties>
+                </component>
+                <component componentClassID="Microsoft.UnionAll" contactInfo="Union All;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1" name="Union PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD" version="1">
+                  <inputs>
+                    <input name="OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="ORDER_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[ORDER_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="RELEASE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[RELEASE_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="SEQUENCE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[SEQUENCE_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                    </input>
+                    <input hasSideEffects="true" name="RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="wstr" cachedLength="1" cachedName="RecordType" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[RecordType]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="200" cachedName="ErrorMessage" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[ErrorMessage]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="ORDER_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[ORDER_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="RELEASE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[RELEASE_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="SEQUENCE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[SEQUENCE_NO]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="i4" cachedName="ErrorCode" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[ErrorCode]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorCode]}</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="i4" cachedName="ErrorColumn" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD].Columns[ErrorColumn]">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Output column lineage ID" name="OutputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorColumn]}</property>
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                    </input>
+                    <input dangling="true" hasSideEffects="true" name="Input1" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[Input1]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="wstr" length="12" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" name="ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]"></outputColumn>
+                        <outputColumn dataType="wstr" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" name="RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]"></outputColumn>
+                        <outputColumn dataType="wstr" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" name="SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]"></outputColumn>
+                        <outputColumn dataType="wstr" length="1" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]" name="RecordType" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RecordType]"></outputColumn>
+                        <outputColumn dataType="wstr" length="200" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]" name="ErrorMessage" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorMessage]"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component componentClassID="Microsoft.DerivedColumn" contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0" name="Derived Column PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD" usesDispositions="true">
+                  <inputs>
+                    <input name="Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="ORDER_NO" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD].Columns[ORDER_NO]" truncationRowDisposition="FailComponent" usageType="readWrite">
+                          <properties>
+                            <property containsID="true" dataType="System.String" description="Derived Column Expression" name="Expression">TRIM(#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]})</property>
+                            <property containsID="true" dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">TRIM(ORDER_NO)</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="RELEASE_NO" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD].Columns[RELEASE_NO]" truncationRowDisposition="FailComponent" usageType="readWrite">
+                          <properties>
+                            <property containsID="true" dataType="System.String" description="Derived Column Expression" name="Expression">TRIM(#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]})</property>
+                            <property containsID="true" dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">TRIM(RELEASE_NO)</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="SEQUENCE_NO" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD].Columns[SEQUENCE_NO]" truncationRowDisposition="FailComponent" usageType="readWrite">
+                          <properties>
+                            <property containsID="true" dataType="System.String" description="Derived Column Expression" name="Expression">TRIM(#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]})</property>
+                            <property containsID="true" dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">TRIM(SEQUENCE_NO)</property>
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output exclusionGroup="1" name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="i8" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[BatchID]" name="BatchID" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[BatchID]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property dataType="System.String" description="Derived Column Expression" name="Expression">@[Audit::AuditBatchID]</property>
+                            <property dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">@[Audit::AuditBatchID]</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn dataType="i8" errorOrTruncationOperation="Computation" errorRowDisposition="FailComponent" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ProcessLogID]" name="ProcessLogID" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ProcessLogID]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property dataType="System.String" description="Derived Column Expression" name="Expression">@[Audit::AuditProcessLogID]</property>
+                            <property dataType="System.String" description="Derived Column Friendly Expression" expressionType="Notify" name="FriendlyExpression">@[Audit::AuditProcessLogID]</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                    </output>
+                    <output exclusionGroup="1" isErrorOut="true" name="Error" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component componentClassID="Microsoft.DataConvert" contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0" name="Data Conversion PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD" usesDispositions="true">
+                  <inputs>
+                    <input name="Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="ORDER_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD].Columns[ORDER_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="RELEASE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD].Columns[RELEASE_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="SEQUENCE_NO" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD].Columns[SEQUENCE_NO]"></inputColumn>
+                      </inputColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output exclusionGroup="1" name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" length="12" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.ORDER_NO]" name="dc.ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.ORDER_NO]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Specifies the input column used as the source of data for the conversion." name="SourceInputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ORDER_NO]}</property>
+                            <property dataType="System.Boolean" description="Indicates whether the column uses the faster, locale-neutral parsing routines." name="FastParse">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.RELEASE_NO]" name="dc.RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.RELEASE_NO]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Specifies the input column used as the source of data for the conversion." name="SourceInputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[RELEASE_NO]}</property>
+                            <property dataType="System.Boolean" description="Indicates whether the column uses the faster, locale-neutral parsing routines." name="FastParse">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn dataType="wstr" errorOrTruncationOperation="Conversion" errorRowDisposition="FailComponent" length="4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.SEQUENCE_NO]" name="dc.SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.SEQUENCE_NO]" truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property containsID="true" dataType="System.Int32" description="Specifies the input column used as the source of data for the conversion." name="SourceInputColumnLineageID">#{Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[SEQUENCE_NO]}</property>
+                            <property dataType="System.Boolean" description="Indicates whether the column uses the faster, locale-neutral parsing routines." name="FastParse">false</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                    </output>
+                    <output exclusionGroup="1" isErrorOut="true" name="Error" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component componentClassID="Microsoft.RowCount" contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0" name="RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD">
+                  <inputs>
+                    <input hasSideEffects="true" name="Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD.Inputs[Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output name="Output" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD.Inputs[Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                    </output>
+                  </outputs>
+                  <properties>
+                    <property dataType="System.String" description="Specifies the variable to hold the row count." name="VariableName">RC::RowCountExtract</property>
+                  </properties>
+                </component>
+                <component componentClassID="Microsoft.OLEDBDestination" contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4" name="OLEDB Target PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD" usesDispositions="true" validateExternalMetadata="False" version="4">
+                  <connections>
+                    <connection connectionManagerID="{44AB8A53-83A3-4759-9AEE-8C4C8348F15E}:external" connectionManagerRefId="Project.ConnectionManagers[StagingIFS_PK]" description="The OLE DB runtime connection used to access the database." name="OleDbConnection" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Connections[OleDbConnection]"></connection>
+                  </connections>
+                  <inputs>
+                    <input errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent" hasSideEffects="true" name="RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns isUsed="True">
+                        <externalMetadataColumn dataType="wstr" length="12" name="ORDER_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[ORDER_NO]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="wstr" length="4" name="RELEASE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[RELEASE_NO]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="wstr" length="4" name="SEQUENCE_NO" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[SEQUENCE_NO]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="i8" name="BatchID" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[BatchID]"></externalMetadataColumn>
+                        <externalMetadataColumn dataType="i8" name="ProcessLogID" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[ProcessLogID]"></externalMetadataColumn>
+                      </externalMetadataColumns>
+                      <inputColumns>
+                        <inputColumn cachedDataType="wstr" cachedLength="12" cachedName="dc.ORDER_NO" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[ORDER_NO]" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.ORDER_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].Columns[dc.ORDER_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="dc.RELEASE_NO" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[RELEASE_NO]" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.RELEASE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].Columns[dc.RELEASE_NO]"></inputColumn>
+                        <inputColumn cachedDataType="wstr" cachedLength="4" cachedName="dc.SEQUENCE_NO" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[SEQUENCE_NO]" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[dc.SEQUENCE_NO]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].Columns[dc.SEQUENCE_NO]"></inputColumn>
+                        <inputColumn cachedDataType="i8" cachedName="BatchID" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[BatchID]" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[BatchID]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].Columns[BatchID]"></inputColumn>
+                        <inputColumn cachedDataType="i8" cachedName="ProcessLogID" externalMetadataColumnId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].ExternalColumns[ProcessLogID]" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output].Columns[ProcessLogID]" name="" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD].Columns[ProcessLogID]"></inputColumn>
+                      </inputColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output exclusionGroup="1" isErrorOut="true" name="Error" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]" synchronousInputId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD]">
+                      <externalMetadataColumns></externalMetadataColumns>
+                      <outputColumns>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" name="ErrorCode" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorCode]" specialFlags="1"></outputColumn>
+                        <outputColumn dataType="i4" lineageId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" name="ErrorColumn" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error].Columns[ErrorColumn]" specialFlags="2"></outputColumn>
+                      </outputColumns>
+                    </output>
+                  </outputs>
+                  <properties>
+                    <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">0</property>
+                    <property dataType="System.String" description="Specifies the name of the database object used to open a rowset." name="OpenRowset">[PROJWMS].[SHOP_ORD]</property>
+                    <property dataType="System.String" description="Specifies the variable that contains the name of the database object used to open a rowset." name="OpenRowsetVariable"></property>
+                    <property dataType="System.String" description="The SQL command to be executed." name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property dataType="System.Int32" description="Specifies the column code page to use when code page information is unavailable from the data source." name="DefaultCodePage">1252</property>
+                    <property dataType="System.Boolean" description="Forces the use of the DefaultCodePage property value when describing character data." name="AlwaysUseDefaultCodePage">false</property>
+                    <property dataType="System.Int32" description="Specifies the mode used to access the database." name="AccessMode">3</property>
+                    <property dataType="System.Boolean" description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on." name="FastLoadKeepIdentity">false</property>
+                    <property dataType="System.Boolean" description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on." name="FastLoadKeepNulls">false</property>
+                    <property dataType="System.String" description="Specifies options to be used with fast load.  Applies only if fast load is turned on." name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                    <property dataType="System.Int32" description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on." name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                </component>
+              </components>
+              <paths>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD]" name="OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Error_Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Error]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD]" name="Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Error PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Columns Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]" name="OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[OLEDB Source PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Source PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]" name="RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[RowCount Error PROJWMS-FORE1APP-SHOP_ORD_Output_Union PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Error PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Inputs[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD]" name="Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[Union PROJWMS-FORE1APP-SHOP_ORD_Output_Derived Column PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Union PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Inputs[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD]" name="Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[Derived Column PROJWMS-FORE1APP-SHOP_ORD_Output_Data Conversion PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Derived Column PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD.Inputs[Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD]" name="Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[Data Conversion PROJWMS-FORE1APP-SHOP_ORD_Output_RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\Data Conversion PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+                <path endId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\OLEDB Target PROJWMS-FORE1APP-SHOP_ORD.Inputs[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD]" name="RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD" refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD.Paths[RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD_Output_OLEDB Target PROJWMS-FORE1APP-SHOP_ORD]" startId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD\RowCount Extraction PROJWMS-FORE1APP-SHOP_ORD.Outputs[Output]"></path>
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{4DC18EF9-6760-4CD6-B008-77331DBCD189}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Target row count PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\SQL Target row count PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="StagingIFS_PK" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="SELECT count(*) FROM [PROJWMS].[SHOP_ORD]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{CD8E08A7-9789-4B8B-8DC1-E05488A8AAF2}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\SQL Truncate table PROJWMS-FORE1APP-SHOP_ORD" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Truncate table PROJWMS-FORE1APP-SHOP_ORD_To_Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD.PrecedenceConstraints[Constraint_SQL Truncate table PROJWMS-FORE1APP-SHOP_ORD_To_Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{EC5055E6-3797-4427-BB7A-EEECD1E1DD52}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD_To_SQL Target row count PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD.PrecedenceConstraints[Constraint_Dataflow Extract PROJWMS-FORE1APP-SHOP_ORD_To_SQL Target row count PROJWMS-FORE1APP-SHOP_ORD]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD\SQL Target row count PROJWMS-FORE1APP-SHOP_ORD"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{27E9CE93-2F40-40C1-A215-CE237B23D73D}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Finish Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package\SQL Finish Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?,@LastExtractionID = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionFinish" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::LastExtractionDate" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountExtract" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="5" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="6" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountError" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="7" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::LastExtractionID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="8" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AA76DF5E-9DBE-4B23-9C94-78CB6302E075}" DTS:From="Package\SQL Start Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Start Audit Package PROJWMS-FORE1APP-SHOP_ORD_To_SC Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package.PrecedenceConstraints[Constraint_SQL Start Audit Package PROJWMS-FORE1APP-SHOP_ORD_To_SC Extract PROJWMS-FORE1APP-SHOP_ORD]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{2291C96F-A68D-494B-9DEB-4D0EB69CB80D}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-SHOP_ORD" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SC Extract PROJWMS-FORE1APP-SHOP_ORD_To_SQL Finish Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package.PrecedenceConstraints[Constraint_SC Extract PROJWMS-FORE1APP-SHOP_ORD_To_SQL Finish Audit Package PROJWMS-FORE1APP-SHOP_ORD]" DTS:To="Package\SQL Finish Audit Package PROJWMS-FORE1APP-SHOP_ORD"></DTS:PrecedenceConstraint>
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:CreationName="OnError" DTS:DTSID="{B5671E5C-E024-489D-BFC1-EBF1E1152C5B}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="-1" DTS:refId="Package.EventHandlers[OnError]">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{3A227FA9-979A-4E5B-951A-0D47D6029544}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Error Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:refId="Package.EventHandlers[OnError]\SQL Error Audit Package PROJWMS-FORE1APP-SHOP_ORD" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::ErrorCode" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:Description="The propagate property of the event" DTS:DTSID="{961A5403-B895-4DD4-81FA-D1E57DB11953}" DTS:IncludeInDebugDump="6789" DTS:Namespace="System" DTS:ObjectName="Propagate">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>

@@ -1,0 +1,8 @@
+﻿CREATE TABLE [TRANS].[CATEGORY] (
+    [CATEGORY]             VARCHAR (20)  NOT NULL,
+    [CATEGORY_DESCRIPTION] VARCHAR (200) NULL,
+    [BatchID]              BIGINT        NULL,
+    [ProcessLogID]         BIGINT        NULL,
+    CONSTRAINT [PK_CATEGORY] PRIMARY KEY CLUSTERED ([CATEGORY] ASC)
+);
+

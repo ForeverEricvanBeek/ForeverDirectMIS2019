@@ -1,0 +1,7 @@
+﻿CREATE TABLE [TRANS].[FORWARDER_STATUS_SUBCATEGORY] (
+    [STATUS_CATEGORY] VARCHAR (20) NOT NULL,
+    [STATUS]          VARCHAR (50) NOT NULL,
+    [BatchID]         BIGINT       NULL,
+    [ProcessLogID]    BIGINT       NULL
+);
+

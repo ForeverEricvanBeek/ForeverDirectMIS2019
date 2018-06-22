@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="06/05/2018 13:14:16" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="FDONB044" DTS:CreatorName="beek" DTS:DTSID="{035C26E6-C6BA-42A9-9D52-854EAC3746C6}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1043" DTS:MaxConcurrentExecutables="4" DTS:ObjectName="PRIM-StagingIFS-PROJWMS-Total" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{2374CCF8-7DC5-4669-9DB6-67734961554C}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{7E8096E8-7340-4AC5-A2E5-D2F5FBCD35A9}" DTS:ObjectName="BatchID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">-1</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{00720A3D-CE35-44ED-9E79-C0279A1B9A2F}" DTS:ObjectName="ProcessLogParentID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{DB86B5E6-FCE3-465D-A19B-EA697A84FE77}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionStart">
+      <DTS:VariableValue DTS:DataType="8">S</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{0A1527B5-B307-45A2-BE56-72B5D58DFA4B}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionStart">
+      <DTS:VariableValue DTS:DataType="8">S</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{A39D51C6-C150-4FCC-8700-6F7D316390ED}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionNone">
+      <DTS:VariableValue DTS:DataType="8">N</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{2224C553-90F6-45DB-9D2E-1F33415D6557}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionError">
+      <DTS:VariableValue DTS:DataType="8">E</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{290E9A79-466B-4BDB-8E1A-55E784FB5988}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionFinish">
+      <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{C1C8D332-A16B-47EE-A5E7-79721176A394}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionFinish">
+      <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{01550C78-B95A-4D90-A0FE-9B9C5B2A7EC1}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionError">
+      <DTS:VariableValue DTS:DataType="8">E</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{18C1EE3E-F78F-4437-9456-FB1BFAC68A25}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditProcessLogID">
+      <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{D9390D26-5889-494D-857F-9270DFAB1863}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchID">
+      <DTS:VariableValue DTS:DataType="20">-1</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{5EC4391A-D2F8-4425-8158-166F9EF28212}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="PackageName">
+      <DTS:VariableValue DTS:DataType="8">PRIM-StagingIFS-PROJWMS-Total</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6C64975D-DA5A-4AA9-BA7D-75C67B6308E0}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Start Audit Package StagingIFS-PROJWMS-Total" DTS:refId="Package\SQL Start Audit Package StagingIFS-PROJWMS-Total" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ? ,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionStart" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::BatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::ProcessLogParentID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="5" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="6" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="7" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::VersionGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="8" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMajor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="9" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMinor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="10" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::MachineName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="11" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::UserName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="12" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ExecutionInstanceGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="13" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ResultName="1"></SQLTask:ResultBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{B271D660-86B5-4A2F-A9DD-77F8C3D98200}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SC Extract StagingIFS-PROJWMS-Total" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{9D5FA774-EF7A-42AA-9567-E5BA2756847A}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{E63BB4F5-1D91-4343-BD61-9167971731D1}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER_LINE_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER_LINE_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-CUSTOMER_ORDER_LINE.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{94B0653F-571A-40C5-847C-2A2EA1F68E10}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-INTFACE_CONV_LIST_COLS_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-INTFACE_CONV_LIST_COLS_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-INTFACE_CONV_LIST_COLS.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{ACD18354-81D7-4DF2-8783-8EE789719708}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-INVENTORY_PART_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-INVENTORY_PART_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-INVENTORY_PART.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{10B8B6C5-DF36-469D-82C4-29D2B35EC983}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{F014CE38-AD1C-4688-8569-77E9759419C4}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-INVENTORY_PRODUCT_FAMILY_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-INVENTORY_PRODUCT_FAMILY_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-INVENTORY_PRODUCT_FAMILY.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{BCC663AE-7C1D-409E-9C86-2EBD348C99E5}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{8FA2F1FE-1E00-4399-82BA-1650B396C7B4}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE_HEAD_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE_HEAD_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-MANUF_STRUCTURE_HEAD.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{E7FC286C-C8FC-433F-8178-B2840E2F732B}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-MATERIAL_HISTORY_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-MATERIAL_HISTORY_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-MATERIAL_HISTORY.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{2BC119EB-F461-4374-B2D4-4956784C0CA8}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-SALES_PART_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-SALES_PART_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-SALES_PART.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{167AD043-58BF-475E-ADD3-65B1B080C319}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-SHOP_MATERIAL_ALLOC_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-SHOP_MATERIAL_ALLOC_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-SHOP_MATERIAL_ALLOC.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{5912E24D-2CDF-4207-BF6C-05374AEC6DF3}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-SHOP_ORD_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-SHOP_ORD_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-SHOP_ORD.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{4ACA2711-4A7F-434A-BBEF-D85B5C8E3AF0}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="PRIM-PROJWMS-FORE1APP-SHOP_ORDER_OPERATION_dtsx" DTS:refId="Package\SC Extract StagingIFS-PROJWMS-Total\PRIM-PROJWMS-FORE1APP-SHOP_ORDER_OPERATION_dtsx" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>PRIM-PROJWMS-FORE1APP-SHOP_ORDER_OPERATION.dtsx</PackageName>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditBatchID</BindedVariableOrParameterName>
+                <ParameterName>BatchID</ParameterName>
+              </ParameterAssignment>
+              <ParameterAssignment>
+                <BindedVariableOrParameterName>Audit::AuditProcessLogID</BindedVariableOrParameterName>
+                <ParameterName>ProcessLogParentID</ParameterName>
+              </ParameterAssignment>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{FE39398C-1CF7-48FE-80A4-BFBDE0519E11}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Finish Audit Package StagingIFS-PROJWMS-Total" DTS:refId="Package\SQL Finish Audit Package StagingIFS-PROJWMS-Total" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionFinish" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{22BDB3DC-D4E6-47AD-97C3-B61C40299D43}" DTS:From="Package\SQL Start Audit Package StagingIFS-PROJWMS-Total" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Start Audit Package StagingIFS-PROJWMS-Total_To_SC Extract StagingIFS-PROJWMS-Total" DTS:refId="Package.PrecedenceConstraints[Constraint_SQL Start Audit Package StagingIFS-PROJWMS-Total_To_SC Extract StagingIFS-PROJWMS-Total]" DTS:To="Package\SC Extract StagingIFS-PROJWMS-Total"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C185718F-9AA1-4DEA-B092-9C0B5241AB4D}" DTS:From="Package\SC Extract StagingIFS-PROJWMS-Total" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SC Extract StagingIFS-PROJWMS-Total_To_SQL Finish Audit Package StagingIFS-PROJWMS-Total" DTS:refId="Package.PrecedenceConstraints[Constraint_SC Extract StagingIFS-PROJWMS-Total_To_SQL Finish Audit Package StagingIFS-PROJWMS-Total]" DTS:To="Package\SQL Finish Audit Package StagingIFS-PROJWMS-Total"></DTS:PrecedenceConstraint>
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:CreationName="OnError" DTS:DTSID="{C5FCC009-7A96-4E58-AE0C-C2128A0D68CD}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="-1" DTS:refId="Package.EventHandlers[OnError]">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{F9259A94-B059-4965-9A38-82D3A918E9E8}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Error Audit Package StagingIFS-PROJWMS-Total" DTS:refId="Package.EventHandlers[OnError]\SQL Error Audit Package StagingIFS-PROJWMS-Total" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::ErrorCode" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:Description="The propagate property of the event&#xD;&#xA;The propagate property of the event" DTS:DTSID="{84B6FD68-8828-4CD5-9DFE-AF278F2388A3}" DTS:IncludeInDebugDump="6789" DTS:Namespace="System" DTS:ObjectName="Propagate">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>
