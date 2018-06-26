@@ -1,69 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<DTS:Executable DTS:CreationDate="06/22/2018 08:02:35" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="FDONB044" DTS:CreatorName="beek" DTS:DTSID="{9F20D7EB-75DC-4ECE-9F93-3C9A6D982930}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1043" DTS:ObjectName="PK-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{8A118CCD-ACE4-46AC-A61A-EFF1F16FE958}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+<DTS:Executable DTS:CreationDate="06/26/2018 07:56:23" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="FDONB044" DTS:CreatorName="beek" DTS:DTSID="{DC61E085-B49E-4476-964B-E8E268105497}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1043" DTS:ObjectName="PK-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{EC84837D-3B6B-4F03-94F5-548DB5D4F7D6}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
   <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:PackageParameters>
-    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{48E61A77-8597-4E8A-91F8-1D2BE1999682}" DTS:ObjectName="BatchID" DTS:Required="0" DTS:Sensitive="0">
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{DB39B9EF-1727-4F57-9B9F-B9E2F4836FA8}" DTS:ObjectName="BatchID" DTS:Required="0" DTS:Sensitive="0">
       <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">-1</DTS:Property>
     </DTS:PackageParameter>
-    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{B9C4C951-D1AD-4541-A66C-5DA5F87755DD}" DTS:ObjectName="ProcessLogParentID" DTS:Required="0" DTS:Sensitive="0">
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{15B01373-FEEF-4595-B1DC-ED608B51ECF2}" DTS:ObjectName="ProcessLogParentID" DTS:Required="0" DTS:Sensitive="0">
       <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">0</DTS:Property>
     </DTS:PackageParameter>
   </DTS:PackageParameters>
   <DTS:Variables>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{7821250A-2C80-4CD7-B656-E648EB2544C5}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionStart">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{4560302D-B40D-4446-955F-FF3935F223AA}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionStart">
       <DTS:VariableValue DTS:DataType="8">S</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{D9874863-78A3-448A-9CA2-6D799DAF6B1C}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionNone">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{6ABA4BD7-A62F-464B-A293-EB32B25C3A38}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionNone">
       <DTS:VariableValue DTS:DataType="8">N</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{73D9F24A-AB20-43CC-8F03-1A15DA4FADB6}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionFinish">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{989D1CD6-9A6B-4E88-BC52-2FD718440985}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionFinish">
       <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{E98E1881-8B69-4176-A7EC-0E09C337EEA0}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionError">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{9B3D43C0-DA04-4441-AC4E-00E88249D2B3}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionError">
       <DTS:VariableValue DTS:DataType="8">E</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{2DE42405-2C9A-437D-9567-83A1802C440C}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditProcessLogID">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{BB93FD75-9B8B-4347-9076-4D5B86BB80C4}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditProcessLogID">
       <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{25956260-C910-4067-B9FD-8658F118C4FD}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchID">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{0EB799EA-960E-4727-91C2-E9F82DF7D8BA}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchID">
       <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{8C66D92E-3681-4785-84A5-3FE627AE99BE}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="PackageName">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{63433188-1DD6-4EBF-9F06-835163A3FBCB}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="PackageName">
       <DTS:VariableValue DTS:DataType="8">PK-PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{EEE41C33-664C-4DBF-853B-06D2CA96024C}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountExtract">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{57C96703-CFF0-4C6C-894A-A3964FDBB57D}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountExtract">
       <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{83D8164F-F1F8-4107-A019-F93727AC24D0}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountTarget">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{9F6BDFC6-3041-41A1-8809-A66CE8D37F47}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountTarget">
       <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{07D93581-34FA-4F1F-A866-C67117C6AEA6}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountError">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{C30BB116-D1E6-49A1-8524-43854B2E6749}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountError">
       <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{B346BBFD-9631-430F-A392-F81FBE45FE22}" DTS:IncludeInDebugDump="2345" DTS:Namespace="RC" DTS:ObjectName="MaxIncrementalKey">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{2F36F865-5E7D-4FFB-AED2-099372069153}" DTS:IncludeInDebugDump="2345" DTS:Namespace="RC" DTS:ObjectName="MaxIncrementalKey">
       <DTS:VariableValue DTS:DataType="8">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{EA34EC3D-BAB2-4E87-A71C-875D9D190008}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionDate">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{C1DFC5B3-9B30-4276-8E0A-40FBF64DE6B2}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionDate">
       <DTS:VariableValue DTS:DataType="8">2000-01-01 00:00:00</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{90F5B64A-D085-425A-9AF1-17773750F476}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionID">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{B520CDF8-69F3-46DC-A359-6D1C669D6C42}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionID">
       <DTS:VariableValue DTS:DataType="8">0</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{3FC4B158-4371-4FC7-8934-811E814EF7CF}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="ExtractionType">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{1C5D029E-606F-4799-BAD2-712C019390BA}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="ExtractionType">
       <DTS:VariableValue DTS:DataType="8">MI</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{D9149DC5-9710-429F-BDE7-A1B0072996BF}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sFullFilePath">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{05DBAD01-EA84-4688-A8EB-A1D85F4C7A08}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sFullFilePath">
       <DTS:VariableValue DTS:DataType="8">E:\DWHWork\Input\test.csv</DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{51AF40B9-7BB0-4FE3-AD95-80949D49BABB}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sSourceFolder">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{5970816D-D6EA-4762-ABB1-2356616FE80F}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="sSourceFolder">
       <DTS:VariableValue DTS:DataType="8"></DTS:VariableValue>
     </DTS:Variable>
-    <DTS:Variable DTS:CreationName="" DTS:DTSID="{67B5613B-096B-4E9E-B657-9C5A9E6A0C19}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="SourceExtractionSQL">
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{72F8479C-E217-472B-808A-CAB9003BD936}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="SourceExtractionSQL">
       <DTS:VariableValue DTS:DataType="8">SELECT CAST(CONTRACT AS VARCHAR2(5)) AS CONTRACT, CAST(PART_NO AS VARCHAR2(25)) AS PART_NO, CAST(CONFIGURATION_ID AS VARCHAR2(50)) AS CONFIGURATION_ID, CAST(LOCATION_NO AS VARCHAR2(35)) AS LOCATION_NO, CAST(LOT_BATCH_NO AS VARCHAR2(20)) AS LOT_BATCH_NO, CAST(SERIAL_NO AS VARCHAR2(50)) AS SERIAL_NO, CAST(ENG_CHG_LEVEL AS VARCHAR2(2)) AS ENG_CHG_LEVEL, CAST(WAIV_DEV_REJ_NO AS VARCHAR2(15)) AS WAIV_DEV_REJ_NO, CAST(ACTIVITY_SEQ AS NUMERIC) AS ACTIVITY_SEQ FROM "FORE1APP"."INVENTORY_PART_IN_STOCK" WHERE 1=1 AND CONTRACT = 'FD01'</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
-    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{046C92AF-F609-48BD-83A7-301AF498D7A7}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{821A59C9-FDB5-436A-AC63-3810F082D3A4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:ObjectData>
         <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ? ,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?,@ExtractionType = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionStart" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
@@ -86,14 +86,14 @@
         </SQLTask:SqlTaskData>
       </DTS:ObjectData>
     </DTS:Executable>
-    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{E30BB4D7-FFFB-4AE5-9D16-FEC1CEE8531A}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK">
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A4D4BDF8-7431-4B50-8F71-EBD1A1B3A5BA}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK">
       <DTS:Executables>
-        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{23245571-FBA3-4454-B821-3E12E3B1C73C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E7952BFB-C28F-49B9-9C57-A4E01B16EC8B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
           <DTS:ObjectData>
             <SQLTask:SqlTaskData SQLTask:Connection="StagingIFS_PK" SQLTask:SqlStatementSource="TRUNCATE TABLE [PROJWMS].[INVENTORY_PART_IN_STOCK]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
           </DTS:ObjectData>
         </DTS:Executable>
-        <DTS:Executable DTS:CreationName="Microsoft.Pipeline" DTS:DTSID="{3E0CDF76-5A6C-42D1-925D-4D3723271691}" DTS:ExecutableType="Microsoft.Pipeline" DTS:LocaleID="-1" DTS:ObjectName="Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+        <DTS:Executable DTS:CreationName="Microsoft.Pipeline" DTS:DTSID="{AB412B2A-519A-4076-BC4C-8F7091A6FC27}" DTS:ExecutableType="Microsoft.Pipeline" DTS:LocaleID="-1" DTS:ObjectName="Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
           <DTS:ObjectData>
             <pipeline BLOBTempStoragePath="" bufferTempStoragePath="" name="pipelineXml" version="1">
               <components>
@@ -618,7 +618,7 @@
             </pipeline>
           </DTS:ObjectData>
         </DTS:Executable>
-        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E739207C-1208-495D-9B77-5E96954F39FE}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E7B8892A-2CAA-4B2D-8DBE-7C1DE783791C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
           <DTS:ObjectData>
             <SQLTask:SqlTaskData SQLTask:Connection="StagingIFS_PK" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="SELECT count(*) FROM [PROJWMS].[INVENTORY_PART_IN_STOCK]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
               <SQLTask:ResultBinding SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ResultName="0"></SQLTask:ResultBinding>
@@ -627,11 +627,11 @@
         </DTS:Executable>
       </DTS:Executables>
       <DTS:PrecedenceConstraints>
-        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{6397DFF2-3C6E-471E-8AB9-D41BF14D7F3E}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK.PrecedenceConstraints[Constraint_SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
-        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{35E8B45E-6192-4912-A259-1F94D945D82C}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK.PrecedenceConstraints[Constraint_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{51B5B792-9929-4340-8F26-73653D8B5522}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK.PrecedenceConstraints[Constraint_SQL Truncate table PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C29AB864-1756-44CA-9C7A-0AFF69BB2E74}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK.PrecedenceConstraints[Constraint_Dataflow Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK\SQL Target row count PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
       </DTS:PrecedenceConstraints>
     </DTS:Executable>
-    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{76D9D1DC-7573-4526-8990-11C8BBCE82D1}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{D07347C4-5633-4873-ADDB-D63B39C2D9FA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package\SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:ObjectData>
         <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?,@LastExtractionID = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionFinish" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
@@ -648,13 +648,13 @@
     </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
-    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{DCA873E7-550B-4E00-8ACC-976C53B6090F}" DTS:From="Package\SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.PrecedenceConstraints[Constraint_SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
-    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{80D764C0-B8C4-4EC8-83EF-5166E4DA42D6}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.PrecedenceConstraints[Constraint_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{E6C93414-BFB3-4E7F-B4F2-281C2D103831}" DTS:From="Package\SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.PrecedenceConstraints[Constraint_SQL Start Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{88F380BB-FAEF-4471-9C9B-22A8AF71AAE4}" DTS:From="Package\SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.PrecedenceConstraints[Constraint_SC Extract PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK_To_SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK]" DTS:To="Package\SQL Finish Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK"></DTS:PrecedenceConstraint>
   </DTS:PrecedenceConstraints>
   <DTS:EventHandlers>
-    <DTS:EventHandler DTS:CreationName="OnError" DTS:DTSID="{B2148142-E45B-441C-A413-94C837B63A66}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="-1" DTS:refId="Package.EventHandlers[OnError]">
+    <DTS:EventHandler DTS:CreationName="OnError" DTS:DTSID="{468DB60F-303C-4F0C-9A17-10ACC8F07062}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="-1" DTS:refId="Package.EventHandlers[OnError]">
       <DTS:Executables>
-        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{508F37D4-7B91-4831-9D17-E63693AAD3F4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Error Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.EventHandlers[OnError]\SQL Error Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{26AECFF9-65CE-4002-A15D-E64919DD1004}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Error Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:refId="Package.EventHandlers[OnError]\SQL Error Audit Package PROJWMS-FORE1APP-INVENTORY_PART_IN_STOCK" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
           <DTS:ObjectData>
             <SQLTask:SqlTaskData SQLTask:Connection="DWI_Control" SQLTask:SqlStatementSource="exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
               <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
@@ -667,7 +667,7 @@
         </DTS:Executable>
       </DTS:Executables>
       <DTS:Variables>
-        <DTS:Variable DTS:CreationName="" DTS:Description="The propagate property of the event" DTS:DTSID="{55F15D9B-ED02-45EE-8784-DC9D48D67086}" DTS:IncludeInDebugDump="6789" DTS:Namespace="System" DTS:ObjectName="Propagate">
+        <DTS:Variable DTS:CreationName="" DTS:Description="The propagate property of the event" DTS:DTSID="{6A118538-5F27-41E1-BD81-5EFF69E718FD}" DTS:IncludeInDebugDump="6789" DTS:Namespace="System" DTS:ObjectName="Propagate">
           <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
         </DTS:Variable>
       </DTS:Variables>
