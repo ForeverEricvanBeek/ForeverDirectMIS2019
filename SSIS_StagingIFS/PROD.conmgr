@@ -1,9 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ObjectName="PROD" DTS:DTSID="{2938908F-2980-4EAE-BAE5-6358F1D089D6}" DTS:refId="Package.ConnectionManagers[PROD]" DTS:CreationName="OLEDB">
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="PROD"
+  DTS:DTSID="{2938908F-2980-4EAE-BAE5-6358F1D089D6}"
+  DTS:CreationName="OLEDB">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::ConPROD]</DTS:PropertyExpression>
   <DTS:ObjectData>
-    <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ConnectionString="data source=PROD;user id=IFSBI;provider=OraOLEDB.Oracle.1;persist security info=True;datatypecompatibility=80">
-      <DTS:Password DTS:Name="Password" Sensitive="1"></DTS:Password>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=PROD;User ID=IFSBI;Provider=OraOLEDB.Oracle.1;Persist Security Info=True;">
+      <DTS:Password
+        DTS:Name="Password"
+        Sensitive="1"></DTS:Password>
     </DTS:ConnectionManager>
   </DTS:ObjectData>
-  <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Project::ConPROD]</DTS:PropertyExpression>
 </DTS:ConnectionManager>
