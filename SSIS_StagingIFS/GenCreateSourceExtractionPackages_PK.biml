@@ -55,6 +55,7 @@
                                                 AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                 WHERE   ST.[IsActive] = 1
                                                 AND		ST.[ExtractionType] <> 'F'
+                                                AND ST.IsLoading = 0
                                             ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
@@ -176,6 +177,7 @@
                                                     INNER JOIN	  [Generator].[SourceExtractionTable] st
                                                     on			  st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME
                                                     AND          st.[IsActive] =  1
+                                                    AND          st.IsLoading = 0
                                                     INNER JOIN	  [Generator].[SourceExtractionColumn] sc
                                                     ON			  sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable
                                                     AND          sc.[IsActive] =  1
@@ -524,6 +526,7 @@
                                         ,[IsStaging]
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
+                                        AND st.IsLoading = 0
                                         ";
         
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
@@ -595,6 +598,7 @@
                                                             AND       [TargetSchema] = '" + varTargetSchema + @"' 
                                                             AND       [st].[IsActive] = 1 
                                                             AND       [IsStaging] = '" + varTargetIsStaging + @"' 
+                                                            AND st.IsLoading = 0
                                                             ORDER BY  [SourceTable]
                                                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
@@ -649,109 +653,5 @@
             </Package>
         <#}#>
 
-        <!-- Create Overall Staging Control Package  -->
-        <Package Name = "CTRL-PK-StagingIFS-Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
-            <Parameters>
-                <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-            </Parameters>
-
-            <Variables>
-                <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
-                <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
-                <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
-                <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit" >-1</Variable>
-            </Variables>
-            
-            <Tasks>
-                <ExecuteSQL Name="SQL Start Audit Package CTRL-PK-StagingIFS-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
-                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
-                    <Parameters>
-                        <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
-                        <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                        <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="5" VariableName="System.PackageName" Direction="Input" DataType="String" />
-                        <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
-                        <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
-                        <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
-                        <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
-                        <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
-                        <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
-                        <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
-                        <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
-                    </Parameters>
-                    <Results>
-                        <Result Name="0" VariableName="Audit.AuditBatchID" />
-                        <Result Name="1" VariableName="Audit.AuditProcessLogID" />
-                    </Results>
-                </ExecuteSQL>
-                
-                <Container Name="SC Extract Sources" ConstraintMode="Linear">
-                    <Tasks>
-                        <#string sqlSTGControlPack  = @"SELECT DISTINCT
-                                                        [TargetConnection]
-                                                        ,[TargetSchema]
-                                                        ,'Total' AS [TargetTable]
-                                                        ,'PK' AS PackagePrefix
-                                                        ,[IsStaging]
-                                                        ,MIN([Order]) OVER(Partition BY [TargetConnection] ,[TargetSchema]) AS [Order]
-                                                        FROM      [Generator].[SourceExtractionTable] st
-                                                        WHERE     st.[IsActive] =  1
-                                                        Order by 6";
-                        
-                        DataTable tableSTGControlPack = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSTGControlPack);
-                        foreach (DataRow rowSTGControlPack in tableSTGControlPack.Rows) {
-                            string varTargetConnection = rowSTGControlPack["TargetConnection"].ToString();
-                            string varTargetSchema = rowSTGControlPack["TargetSchema"].ToString();
-                            string varTargetTable = rowSTGControlPack["TargetTable"].ToString();
-                            string varPackagePrefix = rowSTGControlPack["PackagePrefix"].ToString();
-                            string varTargetIsStaging = rowSTGControlPack["IsStaging"].ToString();
-                            string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-                            string varPackageName = varPackagePrefix + "-" + varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;#>
-                            <ExecutePackage Name="<#=varPackageName#>">
-                                <ExternalProjectPackage Package="<#=varPackageName#>.dtsx"/>
-                                <ParameterBindings>
-                                    <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                    <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
-                                </ParameterBindings>
-                            </ExecutePackage>
-                        <#}#>
-                    </Tasks>
-                </Container>
-
-                <ExecuteSQL Name="SQL Finish Audit Package CTRL-PK-StagingIFS-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
-                    <Parameters>
-                        <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                        <Parameter Name="1" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                        <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                    </Parameters>
-                </ExecuteSQL>
-            </Tasks>
-
-            <Events>
-                <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
-                    <Tasks>
-                        <ExecuteSQL Name="SQL Error Audit Package CTRL-PK-StagingIFS-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                            <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = 'CTRL-PK-Staging-Total',@EventCode = ?,@EventDescription = ?</DirectInput>
-                            <Parameters>
-                                <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="2" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
-                                <Parameter Name="3" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
-                            </Parameters>
-                        </ExecuteSQL>
-                    </Tasks>
-                </Event>
-            </Events>
-        </Package>            
     </Packages>
 </Biml>

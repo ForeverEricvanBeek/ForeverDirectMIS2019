@@ -160,6 +160,7 @@
                                 ,st.[TargetConnection]
                                 FROM      [Generator].[SourceExtractionTable] st
                                 WHERE     st.IsActive = 1
+                                AND st.IsLoading = 0
                                 ";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
@@ -212,6 +213,7 @@
                                             Left JOIN [Generator].[Connection] con
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
+                                            --AND st.IsLoading = 0
                                             UNION
                                             SELECT [SourceConnection]
                                             ,[con].[Type]				AS [ConnectionType]
@@ -224,6 +226,7 @@
                                             Left JOIN [Generator].[Connection] con
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
+                                            AND st.IsLoading = 0
                                             UNION
                                             SELECT DISTINCT
                                             [TargetConnection]
@@ -235,6 +238,7 @@
                                             ,CASE  WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-EXTR' END AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
+                                            AND st.IsLoading = 0
                                             UNION
                                             SELECT DISTINCT
                                             [TargetConnection]
@@ -246,22 +250,7 @@
                                             ,'CTRL-PK' AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
-                                            UNION
-                                            SELECT    'EXTR'
-                                            ,null
-                                            ,null
-                                            ,null
-                                            ,'StagingIFS'
-                                            ,'Total'
-                                            ,'CTRL'
-                                            UNION
-                                            SELECT    'PK'
-                                            ,null
-                                            ,null
-                                            ,null
-                                            ,'StagingIFS'
-                                            ,'Total'
-                                            ,'CTRL'
+                                            AND st.IsLoading = 0
                                             ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {
