@@ -167,7 +167,7 @@
     [PROVISIONAL_PRICE_DB]           NVARCHAR (20)   NULL,
     [RECEIVING_ADVICE_TYPE]          NVARCHAR (200)  NULL,
     [RECEIVING_ADVICE_TYPE_DB]       NVARCHAR (20)   NULL,
-    [DEFAULT_CHARGES]                BIT             NULL,
+    [DEFAULT_CHARGES]                NVARCHAR (50)   NULL,
     [FIRST_ACTUAL_SHIP_DATE]         DATETIME2 (7)   NULL,
     [VAT_NO]                         NVARCHAR (50)   NULL,
     [PRICE_SOURCE_NET_PRICE]         NVARCHAR (200)  NULL,
@@ -208,6 +208,8 @@
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL
 );
+
+
 
 
 

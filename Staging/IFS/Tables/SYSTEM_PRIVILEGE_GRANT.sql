@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[SYSTEM_PRIVILEGE_GRANT] (
+    [PRIVILEGE_ID] NVARCHAR (30)   NOT NULL,
+    [ROLE]         NVARCHAR (30)   NOT NULL,
+    [OBJID]        NVARCHAR (4000) NULL,
+    [OBJVERSION]   NVARCHAR (14)   NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL
+);
+

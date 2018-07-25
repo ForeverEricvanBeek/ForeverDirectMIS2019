@@ -1,6 +1,4 @@
 ﻿
-
-
 CREATE VIEW [FDV].[VW_D_Order]
 AS
 
@@ -26,9 +24,9 @@ SELECT
 	, CASE WHEN SD.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
 		SELECT 
 			COUNT(cal3.DateKey)
-		FROM [$(ForeverData01)].DM.D_Calendar cal3
+		FROM ForeverData01.DM.D_Calendar cal3
 		WHERE cal3.FullDate > SD.Order_Planned_Ship_Date
-		AND cal3.FullDate <= OD.ACTUAL_SHIPPED_DTTM
+		AND cal3.FullDate <= ISNULL(OD.ACTUAL_SHIPPED_DTTM,CAST(GETDATE() as date))
 	) END							AS Order_Days_Too_Late
 	, OD.ACTUAL_SHIPPED_DTTM		AS Order_Shipped_Date
 	, STO.OLPN_Ship_Confirm_Date	AS Order_Ship_Confirm_Date
@@ -65,22 +63,22 @@ ON			S1.CODE_ID = OD.DO_STATUS
 AND			S1.CODE_TYPE = '501' 
 AND			S1.REC_TYPE = 'S' 
 AND			S1.ActInd = 'Y' 
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN	EXTRA.ORDERS_SHIP_DATE SD
 ON			SD.TC_Order_ID = OD.TC_ORDER_ID
 AND			SD.ActInd = 'Y'
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN	MANH.SHIP_VIA AS SV 
 ON			SV.SHIP_VIA = OD.DSG_SHIP_VIA 
 AND			SV.ActInd = 'Y' 
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN	MANH.CARRIER_CODE AS CC 
 ON			CC.CARRIER_ID = SV.CARRIER_ID 
 AND			CC.ActInd = 'Y' 
 LEFT JOIN	MANH.FACILITY_ALIAS AS FA 
 ON			FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 
 AND			FA.ActInd = 'Y'
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN ( SELECT 
 			MAX(SUBSTRING(OL.TC_ORDER_LINE_ID, 1,11)) AS IFS_Order_ID
 			, OL.ORDER_ID
@@ -89,7 +87,7 @@ LEFT JOIN ( SELECT
 		GROUP BY OL.ORDER_ID	
 ) AS IFS
 ON			IFS.ORDER_ID = OD.ORDER_ID
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN (	
 	SELECT		-- Bepaal Per order de laatste datum per status per OLPN, indien er één leeg is dan moet de datum ook leeg blijven.
 						-- De statusdatum van een order geeft dus aan wanneer het laatste Parcel van de order de status heeft bereikt.
@@ -167,7 +165,7 @@ LEFT JOIN (
 	GROUP BY OLPN_Order_ID
 )STO
 ON			OD.TC_ORDER_ID = STO.OLPN_Order_ID
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 LEFT JOIN  (-- Bepaal het aantal Parcels per order
 		SELECT	  
 			TC_ORDER_ID
@@ -181,7 +179,7 @@ LEFT JOIN  (-- Bepaal het aantal Parcels per order
 ON			OD.TC_ORDER_ID = LP.TC_ORDER_ID 
 WHERE		OD.ActInd = 'Y'
 AND			OD.IS_CANCELLED = 0
-AND         YEAR(OD.ACTUAL_SHIPPED_DTTM) >  YEAR(GETDATE())-2
+AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-2
 
 UNION ALL
 

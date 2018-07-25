@@ -1,0 +1,8 @@
+﻿CREATE TABLE [IFS].[CUSTOMER_PARENTS] (
+    [CUSTOMER_NO]     NVARCHAR (20) NOT NULL,
+    [HIERARCHY_ID]    NVARCHAR (10) NOT NULL,
+    [CUSTOMER_PARENT] NVARCHAR (20) NOT NULL,
+    [BatchID]         BIGINT        NULL,
+    [ProcessLogID]    BIGINT        NULL
+);
+

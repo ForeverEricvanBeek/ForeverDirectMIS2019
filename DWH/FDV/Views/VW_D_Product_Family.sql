@@ -1,0 +1,10 @@
+﻿
+CREATE VIEW [FDV].[VW_D_Product_Family] AS
+
+SELECT [PART_PRODUCT_FAMILY]				AS Prod_ID
+      ,[DESCRIPTION]						AS Description
+  FROM [DWH].[IFS].[INVENTORY_PRODUCT_FAMILY]
+  WHERE C_TO_CMS='TRUE'
+  and ActInd='Y'
+  UNION all
+  SELECT '-1','UNKNOWN'

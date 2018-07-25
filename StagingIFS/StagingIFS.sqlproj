@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>StagingIFS</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{303d986c-b797-46eb-88a6-c7d1965a1e33}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>StagingIFS</RootNamespace>
+    <AssemblyName>StagingIFS</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="PROJWMS\" />
+    <Folder Include="PROJWMS\Tables\" />
+    <Folder Include="PROD\" />
+    <Folder Include="PROD\Tables\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="PROJWMS\Tables\COMPANY_SITE.sql" />
+    <Build Include="PROJWMS\Tables\PRES_OBJECT_TYPE.sql" />
+    <Build Include="PROJWMS\Tables\COMPANY_INVOICE_INFO.sql" />
+    <Build Include="PROJWMS\Tables\MANUF_STRUCTURE_HEAD.sql" />
+    <Build Include="PROJWMS\Tables\PRES_OBJECT_SECURITY.sql" />
+    <Build Include="PROJWMS\Tables\COMPANY_FINANCE_AUTH1.sql" />
+    <Build Include="PROJWMS\Tables\SHOP_MATERIAL_ALLOC.sql" />
+    <Build Include="PROJWMS\Tables\PRES_OBJECT_GRANT.sql" />
+    <Build Include="PROJWMS\Tables\SHOP_ORDER_OPERATION.sql" />
+    <Build Include="PROJWMS\Tables\PRES_OBJECT.sql" />
+    <Build Include="PROJWMS\Tables\COMPANY.sql" />
+    <Build Include="PROJWMS\Tables\SHOP_ORD.sql" />
+    <Build Include="PROJWMS\Tables\COMMODITY_GROUP.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_ORDER_LINE.sql" />
+    <Build Include="PROJWMS\Tables\C_SHIPMENT_UNIT_ORD_LINE.sql" />
+    <Build Include="PROJWMS\Tables\USER_PROFILE_ENTRY.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_ORDER.sql" />
+    <Build Include="PROJWMS\Tables\C_KEWILL_STOCK_RECON.sql" />
+    <Build Include="PROJWMS\Tables\USER_FINANCE.sql" />
+    <Build Include="PROJWMS\Tables\LOT_BATCH_MASTER.sql" />
+    <Build Include="PROJWMS\Tables\USER_ALLOWED_SITE.sql" />
+    <Build Include="PROJWMS\Tables\TECHNICAL_SPECIFICATION_BOTH.sql" />
+    <Build Include="PROJWMS\Tables\C_PIX_MSG_STOCK_REC.sql" />
+    <Build Include="PROJWMS\Tables\TECHNICAL_OBJECT_REFERENCE.sql" />
+    <Build Include="PROJWMS\Tables\C_KFD_CMSCOUNTER_HIST.sql" />
+    <Build Include="PROJWMS\Tables\SYSTEM_PRIVILEGE_GRANT.sql" />
+    <Build Include="PROJWMS\Tables\C_EXT_SHIP_CONFIRM.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_TRANSACTION_HIST.sql" />
+    <Build Include="PROJWMS\Tables\SYSTEM_PRIVILEGE.sql" />
+    <Build Include="PROJWMS\Tables\C_EXT_SHIP_CONF_LINES.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PART_PLANNING.sql" />
+    <Build Include="PROJWMS\Tables\SUPPLIER_INFO_ADDRESS_TYPE.sql" />
+    <Build Include="PROJWMS\Tables\PART_CATALOG.sql" />
+    <Build Include="PROJWMS\Tables\ACCOUNTING_PERIOD.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PART_CHAR_ALL.sql" />
+    <Build Include="PROJWMS\Tables\SUPPLIER_INFO_ADDRESS.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_LOCATION.sql" />
+    <Build Include="PROJWMS\Tables\SUPPLIER_INFO.sql" />
+    <Build Include="PROJWMS\Tables\ACCOUNT.sql" />
+    <Build Include="PROJWMS\Tables\ISO_COUNTRY.sql" />
+    <Build Include="PROJWMS\Tables\INVOICE_ITEM.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PART_UNIT_COST_SUM.sql" />
+    <Build Include="PROJWMS\Tables\SUPPLIER.sql" />
+    <Build Include="PROJWMS\Tables\INTRASTAT_LINE.sql" />
+    <Build Include="PROJWMS\Tables\SITE.sql" />
+    <Build Include="PROJWMS\Tables\INVOICE.sql" />
+    <Build Include="PROJWMS\Tables\MANUF_STRUCT_ALTERNATE.sql" />
+    <Build Include="PROJWMS\Tables\IDENTITY_INVOICE_INFO.sql" />
+    <Build Include="PROJWMS\Tables\SHIPMENT_PACKAGE_UNIT.sql" />
+    <Build Include="PROJWMS\Tables\SHIPMENT_ORDER_LINE.sql" />
+    <Build Include="PROJWMS\Tables\INV_ACCOUNTING_ROW.sql" />
+    <Build Include="PROJWMS\Tables\SHIPMENT_HANDLING_UNIT.sql" />
+    <Build Include="PROJWMS\Tables\SHIPMENT.sql" />
+    <Build Include="PROJWMS\Tables\IAL_OBJECT.sql" />
+    <Build Include="PROJWMS\Tables\HISTORY_LOG.sql" />
+    <Build Include="PROJWMS\Tables\PART_CATALOG_INVENT_ATTRIB.sql" />
+    <Build Include="PROJWMS\Tables\SALES_PRICE_LIST_SITE.sql" />
+    <Build Include="PROJWMS\Tables\SALES_PRICE_LIST_PART.sql" />
+    <Build Include="PROJWMS\Tables\INTFACE_CONV_LIST_COLS.sql" />
+    <Build Include="PROJWMS\Tables\GEN_LED_VOUCHER_ROW.sql" />
+    <Build Include="PROJWMS\Tables\HISTORY_LOG_ATTRIBUTE.sql" />
+    <Build Include="PROJWMS\Tables\SALES_PART_CROSS_REFERENCE.sql" />
+    <Build Include="PROJWMS\Tables\FORWARDER_INFO.sql" />
+    <Build Include="PROJWMS\Tables\ROUTING_OPERATION.sql" />
+    <Build Include="PROJWMS\Tables\FND_USER_ROLE.sql" />
+    <Build Include="PROJWMS\Tables\MATERIAL_HISTORY.sql" />
+    <Build Include="PROJWMS\Tables\RECEIPT_INVENTORY_LOCATION.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PRODUCT_FAMILY.sql" />
+    <Build Include="PROJWMS\Tables\FND_USER.sql" />
+    <Build Include="PROJWMS\Tables\QUICK_REPORT.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PART_IN_STOCK.sql" />
+    <Build Include="PROJWMS\Tables\FND_ROLE.sql" />
+    <Build Include="PROJWMS\Tables\INVENTORY_PART.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_RECEIPT.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_PRICELIST.sql" />
+    <Build Include="PROJWMS\Tables\DOCUMENT_TEXT.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_QUANTITY_PRICE.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_PARENTS.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_INFO.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_PART_SUPPLIER.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_PART.sql" />
+    <Build Include="PROJWMS\Tables\CUSTOMER_GROUP.sql" />
+    <Build Include="PROJWMS\Tables\CUST_PRICE_GROUP_DETAIL.sql" />
+    <Build Include="PROJWMS\Tables\SALES_PART.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_ORDER_LINE.sql" />
+    <Build Include="PROJWMS\Tables\CUST_ORD_CUSTOMER.sql" />
+    <Build Include="PROJWMS\Tables\PURCHASE_ORDER.sql" />
+    <Build Include="PROJWMS\Tables\CUST_ORD_INVO_STAT.sql" />
+    <Build Include="PROJWMS\Tables\MANUF_STRUCTURE.sql" />
+    <Build Include="PROD\Tables\PRES_OBJECT_TYPE.sql" />
+    <Build Include="PROD\Tables\MANUF_STRUCTURE.sql" />
+    <Build Include="PROD\Tables\COMPANY_INVOICE_INFO.sql" />
+    <Build Include="PROD\Tables\MANUF_STRUCTURE_HEAD.sql" />
+    <Build Include="PROD\Tables\PRES_OBJECT_SECURITY.sql" />
+    <Build Include="PROD\Tables\PRES_OBJECT_GRANT.sql" />
+    <Build Include="PROD\Tables\COMPANY_FINANCE_AUTH1.sql" />
+    <Build Include="PROD\Tables\SHOP_MATERIAL_ALLOC.sql" />
+    <Build Include="PROD\Tables\COMPANY.sql" />
+    <Build Include="PROD\Tables\SHOP_ORDER_OPERATION.sql" />
+    <Build Include="PROD\Tables\PRES_OBJECT.sql" />
+    <Build Include="PROD\Tables\SHOP_ORD.sql" />
+    <Build Include="PROD\Tables\COMMODITY_GROUP.sql" />
+    <Build Include="PROD\Tables\C_SHIPMENT_UNIT_ORD_LINE.sql" />
+    <Build Include="PROD\Tables\USER_PROFILE_ENTRY.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_ORDER_LINE.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_ORDER.sql" />
+    <Build Include="PROD\Tables\C_KEWILL_STOCK_RECON.sql" />
+    <Build Include="PROD\Tables\USER_FINANCE.sql" />
+    <Build Include="PROD\Tables\LOT_BATCH_MASTER.sql" />
+    <Build Include="PROD\Tables\USER_ALLOWED_SITE.sql" />
+    <Build Include="PROD\Tables\TECHNICAL_SPECIFICATION_BOTH.sql" />
+    <Build Include="PROD\Tables\C_PIX_MSG_STOCK_REC.sql" />
+    <Build Include="PROD\Tables\TECHNICAL_OBJECT_REFERENCE.sql" />
+    <Build Include="PROD\Tables\C_KFD_CMSCOUNTER_HIST.sql" />
+    <Build Include="PROD\Tables\SYSTEM_PRIVILEGE_GRANT.sql" />
+    <Build Include="PROD\Tables\INVENTORY_TRANSACTION_HIST.sql" />
+    <Build Include="PROD\Tables\SYSTEM_PRIVILEGE.sql" />
+    <Build Include="PROD\Tables\PART_CATALOG.sql" />
+    <Build Include="PROD\Tables\C_EXT_SHIP_CONFIRM.sql" />
+    <Build Include="PROD\Tables\C_EXT_SHIP_CONF_LINES.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PART_PLANNING.sql" />
+    <Build Include="PROD\Tables\SUPPLIER_INFO_ADDRESS_TYPE.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PART_CHAR_ALL.sql" />
+    <Build Include="PROD\Tables\SUPPLIER_INFO_ADDRESS.sql" />
+    <Build Include="PROD\Tables\ACCOUNTING_PERIOD.sql" />
+    <Build Include="PROD\Tables\ISO_COUNTRY.sql" />
+    <Build Include="PROD\Tables\INVENTORY_LOCATION.sql" />
+    <Build Include="PROD\Tables\SUPPLIER_INFO.sql" />
+    <Build Include="PROD\Tables\ACCOUNT.sql" />
+    <Build Include="PROD\Tables\SUPPLIER.sql" />
+    <Build Include="PROD\Tables\INVOICE_ITEM.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PART_UNIT_COST_SUM.sql" />
+    <Build Include="PROD\Tables\INVOICE.sql" />
+    <Build Include="PROD\Tables\MANUF_STRUCT_ALTERNATE.sql" />
+    <Build Include="PROD\Tables\INTRASTAT_LINE.sql" />
+    <Build Include="PROD\Tables\SITE.sql" />
+    <Build Include="PROD\Tables\SHIPMENT_PACKAGE_UNIT.sql" />
+    <Build Include="PROD\Tables\IDENTITY_INVOICE_INFO.sql" />
+    <Build Include="PROD\Tables\INV_ACCOUNTING_ROW.sql" />
+    <Build Include="PROD\Tables\SHIPMENT_ORDER_LINE.sql" />
+    <Build Include="PROD\Tables\SHIPMENT_HANDLING_UNIT.sql" />
+    <Build Include="PROD\Tables\IAL_OBJECT.sql" />
+    <Build Include="PROD\Tables\SHIPMENT.sql" />
+    <Build Include="PROD\Tables\SALES_PRICE_LIST_SITE.sql" />
+    <Build Include="PROD\Tables\HISTORY_LOG.sql" />
+    <Build Include="PROD\Tables\PART_CATALOG_INVENT_ATTRIB.sql" />
+    <Build Include="PROD\Tables\INTFACE_CONV_LIST_COLS.sql" />
+    <Build Include="PROD\Tables\GEN_LED_VOUCHER_ROW.sql" />
+    <Build Include="PROD\Tables\HISTORY_LOG_ATTRIBUTE.sql" />
+    <Build Include="PROD\Tables\SALES_PRICE_LIST_PART.sql" />
+    <Build Include="PROD\Tables\MATERIAL_HISTORY.sql" />
+    <Build Include="PROD\Tables\SALES_PART_CROSS_REFERENCE.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PRODUCT_FAMILY.sql" />
+    <Build Include="PROD\Tables\FORWARDER_INFO.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PART_IN_STOCK.sql" />
+    <Build Include="PROD\Tables\INVENTORY_PART.sql" />
+    <Build Include="PROD\Tables\ROUTING_OPERATION.sql" />
+    <Build Include="PROD\Tables\FND_USER_ROLE.sql" />
+    <Build Include="PROD\Tables\RECEIPT_INVENTORY_LOCATION.sql" />
+    <Build Include="PROD\Tables\FND_USER.sql" />
+    <Build Include="PROD\Tables\QUICK_REPORT.sql" />
+    <Build Include="PROD\Tables\FND_ROLE.sql" />
+    <Build Include="PROD\Tables\PURCHASE_RECEIPT.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_PRICELIST.sql" />
+    <Build Include="PROD\Tables\DOCUMENT_TEXT.sql" />
+    <Build Include="PROD\Tables\PURCHASE_QUANTITY_PRICE.sql" />
+    <Build Include="PROD\Tables\PURCHASE_PART_SUPPLIER.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_PARENTS.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_INFO.sql" />
+    <Build Include="PROD\Tables\PURCHASE_PART.sql" />
+    <Build Include="PROD\Tables\CUSTOMER_GROUP.sql" />
+    <Build Include="PROD\Tables\SALES_PART.sql" />
+    <Build Include="PROD\Tables\PURCHASE_ORDER_LINE.sql" />
+    <Build Include="PROD\Tables\CUST_PRICE_GROUP_DETAIL.sql" />
+    <Build Include="PROD\Tables\CUST_ORD_INVO_STAT.sql" />
+    <Build Include="PROD\Tables\CUST_ORD_CUSTOMER.sql" />
+    <Build Include="PROD\Tables\PURCHASE_ORDER.sql" />
+    <Build Include="PROD\Tables\COMPANY_SITE.sql" />
+    <Build Include="Security\PROJWMS.sql" />
+    <Build Include="Security\PROD.sql" />
+  </ItemGroup>
+</Project>

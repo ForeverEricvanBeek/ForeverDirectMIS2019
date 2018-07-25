@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[PRES_OBJECT_TYPE] (
+    [TYPE]         NVARCHAR (50)   NOT NULL,
+    [DESCRIPTION]  NVARCHAR (200)  NULL,
+    [OBJID]        NVARCHAR (4000) NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL
+);
+

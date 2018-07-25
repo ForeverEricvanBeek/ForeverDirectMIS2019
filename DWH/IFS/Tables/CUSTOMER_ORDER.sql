@@ -84,7 +84,7 @@
     [CONTRACT_REV_SEQ]              INT             NULL,
     [CONTRACT_LINE_NO]              INT             NULL,
     [CONTRACT_ITEM_NO]              INT             NULL,
-    [DEFAULT_CHARGES]               BIT             NULL,
+    [DEFAULT_CHARGES]               NVARCHAR (50)   NULL,
     [RELEASED_FROM_CREDIT_CHECK]    NVARCHAR (200)  NULL,
     [RELEASED_FROM_CREDIT_CHECK_DB] NVARCHAR (20)   NULL,
     [PROPOSED_PREPAYMENT_AMOUNT]    INT             NULL,
@@ -136,6 +136,8 @@
     [ProcessLogID]                  BIGINT          NULL,
     CONSTRAINT [PK_CUSTOMER_ORDER] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [Eff_Date] ASC)
 );
+
+
 
 
 

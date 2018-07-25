@@ -37,7 +37,7 @@ WITH CTE_IFS AS (
 	  CA.DateKey
 	  , CA.FullDate
 	  , CA.IndWorkday
-	FROM		[$(Datamart)].DM.D_Calendar CA
+	FROM		Datamart.DM.D_Calendar CA
 	WHERE		CA.IsActual = 1
 	AND			CA.IndWorkday = 1
 ), CTE_LATE AS(
@@ -78,13 +78,15 @@ WITH CTE_IFS AS (
 )
 
 SELECT
-  CAST(CL.TC_ORDER_ID AS NVARCHAR(50))	AS TC_Order_ID
-  , CAST(CL.CREATED_DTTM AS DATETIME2)	AS Order_Create_Date
-  , CAST(CL.CuttOff AS TIME)			AS Order_Cuttoff_Time
-  , CAST(CI.Wave_Date AS DATETIME2)		AS Order_Wave_Date
-  , CAST(CL.SHIPDATE3 AS DATE)			AS Order_Planned_Ship_Date
-  , CAST(CI.MANH_Order_Lines AS INT)	AS Order_Manh_Order_Lines
-  , CAST(CI.IFS_Order_Lines AS INT)		AS Order_IFS_Order_Lines
+  CAST(CL.TC_ORDER_ID AS NVARCHAR(50))		AS TC_Order_ID
+  , CAST(CI.IFS_Order_ID AS NVARCHAR(50))	AS Order_IFS_ID
+  , CAST(CL.CREATED_DTTM AS DATETIME2)		AS Order_Create_Date
+  , CAST(CL.CuttOff AS TIME)				AS Order_Cuttoff_Time
+  , CAST(CI.Wave_Date AS DATETIME2)			AS Order_Wave_Date
+  , CAST(CL.SHIPDATE3 AS DATE)				AS Order_Planned_Ship_Date
+  , CAST(CI.Number_Of_Parcels AS INT)		AS Order_Num_Of_Parcels
+  , CAST(CI.MANH_Order_Lines AS INT)		AS Order_Manh_Order_Lines
+  , CAST(CI.IFS_Order_Lines AS INT)			AS Order_IFS_Order_Lines
   , CAST(CI.TC_SHIPMENT_ID AS NVARCHAR(50)) AS Order_Shipment_ID
 FROM			CTE_LATE CL
 INNER JOIN		CTE_IFS CI

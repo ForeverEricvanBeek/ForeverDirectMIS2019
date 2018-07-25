@@ -1,0 +1,12 @@
+﻿CREATE TABLE [IFS].[COMMODITY_GROUP] (
+    [COMMODITY_CODE]   NVARCHAR (5)    NOT NULL,
+    [PRIME_COMMODITY]  NVARCHAR (5)    NULL,
+    [SECOND_COMMODITY] NVARCHAR (5)    NULL,
+    [DESCRIPTION]      NVARCHAR (35)   NULL,
+    [MIN_PERIODS]      INT             NULL,
+    [OBJID]            NVARCHAR (4000) NULL,
+    [OBJVERSION]       NVARCHAR (2000) NULL,
+    [BatchID]          BIGINT          NULL,
+    [ProcessLogID]     BIGINT          NULL
+);
+

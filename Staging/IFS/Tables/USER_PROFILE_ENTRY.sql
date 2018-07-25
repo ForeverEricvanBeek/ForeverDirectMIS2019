@@ -1,0 +1,7 @@
+﻿CREATE TABLE [IFS].[USER_PROFILE_ENTRY] (
+    [ENTRY_CODE]   NVARCHAR (30) NOT NULL,
+    [ENTRY_VALUE]  NVARCHAR (30) NOT NULL,
+    [BatchID]      BIGINT        NULL,
+    [ProcessLogID] BIGINT        NULL
+);
+

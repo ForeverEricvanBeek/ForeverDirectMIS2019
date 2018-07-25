@@ -1,0 +1,27 @@
+﻿CREATE TABLE [PROJWMS].[INVENTORY_LOCATION] (
+    [CONTRACT]              NVARCHAR (20)   NOT NULL,
+    [LOCATION_NO]           NVARCHAR (140)  NULL,
+    [LOCATION_GROUP]        NVARCHAR (20)   NULL,
+    [WAREHOUSE]             NVARCHAR (60)   NOT NULL,
+    [BAY_NO]                NVARCHAR (20)   NOT NULL,
+    [ROW_NO]                NVARCHAR (20)   NOT NULL,
+    [TIER_NO]               NVARCHAR (20)   NOT NULL,
+    [BIN_NO]                NVARCHAR (20)   NOT NULL,
+    [LOCATION_NAME]         NVARCHAR (800)  NULL,
+    [PRIORITY]              INT             NULL,
+    [LOCATION_SEQUENCE]     INT             NULL,
+    [BIN_WIDTH]             INT             NULL,
+    [BIN_HEIGHT]            INT             NULL,
+    [BIN_DEPTH]             INT             NULL,
+    [BIN_CARRYING_CAPACITY] INT             NULL,
+    [MIN_TEMPERATURE]       INT             NULL,
+    [MAX_TEMPERATURE]       INT             NULL,
+    [MIN_HUMIDITY]          INT             NULL,
+    [MAX_HUMIDITY]          INT             NULL,
+    [OBJID]                 NVARCHAR (4000) NULL,
+    [OBJVERSION]            NVARCHAR (4000) NULL,
+    [BatchID]               BIGINT          NULL,
+    [ProcessLogID]          BIGINT          NULL,
+    CONSTRAINT [PK_INVENTORY_LOCATION] PRIMARY KEY CLUSTERED ([CONTRACT] ASC, [WAREHOUSE] ASC, [BAY_NO] ASC, [ROW_NO] ASC, [TIER_NO] ASC, [BIN_NO] ASC)
+);
+

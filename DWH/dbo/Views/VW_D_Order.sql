@@ -4,7 +4,7 @@ AS
 
 SELECT        
 	OD.TC_ORDER_ID					AS Order_ID
-	, LP.TC_SHIPMENT_ID				AS Order_Shipment_ID
+	, OI.Order_Shipment_ID			AS Order_Shipment_ID
 	, OD.DSG_SHIP_VIA				AS Order_Ship_Via_Code
 	, OD.BILL_FACILITY_ALIAS_ID		AS Order_Facility_Code
 	, OD.D_COUNTRY_CODE				AS Order_Country_Code
@@ -20,15 +20,15 @@ SELECT
 		ELSE 'Created'
 	END								AS Order_Status
 	-- Added Wave information I1802 0022
-	, SD.Order_Cuttoff_Time					AS Order_Cuttoff_Time
-	, SD.Order_Wave_Date					AS Order_Wave_Date
+	, OI.Order_Cuttoff_Time					AS Order_Cuttoff_Time
+	, OI.Order_Wave_Date					AS Order_Wave_Date
 	, OD.CREATED_DTTM				AS Order_Create_Date
-	, SD.Order_Planned_Ship_Date	AS Order_Planned_Ship_Date
-	, CASE WHEN SD.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
+	, OI.Order_Planned_Ship_Date	AS Order_Planned_Ship_Date
+	, CASE WHEN OI.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
 		SELECT 
 			COUNT(cal3.DateKey)
-		FROM [$(Datamart)].DM.D_Calendar cal3
-		WHERE cal3.FullDate > SD.Order_Planned_Ship_Date
+		FROM Datamart.DM.D_Calendar cal3
+		WHERE cal3.FullDate > OI.Order_Planned_Ship_Date
 		AND cal3.FullDate <= ISNULL(OD.ACTUAL_SHIPPED_DTTM,CAST(GETDATE() AS DATE))
 	) END							AS Order_Days_To_Late
 	, OD.ACTUAL_SHIPPED_DTTM		AS Order_Shipped_Date
@@ -56,8 +56,8 @@ SELECT
 		-(DATEDIFF(wk, STO.OLPN_Ship_Confirm_Date, STO.OLPN_Delivered_Date) * 2)
 		-(CASE WHEN DATENAME(dw, STO.OLPN_Ship_Confirm_Date) = 'Sunday' THEN 1 ELSE 0 END)
 		-(CASE WHEN DATENAME(dw, STO.OLPN_Delivered_Date) = 'Saturday' THEN 1 ELSE 0 END) AS Order_LT_Ship_Confirm_Delivered
-	, LP.Number_Of_Parcels			AS Order_Number_Of_Parcels
-	, IFS.IFS_Order_ID				AS Order_IFS_Order_ID
+	, OI.Order_Num_Of_Parcels			AS Order_Number_Of_Parcels
+	, OI.Order_IFS_ID					AS Order_IFS_Order_ID
 	, CASE WHEN OD.DSG_SHIP_VIA = 'FD01' AND OD.ORDER_TYPE <> 'DS' THEN 'FD01' ELSE OD.ORDER_TYPE END AS Order_Type 
 FROM		MANH.ORDERS AS OD
 INNER JOIN	MANH.SYS_CODE AS S1 
@@ -65,9 +65,14 @@ ON			S1.CODE_ID = OD.DO_STATUS
 AND			S1.CODE_TYPE = '501' 
 AND			S1.REC_TYPE = 'S' 
 AND			S1.ActInd = 'Y' 
+LEFT JOIN	EXTRA.ORDERS_INFO OI
+ON			OI.TC_Order_ID = OD.TC_ORDER_ID
+AND			OI.ActInd = 'Y'
+/* Using EXTRA.ORDER_INFO
 LEFT JOIN	EXTRA.ORDERS_SHIP_DATE SD
 ON			SD.TC_Order_ID = OD.TC_ORDER_ID
 AND			SD.ActInd = 'Y'
+*/
 LEFT JOIN	MANH.SHIP_VIA AS SV 
 ON			SV.SHIP_VIA = OD.DSG_SHIP_VIA 
 AND			SV.ActInd = 'Y' 
@@ -77,6 +82,7 @@ AND			CC.ActInd = 'Y'
 LEFT JOIN	MANH.FACILITY_ALIAS AS FA 
 ON			FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 
 AND			FA.ActInd = 'Y'
+/* Added info to EXTRA.ORDER_INFO
 -- Added Wave information I1802 0022
 LEFT JOIN ( SELECT 
 			  MAX(SUBSTRING(OL.TC_ORDER_LINE_ID, 1,11)) AS IFS_Order_ID
@@ -87,6 +93,7 @@ LEFT JOIN ( SELECT
 			  OL.ORDER_ID
 ) AS IFS
 ON			IFS.ORDER_ID = OD.ORDER_ID
+*/
 LEFT JOIN (	
 	SELECT		-- Bepaal Per order de laatste datum per status per OLPN, indien er één leeg is dan moet de datum ook leeg blijven.
 						-- De statusdatum van een order geeft dus aan wanneer het laatste Parcel van de order de status heeft bereikt.
@@ -163,6 +170,7 @@ LEFT JOIN (
 	GROUP BY OLPN_Order_ID
 )STO
 ON			OD.TC_ORDER_ID = STO.OLPN_Order_ID
+/* Added data to EXTRA.ORDER_INFO
 LEFT JOIN  (-- Bepaal het aantal Parcels per order
 		SELECT	  
 			TC_ORDER_ID
@@ -173,7 +181,8 @@ LEFT JOIN  (-- Bepaal het aantal Parcels per order
 		AND		 LP.LPN_FACILITY_STATUS <> 99
 		GROUP BY TC_ORDER_ID
 ) LP
-ON			OD.TC_ORDER_ID = LP.TC_ORDER_ID 
+ON			OD.TC_ORDER_ID = LP.TC_ORDER_ID
+*/
 WHERE		OD.ActInd = 'Y'
 AND			OD.IS_CANCELLED = 0
 

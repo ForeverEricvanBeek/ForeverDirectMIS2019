@@ -1,0 +1,10 @@
+﻿CREATE TABLE [IFS].[COMPANY_SITE] (
+    [CONTRACT]     NVARCHAR (5)    NOT NULL,
+    [DESCRIPTION]  NVARCHAR (20)   NULL,
+    [COMPANY]      NVARCHAR (20)   NULL,
+    [OBJID]        NVARCHAR (4000) NULL,
+    [OBJVERSION]   NVARCHAR (14)   NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL
+);
+
