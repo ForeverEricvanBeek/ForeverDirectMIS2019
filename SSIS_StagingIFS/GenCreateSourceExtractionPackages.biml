@@ -44,6 +44,7 @@
                                                     ,ST.[IncrementalUpdateColumn]
                                                     ,ST.[IncrementalKeyColumn]
                                                     ,ST.[IsStaging] 
+                                                    ,ST.IsLoading
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
                                                     ,ST.[WhereStatement]
@@ -86,6 +87,7 @@
             
             //The IsStaging flag indicates that the Staging database itself is the source of the extraction
             bool varIsStaging = (bool)rowSourceExtractionTable["IsStaging"];
+            bool varIsLoading = (bool)rowSourceExtractionTable["IsLoading"];
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
             
             string varTargetConnection = varExtractionTargetConnection;
@@ -140,9 +142,12 @@
             string varTargetSchemaTablePlus = varTargetSchemaPlus + "." + varTargetTablePlus;
             
             string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
+             
             string varSQLMaxIncrementalKeyTargetTable = "";
-            if (varExtractionType == "MI") {
+            if (varExtractionType == "MI" && (!varIsLoading)) {
+
                 varSQLMaxIncrementalKeyTargetTable = "SELECT MAX(" + varExtractionModifiedDate + ") FROM " + varExtractionTargetSchemaTablePlus;
+                
             } else {
                 varSQLMaxIncrementalKeyTargetTable = "SELECT '0'";
             }
@@ -233,7 +238,9 @@
             string varExtractionSQLStatement = "";
             string varExtractionDateConversion = "";
             string varExtractionIDConversion = "0";
+            string varExtractionisLoadingWhere = "0";
             varExtractionIDConversion = "&apos;&quot; + @[User::LastExtractionID] + &quot;&apos;";
+            varExtractionisLoadingWhere = "\" + @[$Project::LoadingWhere]";
             switch (varExtractionSourceType) {
                 case "SQLServer":
                     varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
@@ -252,7 +259,10 @@
             if (varExtractionType == "MN") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
                 string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [StagingIFS]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
-            } else if (varExtractionType == "MI")  {
+            } else if (varExtractionType == "MI" && (varIsLoading))  {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+                string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [StagingIFS]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
+            } else if (varExtractionType == "MI") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + "\"";
                 string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [StagingIFS]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
             } else  {
@@ -263,7 +273,8 @@
                 } else {
                     varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
                 }
-            }#>
+            }
+            #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
@@ -328,11 +339,11 @@
                                     <Result Name="LastID" VariableName="User.LastExtractionID" />
                                 </Results>
                             </ExecuteSQL>
-    
+                            <# if (!varIsLoading) {#>
                             <ExecuteSQL Name="SQL Truncate table <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                             </ExecuteSQL>
-                            
+                            <#}#>
                             <#string varTaskName = "Dataflow Extract " + varName;
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName],[ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
     

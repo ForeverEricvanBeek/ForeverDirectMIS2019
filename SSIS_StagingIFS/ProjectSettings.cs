@@ -4,6 +4,7 @@ string stagingProjectName = @"SSIS_StagingIFS";
 string DWHProjectName = @"SSIS_DWHIFS";
 string projectServerName = @"FDODWHP01";
 string projectWorkDir = @"\\FDODWHP01\StagingFiles";
+string projectLoadingWhere = @"1";
 string CacheDir = projectWorkDir + @"\Biml\SSIS Cache";
 string ImportDir = projectWorkDir + @"\Biml";
 string ImportDirXSD = projectWorkDir + @"\Biml\Input";
