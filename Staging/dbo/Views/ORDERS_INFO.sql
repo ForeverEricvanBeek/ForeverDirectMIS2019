@@ -37,7 +37,7 @@ WITH CTE_IFS AS (
 	  CA.DateKey
 	  , CA.FullDate
 	  , CA.IndWorkday
-	FROM		Datamart.DM.D_Calendar CA
+	FROM		[$(Datamart)].DM.D_Calendar CA
 	WHERE		CA.IsActual = 1
 	AND			CA.IndWorkday = 1
 ), CTE_LATE AS(

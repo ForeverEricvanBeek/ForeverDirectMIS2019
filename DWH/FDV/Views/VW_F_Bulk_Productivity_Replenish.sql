@@ -23,18 +23,18 @@ WITH CTE_INIT1 as
         when LH.AISLE is null then 'Pallet_Replenish'
 		else 'Tote_Replenish' end																												as WRK_GRP_DETAIL																									 																					  
 
-  FROM DWH.MANH.PROD_TRKG_TRAN PT
+  FROM MANH.PROD_TRKG_TRAN PT
   
-  left join [DWH].[MANH].[TASK_HDR] TH
+  left join [MANH].[TASK_HDR] TH
   on
   TH.TASK_ID=PT.TASK_ID
   AND TH.INVN_NEED_TYPE='1'
   
-  left join [DWH].[MANH].[LOCN_HDR] LH
+  left join [MANH].[LOCN_HDR] LH
   on
   LH.LOCN_ID=PT.TO_LOCN
   
-  join DWH.MANH.UCL_USER UH
+  join MANH.UCL_USER UH
   on 
   PT.[USER_ID]=UH.[USER_NAME]
   and UH.ActInd='Y'
@@ -43,7 +43,7 @@ WITH CTE_INIT1 as
   where  PT.BEGIN_DATE >  GETDATE()-365 
   and (PT.MODULE_NAME= 'Replenish' and PT.MENU_OPTN_NAME in ('Pallet Pull iLPN List','FillActvTroll','FillActive','Pull iLPN List')
   or (PT.MODULE_NAME= 'Invn Mvmt' and PT.MENU_OPTN_NAME in ('User Directed P/A') and PT.CNTR_NBR in (select PT2.CNTR_NBR 
-																								    from DWH.MANH.PROD_TRKG_TRAN PT2
+																								    from MANH.PROD_TRKG_TRAN PT2
 																									where PT2.MODULE_NAME= 'Replenish' and PT2.MENU_OPTN_NAME 
 																									in ('Pallet Pull iLPN List','FillActvTroll','FillActive','Pull iLPN List')
 																									and  PT2.BEGIN_DATE>  GETDATE()-365))))

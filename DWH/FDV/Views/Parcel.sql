@@ -79,7 +79,7 @@ ON				OD.ORDER_ID = LP.ORDER_ID
 AND				OD.ActInd = 'Y' 
 and				OD.ORDER_TYPE='OF'
 and				LP.ActInd='Y'
-INNER JOIN		ForeverData01.DM.D_Order AS VWO
+INNER JOIN		[$(ForeverData01)].DM.D_Order AS VWO
 ON				OD.TC_ORDER_ID	= VWO.Order_ID
 AND				VWO.Order_Days_Too_Late = 0
 AND				VWO.Order_Planned_Ship_Date IS NOT NULL

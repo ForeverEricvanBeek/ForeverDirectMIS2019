@@ -27,7 +27,7 @@ SELECT
 	, CASE WHEN OI.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
 		SELECT 
 			COUNT(cal3.DateKey)
-		FROM Datamart.DM.D_Calendar cal3
+		FROM [$(Datamart)].DM.D_Calendar cal3
 		WHERE cal3.FullDate > OI.Order_Planned_Ship_Date
 		AND cal3.FullDate <= ISNULL(OD.ACTUAL_SHIPPED_DTTM,CAST(GETDATE() AS DATE))
 	) END							AS Order_Days_To_Late

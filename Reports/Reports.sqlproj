@@ -17,12 +17,13 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -57,5 +58,53 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="RT\" />
+    <Folder Include="RT\Tables\" />
+    <Folder Include="RV\" />
+    <Folder Include="RV\Views\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="RT\Tables\INTRASTAT.sql" />
+    <Build Include="RV\Views\INTRASTAT.sql" />
+    <Build Include="Security\RV.sql" />
+    <Build Include="Security\RT.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DWH\DWH.sqlproj">
+      <Name>DWH</Name>
+      <Project>{093abd4e-ab16-4f98-8b6f-5d45cd4ab6bd}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>DWH</DatabaseSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\Datamart\Datamart.sqlproj">
+      <Name>Datamart</Name>
+      <Project>{a270e3e8-da54-4894-a59c-50e5a75ab672}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>Datamart</DatabaseSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\ForeverData01\ForeverData01.sqlproj">
+      <Name>ForeverData01</Name>
+      <Project>{af4170b1-f978-4d58-b021-be216f7f85a9}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>ForeverData01</DatabaseSqlCmdVariable>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="Datamart">
+      <DefaultValue>Datamart</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="DWH">
+      <DefaultValue>DWH</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ForeverData01">
+      <DefaultValue>ForeverData01</DefaultValue>
+      <Value>$(SqlCmdVar__3)</Value>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>

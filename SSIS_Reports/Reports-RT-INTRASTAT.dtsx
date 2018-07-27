@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="07/27/2018 14:01:40" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="FDONB044" DTS:CreatorName="beek" DTS:DTSID="{F3DDB572-23D6-4302-B5BA-9A96C7F37AA8}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1043" DTS:ObjectName="Reports-RT-INTRASTAT" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{DA29C883-E019-40B5-9C43-8236F0035350}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{ACDA21F8-2F04-4EDF-8C16-0CFE72289C90}" DTS:ObjectName="BatchID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">-1</DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter DTS:CreationName="" DTS:DataType="20" DTS:Description="" DTS:DTSID="{8CC26372-7698-40B7-A9A5-D10FAC312C88}" DTS:ObjectName="ProcessLogParentID" DTS:Required="0" DTS:Sensitive="0">
+      <DTS:Property DTS:DataType="20" DTS:Name="ParameterValue">0</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{15CEECB1-93CF-43C1-BACB-3179C90DE731}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionStart">
+      <DTS:VariableValue DTS:DataType="8">S</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{62D70438-E2EE-4533-A2F8-32A41611EA38}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchActionNone">
+      <DTS:VariableValue DTS:DataType="8">N</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{4C3E4CCF-B857-477B-9CBB-B2097BE9753F}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionFinish">
+      <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{5F632259-7F07-47EE-A291-87937FA784FE}" DTS:IncludeInDebugDump="2345" DTS:Namespace="Audit" DTS:ObjectName="AuditActionError">
+      <DTS:VariableValue DTS:DataType="8">E</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{B9FF7C55-AD93-4890-BFE0-ADF71CDAFD70}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditProcessLogID">
+      <DTS:VariableValue DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{E3C707D4-02F8-4AC3-8906-4772997A9120}" DTS:IncludeInDebugDump="6789" DTS:Namespace="Audit" DTS:ObjectName="AuditBatchID">
+      <DTS:VariableValue DTS:DataType="20">-1</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{B7F66072-6DF1-479A-BEAA-C32C90EF7A89}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="PackageName">
+      <DTS:VariableValue DTS:DataType="8">Reports-RT-INTRASTAT</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{531C6276-052A-4823-9ADF-8329F299E7A0}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountExtract">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{009D0D21-FFB8-4891-9A08-E0BC9E92B947}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountTarget">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{183D24F9-444B-4648-A305-98E9BAE3E85B}" DTS:IncludeInDebugDump="6789" DTS:Namespace="RC" DTS:ObjectName="RowCountError">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{A4F58655-386D-470D-8F19-77B713ED5062}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LastExtractionDate">
+      <DTS:VariableValue DTS:DataType="8">2000-01-01 00:00:00</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{85F2A81D-02DF-409D-A5F2-96679863027C}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="ExtractionType">
+      <DTS:VariableValue DTS:DataType="8">F</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{AEF66D01-329C-448F-AEF2-1729A0B7E53F}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="SourceExtractionSQL">
+      <DTS:VariableValue DTS:DataType="8">SELECT * FROM [RT].[INTRASTAT]</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{56FEE5DB-956F-4D9D-8308-136551FA2F3D}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="SelectionDate">
+      <DTS:VariableValue DTS:DataType="8">2000-01-01 00:00:00</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E35CE8F8-F12F-46BF-A1A6-1D1386AECBDA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Start Audit Package DWH-RT-INTRASTAT" DTS:refId="Package\SQL Start Audit Package DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWH_Control" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ? ,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?,@ExtractionType = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionStart" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::BatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::ProcessLogParentID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="5" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="6" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="7" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::VersionGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="8" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMajor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="9" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::VersionMinor" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="10" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::MachineName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="11" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::UserName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="12" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ExecutionInstanceGUID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="13" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::ExtractionType" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="14" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+          <SQLTask:ResultBinding SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ResultName="1"></SQLTask:ResultBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{45B6B191-225B-4A70-8967-9CB12393E79B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SC Load DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{4A0DF7D1-B9BA-45F1-A28C-2B96AD5558DD}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Get last extraction date DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT\SQL Get last extraction date DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH_Control" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) &#xA;FROM [Control].[DWHControl] &#xA;WHERE [SourceConnection] = 'Reports' &#xA;AND [SourceSchema] = 'RT' &#xA;AND [SourceTable] = 'INTRASTAT'" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastExtractionDate" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{3847307F-57DC-4ED8-BBEE-EC02741D8E38}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Source row count DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT\SQL Source row count DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="SELECT count(*) FROM [Reports].[RT].[INTRASTAT]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="RC::RowCountExtract" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{94C26B27-CACC-4C71-8163-6C0B635599BE}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT\SQL Merge DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH" SQLTask:SqlStatementSource="DECLARE @INTRASTAT_TEMP TABLE ([INTRASTAT_ID][int] NULL,[TRANSACTION_ID][int] NULL,[TRANSACTION][nvarchar] (10) NULL,[ORDER_TYPE][nvarchar] (4000) NULL,[CONTRACT][nvarchar] (5) NULL,[COMPONENT_PART][nvarchar] (25) NULL,[DESCRIPTION][nvarchar] (200) NULL,[ORDER_REF1][nvarchar] (12) NULL,[QUANTITY][int] NULL,[PRINT_UNIT][nvarchar] (30) NULL,[DATE_APPLIED][datetime2] (7) NULL,[WEIGHT_NET][int] NULL,[CUSTOMS_STAT_NO][nvarchar] (10) NULL,[INTRASTAT_ALT_QTY][int] NULL,[INTRASTAT_ALT_UNIT_MEAS][nvarchar] (10) NULL,[INTRASTAT_DIRECTION][nvarchar] (4000) NULL,[COUNTRY_OF_ORIGIN][nvarchar] (2) NULL,[INTRASTAT_ORIGIN][nvarchar] (4000) NULL,[OPPOSITE_COUNTRY][nvarchar] (2) NULL,[OPPONENT_NUMBER][nvarchar] (20) NULL,[OPPONENT_NAME][nvarchar] (4000) NULL,[ORDER_UNIT_PRICE][int] NULL,[UNIT_ADD_COST_AMOUNT][int] NULL,[UNIT_CHARGE_AMOUNT][int] NULL,[MODE_OF_TRANSPORT][nvarchar] (4000) NULL,[INVOICE_SERIE][nvarchar] (20) NULL,[INVOICE_NUMBER][nvarchar] (50) NULL,[SALE_UNIT_PRICE][int] NULL,[INVOICED_AMOUNT][int] NULL,[COUNTRY_CODE][nvarchar] (4000) NULL,INSERT INTO @INTRASTAT_TEMP SELECT [INTRASTAT_ID], [TRANSACTION_ID], [TRANSACTION], [ORDER_TYPE], [CONTRACT], [COMPONENT_PART], [DESCRIPTION], [ORDER_REF1], [QUANTITY], [PRINT_UNIT], [DATE_APPLIED], [WEIGHT_NET], [CUSTOMS_STAT_NO], [INTRASTAT_ALT_QTY], [INTRASTAT_ALT_UNIT_MEAS], [INTRASTAT_DIRECTION], [COUNTRY_OF_ORIGIN], [INTRASTAT_ORIGIN], [OPPOSITE_COUNTRY], [OPPONENT_NUMBER], [OPPONENT_NAME], [ORDER_UNIT_PRICE], [UNIT_ADD_COST_AMOUNT], [UNIT_CHARGE_AMOUNT], [MODE_OF_TRANSPORT], [INVOICE_SERIE], [INVOICE_NUMBER], [SALE_UNIT_PRICE], [INVOICED_AMOUNT], [COUNTRY_CODE], FROM (MERGE Reports.RT.INTRASTAT T &#xA;                                                                         USING Staging.RT.INTRASTAT S &#xA;                                                                         ON  1=1 AND  T.ActInd = 'Y' AND T.IsDeleted = 'N' &#xA;                                                                         WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( [INTRASTAT_ID], [TRANSACTION_ID], [TRANSACTION], [ORDER_TYPE], [CONTRACT], [COMPONENT_PART], [DESCRIPTION], [ORDER_REF1], [QUANTITY], [PRINT_UNIT], [DATE_APPLIED], [WEIGHT_NET], [CUSTOMS_STAT_NO], [INTRASTAT_ALT_QTY], [INTRASTAT_ALT_UNIT_MEAS], [INTRASTAT_DIRECTION], [COUNTRY_OF_ORIGIN], [INTRASTAT_ORIGIN], [OPPOSITE_COUNTRY], [OPPONENT_NUMBER], [OPPONENT_NAME], [ORDER_UNIT_PRICE], [UNIT_ADD_COST_AMOUNT], [UNIT_CHARGE_AMOUNT], [MODE_OF_TRANSPORT], [INVOICE_SERIE], [INVOICE_NUMBER], [SALE_UNIT_PRICE], [INVOICED_AMOUNT], [COUNTRY_CODE],  GETDATE()-1, '31-DEC-9999', 'Y','N', ? , ? )  WHEN MATCHED &#xA;                                                                         AND ( (SELECT SUBSTRING(HashBytes('MD5', ISNULL(CAST(S.[INTRASTAT_ID] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[TRANSACTION_ID] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[TRANSACTION] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[ORDER_TYPE] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[CONTRACT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[COMPONENT_PART] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[DESCRIPTION] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[ORDER_REF1] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[QUANTITY] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[PRINT_UNIT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[DATE_APPLIED] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[WEIGHT_NET] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[CUSTOMS_STAT_NO] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INTRASTAT_ALT_QTY] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INTRASTAT_ALT_UNIT_MEAS] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INTRASTAT_DIRECTION] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[COUNTRY_OF_ORIGIN] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INTRASTAT_ORIGIN] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[OPPOSITE_COUNTRY] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[OPPONENT_NUMBER] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[OPPONENT_NAME] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[ORDER_UNIT_PRICE] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[UNIT_ADD_COST_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[UNIT_CHARGE_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[MODE_OF_TRANSPORT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INVOICE_SERIE] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INVOICE_NUMBER] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[SALE_UNIT_PRICE] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[INVOICED_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(S.[COUNTRY_CODE] AS VARCHAR(100)),'') + ''), 3, 32))   &lt;&gt; (SELECT SUBSTRING(HashBytes('MD5', ISNULL(CAST(T.[INTRASTAT_ID] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[TRANSACTION_ID] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[TRANSACTION] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[ORDER_TYPE] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[CONTRACT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[COMPONENT_PART] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[DESCRIPTION] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[ORDER_REF1] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[QUANTITY] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[PRINT_UNIT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[DATE_APPLIED] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[WEIGHT_NET] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[CUSTOMS_STAT_NO] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INTRASTAT_ALT_QTY] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INTRASTAT_ALT_UNIT_MEAS] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INTRASTAT_DIRECTION] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[COUNTRY_OF_ORIGIN] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INTRASTAT_ORIGIN] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[OPPOSITE_COUNTRY] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[OPPONENT_NUMBER] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[OPPONENT_NAME] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[ORDER_UNIT_PRICE] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[UNIT_ADD_COST_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[UNIT_CHARGE_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[MODE_OF_TRANSPORT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INVOICE_SERIE] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INVOICE_NUMBER] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[SALE_UNIT_PRICE] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[INVOICED_AMOUNT] AS VARCHAR(100)),'') +  ISNULL(CAST(T.[COUNTRY_CODE] AS VARCHAR(100)),'') + ''), 3, 32))   OR T.IsDeleted = 'Y') &#xA;                                                                          THEN UPDATE SET T.ActInd = 'N' , T.End_Date = GETDATE()-2 &#xA;                                                                         WHEN NOT MATCHED BY SOURCE AND  T.ActInd = 'Y'  AND T.IsDeleted &lt;&gt; 'Y'  &#xA;                                                                          THEN UPDATE SET T.ActInd = 'N' , T.IsDeleted = 'Y' , T.End_Date     =  GETDATE()-2 OUTPUT $action   AS action, &#xA;                                                                         S.[INTRASTAT_ID], S.[TRANSACTION_ID], S.[TRANSACTION], S.[ORDER_TYPE], S.[CONTRACT], S.[COMPONENT_PART], S.[DESCRIPTION], S.[ORDER_REF1], S.[QUANTITY], S.[PRINT_UNIT], S.[DATE_APPLIED], S.[WEIGHT_NET], S.[CUSTOMS_STAT_NO], S.[INTRASTAT_ALT_QTY], S.[INTRASTAT_ALT_UNIT_MEAS], S.[INTRASTAT_DIRECTION], S.[COUNTRY_OF_ORIGIN], S.[INTRASTAT_ORIGIN], S.[OPPOSITE_COUNTRY], S.[OPPONENT_NUMBER], S.[OPPONENT_NAME], S.[ORDER_UNIT_PRICE], S.[UNIT_ADD_COST_AMOUNT], S.[UNIT_CHARGE_AMOUNT], S.[MODE_OF_TRANSPORT], S.[INVOICE_SERIE], S.[INVOICE_NUMBER], S.[SALE_UNIT_PRICE], S.[INVOICED_AMOUNT], S.[COUNTRY_CODE],  GETDATE()-1 AS Eff_Date , '31-DEC-9999' AS End_Date  , 'Y' AS ActInd , &#xA;                                                                         CASE WHEN S.BatchID IS NULL THEN 'Y' ELSE 'N' END AS IsDeleted, ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT &#xA;                                                                         WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted &lt;&gt; 'Y'; INSERT INTO  Reports.RT.INTRASTAT SELECT * FROM @INTRASTAT_TEMP;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{EDF6FA7D-1545-445A-BD83-6F1DB684C561}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Target row count DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT\SQL Target row count DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="SELECT count(*) FROM [RT].[INTRASTAT]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ResultName="0"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{91E3D795-7C21-4389-80AC-AAF20EFAB750}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Update contol record DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT\SQL Update contol record DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH_Control" SQLTask:SqlStatementSource="MERGE [Control].[DWHControl] T   &#xA; USING (Select 'Reports' as [SourceConnection] &#xA; , 'RT' as [SourceSchema] &#xA; , 'INTRASTAT' as [SourceTable] &#xA; , 'F' as [ExtractionType] &#xA; , ? as [BatchID]  &#xA; , ? as [RowCountExtract]  &#xA; , ? as [RowCountTarget]  &#xA; , ? as [RowCountError]  &#xA; , ? as [LastLoadDate]  &#xA; ) S  &#xA; ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  &#xA; WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] &#xA; , S.[SourceSchema] &#xA; , S.[SourceTable] &#xA; , S.[ExtractionType] &#xA; , S.[BatchID] &#xA; , S.[RowCountExtract] &#xA; , S.[RowCountTarget] &#xA; , S.[RowCountError] &#xA; , S.[LastLoadDate]   )   &#xA; WHEN MATCHED  THEN &#xA; UPDATE &#xA; SET &#xA;  [ExtractionType] = S.[ExtractionType] &#xA; , [BatchID] = S.[BatchID] &#xA; , [RowCountExtract] = S.[RowCountExtract] &#xA; , [RowCountTarget] = S.[RowCountTarget] &#xA; , [RowCountError] = S.[RowCountError] &#xA; , [LastLoadDate] = S.[LastLoadDate] ;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="$Package::BatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountExtract" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountError" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="System::StartTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{67F55AD2-A805-458C-998D-0D4DA859985A}" DTS:From="Package\SC Load DWH-RT-INTRASTAT\SQL Get last extraction date DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Get last extraction date DWH-RT-INTRASTAT_To_SQL Source row count DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT.PrecedenceConstraints[Constraint_SQL Get last extraction date DWH-RT-INTRASTAT_To_SQL Source row count DWH-RT-INTRASTAT]" DTS:To="Package\SC Load DWH-RT-INTRASTAT\SQL Source row count DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{5A498BF8-F79E-4312-91D1-8B7CD650D8C2}" DTS:From="Package\SC Load DWH-RT-INTRASTAT\SQL Source row count DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Source row count DWH-RT-INTRASTAT_To_SQL Merge DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT.PrecedenceConstraints[Constraint_SQL Source row count DWH-RT-INTRASTAT_To_SQL Merge DWH-RT-INTRASTAT]" DTS:To="Package\SC Load DWH-RT-INTRASTAT\SQL Merge DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7711014E-60EC-4FAD-853D-F513E6B706F5}" DTS:From="Package\SC Load DWH-RT-INTRASTAT\SQL Merge DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DWH-RT-INTRASTAT_To_SQL Target row count DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT.PrecedenceConstraints[Constraint_SQL Merge DWH-RT-INTRASTAT_To_SQL Target row count DWH-RT-INTRASTAT]" DTS:To="Package\SC Load DWH-RT-INTRASTAT\SQL Target row count DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{22C84653-51DD-452D-A01E-FCD77664561D}" DTS:From="Package\SC Load DWH-RT-INTRASTAT\SQL Target row count DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Target row count DWH-RT-INTRASTAT_To_SQL Update contol record DWH-RT-INTRASTAT" DTS:refId="Package\SC Load DWH-RT-INTRASTAT.PrecedenceConstraints[Constraint_SQL Target row count DWH-RT-INTRASTAT_To_SQL Update contol record DWH-RT-INTRASTAT]" DTS:To="Package\SC Load DWH-RT-INTRASTAT\SQL Update contol record DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C74BE8B5-70E8-4D95-9EE9-3CD37A907132}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Finish Audit Package DWH-RT-INTRASTAT" DTS:refId="Package\SQL Finish Audit Package DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="DWH_Control" SQLTask:SqlStatementSource="EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditActionFinish" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="Audit::AuditBatchActionNone" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::LastExtractionDate" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountExtract" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="5" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountTarget" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="6" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+          <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="RC::RowCountError" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="7" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C950367B-1FE7-49A9-B223-70B14407E166}" DTS:From="Package\SQL Start Audit Package DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Start Audit Package DWH-RT-INTRASTAT_To_SC Load DWH-RT-INTRASTAT" DTS:refId="Package.PrecedenceConstraints[Constraint_SQL Start Audit Package DWH-RT-INTRASTAT_To_SC Load DWH-RT-INTRASTAT]" DTS:To="Package\SC Load DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{28F01CA1-6152-4B25-8A1F-4E00CD2F2D79}" DTS:From="Package\SC Load DWH-RT-INTRASTAT" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SC Load DWH-RT-INTRASTAT_To_SQL Finish Audit Package DWH-RT-INTRASTAT" DTS:refId="Package.PrecedenceConstraints[Constraint_SC Load DWH-RT-INTRASTAT_To_SQL Finish Audit Package DWH-RT-INTRASTAT]" DTS:To="Package\SQL Finish Audit Package DWH-RT-INTRASTAT"></DTS:PrecedenceConstraint>
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler DTS:CreationName="OnError" DTS:DTSID="{DE3BBD1E-A4CD-4DE2-838B-2217D2441ED0}" DTS:EventID="0" DTS:EventName="OnError" DTS:LocaleID="-1" DTS:refId="Package.EventHandlers[OnError]">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{2CFBC133-0F63-47B0-9DEE-8DCEF66B6633}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Error Audit Package DWH-RT-INTRASTAT" DTS:refId="Package.EventHandlers[OnError]\SQL Error Audit Package DWH-RT-INTRASTAT" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="DWH_Control" SQLTask:SqlStatementSource="exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditProcessLogID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="20" SQLTask:DtsVariableName="Audit::AuditBatchID" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::PackageName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="2" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="3" SQLTask:DtsVariableName="System::ErrorCode" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="3" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="System::ErrorDescription" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="4" SQLTask:ParameterSize="0"></SQLTask:ParameterBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:Description="The propagate property of the event" DTS:DTSID="{F583BCC1-C477-4020-8705-3737351A6B05}" DTS:IncludeInDebugDump="6789" DTS:Namespace="System" DTS:ObjectName="Propagate">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>

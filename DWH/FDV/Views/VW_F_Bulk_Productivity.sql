@@ -17,14 +17,14 @@ WITH CTE_INIT2 as
 , CASE
      WHEN LP.SINGLE_LINE_LPN = 'N' THEN 'CASEPICKING'
   END																										AS WRK_GRP
-  FROM          [DWH].[MANH].[PROD_TRKG_TRAN] PT3
- INNER JOIN     [DWH].[MANH].[LPN_OUTBOUND] LP 
+  FROM          [MANH].[PROD_TRKG_TRAN] PT3
+ INNER JOIN     [MANH].[LPN_OUTBOUND] LP 
  ON             LP.TC_LPN_ID = PT3.CNTR_NBR 
  AND            LP.CONTAINER_TYPE IN ('PAL' ,'EUR')
  AND            LP.LPN_FACILITY_STATUS BETWEEN 10 AND 91
  AND			LP.SINGLE_LINE_LPN = 'N'
  AND			LP.ActInd='Y'
- INNER JOIN DWH.MANH.UCL_USER UH1
+ INNER JOIN MANH.UCL_USER UH1
  on 
  PT3.[USER_ID]=UH1.[USER_NAME]
  and UH1.ActInd='Y'
@@ -56,15 +56,15 @@ WITH CTE_INIT2 as
 		 when TH.TASK_TYPE='04' then '04_ONBEKEND'
      end																																		as WRK_GRP																									 																					  
   ,TH.TASK_TYPE																																	as WRK_GRP_DETAIL2
-  FROM DWH.MANH.PROD_TRKG_TRAN PT
+  FROM MANH.PROD_TRKG_TRAN PT
   
- join [DWH].[MANH].[TASK_HDR] TH
+ join [MANH].[TASK_HDR] TH
   on
   TH.TASK_ID=PT.TASK_ID
   AND TH.INVN_NEED_TYPE='1'
   and TH.ActInd='Y'
    
-  join DWH.MANH.UCL_USER UH
+  join MANH.UCL_USER UH
   on 
   PT.[USER_ID]=UH.[USER_NAME]
   and UH.ActInd='Y'

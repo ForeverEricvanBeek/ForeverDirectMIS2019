@@ -15,11 +15,11 @@ WITH CTE_INIT AS (
                      WHEN WH.Location_Aisle IN ('41','42') THEN 'Lus 4'
                      WHEN WH.Location_Aisle IN ('43','44','45', '46') THEN 'Lus 5'
          END                                                                        AS LUS                         
-       FROM          ForeverData01.DM.F_OF_Productivity PR
-       INNER JOIN    ForeverData01.DM.D_Pickers PK
+       FROM          [$(ForeverData01)].DM.F_OF_Productivity PR
+       INNER JOIN    [$(ForeverData01)].DM.D_Pickers PK
        ON                   PK.D_Pickers_Skey = PR.D_Pickers_Skey
        AND                  PK.Pickers_Name IS NOT NULL
-       INNER JOIN    ForeverData01.DM.D_WHS_Location WH
+       INNER JOIN    [$(ForeverData01)].DM.D_WHS_Location WH
        ON                   WH.D_WHS_Location_Skey = PR.D_WHS_Location_Skey
        AND                  WH.Location_Display_Location IS NOT NULL
        WHERE        PR.DateKey  > CONCAT(Year(GETDATE())-1 ,'01' ,'01')
