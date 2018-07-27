@@ -1,0 +1,713 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="2/18/2015 9:36:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SR-BIT"
+  DTS:CreatorName="DMLINDERS\bi-dev"
+  DTS:DTSID="{D3AB3736-AED3-4D9A-92CC-BC8F0DEB3C40}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3002.106"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="GenXLSLoadMetadata Reports"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="63"
+  DTS:VersionGUID="{6AA94C05-DE54-4476-BD61-89F4719D3925}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[BIML Metadata]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{D5C26FE2-6159-4EF0-AB5B-7E18338BC80F}"
+      DTS:ObjectName="BIML Metadata">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\Biml\BiML IFS metadata.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel Connection Manager]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{14808D34-F9FE-4497-8159-84567693BFA3}"
+      DTS:ObjectName="Excel Connection Manager">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\Biml\BiML Reports metadata.xls;Extended Properties=&quot;Excel 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{FAD6BEE1-2C96-4B92-9F3E-C26F49FE9818}"
+      DTS:ObjectName="BiMLMetadata_ConnectionString"
+      DTS:Required="True">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\sr-bit.sk.janlinders.nl\DWH Work\Import\BiML metadata.xls;Extended Properties="Excel 8.0;HDR=YES";</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Reports table"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{2D58F312-F962-42FE-967B-C2E095E580A6}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Reports table"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Reports table\Connection"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="Connection"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">LoadReportTables$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Reports table\Connection.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Excel Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Excel Connection Manager]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Reports table\Connection.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      name="SourceConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      name="SourceSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
+                      name="SourceTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ExtractionType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ExtractionType]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ExtractionType]"
+                      name="ExtractionType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetConnection]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetConnection]"
+                      name="TargetConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetSchema]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetSchema]"
+                      name="TargetSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Order]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[Order]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Order]"
+                      name="Order"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetTable]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetTable]"
+                      name="TargetTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ExtractionType1]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ExtractionType1]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ExtractionType1]"
+                      name="ExtractionType1"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ExtractionType]"
+                      dataType="wstr"
+                      length="255"
+                      name="ExtractionType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[Order]"
+                      dataType="r8"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[TargetTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ExtractionType1]"
+                      dataType="wstr"
+                      length="255"
+                      name="ExtractionType1" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      name="SourceConnection" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      name="SourceSchema" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      name="SourceTable" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ExtractionType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ExtractionType]"
+                      name="ExtractionType" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetConnection]"
+                      name="TargetConnection" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetSchema]"
+                      name="TargetSchema" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Order]"
+                      dataType="r8"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Order]"
+                      name="Order" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[TargetTable]"
+                      name="TargetTable" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ExtractionType1]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ExtractionType1]"
+                      name="ExtractionType1" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Reports table\Generator_Connection"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_Connection"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[LoadReportTables]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Reports table\Generator_Connection.Connections[OleDbConnection]"
+                  connectionManagerID="{F38DA573-C3D5-432C-A2CE-74F9D6909FC4}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWH_Control]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceConnection"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceConnection]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceSchema"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceSchema]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[TargetSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetSchema"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetSchema]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetSchema]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Order]"
+                      cachedDataType="r8"
+                      cachedName="Order"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Order]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Order]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceTable"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[TargetTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetTable"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetTable]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetTable]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[TargetConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetConnection"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetConnection]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[TargetConnection]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[ExtractionType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ExtractionType"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ExtractionType]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ExtractionType]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceExtractionTableID]"
+                      dataType="i2"
+                      name="SourceExtractionTableID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Order]"
+                      dataType="i4"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[TargetConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="TargetConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ExtractionType]"
+                      dataType="wstr"
+                      length="2"
+                      name="ExtractionType" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Reports table\Generator_Connection.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Reports table\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Reports table\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Reports table.Paths[Excel Source Output]"
+              endId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Reports table\Connection.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Metadata Tables"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{7877F508-3119-42EA-A0FD-0DC3A8E3A963}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Metadata Tables"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F38DA573-C3D5-432C-A2CE-74F9D6909FC4}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [Generator].[LoadReportTables];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{61C8A310-ACD0-4222-8288-93D53D34B244}"
+      DTS:From="Package\Truncate Metadata Tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Load Reports table" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="167,42"
+          Id="Package\Load Reports table"
+          TopLeft="510,142.8" />
+        <NodeLayout
+          Size="272,42"
+          Id="Package\Truncate Metadata Tables"
+          TopLeft="453,51" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="591.25,93">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,49.8"
+              Start="0,0"
+              End="0,42.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,42.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load Reports table">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Reports table.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
