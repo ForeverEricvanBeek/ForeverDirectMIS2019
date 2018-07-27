@@ -11,7 +11,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Reports','DWH','DWH_Control')
+                                            AND          c.[Name] in ('Reports','DWH_Control')
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -74,12 +74,12 @@
             </Parameters>
             
             <Packages>
-                <#string sqlPackage = @"SELECT 'Staging' AS [SourceConnection]
+                <#string sqlPackage = @"SELECT 'Reports' AS [SourceConnection]
                                         ,'SQLServer' AS [ConnectionType]
                                         ,[TargetSchema] AS [SourceSchema]
                                         ,[TargetTable] AS [SourceTable]
                                         ,[ExtractionType]
-                                        ,'DWH' AS PackagePrefix
+                                        ,'Reports' AS PackagePrefix
                                         FROM [Generator].[LoadReportTables] st
                                         Left JOIN [Generator].[Connection] con
                                         on [st].[SourceConnection] = [con].[Name]	
@@ -91,12 +91,12 @@
                                         ,[TargetSchema]
                                         ,'Total' AS [SourceTable]
                                         ,null
-                                        ,'CTRL_DWH' AS PackagePrefix
+                                        ,'CTRL_Reports' AS PackagePrefix
                                         FROM [Generator].[LoadReportTables] st
                                         UNION
                                         SELECT    'EXTR'
                                         ,null
-                                        ,'DWH'
+                                        ,'Reports'
                                         ,'Total'
                                         ,null
                                         ,'CTRL'

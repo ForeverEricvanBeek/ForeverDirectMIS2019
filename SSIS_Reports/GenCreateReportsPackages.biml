@@ -22,14 +22,14 @@
                                                     FOR XML PATH('')),1 ,1, '') PK
                                                     from COLUMN_CONSTRAINTS T1
                                                     )
-                                                    SELECT 'Staging' AS [SourceConnection]
+                                                    SELECT 'Reports' AS [SourceConnection]
                                                     ,ST.[TargetSchema] AS [SourceSchema]
                                                     ,ST.[TargetTable] AS [SourceTable]
                                                     ,SC.[Type] AS [SourceType]
                                                     ,SC.[Options]
                                                     ,SC.[ConnectionString]
                                                     ,ST.[ExtractionType]
-                                                    ,'DWH' AS [TargetConnection]
+                                                    ,'Reports' AS [TargetConnection]
                                                     ,ST.[TargetSchema]
                                                     ,ST.[TargetTable]
                                                     ,'NULL' [IncrementalSchema]
@@ -39,7 +39,7 @@
                                                     ,'NULL' [IsStaging] 
                                                     ,1 [DeleteStaging]
                                                     ,CS.PK AS [PrimaryKey]
-                                                    ,'DWH' AS PackagePrefix
+                                                    ,'Reports' AS PackagePrefix
                                                     FROM      [Generator].[LoadReportTables] ST
                                                     LEFT JOIN [Generator].[Connection] SC
                                                     ON        ST.[SourceConnection] = SC.[Name]
@@ -265,7 +265,7 @@
                             <#string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
                             string MergeSQlStatement = "";
                             if (varExtractionType == "MN" || varExtractionType == "MI") {
-                                MergeSQlStatement = "INSERT INTO DWH."+ varTargetSchema + "."+ varTargetTable + " SELECT ";
+                                MergeSQlStatement = "INSERT INTO Reports."+ varTargetSchema + "."+ varTargetTable + " SELECT ";
                             } else {
                                 MergeSQlStatement = "INSERT INTO @" + varTargetTable + "_TEMP SELECT ";
                             }
@@ -290,11 +290,11 @@
                                                             WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
                                                             ELSE '[' + COL.DATA_TYPE + ']'
                                                             END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
-                                                        from		DWH.INFORMATION_SCHEMA.COLUMNS COL
-                                                        LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                                        from		Reports.INFORMATION_SCHEMA.COLUMNS COL
+                                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
                                                         ON			TC.TABLE_NAME = COL.TABLE_NAME
                                                         AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
-                                                        LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
+                                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
                                                         ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
                                                         AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
                                                         AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
@@ -344,7 +344,7 @@
                             SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
                             string quote = "<>";
                             if(varExtractionType == "MN" ) {
-                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE DWH."+varTargetSchema + "."+ varTargetTable + " T " +
+                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE Reports."+varTargetSchema + "."+ varTargetTable + " T " +
                                                                         	"USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
                                                                         	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
                                                                         	" WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
@@ -471,7 +471,7 @@
                                     [TargetConnection]
                                     ,[TargetSchema]
                                     ,'Total' AS [TargetTable]
-                                    ,'CTRL_DWH' AS PackagePrefix
+                                    ,'CTRL_Reports' AS PackagePrefix
                                     FROM [Generator].[LoadReportTables] st
                                     WHERE st.[IsActive] = 1
                                     ";
@@ -534,7 +534,7 @@
                              ,[Type] AS ConnectionType
                              ,[TargetSchema] AS[SourceSchema]
                              ,[TargetTable] AS [SourceTable]
-                             ,'DWH' AS PackagePrefix
+                             ,'Reports' AS PackagePrefix
                             FROM      [Generator].[LoadReportTables] st 
                             JOIN	  [Generator].[Connection] con 	
                             ON		  [st].[SourceConnection] = [con].[Name]
@@ -592,7 +592,7 @@
   
       <#}#>
 
-        <Package Name = "CTRL-DWH-Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+        <Package Name = "CTRL-Reports-Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
             <Parameters>
                 <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                 <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
@@ -611,7 +611,7 @@
             </Variables>
             
             <Tasks>
-                <ExecuteSQL Name="SQL Start Audit Package CTRL-DWH-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
+                <ExecuteSQL Name="SQL Start Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
                     <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
                     <Parameters>
                         <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
@@ -641,7 +641,7 @@
                                                           [TargetConnection]
                                                          ,[TargetSchema]
                                                          ,'Total' AS [TargetTable]
-                                                         ,'CTRL_DWH' AS PackagePrefix
+                                                         ,'CTRL_Reports' AS PackagePrefix
                                                         FROM      [Generator].[SourceExtractionTable] st
                                                         WHERE     st.[IsActive] = 1
                                                         ";
@@ -666,7 +666,7 @@
                     </Tasks>
                 </Container>
 
-                <ExecuteSQL Name="SQL Finish Audit Package CTRL-DWH-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                <ExecuteSQL Name="SQL Finish Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
                     <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
                     <Parameters>
                         <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
@@ -680,7 +680,7 @@
             <Events>
                 <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
                     <Tasks>
-                        <ExecuteSQL Name="SQL Error Audit Package CTRL-DWH-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                        <ExecuteSQL Name="SQL Error Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
                             <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
                             <Parameters>
                                 <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
