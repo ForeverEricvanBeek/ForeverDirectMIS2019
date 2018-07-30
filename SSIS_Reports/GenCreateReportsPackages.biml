@@ -104,62 +104,7 @@
             string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
             string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
     
-            string sqlSourceExtractionColumn = @"SELECT sc.[SourceColumnName]
-                                                     ,sc.[SourceColumnExpression]
-                                                     ,sc.[SourceColumnType]
-                                                     ,sc.[SourceColumnLength]
-                                                     ,sc.[SourceColumnPrecision]
-                                                     ,sc.[SourceColumnScale]
-                                                     ,sc.[TargetColumnName]
-                                                     ,sc.[TargetColumnType]
-                                                     ,sc.[TargetColumnLength]
-                                                     ,sc.[TargetColumnPrecision]
-                                                     ,sc.[TargetColumnScale]
-                                                     ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
-                                                     ,dc.[DataTypeExpression]
-                                                    FROM         [Generator].[SourceExtractionColumn] sc 
-                                                    LEFT JOIN    [Generator].[DataTypeConversion]     dc
-                                                    ON           [TargetColumnType] collate SQL_Latin1_General_CP1_CS_AS =  [DataType] collate SQL_Latin1_General_CP1_CS_AS
-                                                    WHERE        sc.[SourceConnection] = '" + varExtractionSourceConnection + @"'
-                                                    AND          sc.[SourceSchema] = '" + varExtractionSourceSchema + @"' 
-                                                    AND          sc.[SourceTable] = '" + varExtractionSourceTable + @"' 
-                                                    AND          sc.[SourceColumnName] IS NOT NULL
-                                                    AND          sc.[IsActive] = 1 AND 1=2
-                                                    ORDER BY     sc.[SourceColumnPosition]
-                                                    ";
-            DataTable tableSourceExtractionColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionColumn);
-            int varSourceExtractionColumnCount = tableSourceExtractionColumn.Rows.Count;
-            string varSQLStatementColumns = "";
-            foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName = rowSourceExtractionColumn["SourceColumnExpression"].ToString();
-                int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                varSQLStatementColumns += ", " + varSourceColumnName;
-            }
-            
-            if (varSQLStatementColumns.Length > 0) {
-                varSQLStatementColumns = varSQLStatementColumns.Substring(2, varSQLStatementColumns.Length - 2);
-            } else {
-                varSQLStatementColumns = "*";
-            }
-            string varExtractionSQLStatement = "";
-            string varExtractionDateConversion = "";
-        
-            switch (varExtractionSourceType) {
-                case "SQLServer":
-                    varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
-                    break;
-                case "Oracle":
-                    varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)";
-                    break;
-                case "ODBC":
-                    varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
-                    break;
-                default:
-                    varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
-                    break;
-            }
-        
-            varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
+            string varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
             #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -181,7 +126,6 @@
                     <Variable Name="RowCountError" DataType="Int32" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
-                    <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                 </Variables>
     
@@ -224,34 +168,8 @@
                                                                 WHERE      [PackageName] = '" + varPackageName + @"' 
                                                                 AND        [TaskName]    = '" + varTaskName + @"'
                                                                 ";
-                            if (varExtractionType == "FS") {
-                                string varSQLDeleteStatement = "";
-                                string[] varKeyColumns = varExtractionIncrementalKey.Split(varKeyColumnSeparator,StringSplitOptions.RemoveEmptyEntries);
-                                string varJoinCondition = "";
-                                foreach (string varKeyColumn in varKeyColumns) {
-                                    varJoinCondition += "AND tar.[" + varKeyColumn + "] = inc.[" + varKeyColumn + "] \n";
-                                }
-                                if (varJoinCondition.Length > 0) {
-                                    varJoinCondition = varJoinCondition.Substring(4, varJoinCondition.Length - 5);
-                                }
-                                string varSQLSelectionDate = "select CONVERT(VARCHAR, MAX(DATEADD(DD,-1,StartDateTime)), 120)  from [DWH_Control].[Logging].[BatchLog] where BatchID = ?" ;#>
     
-                                <ExecuteSQL Name="SQL Get Selection Date  <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                    <DirectInput><#=varSQLSelectionDate#></DirectInput>
-                                    <Results><Result Name="0" VariableName="User.SelectionDate" /></Results>
-                                    <Parameters><Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" /></Parameters>
-                                </ExecuteSQL>
-                                
-                                <#varSQLDeleteStatement = "DELETE FROM "+varIncrementalTargetSchemaTablePlus ;
-                                varSQLDeleteStatement = varSQLDeleteStatement + " WHERE cast("+varExtractionModifiedDate+" As Date) = cast( ? As Date) ";#>
-    
-                                <ExecuteSQL Name="SQL Delete target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><#=varSQLDeleteStatement#></DirectInput>
-                                    <Parameters><Parameter Name="0" VariableName="User.SelectionDate" DataType="String" /></Parameters>
-                                </ExecuteSQL>
-                            <#} 
-    
-                            if (varExtractionType == "TI") {#>
+                            if (varExtractionType == "F") {#>
                                 <ExecuteSQL Name="SQL Truncate target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                                 </ExecuteSQL>
@@ -262,13 +180,9 @@
                                 <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                             </ExecuteSQL>
     
-                            <#string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
-                            string MergeSQlStatement = "";
-                            if (varExtractionType == "MN" || varExtractionType == "MI") {
-                                MergeSQlStatement = "INSERT INTO Reports."+ varTargetSchema + "."+ varTargetTable + " SELECT ";
-                            } else {
-                                MergeSQlStatement = "INSERT INTO @" + varTargetTable + "_TEMP SELECT ";
-                            }
+                            <#
+                            string MergeSQlStatementColumnsInsert = "";
+                            string MergeSQlStatementColumnsInto = "";
                             string SQLHashStringSource = "";
                             string SQLHashStringTarget = "";
                             string VarPrimKeyJoin = "";
@@ -318,102 +232,33 @@
                                 string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
                                 string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
                                 if (VarSourceColumnName == "ProcessLogID") {
-                                    MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"] ";
-                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ")";
+                                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"] ";
                                 } else {
-                                    MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"], ";
-                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ",";
+                                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"], ";
                                 }
-                                if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
-                                    if (VarColumnExpression == "1") {
-                                        VarFuncColumn = VarFuncColumn + VarTargetColumnName +", ";
-                                        VarFuncColumnSource = VarFuncColumnSource + VarTargetColumnNameExp +" AS " + VarSourceColumnName + ", ";
-                                    } else {
-                                        SQLHashStringSource = SQLHashStringSource + " ISNULL(CAST(S.["+ VarTargetColumnName +"] AS VARCHAR(100)),'') + ";
-                                        SQLHashStringTarget = SQLHashStringTarget + " ISNULL(CAST(T.["+ VarSourceColumnName +"] AS VARCHAR(100)),'') + ";
-                                        VarFuncColumn = VarFuncColumn + "["+ VarTargetColumnName +"], ";
-                                        VarFuncColumnSource = VarFuncColumnSource + "S.["+ VarTargetColumnName +"], ";
-                                    }
-                                }
-                                if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
-                                    VarPrimKeyJoin = VarPrimKeyJoin + " T.["+ VarSourceColumnName +"] = S.["+ VarTargetColumnName +"] AND ";
+                            
+                                if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID") {
+                                    MergeSQlStatementColumnsInto = MergeSQlStatementColumnsInto + "["+ VarSourceColumnName +"], ";
                                 }
                             }
                             
                             SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
                             SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
                             string quote = "<>";
-                            if(varExtractionType == "MN" ) {
-                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE Reports."+varTargetSchema + "."+ varTargetTable + " T " +
-                                                                        	"USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
-                                                                        	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
-                                                                        	" WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
-                                                                        	VarFuncColumn + "  ? , ? ) "+
-                                                                        	" WHEN MATCHED THEN DELETE"+              
-                                                                        	" OUTPUT $action   AS action, "+
-                                                                        	VarFuncColumnSource + "  ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT WHERE MERGE_OUT.action = 'DELETE'; ";
-                            } else if (varExtractionType == "MI" ) {
-                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE Reports."+varTargetSchema + "."+ varTargetTable + " T " +
-                                                                        	"USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
-                                                                        	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
-                                                                        	" WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
-                                                                        	VarFuncColumn + "  ? , ? ) "+
-                                                                        	" WHEN MATCHED THEN DELETE"+              
-                                                                        	" OUTPUT $action   AS action, "+
-                                                                        	VarFuncColumnSource + "  ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT WHERE MERGE_OUT.action = 'DELETE'; ";
-                            } else if (varExtractionType == "I" ) {
-                                MergeTempTable = MergeTempTable + MergeSQlStatement;                                
-                                MergeSQlStatement = MergeTempTable + @"FROM (MERGE Reports."+varTargetSchema + @"."+ varTargetTable + @" T 
-                                                                    	USING Staging." +varTargetSchema + "."+ varTargetTable + @" S 
-                                                                    	ON "+ VarPrimKeyJoin + @" 1=1 AND  T.ActInd = 'Y' AND T.IsDeleted = 'N' 
-                                                                    	WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
-                                                                    	VarFuncColumn + @" GETDATE()-1, '31-DEC-9999', 'Y','N', ? , ? ) "+
-                                                                    	@" WHEN MATCHED 
-                                                                    	AND ( " + SQLHashStringSource + " <> " + SQLHashStringTarget + @" OR T.IsDeleted = 'Y') 
-                                                                    	THEN UPDATE SET T.ActInd = 'N' , T.End_Date = GETDATE()-2 
-                                                                    	OUTPUT $action   AS action, 
-                                                                    	"+ VarFuncColumnSource + @" GETDATE()-1 AS Eff_Date , '31-DEC-9999' AS End_Date  , 'Y' AS ActInd , 
-                                                                    	CASE WHEN S.BatchID IS NULL THEN 'Y'	ELSE 'N' END AS IsDeleted, ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT 
-                                                                    	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  Reports." + varTargetSchema + "." + varTargetTable + " SELECT * FROM @" + varTargetTable + "_TEMP;";
-                            } else {
-                                MergeTempTable = MergeTempTable + MergeSQlStatement;
-                                MergeSQlStatement = MergeTempTable +    @"FROM (MERGE Reports."+varTargetSchema + @"."+ varTargetTable + @" T 
-                                                                        	USING Staging." +varTargetSchema + "."+ varTargetTable + @" S 
-                                                                        	ON "+ VarPrimKeyJoin + @" 1=1 AND  T.ActInd = 'Y' AND T.IsDeleted = 'N' 
-                                                                        	WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
-                                                                        	VarFuncColumn + @" GETDATE()-1, '31-DEC-9999', 'Y','N', ? , ? ) "+
-                                                                        	@" WHEN MATCHED 
-                                                                        	AND ( " + SQLHashStringSource + " <> " + SQLHashStringTarget + @" OR T.IsDeleted = 'Y') 
-                                                                        	 THEN UPDATE SET T.ActInd = 'N' , T.End_Date = GETDATE()-2 
-                                                                        	WHEN NOT MATCHED BY SOURCE AND  T.ActInd = 'Y'  AND T.IsDeleted <> 'Y'  
-                                                                        	 THEN UPDATE SET T.ActInd = 'N' , T.IsDeleted = 'Y' , T.End_Date     =  GETDATE()-2 OUTPUT $action   AS action, 
-                                                                        	"+ VarFuncColumnSource + @" GETDATE()-1 AS Eff_Date , '31-DEC-9999' AS End_Date  , 'Y' AS ActInd , 
-                                                                        	CASE WHEN S.BatchID IS NULL THEN 'Y'	ELSE 'N' END AS IsDeleted, ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT 
-                                                                        	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  Reports." + varTargetSchema + "." + varTargetTable + " SELECT * FROM @" + varTargetTable + "_TEMP;";
-                            } 
+                            string MergeSQlStatement = "INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
+                            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
+                            MergeSQlStatement = MergeSQlStatement + ") SELECT ";
+                            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
+                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varTargetSchema + "." + varTargetTable;
                             
-                            if (varExtractionType == "FS") {
-                                string varInsertSQLStaement = "INSERT INTO Reports."+varTargetSchema + "."+ varTargetTable  + " SELECT CONVERT(DATETIME2(7),  ? , 120) , " + VarFuncColumn + "  ? , ? FROM Staging."+varTargetSchema + "."+ varTargetTable;#>
-                                <ExecuteSQL Name="SQL Load <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><#=@varInsertSQLStaement#></DirectInput>
-                                    <Parameters>
-                                        <Parameter Name="0" VariableName="User.SelectionDate" DataType="String" />
-                                        <Parameter Name="1" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="2" VariableName="Audit.AuditProcessLogID" DataType="Int64"  />
-                                    </Parameters>
-                                </ExecuteSQL>
-                            <#} else {#>
+                            #>
                                 <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
                                         <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
-                                        <Parameter Name="2" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
                                     </Parameters>
                                 </ExecuteSQL>
-                            <#}#>
-    
     
                             <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
@@ -642,7 +487,7 @@
                                                          ,[TargetSchema]
                                                          ,'Total' AS [TargetTable]
                                                          ,'CTRL_Reports' AS PackagePrefix
-                                                        FROM      [Generator].[SourceExtractionTable] st
+                                                        FROM      [Generator].[LoadReportTables] st
                                                         WHERE     st.[IsActive] = 1
                                                         ";
 
