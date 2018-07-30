@@ -23,7 +23,7 @@
                                                     from COLUMN_CONSTRAINTS T1
                                                     )
                                                     SELECT 'Reports' AS [SourceConnection]
-                                                    ,ST.[TargetSchema] AS [SourceSchema]
+                                                    ,ST.[SourceSchema] AS [SourceSchema]
                                                     ,ST.[TargetTable] AS [SourceTable]
                                                     ,SC.[Type] AS [SourceType]
                                                     ,SC.[Options]
@@ -58,7 +58,9 @@
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
+            string varSourceSchema = varExtractionSourceSchema;
             string varTargetTable = varExtractionTargetTable;
+            string varSourceTable = varExtractionSourceTable;
             string varTargetName = varTargetConnection+"-"+varExtractionTargetSchema+"-"+varExtractionTargetTable;
             string varOutputPathName = "";
             string varTableBeginCharacter = varSQLServTableBeginCharacter;
@@ -66,12 +68,14 @@
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
     
-            string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema      + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
+            string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable + varSQLServTableCloseCharacter;
+            string varExtractionSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionSourceSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionSourceTable + varSQLServTableCloseCharacter;
             string varTargetSchemaPlus = varSQLServTableBeginCharacter + varTargetSchema + varSQLServTableCloseCharacter;
+            
             string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable   + varSQLServTableCloseCharacter;
             string varTargetSchemaTablePlus = varTargetSchemaPlus    + "." + varTargetTablePlus;
             string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
-            string varSQLRowCountSourceTable = "SELECT count(*) FROM [Reports]." + varExtractionTargetSchemaTablePlus;
+            string varSQLRowCountSourceTable = "SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
             string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
             string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
@@ -221,7 +225,7 @@
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
                             MergeSQlStatement = MergeSQlStatement + ") SELECT ";
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
-                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varTargetSchema + "." + varTargetTable;
+                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable;
                             
                             #>
                                 <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
