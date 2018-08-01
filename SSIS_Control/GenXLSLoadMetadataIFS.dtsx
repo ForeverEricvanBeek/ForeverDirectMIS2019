@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadataIFS"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="60"
-  DTS:VersionGUID="{6980A582-11D0-4E27-B79A-DEFF6438ED3D}">
+  DTS:VersionBuild="61"
+  DTS:VersionGUID="{BB39882A-CA00-4AC4-828F-A06DC59752C0}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -1411,6 +1411,13 @@
                       cachedName="WhereInStatement"
                       externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[WhereInStatement]"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[WhereInStatement]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[Parent]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Parent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Parent]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1503,6 +1510,11 @@
                       dataType="wstr"
                       length="4000"
                       name="WhereInStatement" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Parent]"
+                      dataType="wstr"
+                      length="128"
+                      name="Parent" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -1769,6 +1781,16 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[WhereInStatement]"
                       name="WhereInStatement"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]"
+                      name="Parent"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1862,6 +1884,11 @@
                       dataType="wstr"
                       length="255"
                       name="WhereInStatement" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      name="Parent" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -1952,6 +1979,12 @@
                       length="255"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[WhereInStatement]"
                       name="WhereInStatement" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      name="Parent" />
                     <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[DeleteStaging]"
                       dataType="r8"
@@ -2282,12 +2315,12 @@
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="237,42"
-          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
           TopLeft="522,139" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
+          TopLeft="522,53" />
         <EdgeLayout
           Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
           TopLeft="640.5,95">
