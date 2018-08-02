@@ -79,7 +79,7 @@
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
             if (varExtractionWhereStatement.Length > 0) {
-                if (varExtractionType == "MI") {
+                if (varExtractionType == "MI" || varExtractionType == "MN") {
                     varExtractionWhereStatement = "AND "+ varExtractionWhereStatement;
                 } else {
                     varExtractionWhereStatement = varExtractionWhereStatement;
@@ -210,12 +210,16 @@
                     break;
             }
             
-            if (varExtractionType == "MN") {
+            if (varExtractionType == "MX") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
             } else if (varExtractionType == "MI" && (varIsLoading))  {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MI") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + "\"";
+            } else if (varExtractionType == "MN" && (varIsLoading))  {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+            } else if (varExtractionType == "MN") {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
             } else if (varExtractionType == "MO" && (varIsLoading))  {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MO") {
@@ -248,7 +252,7 @@
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
                     <Variable Name="sSourceFolder" DataType="String" Namespace="User"></Variable>
-                    <#if (varExtractionType == "MO" | varExtractionType == "MI") {#>              
+                    <#if (varExtractionType == "MO" || varExtractionType == "MI" ||  varExtractionType == "MN") {#>              
                         <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varExtractionSQLStatement#></Variable> 
                     <#} else {#> 
                         <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable> 
