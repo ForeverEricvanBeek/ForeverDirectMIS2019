@@ -79,7 +79,7 @@
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
             if (varExtractionWhereStatement.Length > 0) {
-                if (varExtractionType == "MI" || varExtractionType == "MN") {
+                if (varExtractionType == "MI" || varExtractionType == "MN" || varExtractionType == "MF") {
                     varExtractionWhereStatement = "AND "+ varExtractionWhereStatement;
                 } else {
                     varExtractionWhereStatement = varExtractionWhereStatement;
@@ -224,6 +224,10 @@
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MO") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + "AND " + varExtractionModifiedDate + " IN (" + varExtractionWhereIn + ")\"";
+            } else if (varExtractionType == "MF" && (varIsLoading))  {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE 1=1 " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+            } else if (varExtractionType == "MF") {
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
             } else  {
                 varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
             }
