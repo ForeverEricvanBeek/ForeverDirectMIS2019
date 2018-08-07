@@ -74,8 +74,8 @@
     [C12]                    NVARCHAR (100)  NULL,
     [C13]                    NVARCHAR (100)  NULL,
     [N1]                     INT             NULL,
-    [N2]                     INT             NULL,
-    [N3]                     INT             NULL,
+    [N2]                     BIGINT          NULL,
+    [N3]                     BIGINT          NULL,
     [N4]                     INT             NULL,
     [N5]                     INT             NULL,
     [D1]                     DATETIME2 (7)   NULL,
@@ -141,4 +141,6 @@
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL
 );
+
+
 

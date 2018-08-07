@@ -105,5 +105,21 @@
     <Build Include="Generator\Tables\ForeverData01Table.sql" />
     <Build Include="Generator\Tables\ForeverData01Column.sql" />
     <Build Include="dbo\Views\ETL_CHECK.sql" />
+    <Build Include="Generator\Tables\LoadReportTables.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Staging\Staging.sqlproj">
+      <Name>Staging</Name>
+      <Project>{63186821-bba1-4297-86c7-809e20f48f74}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>Staging</DatabaseSqlCmdVariable>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="Staging">
+      <DefaultValue>Staging</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>

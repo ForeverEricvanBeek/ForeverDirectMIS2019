@@ -89,8 +89,10 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_INVOICE_ITEM] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [ITEM_ID] ASC, [COMPANY] ASC, [Eff_Date] ASC)
+    CONSTRAINT [PK_INVOICE_ITEM] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [ITEM_ID] ASC, [COMPANY] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE)
 );
+
+
 
 
 

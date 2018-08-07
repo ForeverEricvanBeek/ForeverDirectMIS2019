@@ -52,7 +52,7 @@
     [N6]                       INT             NULL,
     [N7]                       INT             NULL,
     [N8]                       INT             NULL,
-    [N9]                       INT             NULL,
+    [N9]                       BIGINT          NULL,
     [N10]                      INT             NULL,
     [N11]                      INT             NULL,
     [N12]                      INT             NULL,
@@ -87,4 +87,6 @@
     [ProcessLogID]             BIGINT          NULL,
     CONSTRAINT [PK_INVOICE_ITEM] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [ITEM_ID] ASC, [COMPANY] ASC)
 );
+
+
 

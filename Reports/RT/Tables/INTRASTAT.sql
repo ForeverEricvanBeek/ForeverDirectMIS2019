@@ -28,6 +28,10 @@
     [INVOICE_NUMBER]          NVARCHAR (50)   NULL,
     [SALE_UNIT_PRICE]         INT             NULL,
     [INVOICED_AMOUNT]         INT             NULL,
-    [COUNTRY_CODE]            NVARCHAR (4000) NULL
+    [COUNTRY_CODE]            NVARCHAR (4000) NULL,
+    [BatchID]                 BIGINT          NULL,
+    [ProcessLogID]            BIGINT          NULL
 );
+
+
 

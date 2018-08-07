@@ -1,5 +1,5 @@
-﻿CREATE TABLE [DM].[F_OF_Productivity_Lus] (
-    [DateKey]         BIGINT        NOT NULL,
+﻿CREATE TABLE [DM].[F_OF_Productivity_Lus1] (
+    [DateKey]         DATE          NOT NULL,
     [Pickers_ID]      NVARCHAR (50) NULL,
     [Lus]             VARCHAR (5)   NULL,
     [Starttijd]       CHAR (30)     NULL,
