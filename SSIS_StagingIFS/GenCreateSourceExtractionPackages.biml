@@ -223,7 +223,7 @@
             } else if (varExtractionType == "MO" && (varIsLoading))  {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MO") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + "AND " + varExtractionModifiedDate + " IN (" + varExtractionWhereIn + ")\"";
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND " + varExtractionIncrementalKey + " IN (" + varExtractionWhereIn + ")\"";
             } else if (varExtractionType == "MF" && (varIsLoading))  {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE 1=1 " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MF") {
