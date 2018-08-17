@@ -200,7 +200,7 @@
                     varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
                     break;
                 case "Oracle":
-                    varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)"; 
+                    varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)-3"; 
                     break;
                 case "ODBC":
                     varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";

@@ -33,6 +33,10 @@
                                                     ,ST.[TargetSchema]
                                                     ,ST.[TargetTable]
                                                     ,CS.PK AS [PrimaryKey]
+                                                    ,ST.RunSchedule
+													,ST.RunParam1
+													,ST.RunParam2
+													,ST.Output
                                                     ,'Reports' AS PackagePrefix
                                                     FROM      [Generator].[LoadReportTables] ST
                                                     LEFT JOIN [Generator].[Connection] SC
@@ -56,6 +60,10 @@
             string varExtractionTargetTable = rowSourceExtractionTable["TargetTable"].ToString();
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
+            string varExtractionOutput = rowSourceExtractionTable["Output"].ToString();
+            string varExtractionRunSchedule = rowSourceExtractionTable["RunSchedule"].ToString();
+            string varExtractionRunParam1 = rowSourceExtractionTable["RunParam1"].ToString();
+            string varExtractionRunParam2 = rowSourceExtractionTable["RunParam2"].ToString();
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
             string varSourceSchema = varExtractionSourceSchema;
@@ -89,6 +97,8 @@
             string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
     
             string varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
+            
+            string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
             #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -111,6 +121,7 @@
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
+                    <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -228,7 +239,7 @@
                             MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable;
                             
                             #>
-                                <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
@@ -251,6 +262,18 @@
                                     <Parameter Name="4" VariableName="System.StartTime" DataType="DateTime" />
                                 </Parameters>
                             </ExecuteSQL>
+                                
+                            <#if (varExtractionOutput == "CSV") {#>
+                                <Dataflow Name="<#=varTaskName#>">
+                                    <Transformations>
+                                        <OleDbSource Name="Report Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
+                                            <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                            <VariableInput VariableName="User.SourceExtractionSQL" />
+                                        </OleDbSource>
+                                    </Transformations>
+                                </Dataflow>
+                            <#}#>
+                                
                         </Tasks>
                     </Container>
     
