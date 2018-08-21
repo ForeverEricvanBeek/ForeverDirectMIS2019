@@ -3,8 +3,83 @@
 
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <#@include file="ProjectSettings.cs"#>
+    
+    <FileFormats>
+        <# string sqlSourceFlatFile  = @"SELECT
+                                              lr.TargetTable as [Name]
+                                              , 'FlatFileType=Delimited&&RowDelimiter=LF&&ColumnNamesInFirstDataRow=false&&IsUnicode=false&&DataRowsToSkip=0&&ColumnDelimiter=Semicolon' as options
+                                            FROM		Generator.LoadReportTables lr
+											WHERE		lr.Output = 'CSV'
+                                            ";
+        DataTable tableSourceFlatFile = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFile);
+        foreach (DataRow rowSourceFlatFile in tableSourceFlatFile.Rows) {
+            string varSourceFlatFileName = rowSourceFlatFile["Name"].ToString();
+            string varSourceFlatFileOptions = rowSourceFlatFile["Options"].ToString();
+            string varFlatFileAttributes = "";
+            string[] varFlatFileOptions = varSourceFlatFileOptions.Split(varOptionSeparator,StringSplitOptions.RemoveEmptyEntries);
+            string varRowDelimiter = "";
+            string varColumnDelimiter = "";
+            foreach (string varFlatFileOption in varFlatFileOptions) {
+                string[] varAttributes = varFlatFileOption.Split(varColumnSeparator,StringSplitOptions.RemoveEmptyEntries);
+                string varAttributeName = (string)varAttributes[0];
+                string varAttributeValue = (string)varAttributes[1];
+                if (varFlatFileAttributesList.IndexOf("-"+varAttributeName+"-") != -1) {
+                    varFlatFileAttributes = varFlatFileAttributes + " " + varAttributeName + "=\"" + varAttributeValue +"\"";
+                }
+                if (varAttributeName == "RowDelimiter") { 
+                    varRowDelimiter = varAttributeValue; 
+                }
+                if (varAttributeName == "ColumnDelimiter") { 
+                    varColumnDelimiter = varAttributeValue; 
+                }
+            }#>
+            
+            <FlatFileFormat Name="<#=varSourceFlatFileName#>_FFF" <#=varFlatFileAttributes#>>
+                <Columns>
+                    <#string sqlSourceFlatFileColumn = @"SELECT
+                                                           ic.COLUMN_NAME AS [SourceColumnName]
+                                                           , CASE 
+                                                        		WHEN ic.DATA_TYPE = 'nvarchar' THEN 'String'
+                                                        		WHEN ic.DATA_TYPE = 'smallint' THEN 'Int16'
+                                                        		WHEN ic.DATA_TYPE = 'int' THEN 'Int32'
+                                                        		WHEN ic.DATA_TYPE = 'bigint' THEN 'Int64'
+                                                        		WHEN ic.DATA_TYPE = 'date' THEN 'Date'
+                                                        		WHEN ic.DATA_TYPE = 'datetime' THEN 'DateTime'
+                                                        		WHEN ic.DATA_TYPE = 'datetime2' THEN 'DateTime'
+                                                        		WHEN ic.DATA_TYPE = 'decimal' THEN 'Decimal'
+                                                        		WHEN ic.DATA_TYPE = 'numeric' THEN 'Decimal'
+                                                        		else ic.DATA_TYPE
+                                                        	END AS [SourceColumnType]
+                                                            , ISNULL(CASE WHEN ic.DATA_TYPE = 'nvarchar' THEN ic.CHARACTER_MAXIMUM_LENGTH ELSE ic.NUMERIC_PRECISION END,0) AS [SourceColumnLength]
+                                                            , ISNULL(CASE WHEN ic.DATA_TYPE = 'numeric' OR ic.DATA_TYPE = 'decimal' THEN ic.NUMERIC_PRECISION ELSE 0 END,0) AS [SourceColumnPrecision]
+                                                            , ISNULL(CASE WHEN ic.DATA_TYPE = 'numeric' OR ic.DATA_TYPE = 'decimal' THEN ic.NUMERIC_SCALE ELSE 0 END,0) AS [SourceColumnScale]
+                                                            , CASE WHEN MAX(ic.ORDINAL_POSITION) OVER (PARTITION BY ic.TABLE_NAME) = ic.ORDINAL_POSITION THEN 1 ELSE 0 END AS [IsLastColumn]
+                                                        FROM		Reports.INFORMATION_SCHEMA.COLUMNS ic
+                                                        WHERE		ic.TABLE_SCHEMA = 'RT'
+                                                        AND			ic.TABLE_NAME = '"+varSourceFlatFileName+@"' 
+                                                        AND			ic.COLUMN_NAME not in ('BatchID','ProcessLogID')";
+                    DataTable tableSourceFlatFileColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFileColumn);
+                    foreach (DataRow rowSourceFlatFileColumn in tableSourceFlatFileColumn.Rows) {
+                        string varSourceFlatFileColumnName = rowSourceFlatFileColumn["SourceColumnName"].ToString();
+                        string varSourceFlatFileColumnType = rowSourceFlatFileColumn["SourceColumnType"].ToString();
+                        int varSourceFlatFileColumnLength = (int)rowSourceFlatFileColumn["SourceColumnLength"];
+                        int varSourceFlatFileColumnPrecision = (int)rowSourceFlatFileColumn["SourceColumnPrecision"];
+                        int varSourceFlatFileColumnScale = (int)rowSourceFlatFileColumn["SourceColumnScale"];
+                        int varSourceFlatFileColumnIsLastColumn = (int)rowSourceFlatFileColumn["IsLastColumn"];
+                        string varDelimiter = varColumnDelimiter;
+                        if (varSourceFlatFileColumnIsLastColumn == 1) {
+                            varDelimiter = varRowDelimiter;
+                        }#>
+                        <Column Name="<#=varSourceFlatFileColumnName#>" DataType="<#=varSourceFlatFileColumnType#>" Length="<#=varSourceFlatFileColumnLength#>" Precision="<#=varSourceFlatFileColumnPrecision#>" Scale="<#=varSourceFlatFileColumnScale#>" Delimiter="<#=varDelimiter#>" InputLength="<#=varSourceFlatFileColumnLength#>" TextQualified="true" CodePage="1252" />
+                    <#}#>
+                </Columns>
+            </FlatFileFormat>
+        <#}#>
+    </FileFormats>    
+    
     <Connections>
-        <# string ProjectConnections = @"SELECT c.[Name] AS ConnectionName
+        <# string ProjectConnections = @"SELECT 
+                                            c.[Name] AS ConnectionName
                                             ,c.[ConnectionString]
                                             ,c.[Options]
                                             ,c.[IsProjectConnection]
@@ -12,6 +87,16 @@
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
                                             AND          c.[Name] in ('Reports','DWH_Control')
+
+                                            UNION ALL
+                                            
+                                            SELECT
+                                              lr.TargetTable
+                                              , N'\' + lr.TargetTable + '.' + lr.Output
+                                              , 'FlatFileType=Delimited&&RowDelimiter=LF&&ColumnNamesInFirstDataRow=false&&IsUnicode=false&&DataRowsToSkip=0&&ColumnDelimiter=Comma'
+                                              , 'FALSE'
+                                              , lr.Output
+                                            FROM		Generator.LoadReportTables lr
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -21,22 +106,42 @@
             bool ConnectionIsProjectConn = (bool)Connection["IsProjectConnection"];
             string ConnectionType = Connection["Type"].ToString();
             string ConnectionExpression = @"@[$Project::Con" + ConnectionName + "]";
+            string ConnectionExpressioncsv = @"@[$Project::DirExport]" + @"+"""+ ConnectionString.Replace("\\","\\\\") + @"""";
             string ConnectionSSISOptions = "";
             if (ConnectionIsProjectConn) {
                 ConnectionSSISOptions = ProjectConnectionOption;
-            }#>
-            <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
-                <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
-            </Connection>
-        <#}#>
+            }
+            switch (ConnectionType) {
+                case "CSV":#>
+                    <FlatFileConnection Name="<#=ConnectionName#>" FileFormat="<#=ConnectionName#>_FFF" FilePath="<#=ConnectionString#>">
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpressioncsv#></Expression></Expressions>
+                    </FlatFileConnection>
+                    <#break;
+                case "SQLServer":#>
+                <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </Connection>
+                <#
+                break;
+                default:
+                break;
+            }
+        }#>
     </Connections>
     
     <Databases>
     <#foreach (DataRow Connection in Connections.Rows) {
         string ConnectionType = Connection["Type"].ToString();
-        string ConnectionName = Connection["ConnectionName"].ToString();#>
-        <Database Name="<#=ConnectionName#>" ConnectionName="<#=ConnectionName#>" />
-    <#}#>     
+        string ConnectionName = Connection["ConnectionName"].ToString();
+            switch (ConnectionType) {
+                case "CSV":
+                    ConnectionType = ConnectionType;
+                    break;
+                default:#>
+                    <Database Name="<#=ConnectionName#>" ConnectionName="<#=ConnectionName#>" />
+                    <#break;
+            }
+    }#>     
     </Databases>
     
     <Schemas>
@@ -60,7 +165,7 @@
                 <Parameter Name="ServerName" DataType="String" IsRequired="true"><#=projectServerName#></Parameter>
                 <Parameter Name="InstanceName" DataType="String" IsRequired="true"><#=projectDatabaseInstanceName#></Parameter>
                 <Parameter Name="DirWork" DataType="String" IsRequired="true"><#=projectWorkDir#></Parameter>
-                <Parameter Name="DirImport" DataType="String" IsRequired="true"><#=ImportDir#></Parameter>
+                <Parameter Name="DirExport" DataType="String" IsRequired="true"><#=ExportDir#></Parameter>
                 <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {

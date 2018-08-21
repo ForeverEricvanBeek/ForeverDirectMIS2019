@@ -5,7 +5,6 @@ string stagingProjectName = @"SSIS_Reports";
 string projectServerName = @"FDODWHD01";
 string projectWorkDir = @"\\FDODWHD01\StagingFiles";
 string CacheDir = projectWorkDir + @"\Biml\SSIS Cache";
-string ImportDir = projectWorkDir + @"\Biml";
 string ExportDir = projectWorkDir + @"\Biml\Output";
 string ArchiveDir = projectWorkDir + @"\Biml\Archive";
 string ErrorDir = projectWorkDir + @"\Biml\Error";

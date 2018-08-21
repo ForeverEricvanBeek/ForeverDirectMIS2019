@@ -64,6 +64,7 @@
             string varExtractionRunSchedule = rowSourceExtractionTable["RunSchedule"].ToString();
             string varExtractionRunParam1 = rowSourceExtractionTable["RunParam1"].ToString();
             string varExtractionRunParam2 = rowSourceExtractionTable["RunParam2"].ToString();
+            string varDestinationConnection = varExtractionTargetTable;
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
             string varSourceSchema = varExtractionSourceSchema;
@@ -267,9 +268,10 @@
                                 <Dataflow Name="<#=varTaskName#>">
                                     <Transformations>
                                         <OleDbSource Name="Report Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
-                                            <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                             <VariableInput VariableName="User.SourceExtractionSQL" />
                                         </OleDbSource>
+                                        <FlatFileDestination Name="Flat file <#=varName#>" ConnectionName="<#=varDestinationConnection#>" Overwrite="true">
+                                        </FlatFileDestination>
                                     </Transformations>
                                 </Dataflow>
                             <#}#>
