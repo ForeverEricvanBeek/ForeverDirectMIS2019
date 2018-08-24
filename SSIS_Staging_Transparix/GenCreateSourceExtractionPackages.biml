@@ -14,8 +14,8 @@
         string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
                                             AS (
                                                 select TC.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  , COLUMN_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  
-                                                from [StagingIFS].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                JOIN [StagingIFS].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
+                                                from [Staging].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                                JOIN [Staging].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
                                                 ON	TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG
                                                 AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA
                                                 AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME
@@ -44,11 +44,9 @@
                                                     ,ST.[IncrementalUpdateColumn]
                                                     ,ST.[IncrementalKeyColumn]
                                                     ,ST.[IsStaging] 
-                                                    ,ST.IsLoading
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
                                                     ,ST.[WhereStatement]
-                                                    ,ST.[Parent]
                                                 FROM      [Generator].[SourceExtractionTable] ST
                                                 LEFT JOIN [Generator].[Connection]            SC
                                                 ON        ST.[SourceConnection] = SC.[Name]
@@ -56,7 +54,7 @@
                                             ON		    ST.[TargetSchema] = CS.[TABLE_SCHEMA]
                                                 AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                 WHERE   ST.[IsActive] = 1
-                                                --AND ST.IsLoading = 0
+                                                AND		ST.SourceConnection IN ('TRANSPARIX','TPX7')
                                             ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
@@ -68,7 +66,6 @@
             string varExtractionOptions = rowSourceExtractionTable["Options"].ToString();
             string varExtractionConnectionString = rowSourceExtractionTable["ConnectionString"].ToString();
             string varExtractionType = rowSourceExtractionTable["ExtractionType"].ToString();
-            string varExtractionParent = rowSourceExtractionTable["Parent"].ToString();
             string varExtractionTargetConnection = rowSourceExtractionTable["TargetConnection"].ToString();
             string varExtractionTargetSchema = rowSourceExtractionTable["TargetSchema"].ToString();
             string varExtractionTargetTable = rowSourceExtractionTable["TargetTable"].ToString();
@@ -79,15 +76,16 @@
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
             if (varExtractionWhereStatement.Length > 0) {
-                if (varExtractionType == "MI" || varExtractionType == "MN" || varExtractionType == "MF") {
-                    varExtractionWhereStatement = "AND "+ varExtractionWhereStatement;
-                } else {
-                    varExtractionWhereStatement = varExtractionWhereStatement;
-                }
+                varExtractionWhereStatement = "AND "+varExtractionWhereStatement;
             }
             
+            //string ConnectionStringXSD =  @"@[$Project::DirImport]" + @"+"""+ varExtractionOptions.Replace("\\","\\\\") + @"""";
+            //string ConnectionStringXSD2 = @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";
+            string ConnectionStringXSD = varExtractionOptions.Replace("\\","\\\\");
+            string ConnectionStringXSD2 = @"@[$Project::DirImport]" + @"+"""+  varExtractionOptions.Replace("\\","\\\\")+ @"""";
+            
+            //The IsStaging flag indicates that the Staging database itself is the source of the extraction
             bool varIsStaging = (bool)rowSourceExtractionTable["IsStaging"];
-            bool varIsLoading = (bool)rowSourceExtractionTable["IsLoading"];
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
             
             string varTargetConnection = varExtractionTargetConnection;
@@ -100,12 +98,37 @@
             string varTableCloseCharacter = varSQLServTableCloseCharacter;
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
-
-            varTableBeginCharacter = varOracleObjectBeginEndCharacter;
-            varTableCloseCharacter = varOracleObjectBeginEndCharacter;
-            varColumnBeginCharacter = varOracleObjectBeginEndCharacter;
-            varColumnCloseCharacter = varOracleObjectBeginEndCharacter;
-
+            
+            if (varExtractionType == "IM" | varExtractionType == "MA")  { // I=Incremental, M=Modified
+                string varIncrementalConnection = varExtractionTargetConnection;
+                string varIncrementalSourceSchema = varExtractionIncrementalSchema;
+                string varIncrementalSourceTable = varExtractionIncrementalTable;
+                string varIncrementalTargetSchema = varExtractionTargetSchema;
+                string varIncrementalTargetTable = varExtractionTargetTable;
+                varTargetSchema = varExtractionIncrementalSchema;
+                varTargetTable = varExtractionIncrementalTable;
+            } 
+            
+            switch (varExtractionSourceType) {
+                case "Oracle":
+                    varTableBeginCharacter = varOracleObjectBeginEndCharacter;
+                    varTableCloseCharacter = varOracleObjectBeginEndCharacter;
+                    varColumnBeginCharacter = varOracleObjectBeginEndCharacter;
+                    varColumnCloseCharacter = varOracleObjectBeginEndCharacter;
+                    break;
+                case "SQLServer":
+                    varTableBeginCharacter = varSQLServTableBeginCharacter;
+                    varTableCloseCharacter = varSQLServTableCloseCharacter;
+                    varColumnBeginCharacter = varSQLServColumnBeginCharacter;
+                    varColumnCloseCharacter = varSQLServColumnCloseCharacter;
+                    break;
+                default:
+                    varTableBeginCharacter = varODBCObjectBeginEndCharacter;
+                    varTableCloseCharacter = varODBCObjectBeginEndCharacter;
+                    varColumnBeginCharacter = varODBCObjectBeginEndCharacter;
+                    varColumnCloseCharacter = varODBCObjectBeginEndCharacter;
+                    break;
+            }
             
             //Add name qualifier to the table names
             string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
@@ -117,9 +140,8 @@
             string varTargetSchemaTablePlus = varTargetSchemaPlus + "." + varTargetTablePlus;
             
             string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
-             
             string varSQLMaxIncrementalKeyTargetTable = "";
-            if (varExtractionType == "MI" && (!varIsLoading)) {
+            if (varExtractionType == "MI") {
                 varSQLMaxIncrementalKeyTargetTable = "SELECT MAX(" + varExtractionModifiedDate + ") FROM " + varExtractionTargetSchemaTablePlus;
             } else {
                 varSQLMaxIncrementalKeyTargetTable = "SELECT '0'";
@@ -136,8 +158,30 @@
             string varExtractionSourceTablePlus = varTableBeginCharacter + varExtractionSourceTable  + varTableCloseCharacter;
             string varName = varExtractionSourceConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
             
+            //Indien XML dan schema en tabelnaam weglaten
+            switch (varExtractionSourceType) {
+                case "XML_Enkel": 
+                case "XML":
+                case "XML_Kewill":
+                case "XML_IFS":
+                case "CSV":
+                case "CSV_L":
+                case "ODBC":
+                    varName = varExtractionSourceSchema + "-" + varExtractionSourceConnection;
+                    break;
+            }
+            
             string varPackageName    = varExtractionPackagePrefix + "-" + varName;
-
+            
+            //Create Source Extraction Query
+            //The Metadata only contains Column mappings for tables that need some kind of data processing. For example a data conversion.
+            //If such data transformation is needed, all columns must be specified.
+            //It's also possible to specify expressions on the Source column. These expressions must be valid SQL for the source.
+            //They are taken literally in the SELECT list.
+            //For example: you may need to convert a column at the source, then you can use: CAST(MyColumn AS NUMERIC(18,4)) AS MyColumn
+            //This would be something you may use to specifically convert the Oracle NUMBER (without precision) type.
+            //You would also add Column qualifiers for columns that have special characters in them (e.g. "My Column")
+            
             string sqlSourceExtractionColumn = @"SELECT 
                                                     ISNULL(sc.[SourceColumnName],ic.COLUMN_NAME) as[SourceColumnName]
                                                     ,ISNULL(sc.[SourceColumnExpression],ic.COLUMN_NAME)	as [SourceColumnExpression]
@@ -153,11 +197,10 @@
                                                     ,ISNULL(ISNULL(sc.[TargetColumnScale], ic.NUMERIC_SCALE),0) as [TargetColumnScale]
                                                     ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
                                                     ,dc.[DataTypeExpression]
-                                                    FROM         [StagingIFS].INFORMATION_SCHEMA.COLUMNS ic
+                                                    FROM         [Staging].INFORMATION_SCHEMA.COLUMNS ic
                                                     INNER JOIN	  [Generator].[SourceExtractionTable] st
                                                     on			  st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME
                                                     AND          st.[IsActive] =  1
-                                                    --AND          st.IsLoading = 0
                                                     LEFT JOIN	  [Generator].[SourceExtractionColumn] sc
                                                     ON			  sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable
                                                     AND          sc.[IsActive] =  1
@@ -174,7 +217,7 @@
             
             string varSQLStatementColumns = "";
             foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
+                string varSourceColumnName             =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
                 if (varSourceColumnName == rowSourceExtractionColumn["SourceColumnName"].ToString() && varExtractionSourceType == "SQLServer") {
                     varSourceColumnName = "[" + varSourceColumnName + "]";
                 }
@@ -189,18 +232,13 @@
             string varExtractionSQLStatement = "";
             string varExtractionDateConversion = "";
             string varExtractionIDConversion = "0";
-            string varExtractionWhereIn = "0";
-            string varExtractionisLoadingWhere = "0";
-            string varExtractionWhereInSQL = "SELECT CAST(REVERSE(STUFF(REVERSE(STUFF(REVERSE(STUFF(REVERSE(CAST(STUFF((SELECT DISTINCT ',' + '''' + CAST(" + varExtractionModifiedDate + @" AS NVARCHAR) + '''' FROM " + varExtractionTargetSchema + @"." + varExtractionParent + @" FOR XML PATH ('')), 1, 1, '') AS NVARCHAR(MAX))),1,1,'')),1,1,'')),1,1,'')) AS NVARCHAR(4000)) AS InValues";
             varExtractionIDConversion = "&apos;&quot; + @[User::LastExtractionID] + &quot;&apos;";
-            varExtractionWhereIn = "&apos;&quot; + @[User::InValues] + &quot;&apos;";
-            varExtractionisLoadingWhere = "\" + @[$Project::LoadingWhere]";
             switch (varExtractionSourceType) {
                 case "SQLServer":
                     varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
                     break;
                 case "Oracle":
-                    varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)-3"; 
+                    varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)"; 
                     break;
                 case "ODBC":
                     varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
@@ -210,28 +248,21 @@
                     break;
             }
             
-            if (varExtractionType == "MX") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
-            } else if (varExtractionType == "MI" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
-            } else if (varExtractionType == "MI") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + "\"";
-            } else if (varExtractionType == "MN" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
-            } else if (varExtractionType == "MN") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
-            } else if (varExtractionType == "MO" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
-            } else if (varExtractionType == "MO") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND " + varExtractionIncrementalKey + " IN (" + varExtractionWhereIn + ")\"";
-            } else if (varExtractionType == "MF" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE 1=1 " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
-            } else if (varExtractionType == "MF") {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+            if (varExtractionType == "MN") {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + "\"";
+                string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [Staging]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
+            } else if (varExtractionType == "MI")  {
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + "\"";
+                string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [Staging]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
             } else  {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
-            }
-            #>
+                if (varExtractionSourceType == "Excel2007") {
+                    varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceTable;
+                } else if (varExtractionSourceType == "ODBC") {
+                    varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceTable + " WHERE 1=1 " + varExtractionWhereStatement;
+                } else {
+                    varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+                }
+            }#>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
@@ -252,11 +283,10 @@
                     <Variable Name="MaxIncrementalKey" DataType="String" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="LastExtractionID" DataType="String" Namespace="User">0</Variable>
-                    <Variable Name="InValues" DataType="String" Namespace="User">0</Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
                     <Variable Name="sSourceFolder" DataType="String" Namespace="User"></Variable>
-                    <#if (varExtractionType == "MO" || varExtractionType == "MI" ||  varExtractionType == "MN") {#>              
+                    <#if (varExtractionType == "MN" | varExtractionType == "MI") {#>              
                         <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varExtractionSQLStatement#></Variable> 
                     <#} else {#> 
                         <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable> 
@@ -297,37 +327,110 @@
                                     <Result Name="LastID" VariableName="User.LastExtractionID" />
                                 </Results>
                             </ExecuteSQL>
-                            <# if (!varIsLoading) {#>
+    
                             <ExecuteSQL Name="SQL Truncate table <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                             </ExecuteSQL>
-                            <#}#>
+                            
                             <#string varTaskName = "Dataflow Extract " + varName;
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName],[ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
-                            #>
-                            
-                            <#if(varExtractionType == "MO") {#>
-                            <ExecuteSQL Name="SQL Get IN values <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                <DirectInput><#=varExtractionWhereInSQL#></DirectInput>
-                                <Results>
-                                    <Result Name="InValues" VariableName="User.InValues" />
-                                </Results>
-                            </ExecuteSQL>
+    
+                            if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_IFS") {
+                                string ConnectionStringCSV =  @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";
+                                string folder =  ConnectionStringCSV.Substring(0,ConnectionStringCSV.LastIndexOf("\\")+1) + @"""";
+                                string file =  @""""+ConnectionStringCSV.Substring(ConnectionStringCSV.LastIndexOf("\\")+1 );
+                                string filespec =  file.Replace(".","_*.");#>
+                                <ForEachFileLoop Name="ForEach File Loop" Folder="folder" FileSpecification="filespec" ConstraintMode="Parallel" RetrieveFileNameFormat="FullyQualified">
+                                <VariableMappings><VariableMapping Name="Mapping" VariableName="User.sFullFilePath"/></VariableMappings>
+                                <Expressions>
+                                    <Expression PropertyName="Directory"><#=folder#></Expression>
+                                    <Expression PropertyName="FileSpec"><#=filespec#></Expression>
+                                </Expressions>
+                                <Tasks>
                             <#}#>
                             
                             <Dataflow Name="<#=varTaskName#>">
-
+                                <#if (varExtractionSourceType == "XML_Kewill" ) {#>
+                                    <Expressions><Expression ExternalProperty="[XML Source <#=varName#>].[XMLSchemaDefinition]"><#=ConnectionStringXSD2#></Expression></Expressions>
+                                <#}#>
+    
                                 <Transformations>
-                                    <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
-                                        <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
-                                        <VariableInput VariableName="User.SourceExtractionSQL" />
-                                    </OleDbSource>
-                                    <#varOutputPathName = "OLEDB Source " + varName;#>
+                                    <#// Create Source
+                                    switch (varExtractionSourceType) {
+                                        case "FlatFile":#>
+                                            <FlatFileSource Name="FF Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                            </FlatFileSource>
+                                            <#varOutputPathName = "FF Source " + varName;	
+                                            break;
+                                        case "CSV":
+                                        case "CSV_L":#>
+                                            <FlatFileSource Name="CSV Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" RetainNulls="true">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                            </FlatFileSource>
+                                            <#varOutputPathName = "CSV Source " + varName;	
+                                            break;
+                                        case "Excel2007":
+                                        case "Excel97":#>
+                                            <ExcelSource Name="Excel Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                                <VariableInput VariableName="User.SourceExtractionSQL" />
+                                            </ExcelSource>
+                                            <#varOutputPathName = "Excel Source " + varName;	
+                                            break;
+                                        case "ODBC":#>
+                                            <OdbcSource Name="ODBC Source <#=varName#>" Connection="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                                <DirectInput><#=varExtractionSQLStatement#></DirectInput>
+                                            </OdbcSource>
+                                            <#varOutputPathName = "ODBC Source " + varName;	
+                                            break;
+                                        case "ODBCold":#>
+                                            <AdoNetSource Name="ODBC Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                                <DirectInput><#=varExtractionSQLStatement#></DirectInput>
+                                            </AdoNetSource>
+                                            <#varOutputPathName = "ODBC Source " + varName;	
+                                            break;
+                                        case "XML_Enkel":
+                                        case "XML_Kewill":
+                                        case "XML_IFS":
+                                        case "XML":#>
+                                            <XmlSource Name="XML Source <#=varName#>"> 
+                                                <XmlSchemaFileInput ConnectionName="<#=varExtractionSourceConnection#>_XSD" /> 
+                                                <FileNameFromVariableInput VariableName="User.sFullFilePath" /> 
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" /> 
+                                            </XmlSource>
+                                            <#varOutputPathName = "XML Source " + varName;	
+                                            break;
+                                        default:#>
+                                            <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                                <VariableInput VariableName="User.SourceExtractionSQL" />
+                                            </OleDbSource>
+                                            <#varOutputPathName = "OLEDB Source " + varName;	
+                                            break;
+                                        }#>
     
                                         <DerivedColumns Name="Derived Columns Error <#=varName#>"> 
-
-                                            <InputPath OutputPathName="<#=varOutputPathName#>.Error" />
-                                            <#// Voeg primary key toe aan error message
+                                            <#// Indien source is XML dan is outputpathname anders
+                                            switch (varExtractionSourceType) {
+                                                case "XML_Enkel":#>
+                                                    <InputPath OutputPathName="<#=varOutputPathName#>.<#=varTargetTable#>Error" />
+                                                    <#break;
+                                                case "XML_Kewill":#>
+                                                    <InputPath OutputPathName="<#=varOutputPathName#>.rowError" />
+                                                    <#break;
+                                                case "XML":
+                                                case "XML_IFS":#>
+                                                    <InputPath OutputPathName="<#=varOutputPathName#>.<#=varTargetTable#>Error" /> 
+                                                    <#break;
+                                                default:#>
+                                                    <InputPath OutputPathName="<#=varOutputPathName#>.Error" />
+                                                    <#break;
+                                            }
+                                            
+                                            // Voeg primary key toe aan error message
                                             string varExtractionTargetTablePKLogging =" + (DT_WSTR,50)" + varExtractionTargetTablePK.Replace(",","+ \"; \" + (DT_WSTR,50)");
                                             if (varExtractionTargetTablePK.Length > 1 && varExtractionSourceType != "CSV" && varExtractionSourceType != "CSV_L" && varExtractionSourceType != "XML_Kewill") {
                                                 varExtractionTargetTablePKLogging = varExtractionTargetTablePKLogging;
@@ -343,13 +446,78 @@
                                         <RowCount Name="RowCount Error <#=varName#>" VariableName="RC.RowCountError">
                                             <InputPath OutputPathName="Derived Columns Error <#=varName#>.Output" />
                                         </RowCount>
-                                            <UnionAll Name="Union <#=varName#>">
-                                                <InputPaths>
-                                                    <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
-                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" /> 
-                                                </InputPaths>
-                                            </UnionAll>
-                                            <#varOutputPathName = "Union " + varName + ".Output";#>
+                                        <# switch (varExtractionSourceType) {
+                                            case "XML_Enkel":
+                                            case "XML_IFS":#>
+                                                <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
+                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
+                                                    <Columns>
+                                                        <Column Name="PackageName" DataType="String" Length="100"  ReplaceExisting="false">(DT_WSTR,100)@[System::PackageName]</Column>
+                                                        <Column Name="FlatFile" DataType="String" Length="300"  ReplaceExisting="false">(DT_WSTR,300)@[User::PackageName]</Column>
+                                                    </Columns>
+                                                </DerivedColumns>
+                                                
+                                                <OleDbDestination Name="OLEDB Error <#=varName#>" ConnectionName="<#=SystemConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                                    <InputPath OutputPathName="Derived Columns FlatFile Error <#=varName#>.Output" />
+                                                    <ExternalTableOutput Table="[Logging].[XMLFileErrors]" />
+                                                </OleDbDestination>
+                                                <#varOutputPathName = varOutputPathName + "." + varTargetTable;
+                                                break;
+                                            case "XML_Kewill":#>
+                                                <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
+                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
+                                                    <Columns>
+                                                        <Column Name="PackageName" DataType="String" Length="100"  ReplaceExisting="false">(DT_WSTR,100)@[System::PackageName]</Column>
+                                                        <Column Name="FlatFile" DataType="String" Length="300"  ReplaceExisting="false">(DT_WSTR,300)@[User::PackageName]</Column>
+                                                    </Columns>
+                                                </DerivedColumns>
+                                                
+                                                <OleDbDestination Name="OLEDB Error <#=varName#>" ConnectionName="<#=SystemConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                                    <InputPath OutputPathName="Derived Columns FlatFile Error <#=varName#>.Output" />
+                                                    <ExternalTableOutput Table="[Logging].[XMLFileErrors]" />
+                                                </OleDbDestination>
+                                                <#varOutputPathName = varOutputPathName + ".row" ;
+                                                break;
+                                            case "XML":#>
+                                                <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
+                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
+                                                    <Columns>
+                                                        <Column Name="PackageName" DataType="String" Length="100"  ReplaceExisting="false">(DT_WSTR,100)@[System::PackageName]</Column>
+                                                        <Column Name="FlatFile" DataType="String" Length="300"  ReplaceExisting="false">(DT_WSTR,300)@[User::PackageName]</Column>
+                                                    </Columns>
+                                                </DerivedColumns>
+                                                
+                                                <OleDbDestination Name="OLEDB Error <#=varName#>" ConnectionName="<#=SystemConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                                    <InputPath OutputPathName="Derived Columns FlatFile Error <#=varName#>.Output" />
+                                                    <ExternalTableOutput Table="[Logging].[XMLFileErrors]" />
+                                                </OleDbDestination>
+                                                
+                                                <DerivedColumns Name="Derived Columns Header <#=varName#>">
+                                                    <InputPath OutputPathName="<#=varOutputPathName#>.Header" />
+                                                    <Columns>
+                                                        <Column Name="PackageName" DataType="String" Length="100"  ReplaceExisting="false">(DT_WSTR,100)@[System::PackageName]</Column>
+                                                        <Column Name="FlatFile" DataType="String" Length="300"  ReplaceExisting="false">(DT_WSTR,300)@[User::PackageName]</Column>
+                                                        <Column Name="BatchID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditBatchID]</Column>
+                                                        <Column Name="ProcessLogID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditProcessLogID]</Column>
+                                                    </Columns>
+                                                </DerivedColumns>
+                                                
+                                                <OleDbDestination Name="OLEDB Header <#=varName#>" ConnectionName="<#=SystemConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                                    <InputPath OutputPathName="Derived Columns Header <#=varName#>.Output" />
+                                                    <ExternalTableOutput Table="[Logging].[XMLLoadLog]" />
+                                                </OleDbDestination>
+                                                <#varOutputPathName = varOutputPathName + "." + varTargetTable;
+                                                break;
+                                            default:#>
+                                                <UnionAll Name="Union <#=varName#>">
+                                                    <InputPaths>
+                                                        <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
+                                                        <InputPath OutputPathName="RowCount Error <#=varName#>.Output" /> 
+                                                    </InputPaths>
+                                                </UnionAll>
+                                                <#varOutputPathName = "Union " + varName + ".Output";	
+                                                break;
+                                        }#>
                                         
                                         <DerivedColumns Name="Derived Column <#=varName#>">
                                             <InputPath OutputPathName="<#=varOutputPathName#>" />
@@ -445,7 +613,44 @@
                                             </OleDbDestination>
                                         </Transformations>
                                     </Dataflow>
-
+                                    <#if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_IFS") {#>
+                                </Tasks>
+                            </ForEachFileLoop>
+                            <#}               
+                            if (varExtractionType == "IAAA" | varExtractionType == "MAAA") {
+                                string varSQLDeleteStatement = "";
+                                string[] varKeyColumns = varExtractionIncrementalKey.Split(varKeyColumnSeparator,StringSplitOptions.RemoveEmptyEntries);
+                                string varJoinCondition = "";
+                                foreach (string varKeyColumn in varKeyColumns) {
+                                    varJoinCondition += "AND tar.[" + varKeyColumn + "] = inc.[" + varKeyColumn + "] \n";
+                                }
+                                if (varJoinCondition.Length > 0) {
+                                    varJoinCondition      = varJoinCondition.Substring(4, varJoinCondition.Length - 5);
+                                }
+                                varSQLDeleteStatement = varSQLDeleteStatement + "DELETE FROM "+varIncrementalTargetSchemaTablePlus+ " \n";
+                                varSQLDeleteStatement = varSQLDeleteStatement + "FROM "+varIncrementalTargetSchemaTablePlus+" tar \n";
+                                varSQLDeleteStatement = varSQLDeleteStatement + "INNER JOIN "+varIncrementalSourceSchemaTablePlus+" inc \n";
+                                varSQLDeleteStatement = varSQLDeleteStatement + "ON "+varJoinCondition;#>
+                
+                                <ExecuteSQL Name="SQL Delete target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <DirectInput><#=varSQLDeleteStatement#></DirectInput>
+                                </ExecuteSQL>
+                                
+                                <Dataflow Name="Dataflow Load <#=varName#>">
+                                    <Transformations>
+                                        <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varTargetConnection#>">
+                                            <ErrorHandling ErrorRowDisposition="IgnoreFailure" TruncationRowDisposition="IgnoreFailure" />
+                                            <ExternalTableInput Table="<#=varIncrementalSourceSchemaTablePlus#>" />
+                                        </OleDbSource>
+                                        
+                                        <OleDbDestination Name="OLEDB Target <#=varName#>" ConnectionName="<#=varTargetConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                            <InputPath OutputPathName="OLEDB Source <#=varName#>.Output" />
+                                            <ExternalTableOutput Table="<#=varIncrementalTargetSchemaTablePlus#>" />
+                                        </OleDbDestination>
+                                    </Transformations>
+                                </Dataflow>
+                            <#}#>
+                
                             <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
                                 <Results><Result Name="0" VariableName="RC.RowCountTarget" /></Results>
@@ -485,7 +690,14 @@
                         </Parameters>
                     </ExecuteSQL>
                 </Tasks>
-
+                <#if (varExtractionSourceType == "XML_Kewill") {#>
+                    <Connections>
+                        <Connection ConnectionName="<#=varExtractionSourceConnection#>_XSD">
+                            <Expressions><Expression PropertyName="<#=varExtractionSourceConnection#>_XSD.ConnectionString"><#=ConnectionStringXSD2#></Expression></Expressions>
+                        </Connection>
+                    </Connections>
+                <#}#>
+    
                 <Events>
                     <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
                         <Tasks>
@@ -514,7 +726,7 @@
                                         ,[IsStaging]
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
-                                        AND st.IsLoading = 0
+                                        AND st.SourceConnection IN ('TRANSPARIX','TPX7')
                                         ";
         
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
@@ -579,7 +791,6 @@
                                                             ,[SourceSchema] AS [SourceSchema]
                                                             ,[TargetTable] AS [SourceTable]
                                                             ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
-                                                            ,[Parent]
                                                             FROM      [Generator].[SourceExtractionTable] st 
                                                             JOIN	  [Generator].[Connection] con 	
                                                             ON		  [st].[SourceConnection] = [con].[Name]
@@ -587,8 +798,7 @@
                                                             AND       [TargetSchema] = '" + varTargetSchema + @"' 
                                                             AND       [st].[IsActive] = 1 
                                                             AND       [IsStaging] = '" + varTargetIsStaging + @"' 
-                                                            AND st.IsLoading = 0
-                                                            ORDER BY  [SourceTable], [Order]
+                                                            ORDER BY  [SourceTable]
                                                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
                             foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
@@ -597,7 +807,6 @@
                                 string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
                                 string varSourceTable = rowSourcePackages["SourceTable"].ToString();
                                 string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
-                                string varParent = rowSourcePackages["Parent"].ToString();
                                 string varPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + ".dtsx";
                                 string varPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p2.dtsx";
                                 string varPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p3.dtsx";
@@ -612,22 +821,19 @@
                                 string varScriptCoreName3 = "ST_232feca_" + varSourceTable + "_script_3";
                                 string varScriptTaskName3 = "Task_" + varSourceTable + "_script_3";
                                 string varPackageXML = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceConnection + ".dtsx";
-                                
-                                string varParentPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + ".dtsx";
-                                string varParentPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p2.dtsx";
-                                string varParentPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p3.dtsx";
-                                string varParentPackage4 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p4.dtsx";
-                                                            #>
+                            
+                                switch (varConnectionType) {
+                                    case "XML_Enkel": 
+                                    case "XML":
+                                    case "XML_Kewill":
+                                    case "XML_IFS":
+                                    case "CSV":
+                                    case "CSV_L":
+                                    case "ODBC":
+                                        varPackage = varPackageXML;
+                                        break;
+                                }#>
                                 <ExecutePackage Name="<#=varPackage#>">
-                                    <#if (varParent.Length > 0) {#>
-                                    <PrecedenceConstraints LogicalType="Or">
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varParentPackage#>.Output"/>
-                                            <Input OutputPathName="<#=varParentPackage2#>.Output"/>
-                                            <Input OutputPathName="<#=varParentPackage3#>.Output"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <#}#>
                                     <ExternalProjectPackage Package="<#=varPackage#>"/>
                                     <ParameterBindings>
                                         <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
@@ -769,6 +975,7 @@ namespace ST_c1460709233e45a7af989d19c79a53aa
                                     </ParameterBindings>
                                 </ExecutePackage>
                             <#}#>
+                                
                         </Tasks>
                     </Container>
 
