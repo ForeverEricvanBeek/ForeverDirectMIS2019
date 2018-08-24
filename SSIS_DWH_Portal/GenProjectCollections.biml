@@ -1,0 +1,117 @@
+<#@ template language ="C#" tier="1"#>
+<#@ import namespace="System.Data" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <#@include file="ProjectSettings.cs"#>
+    <Connections>
+        <# string ProjectConnections = @"SELECT c.[Name] AS ConnectionName
+                                            ,c.[ConnectionString]
+                                            ,c.[Options]
+                                            ,c.[IsProjectConnection]
+                                            ,c.[Type]
+                                            FROM         [Generator].[Connection] c 
+                                            WHERE        c.[IsActive] = 1
+                                            AND          c.[Name] in ('Staging','DWH','DWH_Control')
+                                            ";
+        DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
+        foreach (DataRow Connection in Connections.Rows) {
+            string ConnectionName = Connection["ConnectionName"].ToString();
+            string ConnectionString = Connection["ConnectionString"].ToString();
+            string ConnectionOptions = Connection["Options"].ToString();
+            bool ConnectionIsProjectConn = (bool)Connection["IsProjectConnection"];
+            string ConnectionType = Connection["Type"].ToString();
+            string ConnectionExpression = @"@[$Project::Con" + ConnectionName + "]";
+            string ConnectionSSISOptions = "";
+            if (ConnectionIsProjectConn) {
+                ConnectionSSISOptions = ProjectConnectionOption;
+            }#>
+            <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
+                <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+            </Connection>
+        <#}#>
+    </Connections>
+    
+    <Databases>
+    <#foreach (DataRow Connection in Connections.Rows) {
+        string ConnectionType = Connection["Type"].ToString();
+        string ConnectionName = Connection["ConnectionName"].ToString();#>
+        <Database Name="<#=ConnectionName#>" ConnectionName="<#=ConnectionName#>" />
+    <#}#>     
+    </Databases>
+    
+    <Schemas>
+        <#string SQLDBSchemas = @"SELECT DISTINCT 
+        st.[TargetSchema]
+        ,st.[TargetConnection]
+        FROM      [Generator].[SourceExtractionTable] st
+        WHERE     st.IsActive = 1 AND IsStaging = 0
+        AND		  st.TargetSchema = 'WEB'
+        ";
+        DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
+        foreach (DataRow DBSchema in DBSchemas.Rows) {
+            string TargetSchema = DBSchema["TargetSchema"].ToString();
+            string TargetConnection = DBSchema["TargetConnection"].ToString();#>
+            <Schema Name="<#=TargetSchema#>" DatabaseName="<#=TargetConnection#>" />
+        <#}#>     
+    </Schemas>
+    
+    <Projects>
+        <PackageProject Name="<#=stagingProjectName#>" ProtectionLevel="<#=ProjectProtectionLevel#>">
+            <Parameters>
+                <Parameter Name="ServerName" DataType="String" IsRequired="true"><#=projectServerName#></Parameter>
+                <Parameter Name="InstanceName" DataType="String" IsRequired="true"><#=projectDatabaseInstanceName#></Parameter>
+                <Parameter Name="DirWork" DataType="String" IsRequired="true"><#=projectWorkDir#></Parameter>
+                <Parameter Name="DirImport" DataType="String" IsRequired="true"><#=ImportDir#></Parameter>
+                <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
+                <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
+                <#foreach (DataRow Connection in Connections.Rows) {
+                    string ConnectionName = Connection["ConnectionName"].ToString();
+                    string ConnectionString = Connection["ConnectionString"].ToString();
+                    string ConnectionIsProjectConn = Connection["IsProjectConnection"].ToString();
+                    string ConnectionType = Connection["Type"].ToString();
+                    string ConnectionOptions = Connection["Options"].ToString();#>
+                    <Parameter Name="Con<#=ConnectionName#>"  DataType="String" IsRequired="true"><#=ConnectionString#></Parameter>
+                <#}#>
+            </Parameters>
+            
+            <Packages>
+                <#string sqlPackage = @"SELECT 'Staging' AS [SourceConnection]
+                                        ,'SQLServer' AS [ConnectionType]
+                                        ,[TargetSchema] AS [SourceSchema]
+                                        ,[TargetTable] AS [SourceTable]
+                                        ,[ExtractionType]
+                                        ,'DWH' AS PackagePrefix
+                                        FROM [Generator].[SourceExtractionTable] st
+                                        Left JOIN [Generator].[Connection] con
+                                        on [st].[SourceConnection] = [con].[Name]	
+                                        WHERE st.[IsActive] =  1
+                                        AND st.IsStaging = 0
+                                        AND st.TargetSchema = 'WEB'
+                                        UNION
+                                        SELECT DISTINCT
+                                        [TargetConnection]
+                                        ,null
+                                        ,[TargetSchema]
+                                        ,'Total' AS [SourceTable]
+                                        ,null
+                                        ,'CTRL_DWH' AS PackagePrefix
+                                        FROM [Generator].[SourceExtractionTable] st
+                                        WHERE st.[IsActive] =  1
+                                        AND st.IsStaging = 0
+                                        AND st.TargetSchema = 'WEB'
+                                        ";
+                DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
+                foreach (DataRow SSISPackage in SSISPackages.Rows) {
+                    string varSourceConnection = SSISPackage["SourceConnection"].ToString();
+                    string varSourceConnectionType = SSISPackage["ConnectionType"].ToString();
+                    string varSourceSchema = SSISPackage["SourceSchema"].ToString();
+                    string varSourceTable = SSISPackage["SourceTable"].ToString();
+                    string varExtractionType = SSISPackage["ExtractionType"].ToString();
+                    string varPackagePrefix = SSISPackage["PackagePrefix"].ToString();
+                    string varPackageName = varPackagePrefix + "-" + varSourceSchema + "-" + varSourceTable;#>
+                    <Package PackageName="<#=varPackageName#>"/>
+                <#}#>               
+            </Packages>
+        </PackageProject>
+    </Projects>
+</Biml>
