@@ -1,0 +1,260 @@
+<#@ template language ="C#" tier="1"#>
+<#@ import namespace="System.Data" #>
+<#@ Import namespace="System.Data.OleDb"#>
+<#@ import namespace="Varigence.Languages.Biml.Connection" #>
+<#@ import namespace="Varigence.Biml.Extensions" #>
+<#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#>
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <#@   include file="ProjectSettings.cs" #>
+    <FileFormats>
+        <# string sqlSourceFlatFile  = @"SELECT [Name]
+                                            ,[Options]
+                                            FROM      [Generator].[Connection]
+                                            WHERE     [Type] IN ('FlatFile','CSV','CSV_L')
+                                            AND		  [Name] IN ('DOC_PlanetPress')
+                                            AND       [IsActive] = 1
+                                            ";
+        DataTable tableSourceFlatFile = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFile);
+        foreach (DataRow rowSourceFlatFile in tableSourceFlatFile.Rows) {
+            string varSourceFlatFileName = rowSourceFlatFile["Name"].ToString();
+            string varSourceFlatFileOptions = rowSourceFlatFile["Options"].ToString();
+            string varFlatFileAttributes = "";
+            string[] varFlatFileOptions = varSourceFlatFileOptions.Split(varOptionSeparator,StringSplitOptions.RemoveEmptyEntries);
+            string varRowDelimiter = "";
+            string varColumnDelimiter = "";
+            foreach (string varFlatFileOption in varFlatFileOptions) {
+                string[] varAttributes = varFlatFileOption.Split(varColumnSeparator,StringSplitOptions.RemoveEmptyEntries);
+                string varAttributeName = (string)varAttributes[0];
+                string varAttributeValue = (string)varAttributes[1];
+                if (varFlatFileAttributesList.IndexOf("-"+varAttributeName+"-") != -1) {
+                    varFlatFileAttributes = varFlatFileAttributes + " " + varAttributeName + "=\"" + varAttributeValue +"\"";
+                }
+                if (varAttributeName == "RowDelimiter") { 
+                    varRowDelimiter = varAttributeValue; 
+                }
+                if (varAttributeName == "ColumnDelimiter") { 
+                    varColumnDelimiter = varAttributeValue; 
+                }
+            }#>
+            
+            <FlatFileFormat Name="<#=varSourceFlatFileName#>_FFF" <#=varFlatFileAttributes#>>
+                <Columns>
+                    <#string sqlSourceFlatFileColumn = "SELECT [SourceColumnName],[SourceColumnType],[SourceColumnLength],[SourceColumnPrecision],[SourceColumnScale],CASE WHEN MAX([SourceColumnPosition]) OVER (PARTITION BY [SourceConnection]) = [SourceColumnPosition] THEN 1 ELSE 0 END [IsLastColumn] FROM [Generator].[SourceExtractionColumn] WHERE [SourceConnection] = '"+varSourceFlatFileName+"' AND IsActive = 1 ORDER BY [SourceColumnPosition]";
+                    DataTable tableSourceFlatFileColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFileColumn);
+                    foreach (DataRow rowSourceFlatFileColumn in tableSourceFlatFileColumn.Rows) {
+                        string varSourceFlatFileColumnName = rowSourceFlatFileColumn["SourceColumnName"].ToString();
+                        string varSourceFlatFileColumnType = rowSourceFlatFileColumn["SourceColumnType"].ToString();
+                        int varSourceFlatFileColumnLength = (int)rowSourceFlatFileColumn["SourceColumnLength"];
+                        int varSourceFlatFileColumnPrecision = (int)rowSourceFlatFileColumn["SourceColumnPrecision"];
+                        int varSourceFlatFileColumnScale = (int)rowSourceFlatFileColumn["SourceColumnScale"];
+                        int varSourceFlatFileColumnIsLastColumn = (int)rowSourceFlatFileColumn["IsLastColumn"];
+                        string varDelimiter = varColumnDelimiter;
+                        if (varSourceFlatFileColumnIsLastColumn == 1) {
+                            varDelimiter = varRowDelimiter;
+                        }#>
+                        <Column Name="<#=varSourceFlatFileColumnName#>" DataType="<#=varSourceFlatFileColumnType#>" Length="<#=varSourceFlatFileColumnLength#>" Precision="<#=varSourceFlatFileColumnPrecision#>" Scale="<#=varSourceFlatFileColumnScale#>" Delimiter="<#=varDelimiter#>" InputLength="<#=varSourceFlatFileColumnLength#>" TextQualified="true" CodePage="1252" />
+                    <#}#>
+                </Columns>
+            </FlatFileFormat>
+        <#}#>
+    </FileFormats>
+    
+    <Connections>
+        <# string ProjectConnections = @"SELECT c.[Name] AS ConnectionName
+                                          ,c.[ConnectionString]
+                                          ,c.[Options]
+                                          ,c.[IsProjectConnection]
+                                          ,c.[Type]
+                                        FROM [Generator].[Connection] c 
+                                        WHERE c.[IsActive] = 1
+                                        AND c.[Name] IN ('DOC_PlanetPress','Staging','DWH_Control')
+                                        ";
+        DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
+        foreach (DataRow Connection in Connections.Rows) {
+            string ConnectionName = Connection["ConnectionName"].ToString();
+            string ConnectionString = Connection["ConnectionString"].ToString();
+            string ConnectionOptions = Connection["Options"].ToString();
+            bool ConnectionIsProjectConn = (bool)Connection["IsProjectConnection"];
+            string ConnectionType = Connection["Type"].ToString();
+            string ConnectionExpression = @"@[$Project::Con" + ConnectionName + "]";
+            string ConnectionExpressionXSD = @"@[$Project::Con" + ConnectionName + "_XSD]";
+            string ConnectionSSISOptions = "";
+            string ConnectionStringCSV = @"@[$Project::DirImport]" + @"+"""+ ConnectionString.Replace("\\","\\\\") + @"""";
+            string importdir = "\\\\FDODWHD01\\StagingFiles\\Input";
+            string ConnectionStringXSD = importdir +  ConnectionOptions ;
+        
+            if (ConnectionIsProjectConn) {
+                ConnectionSSISOptions = ProjectConnectionOption;
+            }
+            
+            switch (ConnectionType) {
+                case "FlatFile": #>
+                    <FlatFileConnection Name="<#=ConnectionName#>" FileFormat="<#=ConnectionName#>_FFF" FilePath="<#=ConnectionString#>">
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </FlatFileConnection>
+                    <#break;
+                case "CSV":#>
+                    <FlatFileConnection Name="<#=ConnectionName#>" FileFormat="<#=ConnectionName#>_FFF" FilePath="<#=ConnectionString#>">
+                        <Expressions><Expression PropertyName="ConnectionString"><#=ConnectionStringCSV#></Expression></Expressions>
+                    </FlatFileConnection>
+                    <#break;
+                case "CSV_L":#>
+                    <FlatFileConnection Name="<#=ConnectionName#>" FileFormat="<#=ConnectionName#>_FFF" FilePath="<#=ConnectionString#>">
+                        <Expressions><Expression PropertyName="ConnectionString">@[User::sFullFilePath]</Expression></Expressions>
+                    </FlatFileConnection>
+                    <#break;
+                case "Excel2007":
+                case "Excel97":#>
+                    <ExcelConnection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </ExcelConnection>
+                    <#break;
+                case "ODBC":#>
+                    <OdbcConnection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </OdbcConnection>
+                    <#break;
+                case "ODBCold":#>
+                    <AdoNetConnection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" Provider="System.Data.Odbc.OdbcConnection, System.Data" <#=ConnectionSSISOptions#> >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </AdoNetConnection>
+                    <#break;
+                case "XML_Enkel": 
+                case "XML_Kewill": 
+                case "XML_IFS": 
+                case "XML":#>
+                    <FileConnection Name="<#=ConnectionName#>" FilePath="<#=ConnectionString#>" RelativePath="true" />
+                    <FileConnection Name="<#=ConnectionName#>_XSD" FilePath="<#=ConnectionStringXSD#>" RelativePath="true" />
+                    <#break;
+                default:#>
+                    <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </Connection>
+                    <#break;
+            }               
+        } #>
+    </Connections>
+    
+    <Databases>
+        <#foreach (DataRow Connection in Connections.Rows) {
+            string ConnectionType = Connection["Type"].ToString();
+            string ConnectionName = Connection["ConnectionName"].ToString();
+            
+            switch (ConnectionType) {
+                case "XML_Enkel": 
+                case "XML_Kewill": 
+                case "XML":
+                case "XML_IFS":
+                case "CSV":
+                case "CSV_L":
+                    ConnectionType = ConnectionType;
+                    break;
+                default:#>
+                    <Database Name="<#=ConnectionName#>" ConnectionName="<#=ConnectionName#>" />
+                    <#break;
+            }
+        }#>     
+    </Databases>
+    
+    <Schemas>
+        <#string SQLDBSchemas= @"SELECT DISTINCT 
+                                st.[TargetSchema]
+                                ,st.[TargetConnection]
+                                FROM      [Generator].[SourceExtractionTable] st
+                                WHERE     st.IsActive = 1
+                                AND		  st.SourceConnection = 'DOC_PlanetPress'
+                                ";
+        DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
+        foreach (DataRow DBSchema in DBSchemas.Rows) {
+            string TargetSchema = DBSchema["TargetSchema"].ToString();
+            string TargetConnection = DBSchema["TargetConnection"].ToString();#>
+            <Schema Name="<#=TargetSchema#>" DatabaseName="<#=TargetConnection#>" />
+        <#}#>     
+    </Schemas>
+    
+    <Projects>
+        <PackageProject Name="<#=stagingProjectName#>" ProtectionLevel="<#=ProjectProtectionLevel#>">
+            <Parameters>
+                <Parameter Name="ServerName" DataType="String" IsRequired="true"><#=projectServerName#></Parameter>
+                <Parameter Name="InstanceName" DataType="String" IsRequired="true"><#=projectDatabaseInstanceName#></Parameter>
+                <Parameter Name="WorkDir" DataType="String" IsRequired="true"><#=projectWorkDir#></Parameter>
+                <Parameter Name="DirImport" DataType="String" IsRequired="true"><#=ImportDir#></Parameter>
+                <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
+                <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
+                <#foreach (DataRow Connection in Connections.Rows) {
+                    string ConnectionName = Connection["ConnectionName"].ToString();
+                    string ConnectionString = Connection["ConnectionString"].ToString();
+                    string ConnectionIsProjectConn = Connection["IsProjectConnection"].ToString();
+                    string ConnectionType = Connection["Type"].ToString();
+                    string ConnectionOptions = Connection["Options"].ToString();
+    
+                    switch (ConnectionType) {
+                        case "XML_Enkel": 
+                        case "XML_Kewill": 
+                        case "XML_IFS":
+                        case "XML":#>
+                            <Parameter Name="Con<#=ConnectionName#>"  DataType="String" IsRequired="true"><#=ConnectionString#></Parameter>
+                            <Parameter Name="Con<#=ConnectionName#>_XSD"  DataType="String" IsRequired="true"><#=ConnectionOptions#></Parameter>
+                            <#break;
+                        default:#>
+                            <Parameter Name="Con<#=ConnectionName#>"  DataType="String" IsRequired="true"><#=ConnectionString#></Parameter>
+                            <#break;
+                    }
+                }#>
+            </Parameters>
+            
+            <Packages>
+                <#string sqlPackage = @"SELECT [SourceConnection]
+                                            ,[con].[Type]				AS [ConnectionType]
+                                            ,[con].[ConnectionString]	AS [ConnectionString]
+                                            ,[con].[Options]			AS [ConnectionOptions]
+                                            ,[SourceSchema]
+                                            ,[SourceTable]
+                                            ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
+                                            FROM      [Generator].[SourceExtractionTable] st
+                                            Left JOIN [Generator].[Connection] con
+                                            on		  [st].[SourceConnection] = [con].[Name]	
+                                            WHERE     st.[IsActive] =  1
+                                            AND		  st.SourceConnection = 'DOC_PlanetPress'
+                                            UNION
+                                            SELECT DISTINCT
+                                            [TargetConnection]
+                                            ,null
+                                            ,null
+                                            ,null
+                                            ,[TargetSchema]
+                                            ,'Total' AS [SourceTable]
+                                            ,CASE  WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-EXTR' END AS PackagePrefix
+                                            FROM      [Generator].[SourceExtractionTable] st
+                                            WHERE     st.[IsActive] =  1
+                                            AND		  st.SourceConnection = 'DOC_PlanetPress'
+                                            ";
+                DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
+                foreach (DataRow SSISPackage in SSISPackages.Rows) {
+                    string varSourceConnection = SSISPackage["SourceConnection"].ToString();
+                    string varSourceConnectionType = SSISPackage["ConnectionType"].ToString();
+                    string varSourceConnectionString = SSISPackage["ConnectionString"].ToString();
+                    string varSourceConnectionOptions = SSISPackage["ConnectionOptions"].ToString();
+                    string varSourceSchema = SSISPackage["SourceSchema"].ToString();
+                    string varSourceTable = SSISPackage["SourceTable"].ToString();
+                    string varPackagePrefix = SSISPackage["PackagePrefix"].ToString();
+                    string varPackageName = varPackagePrefix + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable;
+                    string varPackageNameXML = varPackagePrefix + "-" + varSourceSchema + "-" + varSourceConnection ;
+                    
+                    switch (varSourceConnectionType) {
+                        case "XML_Enkel": 
+                        case "XML_Kewill": 
+                        case "XML_IFS": 
+                        case "XML":
+                        case "CSV":
+                        case "CSV_L":
+                        case "ODBC":
+                            varPackageName = varPackageNameXML;
+                            break;
+                    }#>
+                    <Package PackageName="<#=varPackageName#>"/>
+                <#}#>               
+            </Packages>
+        </PackageProject>
+    </Projects>
+</Biml>
