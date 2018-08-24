@@ -1,8 +1,6 @@
 ﻿
 
 
-
-
 CREATE VIEW [FDV].[VW_D_OLPN_Stats_OF]
 AS
 select PT.CNTR_NBR as OLPN_ID
@@ -14,6 +12,14 @@ select PT.CNTR_NBR as OLPN_ID
 ,OD.ORDER_TYPE 
 ,OD.DSG_SHIP_VIA				AS Ship_Via
 ,OD.D_COUNTRY_CODE				AS Order_Country_Code
+,CASE 
+   WHEN LH.AISLE IN ('35','36') THEN 'Lus 1'
+   WHEN LH.AISLE in ('37','38') THEN 'Lus 2' 
+   WHEN LH.AISLE in ('39','40') THEN 'Lus 3'
+   WHEN LH.AISLE IN ('41','42') THEN 'Lus 4'
+   WHEN LH.AISLE IN ('43','44','45', '46') THEN 'Lus 5'
+   ELSE 'NA'  
+   END	as Lus	
 ,SD.Order_Planned_Ship_Date
 ,SD.Order_Wave_Date
 from MANH.PROD_TRKG_TRAN PT
@@ -23,7 +29,10 @@ on PT.TC_ORDER_ID=OD.TC_ORDER_ID
 and OD.ActInd='Y'
 and OD.ORDER_TYPE='OF'
 --and OD.CREATED_DTTM > getdate()-65
-
+left join   MANH.LOCN_HDR LH 
+  ON           PT.FROM_LOCN = LH.LOCN_ID
+  AND			 LH.ActInd = 'Y'
+	
 join EXTRA.ORDERS_SHIP_DATE SD
 on SD.TC_Order_ID=PT.TC_ORDER_ID
 and SD.ActInd='Y'
@@ -31,4 +40,4 @@ and SD.Order_Planned_Ship_Date BETWEEN GETDATE()-65 AND GETDATE ()-1
 
 UNION ALL
 
-SELECT        '-1', NULL, NULL, '1965-04-26', NULL, NULL, NULL,NULL,NULL,NULL,NULL
+SELECT        '-1', NULL, NULL, '1965-04-26', NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL
