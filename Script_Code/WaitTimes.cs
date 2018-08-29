@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Data;
 using Microsoft.SqlServer.Dts.Runtime;
 using System.Windows.Forms;
@@ -25,3 +26,4 @@ namespace ST_c1460709233e45a7af989d19c79a53aa
 
 	}
 }
+*/

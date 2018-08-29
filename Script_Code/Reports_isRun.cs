@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Data;
 using System.Globalization;
 
@@ -85,3 +86,4 @@ namespace ST_5018c48148b4404da4000b7c59935e52
         }
     }
 }
+*/
