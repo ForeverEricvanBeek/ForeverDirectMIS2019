@@ -7,13 +7,13 @@
   DTS:CreatorName="DMLINDERS\bi-dev"
   DTS:DTSID="{BE06E1F1-C2CC-45F7-9B55-9941A38FEAB4}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="14.0.3002.106"
+  DTS:LastModifiedProductVersion="14.0.3002.113"
   DTS:LocaleID="1043"
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="52"
-  DTS:VersionGUID="{EE5EA15A-DBFD-4B1E-B587-C4FFBBB9AB7F}">
+  DTS:VersionBuild="53"
+  DTS:VersionGUID="{DEE2626D-09D7-46D6-952F-6DB239F6EB5F}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -3180,6 +3180,13 @@
                       cachedName="CleansingType"
                       externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingType]"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[DataType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DataType"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[DataType]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[DataType]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3272,6 +3279,11 @@
                       dataType="wstr"
                       length="2"
                       name="CleansingType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[DataType]"
+                      dataType="wstr"
+                      length="2"
+                      name="DataType" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3529,6 +3541,16 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingType]"
                       name="CleansingType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[DataType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[DataType]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[DataType]"
+                      name="DataType"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3618,6 +3640,11 @@
                       dataType="wstr"
                       length="255"
                       name="CleansingType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[DataType]"
+                      dataType="wstr"
+                      length="255"
+                      name="DataType" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -3649,6 +3676,12 @@
                       length="255"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ExtractionType]"
                       name="ExtractionType" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[DataType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[DataType]"
+                      name="DataType" />
                     <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingType]"
                       dataType="wstr"
@@ -8852,7 +8885,7 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="272,42"
           Id="Package\Load Generator_Connection"
@@ -8894,7 +8927,7 @@
           TopLeft="589,93">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,47.8"
               Start="0,0"
               End="0,40.3">
@@ -8916,7 +8949,7 @@
           TopLeft="588.5,182.8">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,47.8"
               Start="0,0"
               End="0,40.3">
@@ -8938,7 +8971,7 @@
           TopLeft="585.5,272.6">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,47.8"
               Start="0,0"
               End="0,40.3">
@@ -8960,7 +8993,7 @@
           TopLeft="584,362.4">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,42.6"
               Start="0,0"
               End="0,35.1">
@@ -8982,7 +9015,7 @@
           TopLeft="589.5,541.2">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,47.8"
               Start="0,0"
               End="0,40.3">
@@ -9004,7 +9037,7 @@
           TopLeft="589,631">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,60"
               Start="0,0"
               End="0,52.5">
@@ -9026,7 +9059,7 @@
           TopLeft="589,733">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="47.5,29"
               Start="0,0"
               End="47.5,21.5">
@@ -9060,7 +9093,7 @@
           TopLeft="587.5,447">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,52.2"
               Start="0,0"
               End="0,44.7">
@@ -9438,21 +9471,21 @@
     design-time-name="Package\Load Generator_SourceExtractionTable">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="237,42"
-          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
-          TopLeft="522,53" />
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
           TopLeft="522,139" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
+          TopLeft="522,53" />
         <EdgeLayout
           Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
           TopLeft="640.5,95">
           <EdgeLayout.Curve>
             <mssgle:Curve
-              StartConnector="{x:Null}"
+              StartConnector="{assembly:Null}"
               EndConnector="0,44"
               Start="0,0"
               End="0,36.5">

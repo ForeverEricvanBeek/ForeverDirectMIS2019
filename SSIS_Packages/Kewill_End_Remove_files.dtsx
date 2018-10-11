@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="6/15/2015 3:29:38 PM"
@@ -7,13 +7,13 @@
   DTS:CreatorName="FOREVERDIRECT\wsillevis"
   DTS:DTSID="{36A118A7-4005-484C-97F6-4D5BE5CBC9DC}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="14.0.0600.250"
+  DTS:LastModifiedProductVersion="14.0.3002.113"
   DTS:LocaleID="1043"
   DTS:ObjectName="Kewill_End_Remove_files"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="15"
-  DTS:VersionGUID="{C266713C-0AEB-485C-B354-BC8F61507AB5}">
+  DTS:VersionBuild="16"
+  DTS:VersionGUID="{234D6D66-9BFA-4525-8484-4B9367FDAAFD}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables>
@@ -26,7 +26,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="FileFolder">
       <DTS:VariableValue
-        DTS:DataType="8">\\fdeu-bid01\DWHWork\Input\Kewill\</DTS:VariableValue>
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\input\Kewill\</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -37,7 +37,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="FileFolderProcessed">
       <DTS:VariableValue
-        DTS:DataType="8">\\fdeu-bid01\DWHWork\Input\Kewill\Processed\20180301</DTS:VariableValue>
+        DTS:DataType="8">\\FDODWHD01\StagingFiles\input\Kewill\Processed\20181011</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -86,7 +86,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="*.XML" />
             <FEFEProperty
@@ -144,7 +144,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsfire_*.xml" />
             <FEFEProperty
@@ -201,7 +201,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsdnaw_*.xml" />
             <FEFEProperty
@@ -258,7 +258,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsdsmd_*.xml" />
             <FEFEProperty
@@ -315,7 +315,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tseecb_*.xml" />
             <FEFEProperty
@@ -372,7 +372,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsloth_*.xml" />
             <FEFEProperty
@@ -429,7 +429,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsmopd_*.xml" />
             <FEFEProperty
@@ -486,7 +486,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tspakm_*.xml" />
             <FEFEProperty
@@ -527,6 +527,63 @@
       </DTS:ForEachVariableMappings>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Foreach Loop tstrac"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop tstrac"
+      DTS:DTSID="{0d6834a8-c301-4a3d-b6f3-232e32517574}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop tstrac">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{62e95e0d-abc6-4f64-9a1e-ed7204459988}"
+        DTS:ObjectName="{4BC3155A-E797-45E5-9DF0-6534387BFE92}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::FileFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
+            <FEFEProperty
+              FileSpec="tstrac_*.xml" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop tstrac\Delete tstrac"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="Delete tstrac"
+          DTS:DTSID="{e64226b5-9e98-486f-9cd3-9d23729576f7}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete tstrac"
+          DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="User::FullName"
+              TaskIsSourceVariable="True" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{5EC62796-E155-40CA-B4A5-F123C1B9B3D0}"
+          DTS:ObjectName="{5EC62796-E155-40CA-B4A5-F123C1B9B3D0}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FullName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Foreach Loop tsvvdo"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop tsvvdo"
@@ -543,7 +600,7 @@
         <DTS:ObjectData>
           <ForEachFileEnumeratorProperties>
             <FEFEProperty
-              Folder="\\fdeu-bid01\DWHWork\Input\Kewill\" />
+              Folder="\\FDODWHD01\StagingFiles\input\Kewill\" />
             <FEFEProperty
               FileSpec="tsvvdo_*.xml" />
             <FEFEProperty
@@ -657,6 +714,14 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 8"
       DTS:To="Package\Foreach Loop tseecb" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 9]"
+      DTS:CreationName=""
+      DTS:DTSID="{922D3B97-280D-4952-9711-3141CD72CFED}"
+      DTS:From="Package\Foreach Loop tseecb"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 9"
+      DTS:To="Package\Foreach Loop tstrac" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -952,6 +1017,39 @@
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 8]"
           TopLeft="85.0000000000002,1695.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Foreach Loop tstrac\Delete tstrac"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="159,103"
+          Size="159,146"
+          Id="Package\Foreach Loop tstrac"
+          TopLeft="5.50000000000007,1961.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 9]"
+          TopLeft="85.0000000000002,1901.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
