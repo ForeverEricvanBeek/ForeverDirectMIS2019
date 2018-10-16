@@ -25,6 +25,8 @@
     [IsDeleted]          CHAR (1)        NULL,
     [BatchID]            BIGINT          NULL,
     [ProcessLogID]       BIGINT          NULL,
-    CONSTRAINT [PK_Pallet_ForeCast] PRIMARY KEY CLUSTERED ([Pallet_ForeCast_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Pallet_ForeCast] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Pallet_ForeCast_ID] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 

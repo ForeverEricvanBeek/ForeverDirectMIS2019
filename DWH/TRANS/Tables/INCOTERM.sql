@@ -8,6 +8,8 @@
     [IsDeleted]     CHAR (1)       NULL,
     [BatchID]       BIGINT         NULL,
     [ProcessLogID]  BIGINT         NULL,
-    CONSTRAINT [PK_INCOTERM] PRIMARY KEY CLUSTERED ([INCOTERM_CODE] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_INCOTERM] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INCOTERM_CODE] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

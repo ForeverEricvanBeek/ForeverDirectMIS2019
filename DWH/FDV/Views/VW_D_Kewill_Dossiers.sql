@@ -1,6 +1,8 @@
 ﻿
 
 
+
+
 CREATE VIEW [FDV].[VW_D_Kewill_Dossiers]
 as
 with CTE_1 as
@@ -80,7 +82,7 @@ C2.dosvlg as Dossier_ID
 ,C2.ref01 as Reference
 ,C2.afd as Department
 ,cast(C1.SHIPMENT_ID as NVARCHAR(50)) as Shipment_ID
-,cast(C1.ORDER_ID as nvarchar(50)) as Order_ID
+,isnull(cast(C1.ORDER_ID as nvarchar(50)),'-1') as Order_ID
 
 ,NULL as Ship_Confirm_Date
 ,C1.DOCK_DATE as Dock_Time
@@ -112,7 +114,7 @@ Select C4.KEWILL_DOSVLG as Dossier_ID
 ,C4.KEWILL_REF as Reference
 ,C4.KEWILL_AFD as Department
 ,C3.TC_SHIPMENT_ID AS Shipment_ID
-,C3.TC_ORDER_ID AS Order_ID
+,ISNULL(C3.TC_ORDER_ID,'-1') AS Order_ID
 ,C3.ACTUAL_SHIPPED_DTTM AS Ship_Confirm_Date
 ,NUll as Dock_Time
 ,C3.DSG_SHIP_VIA AS Ship_Via
@@ -125,4 +127,4 @@ on 'BK'+C3.TC_ORDER_ID=C4.KEWILL_REF
 or 'BK'+C3.TC_SHIPMENT_ID=C4.KEWILL_REF
 union all
 
-SELECT        '-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+SELECT        '-1', NULL, NULL, NULL, NULL, '-1', NULL, NULL, NULL, NULL, NULL

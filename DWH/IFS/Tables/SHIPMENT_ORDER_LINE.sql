@@ -13,6 +13,8 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_SHIPMENT_ORDER_LINE] PRIMARY KEY CLUSTERED ([SHIPMENT_ID] ASC, [ORDER_NO] ASC, [LINE_NO] ASC, [REL_NO] ASC, [LINE_ITEM_NO] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SHIPMENT_ORDER_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LINE_ITEM_NO] ASC, [LINE_NO] ASC, [ORDER_NO] ASC, [REL_NO] ASC, [SHIPMENT_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

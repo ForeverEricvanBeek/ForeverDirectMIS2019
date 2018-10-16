@@ -7,6 +7,8 @@
     [IsDeleted]                      CHAR (1)       NULL,
     [BatchID]                        BIGINT         NULL,
     [ProcessLogID]                   BIGINT         NULL,
-    CONSTRAINT [PK_STATUS_CATEGORY] PRIMARY KEY CLUSTERED ([FORWARDER_STATUS_CATEGORY_CODE] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_STATUS_CATEGORY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FORWARDER_STATUS_CATEGORY_CODE] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

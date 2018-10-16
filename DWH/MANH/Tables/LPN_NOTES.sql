@@ -12,6 +12,8 @@
     [IsDeleted]         CHAR (1)       NULL,
     [BatchID]           BIGINT         NULL,
     [ProcessLogID]      BIGINT         NULL,
-    CONSTRAINT [PK_LPN_NOTES] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LPN_ID] ASC, [COMMENT_SEQ_NBR] ASC)
-);
+    CONSTRAINT [PK_LPN_NOTES] PRIMARY KEY CLUSTERED ([COMMENT_SEQ_NBR] ASC, [Eff_Date] ASC, [LPN_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

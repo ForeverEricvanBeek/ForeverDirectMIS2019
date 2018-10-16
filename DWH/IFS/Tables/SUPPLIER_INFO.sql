@@ -29,6 +29,8 @@
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_SUPPLIER_INFO] PRIMARY KEY CLUSTERED ([SUPPLIER_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SUPPLIER_INFO] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SUPPLIER_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

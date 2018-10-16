@@ -39,6 +39,8 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_FACILITY_CONTACT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FACILITY_ID] ASC, [FACILITY_CONTACT_ID] ASC)
-);
+    CONSTRAINT [PK_FACILITY_CONTACT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FACILITY_CONTACT_ID] ASC, [FACILITY_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

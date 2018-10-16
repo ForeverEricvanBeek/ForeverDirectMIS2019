@@ -211,8 +211,10 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_CUSTOMER_ORDER_LINE] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [LINE_NO] ASC, [REL_NO] ASC, [LINE_ITEM_NO] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE)
-);
+    CONSTRAINT [PK_CUSTOMER_ORDER_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LINE_ITEM_NO] ASC, [LINE_NO] ASC, [ORDER_NO] ASC, [REL_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 
 
 

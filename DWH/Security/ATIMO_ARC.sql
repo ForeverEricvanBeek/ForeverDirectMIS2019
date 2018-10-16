@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [ATIMO_ARC]
+    AUTHORIZATION [dbo];
+

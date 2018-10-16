@@ -14,6 +14,8 @@
     [IsDeleted]                   CHAR (1)        NULL,
     [BatchID]                     BIGINT          NULL,
     [ProcessLogID]                BIGINT          NULL,
-    CONSTRAINT [PK_PRES_OBJECT_SECURITY] PRIMARY KEY CLUSTERED ([PO_ID] ASC, [SEC_OBJECT] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_PRES_OBJECT_SECURITY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PO_ID] ASC, [SEC_OBJECT] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

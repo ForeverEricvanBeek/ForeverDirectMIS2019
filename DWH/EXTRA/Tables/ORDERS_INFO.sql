@@ -1,4 +1,4 @@
-﻿CREATE TABLE [EXTRA].[ORDERS_INFO] (
+CREATE TABLE [EXTRA].[ORDERS_INFO] (
     [TC_Order_ID]             NVARCHAR (50) NOT NULL,
     [Order_IFS_ID]            NVARCHAR (50) NULL,
     [Order_Create_Date]       DATETIME2 (7) NULL,
@@ -15,8 +15,10 @@
     [IsDeleted]               CHAR (1)      NULL,
     [BatchID]                 BIGINT        NULL,
     [ProcessLogID]            BIGINT        NULL,
-    CONSTRAINT [PK_ORDERS_INFO] PRIMARY KEY CLUSTERED ([TC_Order_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90)
-);
+    CONSTRAINT [PK_ORDERS_INFO] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TC_Order_ID] ASC) ON [DWH_EXTRA]
+) ON [DWH_EXTRA];
+
+
 
 
 
@@ -24,6 +26,7 @@
 
 
 GO
-CREATE NONCLUSTERED INDEX [PK_ORDERS_INFO_ORDER_ACTIND]
-    ON [EXTRA].[ORDERS_INFO]([TC_Order_ID] ASC, [ActInd] ASC);
+CREATE NONCLUSTERED INDEX [NI_ORDERS_INFO_ORDER_ACTIND]
+    ON [EXTRA].[ORDERS_INFO]([TC_Order_ID] ASC, [ActInd] ASC)
+    ON [DWH_EXTRA];
 

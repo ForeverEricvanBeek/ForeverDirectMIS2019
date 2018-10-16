@@ -93,12 +93,14 @@
     [CREATOR_DESC]                 NVARCHAR (4000) NULL,
     [OBJID]                        NVARCHAR (4000) NULL,
     [OBJVERSION]                   NVARCHAR (2000) NULL,
-    [Eff_Date]                     DATE            NOT NULL,
+    [Eff_Date]                     DATE            CONSTRAINT [DF_GEN_LED_VOUCHER_ROW_Eff_Date] DEFAULT (getdate()) NOT NULL,
     [End_Date]                     DATE            NULL,
     [ActInd]                       CHAR (1)        NULL,
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_GEN_LED_VOUCHER_ROW] PRIMARY KEY CLUSTERED ([ACCOUNTING_YEAR] ASC, [COMPANY] ASC, [VOUCHER_TYPE] ASC, [VOUCHER_NO] ASC, [ROW_NO] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_GEN_LED_VOUCHER_ROW] PRIMARY KEY CLUSTERED ([ACCOUNTING_YEAR] ASC, [COMPANY] ASC, [Eff_Date] ASC, [ROW_NO] ASC, [VOUCHER_NO] ASC, [VOUCHER_TYPE] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

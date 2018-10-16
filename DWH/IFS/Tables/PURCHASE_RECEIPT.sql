@@ -44,6 +44,8 @@
     [IsDeleted]               CHAR (1)        NULL,
     [BatchID]                 BIGINT          NULL,
     [ProcessLogID]            BIGINT          NULL,
-    CONSTRAINT [PK_PURCHASE_RECEIPT] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [LINE_NO] ASC, [RELEASE_NO] ASC, [RECEIPT_NO] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_PURCHASE_RECEIPT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LINE_NO] ASC, [ORDER_NO] ASC, [RECEIPT_NO] ASC, [RELEASE_NO] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

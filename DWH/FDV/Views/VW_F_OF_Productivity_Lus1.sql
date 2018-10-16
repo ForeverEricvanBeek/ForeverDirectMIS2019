@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_OF_Productivity_Lus1]
 AS
 --Toelichting:
@@ -67,7 +68,7 @@ SELECT
 
 ,CTE_1 as
 (select * 
-,COUNT(CASE WHEN CI.DIFF > 120 THEN 1 --Tijd per pick t.b.v. uitsluiten pauzes 
+,COUNT(CASE WHEN CI.DIFF > 300 THEN 1 --Tijd per pick t.b.v. uitsluiten pauzes 
             WHEN CI.Lus <> CI.DIFF_LUS THEN 1 END)
             OVER (ORDER BY CI.DateKey,CI.Pickers_ID,CI.TimeKey
 	        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)																							AS RN

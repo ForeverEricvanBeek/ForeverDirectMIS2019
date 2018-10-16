@@ -18,6 +18,8 @@
     [IsDeleted]       CHAR (1)        NULL,
     [BatchID]         BIGINT          NULL,
     [ProcessLogID]    BIGINT          NULL,
-    CONSTRAINT [PK_HISTORY_LOG] PRIMARY KEY CLUSTERED ([LOG_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_HISTORY_LOG] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LOG_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

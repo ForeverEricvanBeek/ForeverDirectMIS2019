@@ -12,8 +12,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_Transporter_Status] PRIMARY KEY CLUSTERED ([Carrier] ASC, [Ship_Via] ASC, [Status] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Transporter_Status] PRIMARY KEY CLUSTERED ([Carrier] ASC, [Eff_Date] ASC, [Ship_Via] ASC, [Status] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 
 
 GO

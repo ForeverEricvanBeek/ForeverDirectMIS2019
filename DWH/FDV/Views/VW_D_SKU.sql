@@ -1,5 +1,6 @@
 ﻿
-CREATE VIEW FDV.VW_D_SKU
+
+CREATE VIEW [FDV].[VW_D_SKU]
 AS
 
 WITH Generic_Name as
@@ -43,24 +44,28 @@ FROM			MANH.ITEM_CBO AS I
 )
 
 SELECT			
-	I.ITEM_ID				AS SKU_Code
-	, I.ITEM_NAME			AS SKU_Name
-	, I.DESCRIPTION			AS SKU_Description
-	, GI.Generic_SKU_Name	AS Generic_SKU_Name
-	, GI.Generic_SKU_Description AS Generic_SKU_Description
-	, I.ITEM_SIZE_DESC		AS SKU_Size_Desc
-	, I.ITEM_BAR_CODE		AS SKU_Barcode
-	, I.UNIT_WEIGHT			AS Unit_Weight
-	, S1.DESCRIPTION		AS Weight_Type
-	, I.UNIT_VOLUME			AS Unit_Volume
-	, S2.DESCRIPTION		AS Volume_Type
-	, I.UNIT_HEIGHT			AS Unit_Height
-	, I.UNIT_WIDTH			AS Unit_Width
-	, I.UNIT_LENGTH			AS Unit_Length
-	, S3.DESCRIPTION		AS Dimension_Type
-	, I.VARIABLE_WEIGHT		AS Ind_Variable_Weight
-	, UN.UN_NUMBER_VALUE	AS Dangerous_Good
+	I.ITEM_ID						AS SKU_Code
+	, I.ITEM_NAME					AS SKU_Name
+	, INVP.PART_PRODUCT_FAMILY		AS FAM_Prod_ID
+	, I.DESCRIPTION					AS SKU_Description
+	, GI.Generic_SKU_Name			AS Generic_SKU_Name
+	, GI.Generic_SKU_Description	AS Generic_SKU_Description
+	, I.ITEM_SIZE_DESC				AS SKU_Size_Desc
+	, I.ITEM_BAR_CODE				AS SKU_Barcode
+	, I.UNIT_WEIGHT					AS Unit_Weight
+	, S1.DESCRIPTION				AS Weight_Type
+	, I.UNIT_VOLUME					AS Unit_Volume
+	, S2.DESCRIPTION				AS Volume_Type
+	, I.UNIT_HEIGHT					AS Unit_Height
+	, I.UNIT_WIDTH					AS Unit_Width
+	, I.UNIT_LENGTH					AS Unit_Length
+	, S3.DESCRIPTION				AS Dimension_Type
+	, I.VARIABLE_WEIGHT				AS Ind_Variable_Weight
+	, UN.UN_NUMBER_VALUE			AS Dangerous_Good
 FROM			MANH.ITEM_CBO AS I 
+LEFT JOIN		IFS.INVENTORY_PART INVP
+ON				I.ITEM_NAME=INVP.PART_NO
+AND				INVP.ActInd='Y'
 LEFT JOIN		Generic_Description AS GI
 ON				I.ITEM_NAME = GI.A_SKU
 LEFT JOIN		MANH.SIZE_UOM AS S1 
@@ -77,4 +82,4 @@ ON				UN.UN_NUMBER_ID = I.UN_NUMBER_ID
 AND				UN.ActInd = 'Y'
 WHERE			I.ActInd = 'Y'
 UNION
-SELECT     - 1, '-1', 'Unknown', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+SELECT     - 1, '-1', NULL, 'Unknown', NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL

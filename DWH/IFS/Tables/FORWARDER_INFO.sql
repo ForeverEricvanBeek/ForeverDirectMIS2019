@@ -19,6 +19,8 @@
     [IsDeleted]           CHAR (1)        NULL,
     [BatchID]             BIGINT          NULL,
     [ProcessLogID]        BIGINT          NULL,
-    CONSTRAINT [PK_FORWARDER_INFO] PRIMARY KEY CLUSTERED ([FORWARDER_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_FORWARDER_INFO] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FORWARDER_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

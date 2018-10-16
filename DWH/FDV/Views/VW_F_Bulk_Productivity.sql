@@ -1,5 +1,7 @@
 ﻿
 
+
+
 create view [FDV].[VW_F_Bulk_Productivity] as 
 --CASEPICKING
 WITH CTE_INIT2 as
@@ -24,14 +26,25 @@ WITH CTE_INIT2 as
  AND            LP.LPN_FACILITY_STATUS BETWEEN 10 AND 91
  AND			LP.SINGLE_LINE_LPN = 'N'
  AND			LP.ActInd='Y'
- INNER JOIN MANH.UCL_USER UH1
- on 
- PT3.[USER_ID]=UH1.[USER_NAME]
- and UH1.ActInd='Y'
- and upper(UH1.FAX_NUMBER)in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE')
+-- INNER JOIN MANH.UCL_USER UH1
+-- on 
+-- PT3.[USER_ID]=UH1.[USER_NAME]
+-- and UH1.ActInd='Y'
+-- and upper(UH1.FAX_NUMBER)in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE')
  WHERE          PT3.TRAN_TYPE = '500'
  AND            PT3.TRAN_CODE = '001'
- AND			PT3.BEGIN_DATE > GETDATE()-365)
+ AND			PT3.BEGIN_DATE > GETDATE()-365
+ AND			PT3.[USER_ID] in (select 
+								distinct(c.[USER_NAME])
+								from MANH.ROLE a
+								join MANH.ACCESS_CONTROL b
+								on a.ROLE_ID = b.ROLE_ID
+							    and a.ActInd='Y'
+								join MANH.UCL_USER c 
+								on b.UCL_USER_ID = c.UCL_USER_ID
+								and b.ActInd='Y'
+								where a.COMPANY_ID = '3001'
+								and a.ROLE_NAME in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE')))
 
  ,CTE_INIT1 as 
 (SELECT 
@@ -58,19 +71,31 @@ WITH CTE_INIT2 as
   ,TH.TASK_TYPE																																	as WRK_GRP_DETAIL2
   FROM MANH.PROD_TRKG_TRAN PT
   
- join [MANH].[TASK_HDR] TH
+ join MANH.TASK_HDR TH
   on
   TH.TASK_ID=PT.TASK_ID
   AND TH.INVN_NEED_TYPE='1'
   and TH.ActInd='Y'
    
-  join MANH.UCL_USER UH
-  on 
-  PT.[USER_ID]=UH.[USER_NAME]
-  and UH.ActInd='Y'
-  and upper(UH.FAX_NUMBER)in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE')
+  --join MANH.UCL_USER UH
+ -- on 
+ -- PT.[USER_ID]=UH.[USER_NAME]
+ -- and UH.ActInd='Y'
+ -- and upper(UH.FAX_NUMBER)in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE')
  
-  where  PT.BEGIN_DATE >  GETDATE()-365 )
+  where  cast(PT.BEGIN_DATE as date) > GETDATE()-365
+  and PT.[USER_ID] in (select 
+					   distinct(c.[USER_NAME])
+					   from MANH.ROLE a
+					   join MANH.ACCESS_CONTROL b
+					   on a.ROLE_ID = b.ROLE_ID
+					   and a.ActInd='Y'
+					   join MANH.UCL_USER c 
+					   on b.UCL_USER_ID = c.UCL_USER_ID
+					   and b.ActInd='Y'
+					   where a.COMPANY_ID = '3001'
+					   and a.ROLE_NAME in ('OG_UI_INBO_ROLE','OG_UI_SUPE_ROLE'))
+ )
 
 Select C1.DateKey																							AS DateKey
 ,C1.USER_ID																									AS USER_ID

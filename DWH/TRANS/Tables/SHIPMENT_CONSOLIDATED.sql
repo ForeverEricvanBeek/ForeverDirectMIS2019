@@ -15,6 +15,8 @@
     [IsDeleted]              CHAR (1)      NULL,
     [BatchID]                BIGINT        NULL,
     [ProcessLogID]           BIGINT        NULL,
-    CONSTRAINT [PK_SHIPMENT_CONSOLIDATED] PRIMARY KEY CLUSTERED ([SHIPMENT_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SHIPMENT_CONSOLIDATED] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SHIPMENT_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

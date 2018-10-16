@@ -91,6 +91,8 @@
     [IsDeleted]                   CHAR (1)        NULL,
     [BatchID]                     BIGINT          NULL,
     [ProcessLogID]                BIGINT          NULL,
-    CONSTRAINT [PK_PURCHASE_ORDER] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_PURCHASE_ORDER] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ORDER_NO] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

@@ -13,6 +13,8 @@
     [IsDeleted]       CHAR (1)        NULL,
     [BatchID]         BIGINT          NULL,
     [ProcessLogID]    BIGINT          NULL,
-    CONSTRAINT [PK_Sensor] PRIMARY KEY CLUSTERED ([Sensor_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Sensor] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Sensor_ID] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 

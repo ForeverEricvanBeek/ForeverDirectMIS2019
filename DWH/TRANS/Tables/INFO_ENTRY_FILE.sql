@@ -8,6 +8,8 @@
     [IsDeleted]          CHAR (1)      NULL,
     [BatchID]            BIGINT        NULL,
     [ProcessLogID]       BIGINT        NULL,
-    CONSTRAINT [PK_INFO_ENTRY_FILE] PRIMARY KEY CLUSTERED ([INFO_ENTRY_FILE_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_INFO_ENTRY_FILE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INFO_ENTRY_FILE_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

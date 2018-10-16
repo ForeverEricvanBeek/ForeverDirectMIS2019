@@ -144,8 +144,10 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [COMPANY] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [Eff_Date] ASC, [INVOICE_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 
 
 

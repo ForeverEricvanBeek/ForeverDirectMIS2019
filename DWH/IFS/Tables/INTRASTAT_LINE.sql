@@ -66,8 +66,10 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_INTRASTAT_LINE] PRIMARY KEY CLUSTERED ([INTRASTAT_ID] ASC, [LINE_NO] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE)
-);
+    CONSTRAINT [PK_INTRASTAT_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INTRASTAT_ID] ASC, [LINE_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 
 
 

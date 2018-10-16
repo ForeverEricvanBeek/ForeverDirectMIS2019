@@ -20,6 +20,8 @@
     [IsDeleted]                   CHAR (1)       NULL,
     [BatchID]                     BIGINT         NULL,
     [ProcessLogID]                BIGINT         NULL,
-    CONSTRAINT [PK_MANH_ROLE] PRIMARY KEY CLUSTERED ([ROLE_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_MANH_ROLE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ROLE_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

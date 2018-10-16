@@ -19,6 +19,8 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_C_EXT_SHIP_CONFIRM] PRIMARY KEY CLUSTERED ([APPLICATION_MESSAGE_ID] ASC, [SHIPMENT_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_C_EXT_SHIP_CONFIRM] PRIMARY KEY CLUSTERED ([APPLICATION_MESSAGE_ID] ASC, [Eff_Date] ASC, [SHIPMENT_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

@@ -13,8 +13,10 @@
     [IsDeleted]    CHAR (1)       NULL,
     [BatchID]      BIGINT         NULL,
     [ProcessLogID] BIGINT         NULL,
-    CONSTRAINT [PK_Pickers] PRIMARY KEY CLUSTERED ([Picker_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Pickers] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Picker_ID] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 
 
 

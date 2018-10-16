@@ -11,6 +11,8 @@
     [IsDeleted]         CHAR (1)        NULL,
     [BatchID]           BIGINT          NULL,
     [ProcessLogID]      BIGINT          NULL,
-    CONSTRAINT [PK_USER_ALLOWED_SITE] PRIMARY KEY CLUSTERED ([USERID] ASC, [CONTRACT] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_USER_ALLOWED_SITE] PRIMARY KEY CLUSTERED ([CONTRACT] ASC, [Eff_Date] ASC, [USERID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

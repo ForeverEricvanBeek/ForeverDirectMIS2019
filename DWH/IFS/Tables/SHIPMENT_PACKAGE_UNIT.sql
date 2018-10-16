@@ -35,6 +35,8 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_SHIPMENT_PACKAGE_UNIT] PRIMARY KEY CLUSTERED ([PACKAGE_UNIT_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SHIPMENT_PACKAGE_UNIT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PACKAGE_UNIT_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

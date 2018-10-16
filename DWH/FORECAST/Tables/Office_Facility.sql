@@ -9,6 +9,8 @@
     [IsDeleted]       CHAR (1)      NULL,
     [BatchID]         BIGINT        NULL,
     [ProcessLogID]    BIGINT        NULL,
-    CONSTRAINT [PK_Office_Facility] PRIMARY KEY CLUSTERED ([ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Office_Facility] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ID] ASC) ON [DWH_FORECAST]
+) ON [DWH_FORECAST];
+
+
 

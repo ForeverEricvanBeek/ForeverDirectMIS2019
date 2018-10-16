@@ -11,6 +11,8 @@
     [IsDeleted]              CHAR (1)     NULL,
     [BatchID]                BIGINT       NULL,
     [ProcessLogID]           BIGINT       NULL,
-    CONSTRAINT [PK_BRING_FORWARDER_REF] PRIMARY KEY CLUSTERED ([POS_NR] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_BRING_FORWARDER_REF] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [POS_NR] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [TPX7_ARC]
+    AUTHORIZATION [dbo];
+

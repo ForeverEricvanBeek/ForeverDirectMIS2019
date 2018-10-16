@@ -8,6 +8,12 @@
     [TargetTable]             NVARCHAR (128) NULL,
     [TargetConnection]        NVARCHAR (50)  NOT NULL,
     [ExtractionType]          NVARCHAR (2)   NOT NULL,
+    [Output]                  NVARCHAR (50)  NULL,
+    [RunSchedule]             NVARCHAR (50)  NULL,
+    [RunParam1]               NVARCHAR (50)  NULL,
+    [RunParam2]               NVARCHAR (50)  NULL,
     [IsActive]                BIT            NOT NULL
 );
+
+
 

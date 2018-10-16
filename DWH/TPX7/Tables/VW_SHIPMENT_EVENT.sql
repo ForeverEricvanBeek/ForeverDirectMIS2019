@@ -34,6 +34,8 @@
     [IsDeleted]                   CHAR (1)      NULL,
     [BatchID]                     BIGINT        NULL,
     [ProcessLogID]                BIGINT        NULL,
-    CONSTRAINT [PK_SHIPMENT_EVENT] PRIMARY KEY CLUSTERED ([SHIPMENT_LOG_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SHIPMENT_EVENT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SHIPMENT_LOG_ID] ASC) ON [DWH_TPX7]
+) ON [DWH_TPX7];
+
+
 

@@ -9,6 +9,8 @@
     [IsDeleted]        CHAR (1)     NULL,
     [BatchID]          BIGINT       NULL,
     [ProcessLogID]     BIGINT       NULL,
-    CONSTRAINT [PK_DPD_SERVICE] PRIMARY KEY CLUSTERED ([SERVICE_NR] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_DPD_SERVICE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SERVICE_NR] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

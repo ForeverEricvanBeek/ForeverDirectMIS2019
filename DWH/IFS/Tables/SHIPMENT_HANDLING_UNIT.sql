@@ -24,6 +24,8 @@
     [IsDeleted]               CHAR (1)        NULL,
     [BatchID]                 BIGINT          NULL,
     [ProcessLogID]            BIGINT          NULL,
-    CONSTRAINT [PK_SHIPMENT_HANDLING_UNIT] PRIMARY KEY CLUSTERED ([HANDLING_UNIT_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SHIPMENT_HANDLING_UNIT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [HANDLING_UNIT_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

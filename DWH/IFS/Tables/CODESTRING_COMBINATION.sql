@@ -19,6 +19,8 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_CODESTRING_COMBINATION] PRIMARY KEY CLUSTERED ([POSTING_COMBINATION_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_CODESTRING_COMBINATION] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [POSTING_COMBINATION_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

@@ -14,6 +14,8 @@
     [IsDeleted]            CHAR (1)       NULL,
     [BatchID]              BIGINT         NULL,
     [ProcessLogID]         BIGINT         NULL,
-    CONSTRAINT [PK_XML_INVOICE] PRIMARY KEY CLUSTERED ([XML_INVOICE_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_XML_INVOICE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [XML_INVOICE_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

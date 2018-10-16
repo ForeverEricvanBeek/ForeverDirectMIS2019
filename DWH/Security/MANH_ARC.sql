@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [MANH_ARC]
+    AUTHORIZATION [dbo];
+

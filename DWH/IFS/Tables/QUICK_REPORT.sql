@@ -17,6 +17,8 @@
     [IsDeleted]            CHAR (1)        NULL,
     [BatchID]              BIGINT          NULL,
     [ProcessLogID]         BIGINT          NULL,
-    CONSTRAINT [PK_QUICK_REPORT] PRIMARY KEY CLUSTERED ([QUICK_REPORT_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_QUICK_REPORT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [QUICK_REPORT_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

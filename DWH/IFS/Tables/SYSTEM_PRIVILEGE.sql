@@ -9,6 +9,8 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_SYSTEM_PRIVILEGE] PRIMARY KEY CLUSTERED ([PRIVILEGE_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_SYSTEM_PRIVILEGE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PRIVILEGE_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

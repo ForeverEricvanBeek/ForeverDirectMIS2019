@@ -20,7 +20,7 @@
     [ref02]        NVARCHAR (5)    NULL,
     [plaanl]       NVARCHAR (6)    NULL,
     [plafle]       NVARCHAR (6)    NULL,
-    [conttp]       NVARCHAR (3)    NULL,
+    [conttp]       NVARCHAR (4)    NULL,
     [atlcnt]       SMALLINT        NULL,
     [contnr]       NVARCHAR (11)   NULL,
     [plher]        NVARCHAR (5)    NULL,
@@ -229,8 +229,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_tsdsmd] PRIMARY KEY NONCLUSTERED ([dosvlg] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_tsdsmd] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC) ON [DWH_KEWILL]
+) ON [DWH_KEWILL];
+
+
 
 
 GO

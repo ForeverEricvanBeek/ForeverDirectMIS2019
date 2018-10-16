@@ -16,8 +16,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_tsvvdo] PRIMARY KEY NONCLUSTERED ([dosvlg] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_tsvvdo] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC) ON [DWH_KEWILL]
+) ON [DWH_KEWILL];
+
+
 
 
 GO

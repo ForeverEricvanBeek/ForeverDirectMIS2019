@@ -1,0 +1,25 @@
+﻿CREATE TABLE [IFS_ARC].[MANUF_STRUCTURE_HEAD] (
+    [CONTRACT]           NVARCHAR (5)    NOT NULL,
+    [PART_NO]            NVARCHAR (25)   NOT NULL,
+    [ENG_CHG_LEVEL]      NVARCHAR (2)    NOT NULL,
+    [BOM_TYPE]           NVARCHAR (200)  NULL,
+    [BOM_TYPE_DB]        NVARCHAR (20)   NOT NULL,
+    [NOTE_ID]            INT             NULL,
+    [NOTE_TEXT]          NVARCHAR (2000) NULL,
+    [ENG_CHG_ORDER]      NVARCHAR (10)   NULL,
+    [EFF_PHASE_IN_DATE]  DATE            NULL,
+    [EFF_PHASE_OUT_DATE] DATE            NULL,
+    [ENG_REVISION]       NVARCHAR (6)    NULL,
+    [CREATE_DATE]        DATETIME2 (7)   NULL,
+    [CUST_WARRANTY_ID]   INT             NULL,
+    [OBJID]              NVARCHAR (100)  NULL,
+    [OBJVERSION]         BIGINT          NULL,
+    [Eff_Date]           DATE            NOT NULL,
+    [End_Date]           DATE            NULL,
+    [ActInd]             CHAR (1)        NULL,
+    [IsDeleted]          CHAR (1)        NULL,
+    [BatchID]            BIGINT          NULL,
+    [ProcessLogID]       BIGINT          NULL,
+    CONSTRAINT [PK_MANUF_STRUCTURE_HEAD] PRIMARY KEY CLUSTERED ([BOM_TYPE_DB] ASC, [CONTRACT] ASC, [Eff_Date] ASC, [ENG_CHG_LEVEL] ASC, [PART_NO] ASC) ON [DWH_IFS_ARC]
+) ON [DWH_IFS_ARC];
+

@@ -10,6 +10,8 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_DOCUMENT_TEXT] PRIMARY KEY CLUSTERED ([NOTE_ID] ASC, [OUTPUT_TYPE] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_DOCUMENT_TEXT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [NOTE_ID] ASC, [OUTPUT_TYPE] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

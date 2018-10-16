@@ -9,6 +9,8 @@
     [IsDeleted]       CHAR (1)      NULL,
     [BatchID]         BIGINT        NULL,
     [ProcessLogID]    BIGINT        NULL,
-    CONSTRAINT [PK_PlanetPress] PRIMARY KEY CLUSTERED ([olpn] ASC, [name] ASC, [archiveDateTime] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_PlanetPress] PRIMARY KEY CLUSTERED ([archiveDateTime] ASC, [Eff_Date] ASC, [name] ASC, [olpn] ASC) ON [DWH_DOC]
+) ON [DWH_DOC];
+
+
 

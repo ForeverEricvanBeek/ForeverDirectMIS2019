@@ -20,6 +20,8 @@
     [IsDeleted]     CHAR (1)      NULL,
     [BatchID]       BIGINT        NULL,
     [ProcessLogID]  BIGINT        NULL,
-    CONSTRAINT [PK_CL_MESSAGE_PLUS] PRIMARY KEY CLUSTERED ([MSG_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_CL_MESSAGE_PLUS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [MSG_ID] ASC) ON [DWH_EXTRA]
+) ON [DWH_EXTRA];
+
+
 

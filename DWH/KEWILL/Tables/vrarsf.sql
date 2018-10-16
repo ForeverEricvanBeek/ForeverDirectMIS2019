@@ -67,8 +67,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_vrarsf] PRIMARY KEY NONCLUSTERED ([rnropd] ASC, [artkd] ASC, [vrfilk] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_vrarsf] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [rnropd] ASC, [vrfilk] ASC) ON [DWH_KEWILL]
+) ON [DWH_KEWILL];
+
+
 
 
 GO

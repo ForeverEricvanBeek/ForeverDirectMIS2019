@@ -19,6 +19,8 @@
     [IsDeleted]     CHAR (1)      NULL,
     [BatchID]       BIGINT        NULL,
     [ProcessLogID]  BIGINT        NULL,
-    CONSTRAINT [PK_Repack] PRIMARY KEY CLUSTERED ([Order] ASC, [Page] ASC, [OLPN] ASC, [TimeAnnounced] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_Repack] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [OLPN] ASC, [Order] ASC, [Page] ASC, [TimeAnnounced] ASC) ON [DWH_SCHAEFER]
+) ON [DWH_SCHAEFER];
+
+
 

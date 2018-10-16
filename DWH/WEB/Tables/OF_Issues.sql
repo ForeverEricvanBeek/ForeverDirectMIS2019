@@ -26,6 +26,8 @@
     [IsDeleted]          CHAR (1)       NULL,
     [BatchID]            BIGINT         NULL,
     [ProcessLogID]       BIGINT         NULL,
-    CONSTRAINT [PK_QA_Issue_List] PRIMARY KEY CLUSTERED ([ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_QA_Issue_List] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ID] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 

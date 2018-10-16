@@ -12,6 +12,8 @@
     [IsDeleted]         CHAR (1)      NULL,
     [BatchID]           BIGINT        NULL,
     [ProcessLogID]      BIGINT        NULL,
-    CONSTRAINT [PK_OUTPUT_COMMAND] PRIMARY KEY CLUSTERED ([OUTPUT_COMMAND_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_OUTPUT_COMMAND] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [OUTPUT_COMMAND_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

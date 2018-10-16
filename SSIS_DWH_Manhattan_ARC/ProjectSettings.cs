@@ -1,7 +1,7 @@
 <#
 string SSISDeploymentMode = "Project";
 string stagingProjectName = @"SSIS_Staging";
-string DWHProjectName = @"SSIS_DWH_ATIMO_ARC";
+string DWHProjectName = @"SSIS_DWH_Manhattan_ARC";
 string projectServerName = @"FDODWHD01";
 string projectWorkDir = @"\\FDODWHD01\StagingFiles";
 string CacheDir = projectWorkDir + @"\Biml\SSIS Cache";

@@ -12,6 +12,8 @@
     [IsDeleted]             CHAR (1)       NULL,
     [BatchID]               BIGINT         NULL,
     [ProcessLogID]          BIGINT         NULL,
-    CONSTRAINT [PK_POSTNORD_DEPOT_1] PRIMARY KEY CLUSTERED ([PN_DEPOT_ID] ASC, [PN_DEPOT_COUNTRY_CODE] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_POSTNORD_DEPOT_1] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PN_DEPOT_COUNTRY_CODE] ASC, [PN_DEPOT_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

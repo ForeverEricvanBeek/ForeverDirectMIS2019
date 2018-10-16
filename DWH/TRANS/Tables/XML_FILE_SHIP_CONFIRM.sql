@@ -12,6 +12,8 @@
     [IsDeleted]                CHAR (1)       NULL,
     [BatchID]                  BIGINT         NULL,
     [ProcessLogID]             BIGINT         NULL,
-    CONSTRAINT [PK_XML_FILE_SHIP_CONFIRM] PRIMARY KEY CLUSTERED ([XML_FILE_SHIP_CONFIRM_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_XML_FILE_SHIP_CONFIRM] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [XML_FILE_SHIP_CONFIRM_ID] ASC) ON [DWH_TRANS]
+) ON [DWH_TRANS];
+
+
 

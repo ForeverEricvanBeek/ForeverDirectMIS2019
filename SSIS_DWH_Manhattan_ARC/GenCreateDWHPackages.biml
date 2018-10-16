@@ -49,7 +49,7 @@
                                                     AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                     WHERE     ST.[IsActive] = 1 
                                                     AND       ST.IsStaging = 0
-                                                    AND		  ST.TargetSchema = 'ATIMO'
+                                                    AND		  ST.TargetSchema = 'MANH'
                                                     ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
@@ -322,7 +322,7 @@
                                     FROM [Generator].[SourceExtractionTable] st
                                     WHERE st.[IsActive] = 1 
                                     AND st.IsStaging = 0
-                                    AND st.TargetSchema = 'ATIMO'
+                                    AND st.TargetSchema = 'MANH'
                                     ";
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {

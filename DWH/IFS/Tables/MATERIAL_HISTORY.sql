@@ -47,6 +47,8 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
-    CONSTRAINT [PK_MATERIAL_HISTORY] PRIMARY KEY CLUSTERED ([MATERIAL_HISTORY_ID] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_MATERIAL_HISTORY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [MATERIAL_HISTORY_ID] ASC) ON [DWH_IFS]
+) ON [DWH_IFS];
+
+
 

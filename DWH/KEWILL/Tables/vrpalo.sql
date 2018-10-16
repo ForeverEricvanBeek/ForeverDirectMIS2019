@@ -45,8 +45,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_vrpalo] PRIMARY KEY NONCLUSTERED ([vrfilk] ASC, [rnropd] ASC, [artkd] ASC, [magkd] ASC, [lockd] ASC, [vrvrdt] ASC, [ptykd] ASC, [ptdati] ASC, [vrvolg] ASC, [Eff_Date] ASC)
-);
+    CONSTRAINT [PK_vrpalo] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [lockd] ASC, [magkd] ASC, [ptdati] ASC, [ptykd] ASC, [rnropd] ASC, [vrfilk] ASC, [vrvolg] ASC, [vrvrdt] ASC) ON [DWH_KEWILL]
+) ON [DWH_KEWILL];
+
+
 
 
 GO

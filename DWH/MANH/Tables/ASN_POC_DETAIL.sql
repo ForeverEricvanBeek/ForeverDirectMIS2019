@@ -77,6 +77,8 @@
     [ORA_ROWSCN]                   BIGINT          NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_MANH_ASN_POC_DETAIL] PRIMARY KEY CLUSTERED ([ASN_POC_DETAIL_ID] ASC, [ASN_ID] ASC)
-);
+    CONSTRAINT [PK_MANH_ASN_POC_DETAIL] PRIMARY KEY CLUSTERED ([ASN_ID] ASC, [ASN_POC_DETAIL_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 
