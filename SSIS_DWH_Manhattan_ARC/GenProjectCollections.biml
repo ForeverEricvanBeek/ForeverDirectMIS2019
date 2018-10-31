@@ -46,6 +46,7 @@
         FROM      [Generator].[SourceExtractionTable] st
         WHERE     st.IsActive = 1 AND IsStaging = 0
         AND		  st.TargetSchema = 'MANH'
+        AND       st.ArchiveType <> 'I'
         ";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
@@ -87,6 +88,7 @@
                                         WHERE st.[IsActive] =  1
                                         AND st.IsStaging = 0
                                         AND st.TargetSchema = 'MANH'
+                                        AND st.ArchiveType <> 'I'
                                         UNION
                                         SELECT DISTINCT
                                         [TargetConnection]
@@ -99,6 +101,7 @@
                                         WHERE st.[IsActive] =  1
                                         AND st.IsStaging = 0
                                         AND st.TargetSchema = 'MANH'
+                                        AND st.ArchiveType <> 'I'
                                         ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {

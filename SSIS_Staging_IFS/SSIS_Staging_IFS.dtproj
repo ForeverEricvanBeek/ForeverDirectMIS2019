@@ -126,7 +126,8 @@
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-EXT_DESADV_HEADER.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-EXT_DESADV_LINE.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-EXT_DESADV_PALLET.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="2018_42.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="2018_43.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-WORK_CENTER.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="DWH_Control.conmgr" />
@@ -4818,22 +4819,68 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="2018_42.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="2018_43.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{0B8616AC-96A7-4D5C-B1C0-CDDAAF023C34}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">2018_42</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{60088D5F-2851-4771-8263-BBC5B987895B}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">2018_43</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">3</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">4</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{9C0A5BAD-74AB-4ACD-93C3-D7F41FDE91A5}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{1AA91A17-60FF-4339-9379-838B3C3C8109}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
                 <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
               </SSIS:Properties>
               <SSIS:Parameters />
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="EXTR-StagingIFS-PROD-WORK_CENTER.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{B455AEAA-12A5-47C3-A6D3-9F400CE78EBE}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">EXTR-StagingIFS-PROD-WORK_CENTER</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{9E5DACCD-628C-45F7-BC7E-C3E50421F271}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters>
+                <SSIS:Parameter SSIS:Name="BatchID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{CEB20742-6775-4E80-9D2A-85435AABDE32}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{CA713469-5AAA-4B27-9559-CC8CB3B3DC7D}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+              </SSIS:Parameters>
             </SSIS:PackageMetaData>
           </SSIS:PackageInfo>
         </SSIS:DeploymentInfo>
