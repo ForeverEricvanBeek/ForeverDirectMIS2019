@@ -11,7 +11,7 @@
                                             ,[Options]
                                             FROM      [Generator].[Connection]
                                             WHERE     [Type] IN ('FlatFile','CSV','CSV_L')
-                                            AND		  [Name] IN ('WEBFORM')
+                                            AND		  [Name] IN ('Portal','WebOps')
                                             AND       [IsActive] = 1
                                             ";
         DataTable tableSourceFlatFile = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFile);
@@ -67,7 +67,7 @@
                                           ,c.[Type]
                                         FROM [Generator].[Connection] c 
                                         WHERE c.[IsActive] = 1
-                                        AND c.[Name] IN ('WEBFORM','Staging','DWH_Control')
+                                        AND c.[Name] IN ('Portal','WebOps','Staging','DWH_Control')
                                         ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -162,7 +162,7 @@
                                 ,st.[TargetConnection]
                                 FROM      [Generator].[SourceExtractionTable] st
                                 WHERE     st.IsActive = 1
-                                AND		  st.SourceConnection = 'WEBFORM'
+                                AND		  st.SourceConnection IN ('Portal','WebOps')
                                 ";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
@@ -215,7 +215,7 @@
                                             Left JOIN [Generator].[Connection] con
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
-                                            AND		  st.SourceConnection = 'WEBFORM'
+                                            AND		  st.SourceConnection IN ('Portal','WebOps')
                                             UNION
                                             SELECT DISTINCT
                                             [TargetConnection]
@@ -227,7 +227,7 @@
                                             ,CASE  WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-EXTR' END AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
-                                            AND		  st.SourceConnection = 'WEBFORM'
+                                            AND		  st.SourceConnection IN ('Portal','WebOps')
                                             ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {

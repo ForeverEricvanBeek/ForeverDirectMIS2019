@@ -54,7 +54,7 @@
                                             ON		    ST.[TargetSchema] = CS.[TABLE_SCHEMA]
                                                 AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                 WHERE   ST.[IsActive] = 1
-                                                AND		ST.SourceConnection = 'WEBFORM'
+                                                AND		ST.SourceConnection IN ('Portal','WebOps')
                                             ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
@@ -726,7 +726,7 @@
                                         ,[IsStaging]
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
-                                        AND st.SourceConnection = 'WEBFORM'
+                                        AND st.SourceConnection IN ('Portal','WebOps')
                                         ";
         
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
