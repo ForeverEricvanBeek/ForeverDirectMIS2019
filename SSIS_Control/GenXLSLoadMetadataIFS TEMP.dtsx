@@ -1,0 +1,2343 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="2/18/2015 9:36:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SR-BIT"
+  DTS:CreatorName="DMLINDERS\bi-dev"
+  DTS:DTSID="{6F205C14-76AD-4B68-BC08-98EDE2BD6BB0}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3002.113"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="GenXLSLoadMetadataIFS TEMP"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="65"
+  DTS:VersionGUID="{F17BBFEA-6CB3-43F9-9419-E5E8CF207915}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[BIML Metadata]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{0E3FCEA2-3417-46C3-A835-A8D740310AA8}"
+      DTS:ObjectName="BIML Metadata">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\Biml\BiML IFS TEMP metadata .xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{B424D461-8AEA-479E-888F-152DB8BD9362}"
+      DTS:ObjectName="BiMLMetadata_ConnectionString"
+      DTS:Required="True">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\sr-bit.sk.janlinders.nl\DWH Work\Import\BiML metadata.xls;Extended Properties="Excel 8.0;HDR=YES";</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Generator_Connection"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{DCF962C8-89A1-40D3-A2B7-DBDD5D8005ED}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Generator_Connection"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Generator_Connection\Connection"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="Connection"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">Connection$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_Connection\Connection.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[BIML Metadata]"
+                  connectionManagerRefId="Package.ConnectionManagers[BIML Metadata]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Name]"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Type]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Type]"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Type]"
+                      name="Type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsProjectConnection]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[IsProjectConnection]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsProjectConnection]"
+                      name="IsProjectConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[ConnectionString]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[ConnectionString]"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[ConnectionString]"
+                      name="ConnectionString"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Options]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Options]"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Options]"
+                      name="Options"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Generate]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Generate]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Generate]"
+                      name="Generate"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="255"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Type]"
+                      dataType="wstr"
+                      length="255"
+                      name="Type" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[IsProjectConnection]"
+                      dataType="r8"
+                      name="IsProjectConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[ConnectionString]"
+                      dataType="wstr"
+                      length="255"
+                      name="ConnectionString" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Options]"
+                      dataType="wstr"
+                      length="255"
+                      name="Options" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Generate]"
+                      dataType="r8"
+                      name="Generate" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Name]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Type]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Type]"
+                      name="Type" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[IsProjectConnection]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[IsProjectConnection]"
+                      name="IsProjectConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ConnectionString]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ConnectionString]"
+                      name="ConnectionString" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Options]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Options]"
+                      name="Options" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Generate]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Generate]"
+                      name="Generate" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Generator_Connection\Generator_Connection"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_Connection"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[Connection_TEMP]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_Connection\Generator_Connection.Connections[OleDbConnection]"
+                  connectionManagerID="{208C2724-C562-4C21-BFE1-0A9F08F6E60F}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWI_Control]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Type]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Type"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Type]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Type]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[IsProjectConnection]"
+                      cachedDataType="r8"
+                      cachedName="IsProjectConnection"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsProjectConnection]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsProjectConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[ConnectionString]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ConnectionString"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ConnectionString]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[ConnectionString]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Options]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Options"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Options]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Options]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Generate]"
+                      cachedDataType="r8"
+                      cachedName="Generate"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Generate]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ConnectionID]"
+                      dataType="i2"
+                      name="ConnectionID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="30"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Type]"
+                      dataType="wstr"
+                      length="100"
+                      name="Type" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ConnectionString]"
+                      dataType="wstr"
+                      length="300"
+                      name="ConnectionString" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Options]"
+                      dataType="wstr"
+                      length="1000"
+                      name="Options" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsProjectConnection]"
+                      dataType="bool"
+                      name="IsProjectConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
+                      dataType="bool"
+                      name="Generate" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_Connection\Generator_Connection.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_Connection\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_Connection\Generator_Connection.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Generator_Connection.Paths[Excel Source Output]"
+              endId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Generator_SourceExtractionColumn"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{562BE884-EF0B-484A-9545-C9F99D973171}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Generator_SourceExtractionColumn"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_SourceExtractionColumn"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[SourceExtractionColumn_TEMP]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Connections[OleDbConnection]"
+                  connectionManagerID="{208C2724-C562-4C21-BFE1-0A9F08F6E60F}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWI_Control]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceConnection"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceSchema"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceTable"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceColumnName"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnName]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnName]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceColumnType"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnType]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnLength]"
+                      cachedDataType="r8"
+                      cachedName="SourceColumnLength"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnLength]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnLength]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnPrecision]"
+                      cachedDataType="r8"
+                      cachedName="SourceColumnPrecision"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnPrecision]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPrecision]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnScale]"
+                      cachedDataType="r8"
+                      cachedName="SourceColumnScale"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnScale]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnScale]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnPosition]"
+                      cachedDataType="r8"
+                      cachedName="SourceColumnPosition"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnPosition]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPosition]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetColumnName"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnName]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnName]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetColumnType"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnType]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnLength]"
+                      cachedDataType="r8"
+                      cachedName="TargetColumnLength"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnLength]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnLength]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnPrecision]"
+                      cachedDataType="r8"
+                      cachedName="TargetColumnPrecision"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnPrecision]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnPrecision]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnScale]"
+                      cachedDataType="r8"
+                      cachedName="TargetColumnScale"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnScale]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnScale]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[SourceColumnExpression]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceColumnExpression"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnExpression]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnExpression]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].Columns[TargetColumnExpression]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetColumnExpression"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnExpression]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnExpression]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceExtractionColumnID]"
+                      dataType="i2"
+                      name="SourceExtractionColumnID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnName]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnType]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnLength]"
+                      dataType="i4"
+                      name="SourceColumnLength" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnPrecision]"
+                      dataType="i4"
+                      name="SourceColumnPrecision" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnScale]"
+                      dataType="i4"
+                      name="SourceColumnScale" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnPosition]"
+                      dataType="i4"
+                      name="SourceColumnPosition" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnName]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnType]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnLength]"
+                      dataType="i4"
+                      name="TargetColumnLength" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnPrecision]"
+                      dataType="i4"
+                      name="TargetColumnPrecision" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnScale]"
+                      dataType="i4"
+                      name="TargetColumnScale" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[SourceColumnExpression]"
+                      dataType="wstr"
+                      length="1000"
+                      name="SourceColumnExpression" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input].ExternalColumns[TargetColumnExpression]"
+                      dataType="wstr"
+                      length="1000"
+                      name="TargetColumnExpression" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="SourceExtractionColumn"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">SourceExtractionColumn$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[BIML Metadata]"
+                  connectionManagerRefId="Package.ConnectionManagers[BIML Metadata]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      name="SourceConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      name="SourceSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceTable]"
+                      name="SourceTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnName]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnName]"
+                      name="SourceColumnName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnType]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnType]"
+                      name="SourceColumnType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnLength]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnLength]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnLength]"
+                      name="SourceColumnLength"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPrecision]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnPrecision]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPrecision]"
+                      name="SourceColumnPrecision"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnScale]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnScale]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnScale]"
+                      name="SourceColumnScale"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPosition]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnPosition]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnPosition]"
+                      name="SourceColumnPosition"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnName]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnName]"
+                      name="TargetColumnName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnType]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnType]"
+                      name="TargetColumnType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnLength]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnLength]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnLength]"
+                      name="TargetColumnLength"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnPrecision]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnPrecision]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnPrecision]"
+                      name="TargetColumnPrecision"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnScale]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnScale]"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnScale]"
+                      name="TargetColumnScale"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnExpression]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnExpression]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[SourceColumnExpression]"
+                      name="SourceColumnExpression"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnExpression]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnExpression]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].Columns[TargetColumnExpression]"
+                      name="TargetColumnExpression"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnLength]"
+                      dataType="r8"
+                      name="SourceColumnLength" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnPrecision]"
+                      dataType="r8"
+                      name="SourceColumnPrecision" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnScale]"
+                      dataType="r8"
+                      name="SourceColumnScale" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnPosition]"
+                      dataType="r8"
+                      name="SourceColumnPosition" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnLength]"
+                      dataType="r8"
+                      name="TargetColumnLength" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnPrecision]"
+                      dataType="r8"
+                      name="TargetColumnPrecision" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnScale]"
+                      dataType="r8"
+                      name="TargetColumnScale" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[SourceColumnExpression]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceColumnExpression" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output].ExternalColumns[TargetColumnExpression]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetColumnExpression" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      name="SourceConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      name="SourceSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      name="SourceTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnName]"
+                      name="SourceColumnName" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnExpression]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnExpression]"
+                      name="SourceColumnExpression" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnType]"
+                      name="SourceColumnType" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnLength]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnLength]"
+                      name="SourceColumnLength" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnPrecision]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnPrecision]"
+                      name="SourceColumnPrecision" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnScale]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnScale]"
+                      name="SourceColumnScale" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnPosition]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[SourceColumnPosition]"
+                      name="SourceColumnPosition" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnName]"
+                      name="TargetColumnName" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnExpression]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnExpression]"
+                      name="TargetColumnExpression" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnType]"
+                      name="TargetColumnType" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnLength]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnLength]"
+                      name="TargetColumnLength" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnPrecision]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnPrecision]"
+                      name="TargetColumnPrecision" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnScale]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[TargetColumnScale]"
+                      name="TargetColumnScale" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Generator_SourceExtractionColumn.Paths[Excel Source Output]"
+              endId="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Generator_SourceExtractionTable"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{EDC259F6-CB6B-443E-A0D9-160D978C00EC}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Generator_SourceExtractionTable"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_SourceExtractionTable"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[SourceExtractionTable_TEMP]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Connections[OleDbConnection]"
+                  connectionManagerID="{208C2724-C562-4C21-BFE1-0A9F08F6E60F}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWI_Control]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[SourceConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceConnection"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[SourceSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceSchema"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[SourceTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceTable"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[ExtractionType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ExtractionType"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ExtractionType]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ExtractionType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[TargetConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetConnection"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetConnection]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[TargetSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetSchema"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetSchema]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[TargetTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TargetTable"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetTable]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IncrementalSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="IncrementalSchema"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalSchema]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IncrementalTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="IncrementalTable"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalTable]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IncrementalUpdateColumn]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="IncrementalUpdateColumn"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalUpdateColumn]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalUpdateColumn]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IncrementalKeyColumn]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="IncrementalKeyColumn"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalKeyColumn]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalKeyColumn]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IsStaging]"
+                      cachedDataType="r8"
+                      cachedName="IsStaging"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsStaging]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsStaging]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[Options]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Options"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Options]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Options]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[Order]"
+                      cachedDataType="r8"
+                      cachedName="Order"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Order]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Order]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[WhereStatement]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="WhereStatement"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[WhereStatement]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[WhereStatement]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IsLoading]"
+                      cachedDataType="r8"
+                      cachedName="IsLoading"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsLoading]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsLoading]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[Parent]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Parent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Parent]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[SourceExtractionTableID]"
+                      dataType="i2"
+                      name="SourceExtractionTableID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="TargetTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[TargetConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="TargetConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ExtractionType]"
+                      dataType="wstr"
+                      length="2"
+                      name="ExtractionType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="IncrementalSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="IncrementalTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalUpdateColumn]"
+                      dataType="wstr"
+                      length="128"
+                      name="IncrementalUpdateColumn" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IncrementalKeyColumn]"
+                      dataType="wstr"
+                      length="1000"
+                      name="IncrementalKeyColumn" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsStaging]"
+                      dataType="bool"
+                      name="IsStaging" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Options]"
+                      dataType="wstr"
+                      length="1000"
+                      name="Options" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Order]"
+                      dataType="i4"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[WhereStatement]"
+                      dataType="nText"
+                      name="WhereStatement" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsLoading]"
+                      dataType="bool"
+                      name="IsLoading" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Parent]"
+                      dataType="wstr"
+                      length="128"
+                      name="Parent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="SourceExtractionTable"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">SourceExtractionTable$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[BIML Metadata]"
+                  connectionManagerRefId="Package.ConnectionManagers[BIML Metadata]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceConnection]"
+                      name="SourceConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceSchema]"
+                      name="SourceSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[SourceTable]"
+                      name="SourceTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ExtractionType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[ExtractionType]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ExtractionType]"
+                      name="ExtractionType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetConnection]"
+                      name="TargetConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetSchema]"
+                      name="TargetSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[TargetTable]"
+                      name="TargetTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalSchema]"
+                      name="IncrementalSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalTable]"
+                      name="IncrementalTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalUpdateColumn]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalUpdateColumn]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalUpdateColumn]"
+                      name="IncrementalUpdateColumn"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalKeyColumn]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalKeyColumn]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IncrementalKeyColumn]"
+                      name="IncrementalKeyColumn"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsStaging]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsStaging]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsStaging]"
+                      name="IsStaging"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Options]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Options]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Options]"
+                      name="Options"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Order]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Order]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Order]"
+                      name="Order"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[WhereStatement]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[WhereStatement]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[WhereStatement]"
+                      name="WhereStatement"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[DeleteStaging]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[DeleteStaging]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[DeleteStaging]"
+                      name="DeleteStaging"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsLoading]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsLoading]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsLoading]"
+                      name="IsLoading"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[Parent]"
+                      name="Parent"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[ExtractionType]"
+                      dataType="wstr"
+                      length="255"
+                      name="ExtractionType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[TargetTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="TargetTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="IncrementalSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="IncrementalTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalUpdateColumn]"
+                      dataType="wstr"
+                      length="255"
+                      name="IncrementalUpdateColumn" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IncrementalKeyColumn]"
+                      dataType="wstr"
+                      length="255"
+                      name="IncrementalKeyColumn" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsStaging]"
+                      dataType="r8"
+                      name="IsStaging" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Options]"
+                      dataType="wstr"
+                      length="255"
+                      name="Options" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Order]"
+                      dataType="r8"
+                      name="Order" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[WhereStatement]"
+                      dataType="wstr"
+                      length="255"
+                      name="WhereStatement" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[DeleteStaging]"
+                      dataType="r8"
+                      name="DeleteStaging" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsLoading]"
+                      dataType="r8"
+                      name="IsLoading" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      name="Parent" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceConnection]"
+                      name="SourceConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceSchema]"
+                      name="SourceSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      name="SourceTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ExtractionType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ExtractionType]"
+                      name="ExtractionType" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetConnection]"
+                      name="TargetConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetSchema]"
+                      name="TargetSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Order]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Order]"
+                      name="Order" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetTable]"
+                      name="TargetTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalSchema]"
+                      name="IncrementalSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalTable]"
+                      name="IncrementalTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalUpdateColumn]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalUpdateColumn]"
+                      name="IncrementalUpdateColumn" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalKeyColumn]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalKeyColumn]"
+                      name="IncrementalKeyColumn" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[WhereStatement]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[WhereStatement]"
+                      name="WhereStatement" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      name="Parent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[DeleteStaging]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[DeleteStaging]"
+                      name="DeleteStaging" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsStaging]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsStaging]"
+                      name="IsStaging" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Options]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[Options]"
+                      name="Options" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsLoading]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsLoading]"
+                      name="IsLoading" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
+              endId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Metadata Tables"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{AD9B07DE-0667-48F5-A249-1E48E406EF3E}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Metadata Tables"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{208C2724-C562-4C21-BFE1-0A9F08F6E60F}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [Generator].[Connection_TEMP];&#xA;TRUNCATE TABLE [Generator].[SourceExtractionColumn_TEMP];&#xA;TRUNCATE TABLE [Generator].[SourceExtractionTable_TEMP];&#xA;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{4D6796DF-BF13-4C7D-9EC1-635CB69BA4DC}"
+      DTS:From="Package\Truncate Metadata Tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Load Generator_Connection" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{6CE2D3A0-FB00-471A-9C5C-14F01B880A62}"
+      DTS:From="Package\Load Generator_Connection"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Load Generator_SourceExtractionColumn" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{15869F62-DCEC-4582-A820-2AF91A220F44}"
+      DTS:From="Package\Load Generator_SourceExtractionColumn"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Load Generator_SourceExtractionTable" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="272,42"
+          Id="Package\Load Generator_Connection"
+          TopLeft="453,140.8" />
+        <NodeLayout
+          Size="274,42"
+          Id="Package\Load Generator_SourceExtractionColumn"
+          TopLeft="452,236.2" />
+        <NodeLayout
+          Size="272,42"
+          Id="Package\Load Generator_SourceExtractionTable"
+          TopLeft="455,342" />
+        <NodeLayout
+          Size="272,42"
+          Id="Package\Truncate Metadata Tables"
+          TopLeft="453,51" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="589,93">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,47.8"
+              Start="0,0"
+              End="0,40.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,40.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="589,182.8">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,53.4"
+              Start="0,0"
+              End="0,45.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,45.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="590,278.2">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,63.8"
+              Start="0,0"
+              End="0,56.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,56.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load Generator_Connection">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Generator_Connection\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Generator_Connection\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Generator_Connection.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_Connection\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_Connection\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Generator_SourceExtractionColumn">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="246,42"
+          Id="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="248,42"
+          Id="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Generator_SourceExtractionColumn.Paths[Excel Source Output]"
+          TopLeft="645.5,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_SourceExtractionColumn\Generator_SourceExtractionColumn">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_SourceExtractionColumn\SourceExtractionColumn">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Generator_SourceExtractionTable">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
+          TopLeft="522,139" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
+          TopLeft="522,53" />
+        <EdgeLayout
+          Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
+          TopLeft="640.5,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_SourceExtractionTable\SourceExtractionTable">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
