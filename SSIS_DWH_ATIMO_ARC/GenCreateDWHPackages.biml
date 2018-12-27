@@ -30,6 +30,7 @@
                                                     ,SC.[ConnectionString]
                                                     ,ST.[ExtractionType]
                                                     ,'DWH' AS [TargetConnection]
+                                                    ,ST.[ArchiveDate]
                                                     ,ST.[TargetSchema]
                                                     ,ST.[TargetTable]
                                                     ,ST.[IncrementalSchema]
@@ -38,7 +39,10 @@
                                                     ,ST.[IncrementalKeyColumn]
                                                     ,ST.[IsStaging] 
                                                     ,ST.[DeleteStaging]
-                                                    ,ST.[DataType]
+                                                    ,SUBSTRING(ST.[ArchiveType],1,1) AS ArchiveType
+													,SUBSTRING(ST.[ArchiveType],2,1) AS ArchivePeriod
+													,SUBSTRING(ST.[ArchiveType],3,1) AS ArchiveTime
+													,ST.[WhereStatement]
                                                     ,CS.PK AS [PrimaryKey]
                                                     ,'DWH' AS PackagePrefix
                                                     FROM      [Generator].[SourceExtractionTable] ST
@@ -50,6 +54,7 @@
                                                     WHERE     ST.[IsActive] = 1 
                                                     AND       ST.IsStaging = 0
                                                     AND		  ST.TargetSchema = 'ATIMO'
+                                                    AND       ST.ArchiveType <> 'I'
                                                     ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
@@ -57,10 +62,14 @@
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
             string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
-            string varExtractionDataType = rowSourceExtractionTable["DataType"].ToString();
+            string varExtractionArchiveType = rowSourceExtractionTable["ArchiveType"].ToString();
+            string varExtractionArchivePeriod = rowSourceExtractionTable["ArchivePeriod"].ToString();
+            string varExtractionArchiveTime = rowSourceExtractionTable["ArchiveTime"].ToString();
+            string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
             string varExtractionOptions = rowSourceExtractionTable["Options"].ToString();
             string varExtractionConnectionString = rowSourceExtractionTable["ConnectionString"].ToString();
             string varExtractionType = rowSourceExtractionTable["ExtractionType"].ToString();
+            string varExtractionArchiveDate = rowSourceExtractionTable["ArchiveDate"].ToString();
             string varExtractionTargetConnection = rowSourceExtractionTable["TargetConnection"].ToString();
             string varExtractionTargetSchema = rowSourceExtractionTable["TargetSchema"].ToString();
             string varExtractionTargetTable = rowSourceExtractionTable["TargetTable"].ToString();
@@ -81,13 +90,22 @@
             string varTableCloseCharacter = varSQLServTableCloseCharacter;
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
-    
+            string varExtractionArchivePeriodFull = "";
+            if (varExtractionArchivePeriod == "Y") {
+                varExtractionArchivePeriodFull = "YEAR";
+            } else if (varExtractionArchivePeriod == "M") {
+                varExtractionArchivePeriodFull = "MONTH";
+            } else if (varExtractionArchivePeriod == "D") {
+                varExtractionArchivePeriodFull = "DAY";
+            }
+            
             varTableBeginCharacter = varSQLServTableBeginCharacter;
             varTableCloseCharacter = varSQLServTableCloseCharacter;
             varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             varColumnCloseCharacter = varSQLServColumnCloseCharacter;
         
             string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + "_ARC" + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
+            string varExtractionSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionSourceSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionSourceTable      + varSQLServTableCloseCharacter;
             string varExtractionIncrementalSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionIncrementalSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionIncrementalTable + varSQLServTableCloseCharacter;
             string varIncrementalSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionIncrementalSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionIncrementalTable + varSQLServTableCloseCharacter;
             string varIncrementalTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema      + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
@@ -95,9 +113,9 @@
             string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable   + varSQLServTableCloseCharacter;
             string varTargetSchemaTablePlus = varTargetSchemaPlus    + "." + varTargetTablePlus;
             string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
-            string varSQLRowCountSourceTable = "SELECT count(*) FROM [DWH]." + varExtractionTargetSchemaTablePlus;
+            string varSQLRowCountSourceTable = "SELECT count(*) FROM " + varExtractionSourceSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"_ARC' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
-            string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"_ARC' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
+            string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"_ARC' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n, ? as [RowCountArchiveBefore]  \n , ? as [RowCountArchiveAfter]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n  , S.[RowCountArchiveBefore] \n , S.[RowCountArchiveAfter] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n  , [RowCountArchiveBefore] = S.[RowCountArchiveBefore] \n , [RowCountArchiveAfter] = S.[RowCountArchiveAfter] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
             
             string varExtractionSourceSchemaPlus = varTableBeginCharacter + varExtractionSourceSchema + varTableCloseCharacter +".";
             if (varExtractionSourceSchema == "") {
@@ -107,43 +125,11 @@
             string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "_ARC-" + varExtractionSourceTable;
             string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "_ARC-" + varTargetTable;
     
-            string sqlSourceExtractionColumn = @"SELECT sc.[SourceColumnName]
-                                                     ,sc.[SourceColumnExpression]
-                                                     ,sc.[SourceColumnType]
-                                                     ,sc.[SourceColumnLength]
-                                                     ,sc.[SourceColumnPrecision]
-                                                     ,sc.[SourceColumnScale]
-                                                     ,sc.[TargetColumnName]
-                                                     ,sc.[TargetColumnType]
-                                                     ,sc.[TargetColumnLength]
-                                                     ,sc.[TargetColumnPrecision]
-                                                     ,sc.[TargetColumnScale]
-                                                     ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
-                                                     ,dc.[DataTypeExpression]
-                                                    FROM         [Generator].[SourceExtractionColumn] sc 
-                                                    LEFT JOIN    [Generator].[DataTypeConversion]     dc
-                                                    ON           [TargetColumnType] collate SQL_Latin1_General_CP1_CS_AS =  [DataType] collate SQL_Latin1_General_CP1_CS_AS
-                                                    WHERE        sc.[SourceConnection] = '" + varExtractionSourceConnection + @"'
-                                                    AND          sc.[SourceSchema] = '" + varExtractionSourceSchema + @"' 
-                                                    AND          sc.[SourceTable] = '" + varExtractionSourceTable + @"' 
-                                                    AND          sc.[SourceColumnName] IS NOT NULL
-                                                    AND          sc.[IsActive] = 1 AND 1=2
-                                                    ORDER BY     sc.[SourceColumnPosition]
-                                                    ";
-            DataTable tableSourceExtractionColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionColumn);
-            int varSourceExtractionColumnCount = tableSourceExtractionColumn.Rows.Count;
+
             string varSQLStatementColumns = "";
-            foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName = rowSourceExtractionColumn["SourceColumnExpression"].ToString();
-                int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                varSQLStatementColumns += ", " + varSourceColumnName;
-            }
-            
-            if (varSQLStatementColumns.Length > 0) {
-                varSQLStatementColumns = varSQLStatementColumns.Substring(2, varSQLStatementColumns.Length - 2);
-            } else {
+
                 varSQLStatementColumns = "*";
-            }
+
             string varExtractionSQLStatement = "";
 
             varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
@@ -163,8 +149,10 @@
                     <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
                     <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit">-1</Variable>
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                    <Variable Name="RowCountExtract" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="RowCountTarget" DataType="Int32" Namespace="RC">0</Variable>
+                    <Variable Name="RowCountSourceBefore" DataType="Int32" Namespace="RC">0</Variable>
+                    <Variable Name="RowCountSourceAfter" DataType="Int32" Namespace="RC">0</Variable>
+                    <Variable Name="RowCountArchiveBefore" DataType="Int32" Namespace="RC">0</Variable>
+                    <Variable Name="RowCountArchiveAfter" DataType="Int32" Namespace="RC">0</Variable>
                     <Variable Name="RowCountError" DataType="Int32" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
@@ -205,9 +193,14 @@
                                 <Results><Result Name="0" VariableName="User.LastExtractionDate" /></Results>
                             </ExecuteSQL>
 
-                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <ExecuteSQL Name="SQL Source before row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
-                                <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
+                                <Results><Result Name="0" VariableName="RC.RowCountSourceBefore" /></Results>
+                            </ExecuteSQL>
+                            
+                            <ExecuteSQL Name="SQL Archive before row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
+                                <Results><Result Name="0" VariableName="RC.RowCountArchiveBefore" /></Results>
                             </ExecuteSQL>
                             <#
                             string VarFuncColumn = "";
@@ -248,32 +241,50 @@
                             }
                             
                                 string insertWhereClause = "";
-                                if (varExtractionDataType == "L") {
-                                    insertWhereClause = "WHERE Eff_Date &lt;= DATEADD(year,-1,GETDATE()) AND ActInd = 'N'";
-                                } else if (varExtractionDataType == "D") {
-                                    insertWhereClause = "WHERE Eff_Date &lt;= DATEADD(year,-1,GETDATE())";
+                                if (varExtractionArchiveType == "L") {
+                                    insertWhereClause = "WHERE Eff_Date &lt;= DATEADD(" + varExtractionArchivePeriodFull + ",-" + varExtractionArchiveTime + ",GETDATE()) AND ActInd = 'N'";
+                                } else if (varExtractionArchiveType == "D") {
+                                    insertWhereClause = "WHERE Eff_Date &lt;= DATEADD(" + varExtractionArchivePeriodFull + ",-" + varExtractionArchiveTime + ",GETDATE())";
+                                } else if (varExtractionArchiveType == "N") {
+                                    insertWhereClause = "WHERE " + varExtractionArchiveDate + " &lt;= DATEADD(" + varExtractionArchivePeriodFull + ",-" + varExtractionArchiveTime + ",GETDATE())";
                                 } else {
                                     insertWhereClause = "WHERE 1=2";
                                 }
                                 string varTargetSchemaArc = varTargetSchema + "_ARC";
-                                string varInsertSQLStaement =  "DELETE DF OUTPUT DELETED.* INTO DWH."+varTargetSchemaArc + "."+ varTargetTable + " FROM DWH."+varTargetSchema + "."+ varTargetTable + " DF " + insertWhereClause;#>
+                                string varInsertSQLStatement =  @"WHILE (1=1)
+                                                                    BEGIN
+                                                                        DELETE TOP(10000) DF OUTPUT DELETED.* 
+                                                                        INTO DWH."+varTargetSchemaArc + @"."+ varTargetTable + @"
+                                                                        FROM DWH."+varTargetSchema + @"."+ varTargetTable + @" DF 
+                                                                        " + insertWhereClause + @"
+                                                                        IF @@ROWCOUNT = 0
+                                                                        BREAK;
+                                                                    END"
+                                                                        ;#>
                                 <ExecuteSQL Name="SQL Load <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><#=@varInsertSQLStaement#></DirectInput>
+                                    <DirectInput><#=@varInsertSQLStatement#></DirectInput>
                                 </ExecuteSQL>
 
-                            <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <ExecuteSQL Name="SQL Source after row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
+                                <Results><Result Name="0" VariableName="RC.RowCountSourceAfter" /></Results>
+                            </ExecuteSQL>
+                            
+                            <ExecuteSQL Name="SQL Archive after row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
-                                <Results><Result Name="0" VariableName="RC.RowCountTarget" /></Results>
+                                <Results><Result Name="0" VariableName="RC.RowCountArchiveAfter" /></Results>
                             </ExecuteSQL>
     
                             <ExecuteSQL Name="SQL Update contol record <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None" Disabled="false" >
                                 <DirectInput><#=varSQLUpdateDWHControl#></DirectInput>
                                 <Parameters>
                                     <Parameter Name="0" VariableName="BatchID" DataType="Int64" />
-                                    <Parameter Name="1" VariableName="RC.RowCountExtract" DataType="Int32" />
-                                    <Parameter Name="2" VariableName="RC.RowCountTarget" DataType="Int32" />
-                                    <Parameter Name="3" VariableName="RC.RowCountError" DataType="Int32" />
-                                    <Parameter Name="4" VariableName="System.StartTime" DataType="DateTime" />
+                                    <Parameter Name="1" VariableName="RC.RowCountSourceBefore" DataType="Int32" />
+                                    <Parameter Name="2" VariableName="RC.RowCountSourceAfter" DataType="Int32" />
+                                    <Parameter Name="3" VariableName="RC.RowCountArchiveBefore" DataType="Int32" />
+                                    <Parameter Name="4" VariableName="RC.RowCountArchiveAfter" DataType="Int32" />
+                                    <Parameter Name="5" VariableName="RC.RowCountError" DataType="Int32" />
+                                    <Parameter Name="6" VariableName="System.StartTime" DataType="DateTime" />
                                 </Parameters>
                             </ExecuteSQL>
                         </Tasks>
@@ -287,8 +298,8 @@
                             <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="4" VariableName="User.LastExtractionDate" Direction="Input" DataType="String" />
-                            <Parameter Name="5" VariableName="RC.RowCountExtract" Direction="Input" DataType="Int32" />
-                            <Parameter Name="6" VariableName="RC.RowCountTarget" Direction="Input" DataType="Int32" />
+                            <Parameter Name="5" VariableName="RC.RowCountSourceBefore" Direction="Input" DataType="Int32" />
+                            <Parameter Name="6" VariableName="RC.RowCountSourceAfter" Direction="Input" DataType="Int32" />
                             <Parameter Name="7" VariableName="RC.RowCountError" Direction="Input" DataType="Int32" />
                         </Parameters>
                     </ExecuteSQL>
@@ -323,6 +334,7 @@
                                     WHERE st.[IsActive] = 1 
                                     AND st.IsStaging = 0
                                     AND st.TargetSchema = 'ATIMO'
+                                    AND st.ArchiveType <> 'I'
                                     ";
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
@@ -334,7 +346,7 @@
             string varName = varTargetConnection + "-" + varTargetSchema + "_ARC-" + varTargetTable;
             string varPackageName = varPackagePrefix + "-" + varTargetSchema + "_ARC-" + varTargetTable;#>
     
-            <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+            <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>"  MaxConcurrentExecutables="4">
                 <Parameters>
                     <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                     <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
@@ -389,7 +401,7 @@
                             JOIN	  [Generator].[Connection] con 	
                             ON		  [st].[SourceConnection] = [con].[Name]
                             WHERE     [TargetSchema] = '" + varTargetSchema + @"' 
-                            AND       [st].[IsActive] = 1  AND st.IsStaging = 0 
+                            AND       [st].[IsActive] = 1  AND st.IsStaging = 0 AND st.ArchiveType <> 'I'
                             ORDER BY  [SourceTable]
                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);

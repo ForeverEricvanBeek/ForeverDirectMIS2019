@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="54"
-  DTS:VersionGUID="{ADB41145-AD5C-43B3-A973-425A90A5070C}">
+  DTS:VersionBuild="55"
+  DTS:VersionGUID="{F0649D87-46A3-43F6-924C-A24553D4006C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -3187,6 +3187,13 @@
                       cachedName="ArchiveType"
                       externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveType]"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ArchiveType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[ArchiveDate]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ArchiveDate"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveDate]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ArchiveDate]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3282,8 +3289,13 @@
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveType]"
                       dataType="wstr"
-                      length="2"
+                      length="3"
                       name="ArchiveType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveDate]"
+                      dataType="wstr"
+                      length="50"
+                      name="ArchiveDate" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3551,6 +3563,16 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ArchiveType]"
                       name="ArchiveType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ArchiveDate]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[ArchiveDate]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[ArchiveDate]"
+                      name="ArchiveDate"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3645,6 +3667,11 @@
                       dataType="wstr"
                       length="255"
                       name="ArchiveType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[ArchiveDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="ArchiveDate" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -3711,6 +3738,12 @@
                       length="255"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[TargetTable]"
                       name="TargetTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ArchiveDate]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ArchiveDate]"
+                      name="ArchiveDate" />
                     <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IncrementalSchema]"
                       dataType="wstr"
