@@ -1,0 +1,766 @@
+<#@ template language="C#" hostspecific="true" tier="3"#>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="Varigence.Languages.Biml.Connection" #>
+<#@ import namespace="Varigence.Biml.Extensions" #>
+<#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#>
+<#@ include file="ProjectSettings.cs" #>
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Packages>
+        <#string sqlDatamartTable = @"SELECT [DWHConnection]
+                                        ,[DWHSchema]
+                                        ,[DWHTable]
+                                        ,[DatamartConnection]
+                                        ,[DatamartSchema]
+                                        ,[DatamartTable]
+                                        ,[LoadingType] 
+                                        FROM       [Generator].[DatamartTable]
+                                        WHERE      [TableType] =  'D' 
+                                        AND        [IsActive] =  1
+                                        AND        [Generate] =  1
+                                        ";
+        DataTable tableDatamartTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartTable);
+        foreach (DataRow rowDatamartTable in tableDatamartTable.Rows) {
+            string varDWHConnection = rowDatamartTable["DWHConnection"].ToString();
+            string varDWHSchema = rowDatamartTable["DWHSchema"].ToString();
+            string varDWHTable = rowDatamartTable["DWHTable"].ToString();
+            string varDatamartConnection = rowDatamartTable["DatamartConnection"].ToString();
+            string varDatamartSchema = rowDatamartTable["DatamartSchema"].ToString();
+            string varDatamartTable = rowDatamartTable["DatamartTable"].ToString();
+            string varLoadingType = rowDatamartTable["LoadingType"].ToString();
+            
+            string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
+            string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
+            string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
+            string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
+            string varDatamartTablePlus = varSQLServTableBeginCharacter + varDatamartTable + varSQLServTableCloseCharacter;
+            string varDatamartTableFull = varDatamartSchemaPlus + varDatamartTablePlus;
+            
+            string varName = varDatamartConnection + "-" +varDatamartSchema+"-"+varDatamartTable;
+            string varNameShort = varDatamartSchema + "-" + varDatamartTable;
+            string varPackageName = "Load Dim-" + varName;
+            string sqlSourceColumn = @"SELECT dbcol.[name] AS [ColumnName]
+                                            ,dbcol.[Column_id] AS [ColumnPosition]
+                                            ,dbtyp.[name] AS [ColumnDataType]
+                                            ,dbcol.[max_length] AS [ColumnDataLength]
+                                            ,dbcol.[scale] AS [ColumnDataScale]
+                                            ,dbcol.[precision] AS [ColumnDataPrecision]
+                                            FROM       DWH.sys.all_columns dbcol
+                                            JOIN       DWH.sys.types dbtyp
+                                            ON         dbtyp.system_type_id =  dbcol.system_type_id
+                                            WHERE      OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + DWHDBName + @"')) =  '" + varDWHSchema + @"' 
+                                            AND        OBJECT_NAME(dbcol.object_id,DB_ID('" + DWHDBName + @"')) =  '" + varDWHTable + @"' 
+                                            AND        dbtyp.[name] != 'sysname'
+                                            ORDER BY   dbcol.[column_id]
+                                            ";
+            DataTable tableSourceColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceColumn);
+            DataRow[] rowSourceColumns = tableSourceColumn.Select((string)"1 = 1", (string)"ColumnPosition");
+            string sqlDatamartColumn =  @"SELECT dbcol.[name] AS [ColumnName]
+                                                ,ISNULL(col.[ColumnType],'mt') AS [ColumnType]
+                                                ,col.[ColumnInferredValue]
+                                                ,dbtyp.[name] AS [ColumnDataType]
+                                                ,dbcol.[max_length] AS [ColumnDataLength]
+                                                ,dbcol.[scale] AS [ColumnDataScale]
+                                                ,dbcol.[precision] AS [ColumnDataPrecision]
+                                                ,typcon.[DataTypeExpression]          
+                                                ,dbcol.[Column_ID] AS [ColumnPosition]
+                                                ,dbcol.[is_nullable] AS [ColumnNotNullFlag]
+                                                ,col.[ColumnDefaultValue]
+                                                FROM       Datamart.sys.all_columns dbcol
+                                                JOIN       Datamart.sys.types dbtyp
+                                                ON         dbtyp.system_type_id =  dbcol.system_type_id
+                                                LEFT JOIN  [DWH_Control].[Generator].[DatamartColumn] col
+                                                ON         col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS
+                                                AND        col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) collate SQL_Latin1_General_CP1_CS_AS
+                                                AND        col.[DatamartSchema] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) collate SQL_Latin1_General_CP1_CS_AS
+                                                AND        col.[IsActive] =  1 
+                                                LEFT JOIN  [DWH_Control].[Generator].[DataTypeConversion] typcon
+                                                ON         typcon.[DataType] =  dbtyp.[name]  collate SQL_Latin1_General_CP1_CS_AS
+                                                WHERE      OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) =  '" + varDatamartSchema + @"' 
+                                                AND        OBJECT_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) =  '" + varDatamartTable + @"' 
+                                                AND        dbtyp.[name] != 'sysname'
+                                                ORDER BY   dbcol.[Column_ID]
+                                                ";
+            DataTable tableDatamartColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartColumn);
+            DataRow[] rowSurrogateKey = tableDatamartColumn.Select((string)"ColumnType = 'sk'" , (string)"ColumnPosition");
+            DataRow[] rowBusinessKeys = tableDatamartColumn.Select((string)"ColumnType = 'bk'" , (string)"ColumnPosition");
+            DataRow[] rowSCD1Columns = tableDatamartColumn.Select((string)"ColumnType = 't1'" , (string)"ColumnPosition");
+            DataRow[] rowSCD2Columns = tableDatamartColumn.Select((string)"ColumnType = 't2'" , (string)"ColumnPosition");
+            DataRow[] rowDataColumns = tableDatamartColumn.Select((string)"ColumnType not in ('bk','sk','mt')" , (string)"ColumnPosition");
+            DataRow[] rowNonKeyColumns = tableDatamartColumn.Select((string)"ColumnType not in ('sk')" , (string)"ColumnPosition");
+            DataRow[] rowDatamartColumns = tableDatamartColumn.Select((string)"1 = 1" , (string)"ColumnPosition");
+            
+            string varDWHColumns = "";
+            string varSqlDWHColumns = "";
+            
+            for(int i = 0; i < rowSourceColumns.Length; i ++) {
+                string varColumnName = varSQLServColumnBeginCharacter + rowSourceColumns[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
+                varDWHColumns += ", " + varColumnName + "\n";
+                varSqlDWHColumns += ", ms." + varColumnName + "\n"; 
+            }
+            
+            varDWHColumns = varDWHColumns.Substring(2, varDWHColumns.Length - 2);
+            varSqlDWHColumns = varSqlDWHColumns.Substring(2, varSqlDWHColumns.Length - 2);
+        
+            string varCheckSumColumn = "";
+            
+            if (rowDataColumns.Length > 0) {
+                for(int i = 0; i < rowDataColumns.Length; i ++) {
+                    string varColumnName = varSQLServColumnBeginCharacter + rowDataColumns[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
+                    string varColumnDataType = rowDataColumns[i]["ColumnDataType"].ToString();
+                    string varColumnDataPrecision = rowDataColumns[i]["ColumnDataPrecision"].ToString();
+                    if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
+                        varCheckSumColumn += "+ ISNULL(" + varColumnName + ",'')";
+                    } else {
+                        varCheckSumColumn += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                    }
+                }
+                varCheckSumColumn = ", HASHBYTES(\'MD5\'," + varCheckSumColumn.Substring(2, varCheckSumColumn.Length - 2) + "+ \'00\') AS [CheckSum]";
+            } else {
+                varCheckSumColumn = ", HASHBYTES('MD5','') AS [CheckSum]";
+            }
+        
+            string varCheckSumSCD1Column = "";
+            if (rowSCD1Columns.Length > 0) {
+                for(int i = 0; i < rowSCD1Columns.Length; i ++) {
+                    string varColumnName = varSQLServColumnBeginCharacter + rowSCD1Columns[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
+                    string varColumnDataType = rowSCD1Columns[i]["ColumnDataType"].ToString();
+                    string varColumnDataPrecision = rowSCD1Columns[i]["ColumnDataPrecision"].ToString();
+                    if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
+                        varCheckSumSCD1Column += "+ ISNULL(" + varColumnName + ",'')";
+                    } else {
+                        varCheckSumSCD1Column += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                    }
+                }
+                varCheckSumSCD1Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD1Column.Substring(2, varCheckSumSCD1Column.Length - 2) + ") AS [CheckSumSCD1]";
+            } else {
+                varCheckSumSCD1Column = ", HASHBYTES('MD5','') AS [CheckSumSCD1]";
+            }
+        
+            string varCheckSumSCD2Column = "";
+            if (rowSCD2Columns.Length > 0) {
+                for(int i = 0; i < rowSCD2Columns.Length; i ++) {
+                    string varColumnName          = varSQLServColumnBeginCharacter + rowSCD2Columns[i]["ColumnName"].ToString()  + varSQLServColumnCloseCharacter;
+                    string varColumnDataType      = rowSCD2Columns[i]["ColumnDataType"].ToString();
+                    string varColumnDataPrecision = rowSCD2Columns[i]["ColumnDataPrecision"].ToString();
+                    if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
+                        varCheckSumSCD2Column += "+ ISNULL(" + varColumnName + ",'')";
+                    } else {
+                        varCheckSumSCD2Column += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                    }
+                }
+                varCheckSumSCD2Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD2Column.Substring(2, varCheckSumSCD2Column.Length - 2) + " + \'00\') AS [CheckSumSCD2]";
+            } else {
+                varCheckSumSCD2Column = ", HASHBYTES('MD5','') AS [CheckSumSCD2]";
+            }
+        
+            string varSurrogateKey = "";
+            string varSurrogateKeyDataType = "";
+            if (rowSurrogateKey.Length > 0) {
+                varSurrogateKey = varSQLServColumnBeginCharacter + (string)rowSurrogateKey[0]["ColumnName"] + varSQLServColumnCloseCharacter;
+                varSurrogateKeyDataType = (string)rowSurrogateKey[0]["ColumnDataType"];
+            }
+        
+            string varDatamartColumns = "";
+            if (rowDatamartColumns.Length > 0) {
+                for(int i = 0; i < rowDatamartColumns.Length; i ++) {
+                    string varColumnName = (string)rowDatamartColumns[i]["ColumnName"];
+                    varDatamartColumns += ", " + varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter + "\n";
+                }
+                varDatamartColumns = varDatamartColumns.Substring(2, varDatamartColumns.Length - 2);
+            }
+        
+            string varBKJoinClause = "";
+            if (rowBusinessKeys.Length > 0) {
+                for(int i = 0; i < rowBusinessKeys.Length; i ++) {
+                    string varColumnName = (string)rowBusinessKeys[i]["ColumnName"];
+                    varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
+                    varBKJoinClause += "AND ms." + varColumnName + " = mt." + varColumnName;
+                }
+                varBKJoinClause = varBKJoinClause.Substring(4, varBKJoinClause.Length - 4); 
+            }
+            
+            string varUpdateSCD1Clause = "";
+            if (rowSCD1Columns.Length > 0) {                         
+                for(int i = 0; i < rowSCD1Columns.Length; i ++) {
+                    string varColumnName = (string)rowSCD1Columns[i]["ColumnName"];
+                    varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
+                    varUpdateSCD1Clause += ", " + varColumnName + " = ms." + varColumnName  + "\n";
+                }
+                varUpdateSCD1Clause = varUpdateSCD1Clause.Substring(2, varUpdateSCD1Clause.Length - 2); 
+            }
+            
+            string varSqlMergeOutputClause   = "";
+            for(int i = 0; i < rowBusinessKeys.Length; i ++) {
+                string varColumnName = (string)rowBusinessKeys[i]["ColumnName"];
+                varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
+                varSqlMergeOutputClause  += ", ISNULL(ms." + varColumnName + ",DELETED." + varColumnName  + ") AS " + varColumnName + "\n";
+            }
+        
+            for(int i = 0; i < rowDataColumns.Length; i ++) {
+                string varColumnName = (string)rowDataColumns[i]["ColumnName"];
+                varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
+                varSqlMergeOutputClause  += ", ms." + varColumnName + "\n";
+            }
+        
+            string varSqlTableVarClause = @"([MergeAction] NVARCHAR(10)";
+            for(int i = 0; i < rowSourceColumns.Length; i ++) {
+                string varColumnName = (string)rowSourceColumns[i]["ColumnName"];
+                varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
+                string varColumnDataType = rowSourceColumns[i]["ColumnDataType"].ToString();
+                string varColumnDataLength = rowSourceColumns[i]["ColumnDataLength"].ToString();
+                string varColumnDataPrecision = rowSourceColumns[i]["ColumnDataPrecision"].ToString();
+                string varColumnDataScale = rowSourceColumns[i]["ColumnDataScale"].ToString();
+                if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllBinaryDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-")    != -1) {
+                    if (varColumnDataLength == "-1") {
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(MAX)\n";
+                    } else {
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataLength + ")\n";
+                    }
+                } else if (AllDateDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
+                    if (varColumnDataScale == "0") {
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "\n";
+                    } else {
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataScale + ")\n";
+                    }
+                } else if (  AllIntegerDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllBooleanDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllRealDateTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-")    != -1) {
+                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "\n";
+                } else if (AllNumericDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
+                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataPrecision + "," + varColumnDataScale + ")\n";
+                }
+            }
+            
+        string varSqlMerge = "";
+        string varSqlSCD1Update = "";
+        string varDollarAction = "$action AS [MergeAction]";
+        switch (varLoadingType.ToLower()) {
+            case "ui-t2":
+                varSqlSCD1Update += @"
+                DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10))
+                ;
+                UPDATE mt
+                SET " + varUpdateSCD1Clause + @"
+                ,[CheckSum] =  ms.[CheckSum]
+                ,[CheckSumSCD1] =  ms.[CheckSumSCD1]
+                ,[IsDeleted] =  ms.[IsDeleted]
+                ,[IsInferred] =  ms.[IsInferred]
+                ,[UpdateDateTime] =  ms.[UpdateDateTime]
+                ,[BatchID] =  ms.[BatchID]
+                ,[ProcessLogID] =  ms.[ProcessLogID] 
+                OUTPUT 'Update' INTO @OutPutTable
+                FROM " + varDatamartTableFull + @"   mt
+                JOIN (SELECT " + varDWHColumns  + @"
+                " + varCheckSumColumn  + @"
+                " + varCheckSumSCD1Column + @"
+                ,0 AS [IsInferred]
+                ,0 AS [IsDeleted]
+                ,SYSDATETIME() AS [EffectiveDate]
+                ,'31-DEC-9999' AS [ExpiryDate]
+                ,SYSDATETIME() AS [UpdateDateTime]
+                ,? AS [BatchID]
+                ,? AS [ProcessLogID]
+                FROM   " + varDWHConnection + "." + varDWHTableFull + @"
+                ) ms
+                ON " + varBKJoinClause + @"
+                AND mt.[CheckSumSCD1] !=  ms.[CheckSumSCD1]
+                ;
+                SELECT [Insert], [Update], [Delete], [NoChange]
+                FROM (SELECT [MergeAction]
+                ,1 AS [RowCount]
+                FROM @OutPutTable
+                UNION
+                SELECT 'NoChange' 
+                ,0
+                ) AS SourceTable
+                PIVOT (SUM([RowCount])
+                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
+                ) AS PivotTable
+                ";
+                varSqlMerge += @"
+                DECLARE @OutPutTableMerge TABLE " + varSqlTableVarClause + @"
+                " + varDWHDefaultColumnsWithType + @"
+                )
+                ;
+                DECLARE @OutPutTableInsert TABLE ([MergeAction] NVARCHAR(10))
+                ;   
+                MERGE " + varDatamartTableFull + @" mt
+                USING (SELECT  " + varDWHColumns  + @"
+                " + varCheckSumColumn  + @"
+                " + varCheckSumSCD1Column + @"
+                " + varCheckSumSCD2Column + @"
+                ,1 AS [IsActual]
+                ,0 AS [IsInferred]
+                ,0 AS [IsDeleted]
+                ,SYSDATETIME() AS [EffectiveDate]
+                ,'31-DEC-9999' AS [ExpiryDate]
+                ,SYSDATETIME() AS [InsertDateTime]
+                ,SYSDATETIME() AS [UpdateDateTime]
+                ,? AS [BatchID]
+                ,? AS [ProcessLogID]
+                FROM " + varDWHConnection + "." + varDWHTableFull + @"
+                ) ms
+                ON " + varBKJoinClause + @"
+                WHEN NOT MATCHED BY TARGET
+                THEN INSERT (" + varDWHColumns + @"
+                " + varDWHDefaultColumnsList + @"
+                )
+                VALUES        (" + varSqlDWHColumns + @"
+                ,ms.[CheckSum]
+                ,ms.[CheckSumSCD1]
+                ,ms.[CheckSumSCD2]
+                ,ms.[IsActual]
+                ,ms.[IsInferred]
+                ,ms.[IsDeleted]
+                ,ms.[EffectiveDate]
+                ,ms.[ExpiryDate]
+                ,ms.[InsertDateTime]
+                ,NULL
+                ,ms.[BatchID]
+                ,ms.[ProcessLogID]
+                )
+                WHEN MATCHED
+                AND  mt.[CheckSumSCD2] != ms.[CheckSumSCD2]
+                AND  mt.[IsActual] =  1
+                THEN UPDATE SET [IsActual] =  0
+                ,[ExpiryDate] =  SYSDATETIME()
+                ,[UpdateDateTime] =  ms.[UpdateDateTime]
+                WHEN NOT MATCHED BY SOURCE
+                THEN UPDATE SET [IsActual] =  0
+                ,[ExpiryDate] =  SYSDATETIME()
+                ,[UpdateDateTime] =  SYSDATETIME() 
+                OUTPUT " + varDollarAction + @"
+                " + varSqlMergeOutputClause + @"
+                ,ms.[CheckSum]
+                ,ms.[CheckSumSCD1]
+                ,ms.[CheckSumSCD2]
+                ,ms.[IsActual]
+                ,ms.[IsInferred]
+                ,ISNULL(ms.[IsDeleted],1) AS [IsDeleted]
+                ,ms.[EffectiveDate]
+                ,ms.[ExpiryDate]
+                ,ms.[InsertDateTime]
+                ,ms.[UpdateDateTime]
+                ,ms.[BatchID]
+                ,ms.[ProcessLogID]
+                INTO @OutPutTableMerge 
+                ;
+                
+                INSERT INTO " + varDatamartTableFull + @" 
+                (" + varSqlDWHColumns + @"
+                " + varDWHDefaultColumnsList + @"
+                )
+                OUTPUT 'INSERT' INTO @OutPutTableInsert
+                SELECT  " + varSqlDWHColumns + @"
+                ,ms.[CheckSum]
+                ,ms.[CheckSumSCD1]
+                ,ms.[CheckSumSCD2]
+                ,ms.[IsActual]
+                ,ms.[IsInferred]
+                ,ms.[IsDeleted]
+                ,ms.[EffectiveDate]
+                ,ms.[ExpiryDate]
+                ,ms.[InsertDateTime]
+                ,NULL
+                ,ms.[BatchID]
+                ,ms.[ProcessLogID]
+                FROM        @OutPutTableMerge ms
+                WHERE       ms.[MergeAction] = 'UPDATE'
+                ;
+                SELECT [Insert], [Update], [Delete], [NoChange]
+                FROM  (SELECT [MergeAction]
+                ,1 AS [RowCount]
+                FROM @OutPutTableMerge
+                UNION ALL
+                SELECT [MergeAction]
+                ,1
+                FROM @OutPutTableInsert
+                UNION
+                SELECT 'NoChange' 
+                ,0
+                ) AS SourceTable
+                PIVOT (SUM([RowCount])
+                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
+                ) AS PivotTable
+                ";
+                break;
+            case "ui-t1":
+            default:
+                varSqlMerge += @"
+                DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10))
+                ;
+                MERGE " + varDatamartTableFull + @" mt
+                USING (SELECT  " + varDWHColumns  + @"
+                " + varCheckSumColumn  + @"
+                " + varCheckSumSCD1Column + @"
+                " + varCheckSumSCD2Column + @"
+                ,1 AS [IsActual]
+                ,0 AS [IsInferred]
+                ,0 AS [IsDeleted]
+                ,SYSDATETIME() AS [EffectiveDate]
+                ,'31-DEC-9999' AS [ExpiryDate]
+                ,SYSDATETIME() AS [InsertDateTime]
+                ,SYSDATETIME() AS [UpdateDateTime]
+                ,? AS [BatchID]
+                ,? AS [ProcessLogID]
+                FROM   " + varDWHConnection + "." + varDWHTableFull + @"
+                ) ms
+                ON    " + varBKJoinClause + @"
+                WHEN NOT MATCHED BY TARGET
+                THEN INSERT   (" + varDWHColumns + @"
+                ,[CheckSum]
+                ,[CheckSumSCD1]
+                ,[CheckSumSCD2]
+                ,[IsActual]
+                ,[IsInferred]
+                ,[IsDeleted]
+                ,[EffectiveDate]
+                ,[ExpiryDate]
+                ,[InsertDateTime]
+                ,[UpdateDateTime]
+                ,[BatchID]
+                ,[ProcessLogID]
+                )
+                VALUES        (" + varSqlDWHColumns + @"
+                ,ms.[CheckSum]
+                ,ms.[CheckSumSCD1]
+                ,ms.[CheckSumSCD2]
+                ,ms.[IsActual]
+                ,ms.[IsInferred]
+                ,ms.[IsDeleted]
+                ,ms.[EffectiveDate]
+                ,ms.[ExpiryDate]
+                ,ms.[InsertDateTime]
+                ,NULL
+                ,ms.[BatchID]
+                ,ms.[ProcessLogID]
+                )
+                WHEN MATCHED
+                AND  mt.[CheckSum] != ms.[CheckSum]
+                AND  mt.[IsActual] =  1
+                THEN UPDATE SET " + varUpdateSCD1Clause + @"
+                ,[CheckSum] =  ms.[CheckSum]
+                ,[CheckSumSCD1] =  ms.[CheckSumSCD1]
+                ,[CheckSumSCD2] =  ms.[CheckSumSCD2]
+                ,[IsDeleted] =  ms.[IsDeleted]
+                ,[IsInferred] =  ms.[IsInferred]
+                ,[UpdateDateTime] =  ms.[UpdateDateTime]
+                ,[BatchID] =  ms.[BatchID]
+                ,[ProcessLogID] =  ms.[ProcessLogID]
+                WHEN NOT MATCHED BY SOURCE
+                THEN UPDATE SET [IsDeleted] =  1
+                ,[UpdateDateTime] =  SYSDATETIME()
+                OUTPUT " + varDollarAction + @"  INTO @OutPutTable
+                ;
+                
+                SELECT [Insert], [Update], [Delete], [NoChange]
+                FROM  (SELECT [MergeAction]
+                ,1 AS [RowCount]
+                FROM    @OutPutTable
+                UNION
+                SELECT 'NoChange' 
+                ,0
+                ) AS SourceTable
+                PIVOT (SUM([RowCount])
+                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
+                ) AS PivotTable
+                ";
+                break;
+        }
+        
+        string varStgRowCountSQLStatement = @"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
+        string varDWHRowCountSQLStatement = @"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
+        string varTargetRowCountSQLStatement = @"SELECT COUNT(1) AS [Total]
+        , COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual]
+        , COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred]
+        , COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] 
+        FROM " + varDatamartTableFull;#>
+        
+        <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
+            <Parameters>
+                <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
+                <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+            </Parameters>
+            
+            <Variables>
+                <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
+                <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
+                <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
+                <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
+                <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit">0</Variable>
+                <Variable Name="RowCountExtract" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountTarget" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountError" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+                <Variable Name="LoadingType" DataType="String" Namespace="User"><#=varLoadingType#></Variable>
+                <Variable Name="RowCountSourceSTG" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountSourceDWH" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountNew" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountInferred" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountDeleted" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountSCD1" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountSCD2" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountUnchanged" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountTargetTotal" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountTargetActual"  DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountTargetInferred" DataType="Int32" Namespace="RC">0</Variable>
+                <Variable Name="RowCountTargetDeleted" DataType="Int32" Namespace="RC">0</Variable>
+            </Variables>
+            
+            <Tasks>
+                <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
+                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?,@ExtractionType = ? </DirectInput>
+                    <Parameters>
+                        <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
+                        <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
+                        <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
+                        <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
+                        <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                        <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
+                        <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
+                        <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
+                        <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
+                        <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
+                        <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
+                        <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
+                        <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
+                        <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
+                        <Parameter Name="14" VariableName="User.LoadingType" Direction="Input" DataType="String" />
+                    </Parameters>
+                    <Results>
+                        <Result Name="0" VariableName="Audit.AuditBatchID" />
+                        <Result Name="1" VariableName="Audit.AuditProcessLogID" />
+                    </Results>
+                </ExecuteSQL>
+        
+                <Container Name="SC Load dimension <#=varDatamartTable#>" ConstraintMode="Linear">
+                    <Tasks>
+                        <ExecuteSQL Name="Source Row Count <#=varDatamartTable#>" ConnectionName ="<#=varDWHConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <DirectInput><#=varStgRowCountSQLStatement#></DirectInput>
+                            <Results><Result Name="0" VariableName="RC.RowCountSourceSTG" /></Results>
+                        </ExecuteSQL>
+                        <ExecuteSQL Name="DWH Row Count <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <DirectInput><#=varDWHRowCountSQLStatement#></DirectInput>
+                            <Results><Result Name="0" VariableName="RC.RowCountSourceDWH" /></Results>
+                        </ExecuteSQL>
+                        
+                        <#if (varLoadingType == "TI") {#>
+                        <ExecuteSQL Name="SQL Truncate <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                            <DirectInput>TRUNCATE TABLE <#=varDatamartSchemaPlus#><#=varDatamartTablePlus#></DirectInput>
+                        </ExecuteSQL>
+                        <#}
+                        
+                        switch (varLoadingType.ToLower()) {
+                            case "ui-t2":#>
+                                <ExecuteSQL Name="SQL Update SCD-1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
+                                    <DirectInput><#=varSqlSCD1Update#></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+                                    </Parameters>
+                                    <Results>
+                                        <Result Name="0" VariableName="RC.RowCountNew" />
+                                        <Result Name="1" VariableName="RC.RowCountSCD1" />
+                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
+                                    </Results>
+                                </ExecuteSQL>
+                                
+                                <ExecuteSQL Name="SQL Merge SCD-2 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
+                                    <DirectInput><#=varSqlMerge#></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+                                    </Parameters>
+                                    <Results>
+                                        <Result Name="0" VariableName="RC.RowCountNew" />
+                                        <Result Name="1" VariableName="RC.RowCountSCD2" />
+                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
+                                    </Results>
+                                </ExecuteSQL>
+                                <#break;
+                            case "ui-t1":
+                            default:#>                              
+                                <ExecuteSQL Name="SQL Merge SCD-1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
+                                    <DirectInput><#=varSqlMerge#></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+                                    </Parameters>
+                                    <Results>
+                                        <Result Name="0" VariableName="RC.RowCountNew" />
+                                        <Result Name="1" VariableName="RC.RowCountSCD1" />
+                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
+                                    </Results>
+                                </ExecuteSQL>
+                                <#break;
+                        }#>
+                        
+                        <ExecuteSQL Name="Target Row Count <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <DirectInput><#=varTargetRowCountSQLStatement#></DirectInput>
+                            <Results>
+                                <Result Name="0" VariableName="RC.RowCountTargetTotal" />
+                                <Result Name="1" VariableName="RC.RowCountTargetActual" />
+                                <Result Name="2" VariableName="RC.RowCountTargetInferred" />
+                                <Result Name="3" VariableName="RC.RowCountTargetDeleted" />
+                            </Results>
+                        </ExecuteSQL>
+                    </Tasks>
+                </Container>
+                
+                <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@RowCountSourceSTG = ?,@RowCountSourceDWH = ?,@RowCountNew = ?,@RowCountInferred = ?,@RowCountDeleted = ?,@RowCountSCD1 = ?,@RowCountSCD2 = ?,@RowCountUnchanged = ?,@RowCountTargetTotal = ?,@RowCountTargetActual = ?,@RowCountTargetDeleted = ?,@RowCountTargetInferred = ?</DirectInput>
+                    <Parameters>
+                        <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                        <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
+                        <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                        <Parameter Name="4" VariableName="RC.RowCountSourceSTG" Direction="Input" DataType="Int32" />
+                        <Parameter Name="5" VariableName="RC.RowCountSourceDWH" Direction="Input" DataType="Int32" />
+                        <Parameter Name="6" VariableName="RC.RowCountNew" Direction="Input" DataType="Int32" />
+                        <Parameter Name="7" VariableName="RC.RowCountInferred" Direction="Input" DataType="Int32" />
+                        <Parameter Name="8" VariableName="RC.RowCountDeleted" Direction="Input" DataType="Int32" />
+                        <Parameter Name="9" VariableName="RC.RowCountSCD1" Direction="Input" DataType="Int32" />
+                        <Parameter Name="10" VariableName="RC.RowCountSCD2" Direction="Input" DataType="Int32" />
+                        <Parameter Name="11" VariableName="RC.RowCountUnchanged" Direction="Input" DataType="Int32" />
+                        <Parameter Name="12" VariableName="RC.RowCountTargetTotal" Direction="Input" DataType="Int32" />
+                        <Parameter Name="13" VariableName="RC.RowCountTargetActual" Direction="Input" DataType="Int32" />
+                        <Parameter Name="14" VariableName="RC.RowCountTargetDeleted" Direction="Input" DataType="Int32" />
+                        <Parameter Name="15" VariableName="RC.RowCountTargetInferred" Direction="Input" DataType="Int32" />
+                    </Parameters>
+                </ExecuteSQL>
+            </Tasks>
+            
+            <Events>
+                <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
+                    <Tasks>
+                        <ExecuteSQL Name="SQL Error Audit Package <#=varDatamartTable#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                            <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
+                            <Parameters>
+                                <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                                <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                                <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
+                                <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
+                                <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                            </Parameters>
+                        </ExecuteSQL>
+                    </Tasks>
+                </Event>
+            </Events>
+        </Package>
+    
+        <#} 
+        
+        string sqlDatamartSchemas = @"SELECT DISTINCT 
+                                        [DatamartConnection]
+                                        ,[DatamartSchema]
+                                        FROM [Generator].[DatamartTable] 
+                                        WHERE [TableType] = 'D' 
+                                        AND [IsActive] = 1";
+        DataTable tableDatamartSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartSchemas);
+        foreach (DataRow rowDatamartSchemas in tableDatamartSchemas.Rows) {
+            string varDatamartConnection = rowDatamartSchemas["DatamartConnection"].ToString();
+            string varDatamartSchema = rowDatamartSchemas["DatamartSchema"].ToString();
+            string varOverallPackageName = "CTRL-Dimensions-" + varDatamartConnection + "-" + varDatamartSchema + "-Total";
+            string varName = varDatamartConnection + "-" + varDatamartSchema;
+            string sqlDatamartPackages = @"SELECT [DatamartConnection]
+                                                ,[DatamartSchema]
+                                                ,[DatamartTable]
+                                                FROM [Generator].[DatamartTable] st 
+                                                WHERE [DatamartConnection] = '" + varDatamartConnection + @"' 
+                                                AND [DatamartSchema]     = '" + varDatamartSchema + @"' 
+                                                AND [TableType] = 'D' 
+                                                AND [IsActive] =  1 
+                                                ORDER BY [DatamartTable]
+                                                ";
+            DataTable tableDatamartPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartPackages);#>
+    
+            <Package Name="<#=varOverallPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+                <Parameters>
+                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
+                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+                </Parameters>
+    
+                <Variables>
+                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
+                    <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
+                    <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
+                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varOverallPackageName#></Variable>
+                </Variables>
+    
+                <Tasks>
+                    <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
+                            <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
+                            <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
+                            <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
+                            <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
+                        </Parameters>
+                        <Results>
+                            <Result Name="0" VariableName="Audit.AuditBatchID" />
+                            <Result Name="1" VariableName="Audit.AuditProcessLogID" />
+                        </Results>
+                    </ExecuteSQL>
+                    
+                    <Container Name="SC Load Dimensions <#=varName#>" ConstraintMode="Parallel">
+                        <Tasks>
+                            <#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
+                                string varDatamartTable = rowDatamartPackages["DatamartTable"].ToString();
+                                string varPackageName = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + varDatamartTable + ".dtsx";#>
+                                <ExecutePackage Name="<#=varPackageName#>">
+                                    <ExternalProjectPackage Package="<#=varPackageName#>"/>
+                                    <ParameterBindings>
+                                        <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
+                                        <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
+                                    </ParameterBindings>
+                                </ExecutePackage>
+                            <#}#>
+                        </Tasks>
+                    </Container>
+                    
+                    <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                        </Parameters>
+                    </ExecuteSQL>
+                </Tasks>
+                
+                <Events>
+                    <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
+                        <Tasks>
+                            <ExecuteSQL Name="SQL Error Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                                <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
+                                    <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
+                                    <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                                </Parameters>
+                            </ExecuteSQL>
+                        </Tasks>
+                    </Event>
+                </Events>
+            </Package>
+        <#}#>
+    </Packages>
+</Biml>
