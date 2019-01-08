@@ -63,7 +63,7 @@
                           ,c.[Type]
               FROM [Generator].[Connection] c 
               WHERE c.[IsActive] = 1
-              AND c.[Name] in ('Staging','StagingIFS','DWH','DWH_Control','Datamart')
+              AND c.[Name] in ('Staging','StagingIFS','DWH','DWH_Control','Datamart2')
              ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -168,7 +168,7 @@
                               ,[DatamartSchema] AS [Schema]
                               ,[DatamartTable] AS [Table]
                               ,'Load Dim' AS [PackagePrefix]
-                  FROM [Generator].[DatamartTable]
+                  FROM [Generator].[Datamart2Table]
                     WHERE [TableType] =  'D' 
                     AND [IsActive] =  1
                     AND [Generate] =  1
@@ -178,7 +178,7 @@
                              ,[DatamartSchema]
                              ,'Total'
                              ,'CTRL-Dimensions'
-                    FROM [Generator].[DatamartTable] 
+                    FROM [Generator].[Datamart2Table] 
                     WHERE [TableType] = 'D' 
                     AND [IsActive] = 1
                    UNION
@@ -186,7 +186,7 @@
                               ,[DatamartSchema] AS [Schema]
                               ,[DatamartTable] AS [Table]
                               ,'Load Fact' AS [PackagePrefix]
-                  FROM [Generator].[DatamartTable]
+                  FROM [Generator].[Datamart2Table]
                     WHERE [TableType] =  'F' 
                     AND [IsActive] =  1
                     AND [Generate] =  1
@@ -196,7 +196,7 @@
                              ,[DatamartSchema]
                              ,'Total'
                              ,'CTRL-Facts'
-                    FROM [Generator].[DatamartTable] 
+                    FROM [Generator].[Datamart2Table] 
                     WHERE [TableType] = 'F' 
                     AND [IsActive] = 1
                    ";

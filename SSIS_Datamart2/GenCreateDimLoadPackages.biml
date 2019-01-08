@@ -13,7 +13,7 @@
                                         ,[DatamartSchema]
                                         ,[DatamartTable]
                                         ,[LoadingType] 
-                                        FROM       [Generator].[DatamartTable]
+                                        FROM       [Generator].[Datamart2Table]
                                         WHERE      [TableType] =  'D' 
                                         AND        [IsActive] =  1
                                         AND        [Generate] =  1
@@ -65,10 +65,10 @@
                                                 ,dbcol.[Column_ID] AS [ColumnPosition]
                                                 ,dbcol.[is_nullable] AS [ColumnNotNullFlag]
                                                 ,col.[ColumnDefaultValue]
-                                                FROM       Datamart.sys.all_columns dbcol
-                                                JOIN       Datamart.sys.types dbtyp
+                                                FROM       Datamart2.sys.all_columns dbcol
+                                                JOIN       Datamart2.sys.types dbtyp
                                                 ON         dbtyp.system_type_id =  dbcol.system_type_id
-                                                LEFT JOIN  [DWH_Control].[Generator].[DatamartColumn] col
+                                                LEFT JOIN  [DWH_Control].[Generator].[Datamart2Column] col
                                                 ON         col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS
                                                 AND        col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) collate SQL_Latin1_General_CP1_CS_AS
                                                 AND        col.[DatamartSchema] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + DatamartDBName + @"')) collate SQL_Latin1_General_CP1_CS_AS
@@ -652,7 +652,7 @@
         string sqlDatamartSchemas = @"SELECT DISTINCT 
                                         [DatamartConnection]
                                         ,[DatamartSchema]
-                                        FROM [Generator].[DatamartTable] 
+                                        FROM [Generator].[Datamart2Table] 
                                         WHERE [TableType] = 'D' 
                                         AND [IsActive] = 1";
         DataTable tableDatamartSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartSchemas);
@@ -664,7 +664,7 @@
             string sqlDatamartPackages = @"SELECT [DatamartConnection]
                                                 ,[DatamartSchema]
                                                 ,[DatamartTable]
-                                                FROM [Generator].[DatamartTable] st 
+                                                FROM [Generator].[Datamart2Table] st 
                                                 WHERE [DatamartConnection] = '" + varDatamartConnection + @"' 
                                                 AND [DatamartSchema]     = '" + varDatamartSchema + @"' 
                                                 AND [TableType] = 'D' 

@@ -3,7 +3,7 @@ string SSISDeploymentMode = "Project";
 string stagingProjectName = @"SSIS_Staging";
 string DWHProjectName = @"SSIS_DWH";
 string projectServerName = @"FDODWHD01";
-string DatamartProjectName = @"SSIS_Datamart";
+string DatamartProjectName = @"SSIS_Datamart2";
 string projectWorkDir = @"\\FDODWHD01\StagingFiles";
 string CacheDir = projectWorkDir + @"\Biml\SSIS Cache";
 string ImportDir = projectWorkDir + @"\Biml";
@@ -14,11 +14,11 @@ string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't
 string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 string WarehouseConnection = "DWH";
-string DatamartConnection = "Datamart";
+string DatamartConnection = "Datamart2";
 string SystemDBName = "DWH_Control";
 string StagingDBName = "Staging";
 string DWHDBName = "DWH";
-string DatamartDBName = "Datamart";
+string DatamartDBName = "Datamart2";
 
 string projectServerNameAndDatabaseInstanceName = "";
 

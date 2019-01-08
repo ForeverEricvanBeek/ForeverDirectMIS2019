@@ -29,21 +29,20 @@
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
+          <SSIS:Package SSIS:Name="2019_02.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="CTRL_DWH-WEB_ARC-Total.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Complaints.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Complaint.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="DWH-WEB_ARC-Holiday.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="DWH-WEB_ARC-Messages.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="DWH-WEB_ARC-OF_Issues.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Pallet_ForeCast.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Pickers.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Picker.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-QAScanPackingIssue.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="DWH-WEB_ARC-QAScansBI.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-QAScansPackingIssues.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="DWH-WEB_ARC-Sensor.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Transporter_Manual.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Transporter_Status.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-Transporter_URL.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="DWH-WEB_ARC-VASUsers.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="201851.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-TransporterManual.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-TransporterStatus.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-TransporterURL.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="DWH-WEB_ARC-VASUser.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="DWH.conmgr" />
@@ -199,16 +198,33 @@
             </SSIS:Parameter>
           </SSIS:ProjectConnectionParameters>
           <SSIS:PackageInfo>
+            <SSIS:PackageMetaData SSIS:Name="2019_02.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{01E51A9F-419C-4461-AFA5-F1FDEAD0C623}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">2019_02</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">3</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{969B5BB8-56DF-4BB6-9E76-601ADAFE1609}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters />
+            </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="CTRL_DWH-WEB_ARC-Total.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{49F878B3-605B-453E-9444-C5A3607B36AF}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{367B08F8-B3E0-4149-90DF-9F58A60EA482}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">CTRL_DWH-WEB_ARC-Total</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{AAFC7878-A5F7-46E6-A9E7-CD842335F832}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{793FD2FE-8F0F-43E0-AD7D-EDE446530109}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -217,7 +233,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{7A595A7F-B754-4D96-8E51-5078B61E87B0}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{6966799D-DB22-4B88-85F4-4BF6A9AA851B}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -231,7 +247,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{129A1D90-4B06-4B99-B18D-1ED2422B2F34}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{50EF4C4D-F702-4EC2-858B-2E30EB03D383}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -245,16 +261,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Complaints.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Complaint.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{81BE4553-C200-4BBA-8C22-B36B1D6F3F76}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Complaints</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{3A04AB0B-2B2C-4215-9B7B-1D5646EF6A93}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Complaint</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{41C37E73-633C-4831-8988-7FE93FDB61EA}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{72E10211-F531-44E0-A9BC-B97833D7642E}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -263,7 +279,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{AE15E535-D35A-4E13-A8E1-D3120F368B24}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{39FEB947-F281-495A-BDE0-F05CB445992D}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -277,7 +293,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{7DCC2993-18F6-4F60-8E3A-AD415C7B2D94}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{33CE0711-94D9-4CF3-B062-74D3B2C4E98B}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -293,14 +309,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Holiday.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{5B55F888-D6B9-42A6-8973-60B48DF6090B}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{945D5343-F7A6-4997-BC81-9BD22527D924}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Holiday</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{EF3A543C-B117-40D5-9758-A0BD043DD485}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{638239DB-960B-4AFB-BB3B-3C225839B13D}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -309,7 +325,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{0F4DE725-E00E-4C9E-84BF-D5E64C89EC59}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{3DF8B538-EB87-44E5-89F7-00EAC66D8A3D}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -323,7 +339,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{DA4E2D23-D741-4EC9-A449-C92D5876E233}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{41D2605E-B60B-453C-BA18-914D2468AD41}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -339,14 +355,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Messages.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{615AC4D9-7332-4755-986E-583701C25FA2}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{096B1CB8-BD89-4AFF-A929-936D563BE99A}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Messages</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{39F5AA63-589F-4060-92A7-D4EF05096036}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{6FFB4125-473D-4049-ABF8-EF6BF4AA29FC}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -355,7 +371,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{5ABBB904-22C4-4835-8379-1A555D715DC7}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{7251EE50-95D6-43C2-B9C0-B62F023153FE}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -369,7 +385,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{DA037DAA-A292-4046-97ED-E52CC78231E8}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{3B9B1B8E-C8FA-4F67-B6ED-C27DC835F1EC}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -385,14 +401,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-OF_Issues.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{D7200EF1-D1D7-4588-A875-F1B9136905B3}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{2552BD89-D24A-4F7D-B293-CAE7644D72EA}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-OF_Issues</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{16349866-4394-4C09-B8DC-3B6E8176B3F9}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{7B10D7D2-7837-48B6-8F63-156FB28AE537}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -401,7 +417,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{F28C1B61-C09A-44A1-9E68-CCD89802A7A3}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{26D9A8BA-89E4-41FC-A9E7-410AFDB2E829}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -415,7 +431,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{A33E5DF9-A999-419E-BEE9-725247DCC9BE}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{35E226B9-74F6-4524-A7E1-055E044293EE}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -429,16 +445,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Pallet_ForeCast.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Picker.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{1DEF10A0-521F-4762-90B6-7B55ADAAC712}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Pallet_ForeCast</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{3E038C72-E653-4668-9F86-12808A5BC16C}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Picker</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{8BC39FA6-C81E-490A-9D35-ED2AF9F00187}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{175FEE0B-CE08-4F2C-A9E5-29EBC3A726BC}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -447,7 +463,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{CA22590E-496F-4BFB-94FA-66235C6BE15F}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{25EED67D-00B3-4F8F-9F20-1D0BC9F2282B}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -461,7 +477,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{B7BC3FE5-0331-48F4-99F6-5F8F70BC0EB1}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{C85C86FD-EE06-4086-A288-1169D64FD5F1}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -475,16 +491,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Pickers.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-QAScanPackingIssue.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{50615C67-8E5D-4BAD-AD34-C287C5811F9C}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Pickers</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{569E6B24-2B56-4DA3-9110-F74B19E06D83}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-QAScanPackingIssue</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{E56C2B72-B99C-494C-B6F0-3CD4CA0D2ED7}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{1651F1AC-61B3-4A03-824E-7A80760F2E45}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -493,7 +509,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{9DE71D02-B697-4C6D-AD76-1A055EC665A0}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{BC2E0A61-45D5-4EF8-8318-A06086ED9ABA}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -507,7 +523,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{5A28334B-9BF5-4741-8122-AF74CD76713E}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{0004AEFC-12C3-4424-A73F-1A10F28760CD}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -523,14 +539,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-QAScansBI.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{A456EB5E-E722-4992-B018-C1CC0EE67BCC}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{86CFD4D4-3DE5-46D9-ADCD-ECBDB14006C0}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-QAScansBI</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{7CD33B2E-0EA2-4940-91E8-1FAF4451F6B3}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{D18A89D1-AC5F-42E4-B197-A9CF6576624D}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -539,7 +555,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{5A09A18D-07D2-4FA2-A754-1ED2F5229FB3}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{2972845B-49E1-48EF-B502-66C412C54478}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -553,53 +569,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{5F16F840-8388-4A42-B5C9-6C9F0EDC7E9A}</SSIS:Property>
-                    <SSIS:Property SSIS:Name="CreationName">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="Description">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
-                  </SSIS:Properties>
-                </SSIS:Parameter>
-              </SSIS:Parameters>
-            </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-QAScansPackingIssues.dtsx">
-              <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{A50CF49C-BB9B-45D4-862B-DE2E64F391AC}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-QAScansPackingIssues</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionComments">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{FFB32D37-D754-4E6E-8C99-3AF0B1706513}</SSIS:Property>
-                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
-                <SSIS:Property SSIS:Name="Description">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
-              </SSIS:Properties>
-              <SSIS:Parameters>
-                <SSIS:Parameter SSIS:Name="BatchID">
-                  <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{D635DA83-9837-44FD-B01B-B9B1C063579A}</SSIS:Property>
-                    <SSIS:Property SSIS:Name="CreationName">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="Description">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
-                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
-                  </SSIS:Properties>
-                </SSIS:Parameter>
-                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
-                  <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{B132C348-152C-4EAC-8CD0-D96B61832637}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{E8F86BCE-B1B4-4C6D-98F6-AC449A8ABE5C}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -615,14 +585,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Sensor.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{D60FFC10-C3AC-4D64-964B-2BBEC49045D9}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{345C086F-A253-494B-9D5C-AE34D22F9AF0}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Sensor</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{689AC6AF-606B-429B-8D7A-BACDC81D1E21}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{D1066157-E55F-49FB-983A-2A943A414C2D}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -631,7 +601,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{7BA1ADED-AE08-4253-B694-86DCE0BAA1F1}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{7FB5301A-4433-493E-8192-08651F29CE1B}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -645,7 +615,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{3E460DF9-4AF0-42D7-B76D-BA7E97A1D3A3}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{FE589094-4CE0-41BB-A0A7-90B3E858EE3C}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -659,16 +629,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Transporter_Manual.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-TransporterManual.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{2D843926-36FD-4198-991D-4781B0538C7E}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Transporter_Manual</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{528AFE0F-D68A-4917-954C-C4510BAAB502}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-TransporterManual</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{BFEF0CF2-4174-4CF8-906E-F257B158FD69}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{5C3D6957-2250-4FB0-8AE7-89691FE61ADF}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -677,7 +647,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{6F9935A6-1A94-471A-8F60-5FABA2E36EDD}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{36020DC0-B30E-471B-8C0F-1252DE7BCD48}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -691,7 +661,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{1B3321C2-CF46-4C46-8BD8-A0B5504C539A}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{438D6D20-EDD2-4A3A-97C0-5B3F3865DBD2}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -705,16 +675,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Transporter_Status.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-TransporterStatus.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{AB173888-F00A-4766-BD5B-7173C9BDEE34}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Transporter_Status</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{24628A1C-BECC-4B4E-A008-0C34D77D6770}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-TransporterStatus</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{8CB30670-8BB1-47C0-BD0F-68D52922DAA7}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{CA0DB00F-836D-45B0-92F2-6DC788F03002}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -723,7 +693,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{4B30E907-BD75-4D15-8E63-0FB8CECC09C7}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{5237C25D-DDFE-4690-A63D-124E7CF37A49}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -737,7 +707,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{361A22F2-9102-417C-A7A8-30BE8633A6BF}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{00D5608F-4450-4FC8-8F4C-1EF821EB88CF}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -751,16 +721,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-Transporter_URL.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-TransporterURL.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{AB665079-316E-4476-B0CE-7F56A805B31A}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-Transporter_URL</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{E2152CFB-1292-4013-ABF1-9DE864C442B0}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-TransporterURL</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{C8EE79CB-18E3-4C45-A2EB-D6E461C62A55}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{171F4AA8-EFB0-405A-A995-6BBEA7D31D00}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -769,7 +739,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{CED05D82-04F3-42A0-9825-F2500CC3EEBE}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{89C88A29-21E1-4C90-868C-6F7830A65FD8}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -783,7 +753,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{17A3A6F4-19B8-4568-8B2D-620E5A32A9B8}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{B9D308CB-F4E5-4286-8EC1-66EBEC7EB618}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -797,16 +767,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-VASUsers.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="DWH-WEB_ARC-VASUser.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{1AD8ADCA-A370-4F5D-BFBC-E3DB3E166D25}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-VASUsers</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{5815B07F-67F5-424D-9710-3D5D0BB0281B}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">DWH-WEB_ARC-VASUser</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{43FC2249-3610-406A-87A1-BEF5A7D5E9C2}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{15D90E89-6669-4337-B027-070C0EEDD5F7}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -815,7 +785,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{ED0F2CD6-7F17-405C-92B5-BEEFD41CDAEE}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{182A2BD9-2B88-4286-89A3-6D65B165E42D}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -829,7 +799,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{903393D7-6FC1-4AE4-B262-3B28999A4F37}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{70DAA3C4-855C-4992-A245-81FAF4EE8C41}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -842,23 +812,6 @@
                   </SSIS:Properties>
                 </SSIS:Parameter>
               </SSIS:Parameters>
-            </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="201851.dtsx">
-              <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{63AB2FF6-B0F1-4B36-8E9A-27CF0C4DEDC6}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">201851</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">2</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionComments">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{1E1DA0C7-4C38-4C8F-A4FF-10C5BCC48224}</SSIS:Property>
-                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
-                <SSIS:Property SSIS:Name="Description">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
-              </SSIS:Properties>
-              <SSIS:Parameters />
             </SSIS:PackageMetaData>
           </SSIS:PackageInfo>
         </SSIS:DeploymentInfo>
