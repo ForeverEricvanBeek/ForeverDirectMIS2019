@@ -41,9 +41,13 @@
             string sqlSourceColumn = @"SELECT dbcol.[name] AS [ColumnName]
                                             ,dbcol.[Column_id] AS [ColumnPosition]
                                             ,dbtyp.[name] AS [ColumnDataType]
-                                            ,dbcol.[max_length] AS [ColumnDataLength]
+                                            ,CASE
+												WHEN dbtyp.[name] = 'nvarchar' THEN dbcol.[max_length]/2 
+												ELSE dbcol.[max_length]
+											END AS [ColumnDataLength]
                                             ,dbcol.[scale] AS [ColumnDataScale]
                                             ,dbcol.[precision] AS [ColumnDataPrecision]
+                                            ,dbcol.[is_nullable] AS [ColumnNotNullFlag]
                                             FROM       DWH.sys.all_columns dbcol
                                             JOIN       DWH.sys.types dbtyp
                                             ON         dbtyp.system_type_id =  dbcol.system_type_id
@@ -170,14 +174,26 @@
             }
         
             string varBKJoinClause = "";
+            string varPrimaryKey = "";
             if (rowBusinessKeys.Length > 0) {
                 for(int i = 0; i < rowBusinessKeys.Length; i ++) {
                     string varColumnName = (string)rowBusinessKeys[i]["ColumnName"];
                     varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
-                    varBKJoinClause += "AND ms." + varColumnName + " = mt." + varColumnName;
+                    if (varLoadingType.ToLower() == "ui-t3") {
+                        varBKJoinClause += "AND ms." + varColumnName + " collate SQL_Latin1_General_CP1_CS_AS = mt." + varColumnName;
+                    } else {
+                        varBKJoinClause += "AND ms." + varColumnName + " = mt." + varColumnName;  
+                    }
+                    varPrimaryKey += ", " + varColumnName + " ASC";
                 }
                 varBKJoinClause = varBKJoinClause.Substring(4, varBKJoinClause.Length - 4); 
             }
+            
+            varPrimaryKey = varPrimaryKey.Substring(2, varPrimaryKey.Length - 2);
+            string varSqlConstraint = @"ALTER TABLE dbo.#" + varDWHTable + @"_temp ADD CONSTRAINT [pk_" + varDWHTable + @"] PRIMARY KEY CLUSTERED (
+                " + varPrimaryKey + @"
+                ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]";
+            
             
             string varUpdateSCD1Clause = "";
             if (rowSCD1Columns.Length > 0) {                         
@@ -201,33 +217,69 @@
                 varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
                 varSqlMergeOutputClause  += ", ms." + varColumnName + "\n";
             }
-        
-            string varSqlTableVarClause = @"([MergeAction] NVARCHAR(10)";
+            
+            string varSqlTableVarClause = "";
+            if (varLoadingType.ToLower() == "ui-t3") {
+                varSqlTableVarClause += @"";
+            } else {
+                varSqlTableVarClause += @"([MergeAction] NVARCHAR(10)"; 
+            }
             for(int i = 0; i < rowSourceColumns.Length; i ++) {
                 string varColumnName = (string)rowSourceColumns[i]["ColumnName"];
-                varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
                 string varColumnDataType = rowSourceColumns[i]["ColumnDataType"].ToString();
+                string varColumnDataType2 = "";
+                if (varLoadingType.ToLower() == "ui-t3") {
+                     varColumnDataType2 = "[" + rowSourceColumns[i]["ColumnDataType"].ToString() + "]";
+                } else {
+                     varColumnDataType2 = rowSourceColumns[i]["ColumnDataType"].ToString();
+                }
+                varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
                 string varColumnDataLength = rowSourceColumns[i]["ColumnDataLength"].ToString();
                 string varColumnDataPrecision = rowSourceColumns[i]["ColumnDataPrecision"].ToString();
                 string varColumnDataScale = rowSourceColumns[i]["ColumnDataScale"].ToString();
                 if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllBinaryDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-")    != -1) {
                     if (varColumnDataLength == "-1") {
-                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(MAX)\n";
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2 + "(MAX)";
                     } else {
-                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataLength + ")\n";
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2 + "(" + varColumnDataLength + ")";
                     }
                 } else if (AllDateDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
                     if (varColumnDataScale == "0") {
-                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "\n";
+                            varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2;
                     } else {
-                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataScale + ")\n";
+                        varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2 + "(" + varColumnDataScale + ")";
                     }
                 } else if (  AllIntegerDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllBooleanDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1 || AllRealDateTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-")    != -1) {
-                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "\n";
+                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2;
                 } else if (AllNumericDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
-                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType + "(" + varColumnDataPrecision + "," + varColumnDataScale + ")\n";
+                    varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2 + "(" + varColumnDataPrecision + "," + varColumnDataScale + ")";
                 }
+                 if (varLoadingType.ToLower() == "ui-t3" && rowSourceColumns[i]["ColumnNotNullFlag"].ToString() == "True") {
+                    varSqlTableVarClause += @" NULL" + "\n";
+                 } else if (varLoadingType.ToLower() == "ui-t3" && rowSourceColumns[i]["ColumnNotNullFlag"].ToString() == "False") {
+                     varSqlTableVarClause += @" NOT NULL" + "\n";
+                 } else {
+                     varSqlTableVarClause +=  "\n";
+                 }
             }
+            if (varLoadingType.ToLower() == "ui-t3") {
+                varSqlTableVarClause = varSqlTableVarClause.Substring(2, varSqlTableVarClause.Length - 2);
+            }
+            
+        if (varLoadingType.ToLower() == "ui-t3") {
+            varSqlTableVarClause += @",	[CheckSum] [varbinary](8000) NULL
+            	, [CheckSumSCD1] [varbinary](8000) NULL
+            	, [CheckSumSCD2] [varbinary](8000) NULL
+            	, [IsActual] [int] NOT NULL
+            	, [IsInferred] [int] NOT NULL
+            	, [IsDeleted] [int] NOT NULL
+            	, [EffectiveDate] [datetime2](7) NOT NULL
+            	, [ExpiryDate] [varchar](11) NOT NULL
+            	, [InsertDateTime] [datetime2](7) NOT NULL
+            	, [UpdateDateTime] [datetime2](7) NOT NULL
+            	, [BatchID] [int] NOT NULL
+            	, [ProcessLogID] [int] NOT NULL";
+        }
             
         string varSqlMerge = "";
         string varSqlSCD1Update = "";
@@ -381,6 +433,90 @@
                 FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
                 ) AS PivotTable
                 ";
+                break;
+                // Create index on key
+            case "ui-t3":
+                varSqlMerge += @"DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10));
+                IF OBJECT_ID('tempdb..#" + varDWHTable + @"_temp') IS NOT NULL DROP TABLE dbo.#" + varDWHTable + @"_temp
+                IF (OBJECT_ID('dbo.pk_" + varDWHTable + @"', 'F') IS NOT NULL) ALTER TABLE  dbo.#" + varDWHTable + @"_temp DROP CONSTRAINT pk_" + varDWHTable + @"
+                CREATE TABLE dbo.#" + varDWHTable + @"_temp
+                    (" + varSqlTableVarClause + @"
+                )
+                " + varSqlConstraint + @"
+                
+                INSERT INTO dbo.#" + varDWHTable + @"_temp
+                SELECT  " + varDWHColumns  + @"
+                " + varCheckSumColumn  + @"
+                " + varCheckSumSCD1Column + @"
+                " + varCheckSumSCD2Column + @"
+                ,1 AS [IsActual]
+                ,0 AS [IsInferred]
+                ,0 AS [IsDeleted]
+                ,SYSDATETIME() AS [EffectiveDate]
+                ,'31-DEC-9999' AS [ExpiryDate]
+                ,SYSDATETIME() AS [InsertDateTime]
+                ,SYSDATETIME() AS [UpdateDateTime]
+                ,? AS [BatchID]
+                ,? AS [ProcessLogID]
+                FROM   " + varDWHConnection + "." + varDWHTableFull + @" 
+                
+                MERGE " + varDatamartTableFull + @" mt
+                USING dbo.#" + varDWHTable + @"_temp ms
+                ON    " + varBKJoinClause + @"
+                WHEN NOT MATCHED BY TARGET
+                THEN INSERT   (" + varDWHColumns + @"
+                ,[CheckSum]
+                ,[CheckSumSCD1]
+                ,[CheckSumSCD2]
+                ,[IsActual]
+                ,[IsInferred]
+                ,[IsDeleted]
+                ,[EffectiveDate]
+                ,[ExpiryDate]
+                ,[InsertDateTime]
+                ,[UpdateDateTime]
+                ,[BatchID]
+                ,[ProcessLogID]
+                )
+                VALUES        (" + varSqlDWHColumns + @"
+                ,ms.[CheckSum]
+                ,ms.[CheckSumSCD1]
+                ,ms.[CheckSumSCD2]
+                ,ms.[IsActual]
+                ,ms.[IsInferred]
+                ,ms.[IsDeleted]
+                ,ms.[EffectiveDate]
+                ,ms.[ExpiryDate]
+                ,ms.[InsertDateTime]
+                ,NULL
+                ,ms.[BatchID]
+                ,ms.[ProcessLogID]
+                )
+                WHEN MATCHED
+                AND  mt.[CheckSum] != ms.[CheckSum]
+                AND  mt.[IsActual] =  1
+                THEN UPDATE SET " + varUpdateSCD1Clause + @"
+                ,[CheckSum] =  ms.[CheckSum]
+                ,[CheckSumSCD1] =  ms.[CheckSumSCD1]
+                ,[CheckSumSCD2] =  ms.[CheckSumSCD2]
+                ,[IsDeleted] =  ms.[IsDeleted]
+                ,[IsInferred] =  ms.[IsInferred]
+                ,[UpdateDateTime] =  ms.[UpdateDateTime]
+                ,[BatchID] =  ms.[BatchID]
+                ,[ProcessLogID] =  ms.[ProcessLogID]
+                WHEN NOT MATCHED BY SOURCE
+                THEN UPDATE SET [IsDeleted] =  1
+                ,[UpdateDateTime] =  SYSDATETIME()
+                OUTPUT " + varDollarAction + @"  INTO @OutPutTable;
+                
+                SELECT [Insert], [Update], [Delete], [NoChange]
+                FROM  (SELECT [MergeAction],1 AS [RowCount]
+                FROM    @OutPutTable
+                UNION
+                SELECT 'NoChange' ,0) AS SourceTable
+                PIVOT (SUM([RowCount])
+                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
+                ) AS PivotTable";
                 break;
             case "ui-t1":
             default:
@@ -578,6 +714,7 @@
                                 </ExecuteSQL>
                                 <#break;
                             case "ui-t1":
+                            case "ui-t3":
                             default:#>                              
                                 <ExecuteSQL Name="SQL Merge SCD-1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
