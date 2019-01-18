@@ -2,9 +2,25 @@
     [D_SKU_Skey]              BIGINT          IDENTITY (1, 1) NOT NULL,
     [SKU_Code]                INT             NOT NULL,
     [SKU_Name]                NVARCHAR (100)  NOT NULL,
+    [FAM_Prod_ID]             NVARCHAR (7)    NULL,
+    [Type_Code]               NVARCHAR (200)  NULL,
+    [Order_Type]              VARCHAR (2)     NULL,
+    [Accounting_Group_ID]     NVARCHAR (5)    NULL,
+    [Accounting_Group_Desc]   VARCHAR (28)    NULL,
+    [Country_of_Origin]       NVARCHAR (2)    NULL,
     [SKU_Description]         NVARCHAR (65)   NOT NULL,
     [Generic_SKU_Name]        NVARCHAR (100)  NULL,
     [Generic_SKU_Description] NVARCHAR (65)   NULL,
+    [Second_Commodity]        NVARCHAR (5)    NULL,
+    [Commodity_Desc]          NVARCHAR (35)   NULL,
+    [Site]                    NVARCHAR (5)    NULL,
+    [Purchase_LeadTime]       INT             NULL,
+    [Manufactured_LeadTime]   INT             NULL,
+    [Unit_Measered]           NVARCHAR (10)   NULL,
+    [ABC_Class]               NVARCHAR (1)    NULL,
+    [IFS_Status]              NVARCHAR (1)    NULL,
+    [Frequency_Class]         NVARCHAR (200)  NULL,
+    [Vendor_Name]             NVARCHAR (20)   NULL,
     [SKU_Size_Desc]           NVARCHAR (50)   NULL,
     [SKU_Barcode]             NVARCHAR (50)   NULL,
     [Unit_Weight]             NUMERIC (16, 4) NULL,
@@ -31,4 +47,6 @@
     [ProcessLogID]            BIGINT          NULL,
     CONSTRAINT [PK_D_SKU] PRIMARY KEY CLUSTERED ([D_SKU_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

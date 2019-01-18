@@ -55,10 +55,10 @@
     [LANGUAGE_CODE]          NVARCHAR (20)   NULL,
     [PO_REF_NUMBER]          NVARCHAR (4000) NULL,
     [PL_PAY_DATE]            DATETIME2 (7)   NULL,
-    [NET_CURR_AMOUNT]        INT             NULL,
-    [NET_DOM_AMOUNT]         INT             NULL,
-    [VAT_CURR_AMOUNT]        INT             NULL,
-    [VAT_DOM_AMOUNT]         INT             NULL,
+    [NET_CURR_AMOUNT]        DECIMAL (18, 2) NULL,
+    [NET_DOM_AMOUNT]         DECIMAL (18, 2) NULL,
+    [VAT_CURR_AMOUNT]        DECIMAL (18, 2) NULL,
+    [VAT_DOM_AMOUNT]         DECIMAL (18, 2) NULL,
     [CURRENCY]               NVARCHAR (3)    NULL,
     [C1]                     NVARCHAR (100)  NULL,
     [C2]                     NVARCHAR (100)  NULL,
@@ -142,6 +142,8 @@
     [ProcessLogID]           BIGINT          NULL,
     CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [COMPANY] ASC)
 );
+
+
 
 
 

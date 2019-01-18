@@ -83,6 +83,8 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_vrarst] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [rnropd] ASC) ON [DWH_KEWILL_ARC]
+    CONSTRAINT [PK_vrarst] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [rnropd] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_KEWILL_ARC]
 ) ON [DWH_KEWILL_ARC];
+
+
 

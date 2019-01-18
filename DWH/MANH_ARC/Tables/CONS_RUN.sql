@@ -107,6 +107,8 @@
     [RTE_WAVE_NBR]                   NVARCHAR (12)   NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_CONS_RUN] PRIMARY KEY CLUSTERED ([CONS_RUN_ID] ASC) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_CONS_RUN] PRIMARY KEY CLUSTERED ([CONS_RUN_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 

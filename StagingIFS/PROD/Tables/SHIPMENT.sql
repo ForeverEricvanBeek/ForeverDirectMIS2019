@@ -75,7 +75,7 @@
     [C_CONSOLIDATED_SHIPMENT_ID]    NVARCHAR (20)   NULL,
     [C_CMS_OUTBOUND_SENT]           NVARCHAR (5)    NULL,
     [C_DATE_OUTBOUND_SENT]          DATETIME2 (7)   NULL,
-    [C_COD_AMOUNT]                  INT             NULL,
+    [C_COD_AMOUNT]                  DECIMAL (18, 2) NULL,
     [C_COD_CURRENCY_CODE]           NVARCHAR (3)    NULL,
     [C_INVOICE_DATE]                DATETIME2 (7)   NULL,
     [C_VESSEL_AIRLINE_NAME]         NVARCHAR (100)  NULL,
@@ -99,4 +99,6 @@
     [ProcessLogID]                  BIGINT          NULL,
     CONSTRAINT [PK_SHIPMENT] PRIMARY KEY CLUSTERED ([SHIPMENT_ID] ASC)
 );
+
+
 

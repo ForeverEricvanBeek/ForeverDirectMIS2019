@@ -14,10 +14,10 @@
     [NET_CURR_CODE]            NVARCHAR (3)    NULL,
     [NET_RATE]                 INT             NULL,
     [NET_DIV_FACTOR]           INT             NULL,
-    [NET_CURR_AMOUNT]          INT             NULL,
-    [NET_DOM_AMOUNT]           INT             NULL,
-    [VAT_CURR_AMOUNT]          INT             NULL,
-    [VAT_DOM_AMOUNT]           INT             NULL,
+    [NET_CURR_AMOUNT]          DECIMAL (18, 2) NULL,
+    [NET_DOM_AMOUNT]           DECIMAL (18, 2) NULL,
+    [VAT_CURR_AMOUNT]          DECIMAL (18, 2) NULL,
+    [VAT_DOM_AMOUNT]           DECIMAL (18, 2) NULL,
     [DB_NET_AMOUNT]            NVARCHAR (2000) NULL,
     [DB_VAT_AMOUNT]            NVARCHAR (2000) NULL,
     [VAT_CURR_CODE]            NVARCHAR (3)    NULL,
@@ -86,6 +86,8 @@
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL
 );
+
+
 
 
 

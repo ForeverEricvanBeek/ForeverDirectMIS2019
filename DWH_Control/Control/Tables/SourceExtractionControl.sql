@@ -9,6 +9,10 @@
     [RowCountTarget]            INT           NULL,
     [RowCountError]             INT           NULL,
     [LastExtractionDate]        DATETIME2 (7) NOT NULL,
-    [LastExtractionID]          NVARCHAR (50) NULL
+    [LastExtractionID]          NVARCHAR (50) NULL,
+    [RowCountArchiveBefore]     INT           NULL,
+    [RowCountArchiveAfter]      INT           NULL
 );
+
+
 

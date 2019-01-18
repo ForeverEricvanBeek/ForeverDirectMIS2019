@@ -27,6 +27,8 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_MANH_SIZE_UOM] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SIZE_UOM_ID] ASC) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_MANH_SIZE_UOM] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SIZE_UOM_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 

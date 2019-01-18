@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Pack_QC]
 AS
 WITH CTE_INIT as
@@ -103,12 +104,14 @@ AND			YEAR(OD.CREATED_DTTM) >= YEAR(GETDATE())-2)
 
 
 select *
-  ,case when Diff_Weight between -0.02000 and -0.0001	then		'A -'  
-        when Diff_Weight between -0.04000 and -0.02000	then		'B -'  
-		when Diff_Weight between -0.06000 and -0.04000	then		'C -'
-		when Diff_Weight between 0.0001 and 0.02000		then		'A +'
-		when Diff_Weight between 0.0200 and 0.04000		then		'B +'
-		when Diff_Weight between 0.0400 and 0.06000		then		'C +'
+  ,case when Diff_Weight between -0.01000 and -0.0001	then		'A -'  
+        when Diff_Weight between -0.02000 and -0.01000	then		'B -'  
+		when Diff_Weight between -0.03000 and -0.02000	then		'C -'
+		when Diff_Weight between -0.04000 and -0.03000	then		'D -'
+		when Diff_Weight between 0.0001 and 0.01000		then		'A +'
+		when Diff_Weight between 0.0100 and 0.02000		then		'B +'
+		when Diff_Weight between 0.0200 and 0.03000		then		'C +'
+		when Diff_Weight between 0.0300 and 0.04000		then		'D +'
 		When Diff_Weight = 0.000						then		'Z'
 		--When Diff_Weight is null						then		null
 		else														'Extreme'

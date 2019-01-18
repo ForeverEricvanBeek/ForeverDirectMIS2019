@@ -8,7 +8,7 @@
     [CURRENCY_CODE]          NVARCHAR (3)    NULL,
     [QUOTE_NO]               NVARCHAR (10)   NULL,
     [VALID_UNTIL]            DATETIME2 (7)   NULL,
-    [QUOTE_PRICE]            INT             NULL,
+    [QUOTE_PRICE]            DECIMAL (18, 2) NULL,
     [DISCOUNT]               INT             NULL,
     [ADDITIONAL_COST_AMOUNT] INT             NULL,
     [PRICE_CATALOG_NO]       NVARCHAR (20)   NULL,
@@ -22,4 +22,6 @@
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL
 );
+
+
 

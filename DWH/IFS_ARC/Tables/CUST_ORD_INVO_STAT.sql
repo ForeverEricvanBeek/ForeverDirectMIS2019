@@ -83,6 +83,8 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
-    CONSTRAINT [PK_CUST_ORD_INVO_STAT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [STATISTIC_NO] ASC) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_CUST_ORD_INVO_STAT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [STATISTIC_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 

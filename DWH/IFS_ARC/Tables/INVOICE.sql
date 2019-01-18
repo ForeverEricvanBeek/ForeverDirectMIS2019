@@ -144,6 +144,8 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [Eff_Date] ASC, [INVOICE_ID] ASC) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [Eff_Date] ASC, [INVOICE_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 

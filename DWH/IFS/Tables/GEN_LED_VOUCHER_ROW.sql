@@ -30,12 +30,12 @@
     [CODE_J]                       NVARCHAR (20)   NULL,
     [CODE_J_DESC]                  NVARCHAR (4000) NULL,
     [TRANS_CODE]                   NVARCHAR (100)  NULL,
-    [CURRENCY_DEBET_AMOUNT]        INT             NULL,
-    [CURRENCY_CREDIT_AMOUNT]       INT             NULL,
-    [CURRENCY_AMOUNT]              INT             NULL,
-    [DEBET_AMOUNT]                 INT             NULL,
-    [CREDIT_AMOUNT]                INT             NULL,
-    [AMOUNT]                       INT             NULL,
+    [CURRENCY_DEBET_AMOUNT]        DECIMAL (18, 2) NULL,
+    [CURRENCY_CREDIT_AMOUNT]       DECIMAL (18, 2) NULL,
+    [CURRENCY_AMOUNT]              DECIMAL (18, 2) NULL,
+    [DEBET_AMOUNT]                 DECIMAL (18, 2) NULL,
+    [CREDIT_AMOUNT]                DECIMAL (18, 2) NULL,
+    [AMOUNT]                       DECIMAL (18, 2) NULL,
     [CORRECTION]                   NVARCHAR (1)    NULL,
     [CURRENCY_CODE]                NVARCHAR (3)    NULL,
     [QUANTITY]                     INT             NULL,
@@ -65,9 +65,9 @@
     [OLD_PERIOD]                   INT             NULL,
     [CORRECTED]                    NVARCHAR (1)    NULL,
     [HEADER_CORRECTION]            NVARCHAR (50)   NULL,
-    [THIRD_CURRENCY_DEBIT_AMOUNT]  INT             NULL,
-    [THIRD_CURRENCY_CREDIT_AMOUNT] INT             NULL,
-    [THIRD_CURRENCY_AMOUNT]        INT             NULL,
+    [THIRD_CURRENCY_DEBIT_AMOUNT]  DECIMAL (18, 2) NULL,
+    [THIRD_CURRENCY_CREDIT_AMOUNT] DECIMAL (18, 2) NULL,
+    [THIRD_CURRENCY_AMOUNT]        DECIMAL (18, 2) NULL,
     [THIRD_CURRENCY_RATE]          INT             NULL,
     [ACCOUNTING_PERIOD]            INT             NULL,
     [CURRENCY_RATE]                INT             NULL,
@@ -93,14 +93,16 @@
     [CREATOR_DESC]                 NVARCHAR (4000) NULL,
     [OBJID]                        NVARCHAR (4000) NULL,
     [OBJVERSION]                   NVARCHAR (2000) NULL,
-    [Eff_Date]                     DATE            CONSTRAINT [DF_GEN_LED_VOUCHER_ROW_Eff_Date] DEFAULT (getdate()) NOT NULL,
+    [Eff_Date]                     DATE            NOT NULL,
     [End_Date]                     DATE            NULL,
     [ActInd]                       CHAR (1)        NULL,
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_GEN_LED_VOUCHER_ROW] PRIMARY KEY CLUSTERED ([ACCOUNTING_YEAR] ASC, [COMPANY] ASC, [Eff_Date] ASC, [ROW_NO] ASC, [VOUCHER_NO] ASC, [VOUCHER_TYPE] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
+    CONSTRAINT [PK_GEN_LED_VOUCHER_ROW] PRIMARY KEY CLUSTERED ([ACCOUNTING_YEAR] ASC, [COMPANY] ASC, [VOUCHER_TYPE] ASC, [VOUCHER_NO] ASC, [ROW_NO] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

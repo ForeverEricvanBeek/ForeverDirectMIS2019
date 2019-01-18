@@ -10,15 +10,15 @@
     [PART_NO]                        NVARCHAR (25)   NULL,
     [PRE_ACCOUNTING_ID]              INT             NULL,
     [SALES_UNIT_MEAS]                NVARCHAR (10)   NULL,
-    [BASE_SALE_UNIT_PRICE]           DECIMAL (18)    NULL,
+    [BASE_SALE_UNIT_PRICE]           DECIMAL (18, 2) NULL,
     [BONUS_BASIS]                    INT             NULL,
     [BONUS_VALUE]                    INT             NULL,
-    [BUY_QTY_DUE]                    DECIMAL (18)    NULL,
+    [BUY_QTY_DUE]                    DECIMAL (18, 2) NULL,
     [CATALOG_DESC]                   NVARCHAR (200)  NULL,
     [CATALOG_TYPE]                   NVARCHAR (200)  NULL,
     [CATALOG_TYPE_DB]                NVARCHAR (20)   NULL,
     [CONV_FACTOR]                    INT             NULL,
-    [COST]                           DECIMAL (18)    NULL,
+    [COST]                           DECIMAL (18, 2) NULL,
     [CURRENCY_RATE]                  DECIMAL (18)    NULL,
     [DATE_ENTERED]                   DATETIME2 (7)   NULL,
     [DISCOUNT]                       INT             NULL,
@@ -42,7 +42,7 @@
     [QTY_SHORT]                      INT             NULL,
     [REAL_SHIP_DATE]                 DATETIME2 (7)   NULL,
     [REVISED_QTY_DUE]                INT             NULL,
-    [SALE_UNIT_PRICE]                DECIMAL (18)    NULL,
+    [SALE_UNIT_PRICE]                DECIMAL (18, 2) NULL,
     [SUPPLY_CODE]                    NVARCHAR (200)  NULL,
     [SUPPLY_CODE_DB]                 NVARCHAR (20)   NULL,
     [WANTED_DELIVERY_DATE]           DATETIME2 (7)   NULL,
@@ -95,7 +95,7 @@
     [SUP_SM_OBJECT]                  NVARCHAR (40)   NULL,
     [SM_CONNECTION]                  NVARCHAR (200)  NULL,
     [SM_CONNECTION_DB]               NVARCHAR (20)   NULL,
-    [PART_PRICE]                     INT             NULL,
+    [PART_PRICE]                     DECIMAL (18, 2) NULL,
     [CALC_CHAR_PRICE]                INT             NULL,
     [CHAR_PRICE]                     INT             NULL,
     [PRICE_SOURCE]                   NVARCHAR (200)  NULL,
@@ -202,9 +202,12 @@
     [COMPANY]                        NVARCHAR (20)   NULL,
     [QTY_PER_ASSEMBLY]               INT             NULL,
     [NEW_COMP_AFTER_DELIVERY]        NVARCHAR (5)    NULL,
-    [CASE_CREDIT]                    INT             NULL,
+    [CASE_CREDIT]                    DECIMAL (18, 2) NULL,
     [OBJID]                          NVARCHAR (100)  NULL,
     [OBJVERSION]                     BIGINT          NULL,
+    [OBJSTATE]                       NVARCHAR (20)   NULL,
+    [OBJEVENTS]                      NVARCHAR (4000) NULL,
+    [STATE]                          NVARCHAR (4000) NULL,
     [Eff_Date]                       DATE            NOT NULL,
     [End_Date]                       DATE            NULL,
     [ActInd]                         CHAR (1)        NULL,
@@ -213,6 +216,8 @@
     [ProcessLogID]                   BIGINT          NULL,
     CONSTRAINT [PK_CUSTOMER_ORDER_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LINE_ITEM_NO] ASC, [LINE_NO] ASC, [ORDER_NO] ASC, [REL_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

@@ -16,6 +16,8 @@
     [IsDeleted]       CHAR (1)       NULL,
     [BatchID]         BIGINT         NULL,
     [ProcessLogID]    BIGINT         NULL,
-    CONSTRAINT [PK_timewize] PRIMARY KEY CLUSTERED ([track_id] ASC, [pers_key] ASC, [bkdate] ASC, [bktype_id] ASC, [department_id] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_ATIMO_ARC]
+    CONSTRAINT [PK_timewize] PRIMARY KEY CLUSTERED ([track_id] ASC, [pers_key] ASC, [bkdate] ASC, [bktype_id] ASC, [department_id] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90, DATA_COMPRESSION = PAGE) ON [DWH_ATIMO_ARC]
 ) ON [DWH_ATIMO_ARC];
+
+
 

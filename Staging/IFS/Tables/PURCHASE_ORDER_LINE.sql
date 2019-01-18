@@ -5,14 +5,14 @@
     [BLANKET_LINE]             INT             NULL,
     [ADDITIONAL_COST_AMOUNT]   INT             NULL,
     [BUY_QTY_DUE]              INT             NULL,
-    [BUY_UNIT_PRICE]           INT             NULL,
+    [BUY_UNIT_PRICE]           DECIMAL (18, 2) NULL,
     [CLOSE_TOLERANCE]          INT             NULL,
     [CONV_FACTOR]              INT             NULL,
     [CURRENCY_RATE]            INT             NULL,
     [DATE_ENTERED]             DATETIME2 (7)   NULL,
     [DESCRIPTION]              NVARCHAR (4000) NULL,
     [DISCOUNT]                 INT             NULL,
-    [FBUY_UNIT_PRICE]          INT             NULL,
+    [FBUY_UNIT_PRICE]          DECIMAL (18, 2) NULL,
     [LAST_ACTIVITY_DATE]       DATETIME2 (7)   NULL,
     [NOTE_TEXT]                NVARCHAR (2000) NULL,
     [PLANNED_DELIVERY_DATE]    DATETIME2 (7)   NULL,
@@ -67,7 +67,7 @@
     [TECHNICAL_COORDINATOR_ID] NVARCHAR (20)   NULL,
     [TAX_EXEMPT]               NVARCHAR (4000) NULL,
     [TAX_EXEMPT_DB]            NVARCHAR (5)    NULL,
-    [TAX_AMOUNT]               INT             NULL,
+    [TAX_AMOUNT]               DECIMAL (18, 2) NULL,
     [ORIGINAL_QTY]             INT             NULL,
     [DEFECT_PART_KEY_REF]      NVARCHAR (60)   NULL,
     [ADDR_FLAG]                NVARCHAR (4000) NULL,
@@ -107,4 +107,6 @@
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL
 );
+
+
 

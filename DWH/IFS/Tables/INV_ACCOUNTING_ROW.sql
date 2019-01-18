@@ -10,13 +10,13 @@
     [CURR_CODE]                 NVARCHAR (3)    NULL,
     [RATE]                      INT             NULL,
     [DIV_FACTOR]                INT             NULL,
-    [CURR_AMOUNT]               INT             NULL,
-    [DOM_AMOUNT]                INT             NULL,
-    [CURR_AMOUNT_CREDIT]        INT             NULL,
-    [CURR_AMOUNT_DEBIT]         INT             NULL,
-    [DOM_AMOUNT_CREDIT]         INT             NULL,
-    [DOM_AMOUNT_DEBIT]          INT             NULL,
-    [THIRD_AMOUNT]              INT             NULL,
+    [CURR_AMOUNT]               DECIMAL (18, 2) NULL,
+    [DOM_AMOUNT]                DECIMAL (18, 2) NULL,
+    [CURR_AMOUNT_CREDIT]        DECIMAL (18, 2) NULL,
+    [CURR_AMOUNT_DEBIT]         DECIMAL (18, 2) NULL,
+    [DOM_AMOUNT_CREDIT]         DECIMAL (18, 2) NULL,
+    [DOM_AMOUNT_DEBIT]          DECIMAL (18, 2) NULL,
+    [THIRD_AMOUNT]              DECIMAL (18, 2) NULL,
     [DB_AMOUNT]                 NVARCHAR (2000) NULL,
     [CODE_A]                    NVARCHAR (10)   NULL,
     [CODE_B]                    NVARCHAR (10)   NULL,
@@ -64,8 +64,10 @@
     [IsDeleted]                 CHAR (1)        NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
-    CONSTRAINT [PK_INV_ACCOUNTING_ROW] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [Eff_Date] ASC, [INVOICE_ID] ASC, [ITEM_ID] ASC, [ROW_ID] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_INV_ACCOUNTING_ROW] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [ITEM_ID] ASC, [ROW_ID] ASC, [COMPANY] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

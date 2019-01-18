@@ -6,7 +6,7 @@
     [OPERATION_DESCRIPTION]     NVARCHAR (35)   NULL,
     [EFFICIENCY_FACTOR]         INT             NULL,
     [MACH_RUN_FACTOR]           INT             NULL,
-    [MACH_SETUP_TIME]           INT             NULL,
+    [MACH_SETUP_TIME]           DECIMAL (18, 2) NULL,
     [MOVE_TIME]                 INT             NULL,
     [QUEUE_TIME]                INT             NULL,
     [CBS_QUEUE_TIME]            INT             NULL,
@@ -77,4 +77,6 @@
     [ProcessLogID]              BIGINT          NULL,
     CONSTRAINT [PK_SHOP_ORDER_OPERATION] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [RELEASE_NO] ASC, [SEQUENCE_NO] ASC, [OPERATION_NO] ASC)
 );
+
+
 

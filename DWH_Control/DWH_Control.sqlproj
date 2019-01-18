@@ -109,6 +109,10 @@
     <Build Include="Generator\Tables\LoadReportTables.sql" />
     <Build Include="Logging\Tables\DatabaseSize.sql" />
     <Build Include="Control\Tables\RebuildIndex.sql" />
+    <Build Include="Generator\Tables\Datamart2Table.sql" />
+    <Build Include="Generator\Tables\Datamart2Column.sql" />
+    <Build Include="dbo\Views\Nagios_Check.sql" />
+    <Build Include="dbo\Views\ARC_CHECK.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Staging\Staging.sqlproj">
@@ -118,8 +122,19 @@
       <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>Staging</DatabaseSqlCmdVariable>
     </ProjectReference>
+    <ProjectReference Include="..\SSISDB\SSISDB.sqlproj">
+      <Name>SSISDB</Name>
+      <Project>{4173dfca-919b-4a75-b3b2-e3c16ea4438b}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>SSISDB</DatabaseSqlCmdVariable>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <SqlCmdVariable Include="SSISDB">
+      <DefaultValue>SSISDB</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="Staging">
       <DefaultValue>Staging</DefaultValue>
       <Value>$(SqlCmdVar__1)</Value>

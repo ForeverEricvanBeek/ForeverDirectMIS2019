@@ -56,5 +56,8 @@
     [ER_USER_PROFILE_ID]         INT             NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL
-);
+)
+WITH (DATA_COMPRESSION = PAGE);
+
+
 

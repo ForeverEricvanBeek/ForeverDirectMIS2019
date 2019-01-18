@@ -45,6 +45,8 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_vrpalo] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [lockd] ASC, [magkd] ASC, [ptdati] ASC, [ptykd] ASC, [rnropd] ASC, [vrfilk] ASC, [vrvolg] ASC, [vrvrdt] ASC) ON [DWH_KEWILL_ARC]
+    CONSTRAINT [PK_vrpalo] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [lockd] ASC, [magkd] ASC, [ptdati] ASC, [ptykd] ASC, [rnropd] ASC, [vrfilk] ASC, [vrvolg] ASC, [vrvrdt] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_KEWILL_ARC]
 ) ON [DWH_KEWILL_ARC];
+
+
 

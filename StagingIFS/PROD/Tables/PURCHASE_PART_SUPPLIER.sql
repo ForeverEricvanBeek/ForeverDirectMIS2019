@@ -12,7 +12,7 @@
     [CUM_RCPTS_QTY]               INT             NULL,
     [DISCOUNT]                    INT             NULL,
     [INTERNAL_CONTROL_TIME]       INT             NULL,
-    [LIST_PRICE]                  INT             NULL,
+    [LIST_PRICE]                  DECIMAL (18, 2) NULL,
     [MINIMUM_QTY]                 INT             NULL,
     [PRICE_CONV_FACTOR]           INT             NULL,
     [PRICE_UNIT_MEAS]             NVARCHAR (10)   NULL,
@@ -62,4 +62,6 @@
     [ProcessLogID]                BIGINT          NULL,
     CONSTRAINT [PK_PURCHASE_PART_SUPPLIER] PRIMARY KEY CLUSTERED ([PART_NO] ASC, [CONTRACT] ASC, [VENDOR_NO] ASC)
 );
+
+
 

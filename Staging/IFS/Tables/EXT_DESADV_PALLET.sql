@@ -3,7 +3,7 @@
     [DELNOTE_NO]            NVARCHAR (50)   NULL,
     [SEQUENCE_NO]           INT             NULL,
     [HANDLING_UNIT_ID]      INT             NULL,
-    [HANDLING_UNIT_QTY]     INT             NULL,
+    [HANDLING_UNIT_QTY]     BIGINT          NULL,
     [NO_OF_PACKAGES]        INT             NULL,
     [NET_WEIGHT]            INT             NULL,
     [TARE_WEIGHT]           INT             NULL,
@@ -26,4 +26,6 @@
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL
 );
+
+
 

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [WEB].[Messages] (
-    [ID]               INT            IDENTITY (1, 1) NOT NULL,
+    [ID]               INT            NOT NULL,
     [Type]             NVARCHAR (20)  NULL,
     [LocationPicked]   NVARCHAR (20)  NULL,
     [IssueCode]        NVARCHAR (2)   NULL,
@@ -20,4 +20,6 @@
     [ProcessLogID]     BIGINT         NULL,
     CONSTRAINT [PK_Messages] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

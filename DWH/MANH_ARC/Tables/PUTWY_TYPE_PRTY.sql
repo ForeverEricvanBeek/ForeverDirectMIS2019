@@ -16,6 +16,8 @@
     [IsDeleted]                     CHAR (1)      NULL,
     [BatchID]                       BIGINT        NULL,
     [ProcessLogID]                  BIGINT        NULL,
-    CONSTRAINT [PK_MANH_PUTWY_TYPE_PRTY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PUTWY_TYPE_PRTY_ID] ASC) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_MANH_PUTWY_TYPE_PRTY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PUTWY_TYPE_PRTY_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 

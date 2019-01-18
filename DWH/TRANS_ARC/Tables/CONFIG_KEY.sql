@@ -7,6 +7,8 @@
     [IsDeleted]              CHAR (1)      NULL,
     [BatchID]                BIGINT        NULL,
     [ProcessLogID]           BIGINT        NULL,
-    CONSTRAINT [PK_CONFIG_KEY] PRIMARY KEY CLUSTERED ([CONFIG_KEY] ASC, [Eff_Date] ASC) ON [DWH_TRANS_ARC]
+    CONSTRAINT [PK_CONFIG_KEY] PRIMARY KEY CLUSTERED ([CONFIG_KEY] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_TRANS_ARC]
 ) ON [DWH_TRANS_ARC];
+
+
 

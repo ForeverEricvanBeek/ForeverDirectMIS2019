@@ -2,6 +2,7 @@
     [DateKey]               BIGINT          NOT NULL,
     [D_SKU_Skey]            BIGINT          NOT NULL,
     [D_Lot_Skey]            BIGINT          NOT NULL,
+    [D_Lot_IFS_Skey]        BIGINT          NOT NULL,
     [D_Aging_Category_Skey] BIGINT          NOT NULL,
     [D_ILPN_Skey]           BIGINT          NULL,
     [D_WHS_Location_Skey]   BIGINT          NULL,
@@ -12,4 +13,6 @@
     [BatchID]               BIGINT          NOT NULL,
     [ProcessLogID]          BIGINT          NULL
 );
+
+
 

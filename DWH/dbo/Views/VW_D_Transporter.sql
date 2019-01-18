@@ -23,12 +23,12 @@ WITH AVGT_CTE AS (
 SELECT        
 	CC.CARRIER_CODE				AS Transporter_Code
 	, CASE 
-		WHEN TM.Transporter_New IS NULL THEN CC.CARRIER_CODE_NAME 
-		ELSE TM.Transporter_Name 
+		WHEN TM.TransporterManual_New IS NULL THEN CC.CARRIER_CODE_NAME 
+		ELSE TM.TransporterManual_Name 
 	END							AS Transporter_Name
 	, CASE 
-		WHEN TM.Transporter_New IS NULL THEN CC.CARRIER_CODE 
-		ELSE TM.Transporter_New 
+		WHEN TM.TransporterManual_New IS NULL THEN CC.CARRIER_CODE 
+		ELSE TM.TransporterManual_New 
 	END							AS Transporter_SubCode
 	, SV.SHIP_VIA				AS Transporter_Ship_Via_Code
 	, SV.DESCRIPTION			AS Transporter_Ship_Via_Desc
@@ -37,7 +37,7 @@ SELECT
 	, CC.CITY					AS Transporter_City
 	, CC.POSTAL_CODE			AS Transporter_Postal_Code
 	, CAST (CAST(LEFT(SC.MISC_FLAGS, 2) AS CHAR(2)) + ':' + CAST(SUBSTRING(SC.MISC_FLAGS, 3, 2) AS CHAR(2)) + ':00' AS TIME) AS Transporter_CutOff_Time
-	, TS.Lead_Time				AS Transporter_LT_Delivered
+	, TS.TransporterStatus_LeadTime	AS Transporter_LT_Delivered
 	, AC.TVALUE					AS Transporter_AVG_Parcels
 	, AC.PVALUE					AS Transporter_AVG_Lines
 FROM			MANH.CARRIER_CODE AS CC 
@@ -50,12 +50,12 @@ ON				SC.CODE_ID = SV.SHIP_VIA
 AND				SC.REC_TYPE = 'C' 
 AND				SC.CODE_TYPE = 'CBC' 
 AND				SC.ActInd = 'Y'
-LEFT OUTER JOIN WEB.Transporter_Status AS TS 
-ON				SV.SHIP_VIA = TS.Ship_Via 
-AND				TS.Status = 'DELIVERED' 
+LEFT OUTER JOIN WEB.TransporterStatus AS TS 
+ON				SV.SHIP_VIA = TS.TransporterStatus_ShipVia 
+AND				TS.TransporterStatus_Status = 'DELIVERED' 
 AND				TS.ActInd = 'Y' 
-LEFT OUTER JOIN WEB.Transporter_Manual AS TM 
-ON				TM.Transporter_Ship_Via_Code = SV.SHIP_VIA 
+LEFT OUTER JOIN WEB.TransporterManual AS TM 
+ON				TM.TransporterManual_ShipViaCode = SV.SHIP_VIA 
 AND				TM.ActInd = 'Y'
 LEFT JOIN		AVGT_CTE AC
 ON				AC.DSG_SHIP_VIA = SV.SHIP_VIA

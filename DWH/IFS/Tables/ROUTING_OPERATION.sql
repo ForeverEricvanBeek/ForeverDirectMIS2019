@@ -13,7 +13,7 @@
     [LOT_QTY]                   INT             NULL,
     [EFFICIENCY_FACTOR]         INT             NULL,
     [MACH_RUN_FACTOR]           INT             NULL,
-    [MACH_SETUP_TIME]           INT             NULL,
+    [MACH_SETUP_TIME]           DECIMAL (18, 2) NULL,
     [MOVE_TIME]                 INT             NULL,
     [LABOR_RUN_FACTOR]          INT             NULL,
     [LABOR_SETUP_TIME]          INT             NULL,
@@ -51,6 +51,8 @@
     [ProcessLogID]              BIGINT          NULL,
     CONSTRAINT [PK_ROUTING_OPERATION] PRIMARY KEY CLUSTERED ([ALTERNATIVE_NO] ASC, [BOM_TYPE_DB] ASC, [CONTRACT] ASC, [Eff_Date] ASC, [OPERATION_ID] ASC, [PART_NO] ASC, [ROUTING_REVISION] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

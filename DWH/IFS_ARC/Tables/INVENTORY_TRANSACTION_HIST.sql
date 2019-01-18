@@ -78,6 +78,8 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_INVENTORY_TRANSACTION_HIST] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TRANSACTION_ID] ASC) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_INVENTORY_TRANSACTION_HIST] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TRANSACTION_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 

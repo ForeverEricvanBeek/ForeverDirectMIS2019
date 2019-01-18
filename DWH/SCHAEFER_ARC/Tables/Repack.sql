@@ -19,6 +19,8 @@
     [IsDeleted]     CHAR (1)      NULL,
     [BatchID]       BIGINT        NULL,
     [ProcessLogID]  BIGINT        NULL,
-    CONSTRAINT [PK_Repack] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [OLPN] ASC, [Order] ASC, [Page] ASC, [TimeAnnounced] ASC) ON [DWH_SCHAEFER_ARC]
+    CONSTRAINT [PK_Repack] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [OLPN] ASC, [Order] ASC, [Page] ASC, [TimeAnnounced] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_SCHAEFER_ARC]
 ) ON [DWH_SCHAEFER_ARC];
+
+
 

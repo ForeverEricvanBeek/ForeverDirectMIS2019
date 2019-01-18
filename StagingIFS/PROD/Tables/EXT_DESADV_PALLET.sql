@@ -3,7 +3,7 @@
     [DELNOTE_NO]            NVARCHAR (50)   NOT NULL,
     [SEQUENCE_NO]           INT             NOT NULL,
     [HANDLING_UNIT_ID]      INT             NULL,
-    [HANDLING_UNIT_QTY]     INT             NULL,
+    [HANDLING_UNIT_QTY]     BIGINT          NULL,
     [NO_OF_PACKAGES]        INT             NULL,
     [NET_WEIGHT]            INT             NULL,
     [TARE_WEIGHT]           INT             NULL,
@@ -27,4 +27,6 @@
     [ProcessLogID]          BIGINT          NULL,
     CONSTRAINT [PK_EXT_DESADV_PALLET] PRIMARY KEY CLUSTERED ([MESSAGE_ID] ASC, [DELNOTE_NO] ASC, [SEQUENCE_NO] ASC)
 );
+
+
 

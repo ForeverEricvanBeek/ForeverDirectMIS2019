@@ -8,7 +8,7 @@
     [CURRENCY_CODE]          NVARCHAR (3)    NULL,
     [QUOTE_NO]               NVARCHAR (10)   NULL,
     [VALID_UNTIL]            DATETIME2 (7)   NULL,
-    [QUOTE_PRICE]            INT             NULL,
+    [QUOTE_PRICE]            DECIMAL (18, 2) NULL,
     [DISCOUNT]               INT             NULL,
     [ADDITIONAL_COST_AMOUNT] INT             NULL,
     [PRICE_CATALOG_NO]       NVARCHAR (20)   NULL,
@@ -23,4 +23,6 @@
     [ProcessLogID]           BIGINT          NULL,
     CONSTRAINT [PK_PURCHASE_QUANTITY_PRICE] PRIMARY KEY CLUSTERED ([PART_NO] ASC, [CONTRACT] ASC, [VENDOR_NO] ASC, [LINE_NO] ASC)
 );
+
+
 

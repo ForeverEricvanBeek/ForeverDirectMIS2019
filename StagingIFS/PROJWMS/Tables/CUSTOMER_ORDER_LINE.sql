@@ -207,6 +207,11 @@
     [OBJVERSION]                     BIGINT          NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [OBJSTATE]                       NVARCHAR (20)   NULL,
+    [OBJEVENTS]                      NVARCHAR (4000) NULL,
+    [STATE]                          NVARCHAR (4000) NULL,
     CONSTRAINT [PK_CUSTOMER_ORDER_LINE_1] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [LINE_NO] ASC, [REL_NO] ASC, [LINE_ITEM_NO] ASC)
 );
+
+
 

@@ -51,6 +51,8 @@
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_PART_CATALOG_INVENT_ATTRIB] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PART_NO] ASC) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_PART_CATALOG_INVENT_ATTRIB] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PART_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 

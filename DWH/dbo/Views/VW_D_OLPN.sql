@@ -55,11 +55,11 @@ SELECT DISTINCT
 			-(DATEDIFF(wk, FD.STATUS_DATE_SH, FD.STATUS_DATE_DL) * 2)
 			-(CASE WHEN DATENAME(dw, FD.STATUS_DATE_SH) = 'Sunday' THEN 1 ELSE 0 END)
 			-(CASE WHEN DATENAME(dw, FD.STATUS_DATE_DL) = 'Saturday' THEN 1 ELSE 0 END)	AS OLPN_LT_Ship_Confirm_Delivered
-		, TU.Link + FD.FORWARDER_SHIPMENT_REF 
-			+ CASE WHEN TU.Link2 IS NOT NULL THEN TU.Link2 ELSE '' END 
-			+ CASE WHEN TU.Zipcode = 1 THEN OD.D_POSTAL_CODE ELSE '' END	AS OLPN_Track_Trace_Link
+		, TU.TransporterURL_Link + FD.FORWARDER_SHIPMENT_REF 
+			+ CASE WHEN TU.TransporterURL_Link2 IS NOT NULL THEN TU.TransporterURL_Link2 ELSE '' END 
+			+ CASE WHEN TU.TransporterURL_Zipcode = 1 THEN OD.D_POSTAL_CODE ELSE '' END	AS OLPN_Track_Trace_Link
 		, P2.PLT_ID							AS OLPN_Pallet_ID
-		, '//FDXDOCP01/PackingslipPRD/'  + REPLACE(PP.fileName,'\','/') AS OLPN_Document_Location
+		, '//FDXDOCP01/PackingslipPRD/'  + REPLACE(PP.fName,'\','/') AS OLPN_Document_Location
 FROM		dbo.VW_T_LPN AS LP 
 INNER JOIN	MANH.ORDERS AS OD 
 ON			OD.TC_ORDER_ID = LP.TC_ORDER_ID 
@@ -69,7 +69,7 @@ AND			OD.ACTUAL_SHIPPED_DTTM >= '20140601'
 LEFT JOIN	(
 			SELECT
 			  P1.olpn
-			  , MAX(P1.path) + MAX(P1.name) AS fileName
+			  , MAX(P1.path) + MAX(P1.name) AS fName
 			FROM		DOC.PlanetPress P1
 			WHERE		P1.ActInd = 'Y'
 			GROUP By P1.olpn
@@ -99,8 +99,8 @@ LEFT JOIN	(
 			  WHERE		REC_TYPE = 'C' 
 			  AND		CODE_TYPE = 'SW2'
 			) SC ON SC.CONTAINER_TYPE = LP.CONTAINER_TYPE AND SC.CODE_ID = CO.CODE_ID
-LEFT JOIN	WEB.Transporter_URL AS TU 
-ON			TU.Ship_Via = OD.DSG_SHIP_VIA 
+LEFT JOIN	WEB.TransporterURL AS TU 
+ON			TU.TransporterURL_ShipVia = OD.DSG_SHIP_VIA 
 AND			TU.ActInd = 'Y' 
 LEFT JOIN(
 			SELECT

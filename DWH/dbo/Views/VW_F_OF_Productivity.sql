@@ -1,5 +1,5 @@
 ﻿
-CREATE VIEW dbo.VW_F_OF_Productivity
+CREATE VIEW VW_F_OF_Productivity
 AS
 
 SELECT 
@@ -40,7 +40,7 @@ SELECT
   , 0												AS Number_Of_Picks
   , 1												AS Number_Of_Packs
 FROM SCHAEFER.Repack RP
-INNER JOIN	WEB.Pickers PI
+INNER JOIN	WEB.Picker PI
 ON			PI.Picker_ID = SUBSTRING(RP.[User],2,5)
 AND			PI.ActInd = 'Y'
 WHERE RP.ActInd = 'Y'

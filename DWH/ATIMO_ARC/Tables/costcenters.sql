@@ -8,6 +8,8 @@
     [IsDeleted]              CHAR (1)       NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
-    CONSTRAINT [PK_costcenters] PRIMARY KEY CLUSTERED ([department_id] ASC, [Eff_Date] ASC) ON [DWH_ATIMO_ARC]
+    CONSTRAINT [PK_costcenters] PRIMARY KEY CLUSTERED ([department_id] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_ATIMO_ARC]
 ) ON [DWH_ATIMO_ARC];
+
+
 

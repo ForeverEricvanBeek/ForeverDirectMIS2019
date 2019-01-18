@@ -1,4 +1,5 @@
 ﻿
+
 CREATE VIEW [FDV].[VW_D_OLPN_Details]
 AS
 select 
@@ -11,7 +12,7 @@ on
 LD.LPN_ID=LO.LPN_ID
 and LD.ActInd = 'Y'
 and LO.ActInd= 'Y'
-and YEAR(LD.CREATED_DTTM) > YEAR(GETDATE())-2
+and YEAR(LD.CREATED_DTTM) > YEAR(GETDATE())-3
 inner join MANH.ITEM_CBO as IC
 on
 IC.ITEM_ID=LD.ITEM_ID

@@ -92,5 +92,8 @@
     [ER_ITEM_FACILITY_MAPPING_W_ID]  BIGINT          NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL
-);
+)
+WITH (DATA_COMPRESSION = PAGE);
+
+
 

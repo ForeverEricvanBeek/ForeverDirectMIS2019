@@ -54,6 +54,8 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
-    CONSTRAINT [PK_MANH_TRAN_LOG] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TRAN_LOG_ID] ASC) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_MANH_TRAN_LOG] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TRAN_LOG_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 

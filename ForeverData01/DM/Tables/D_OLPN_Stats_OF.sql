@@ -6,9 +6,11 @@
     [BEGIN_DATE]              DATETIME2 (7) NULL,
     [END_DATE]                DATETIME2 (7) NULL,
     [ORDER_ID]                NVARCHAR (50) NULL,
+    [REF_FIELD]               NVARCHAR (50) NULL,
     [ORDER_TYPE]              NVARCHAR (20) NULL,
     [Ship_Via]                NVARCHAR (4)  NULL,
     [Order_Country_Code]      NVARCHAR (2)  NULL,
+    [Lus]                     VARCHAR (5)   NULL,
     [Order_Planned_Ship_Date] DATE          NULL,
     [Order_Wave_Date]         DATETIME2 (7) NULL,
     [CheckSum]                NVARCHAR (32) NULL,
@@ -25,4 +27,6 @@
     [ProcessLogID]            BIGINT        NULL,
     CONSTRAINT [PK_D_OLPN_Stats_OF] PRIMARY KEY CLUSTERED ([D_OLPN_Stats_OF_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

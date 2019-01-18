@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Order_Details]
 AS
 select
@@ -16,7 +17,7 @@ on
 OD.ORDER_ID=OL.ORDER_ID
 and OD.ActInd = 'Y'
 and OL.ActInd = 'Y'
-and YEAR(OL.CREATED_DTTM) > YEAR(GETDATE())-2 
+and YEAR(OL.CREATED_DTTM) > YEAR(GETDATE())-3
 group by
 OD.TC_ORDER_ID,OL.IS_CANCELLED,OL.ITEM_NAME 
 

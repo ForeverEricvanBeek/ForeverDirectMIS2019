@@ -19,12 +19,12 @@
     [CURRENCY_CODE]             NVARCHAR (3)    NULL,
     [STATUS_CODE]               NVARCHAR (2)    NULL,
     [BOOKING_SOURCE]            NVARCHAR (10)   NULL,
-    [CURR_AMOUNT]               INT             NULL,
+    [CURR_AMOUNT]               DECIMAL (18, 2) NULL,
     [CURRENCY_RATE]             INT             NULL,
     [DATE_APPLIED]              DATETIME2 (7)   NULL,
     [DEBIT_CREDIT]              NVARCHAR (1)    NULL,
     [ERROR_DESC]                NVARCHAR (2000) NULL,
-    [VALUE]                     INT             NULL,
+    [VALUE]                     DECIMAL (18, 2) NULL,
     [ACTIVITY_SEQ]              INT             NULL,
     [ACCOUNTING_YEAR]           INT             NULL,
     [ACCOUNTING_PERIOD]         INT             NULL,
@@ -34,9 +34,9 @@
     [DATE_OF_ORIGIN]            DATETIME2 (7)   NULL,
     [ORIGINAL_ACCOUNTING_ID]    INT             NULL,
     [ORIGINAL_SEQ]              INT             NULL,
-    [DEBIT_AMOUNT]              INT             NULL,
-    [CREDIT_AMOUNT]             INT             NULL,
-    [DEBIT_CREDIT_AMOUNT]       INT             NULL,
+    [DEBIT_AMOUNT]              DECIMAL (18, 2) NULL,
+    [CREDIT_AMOUNT]             DECIMAL (18, 2) NULL,
+    [DEBIT_CREDIT_AMOUNT]       DECIMAL (18, 2) NULL,
     [USERID]                    NVARCHAR (30)   NULL,
     [BUCKET_POSTING_GROUP_ID]   NVARCHAR (20)   NULL,
     [COST_SOURCE_ID]            NVARCHAR (20)   NULL,
@@ -49,8 +49,10 @@
     [IsDeleted]                 CHAR (1)        NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
-    CONSTRAINT [PK_MPCCOM_ACCOUNTING] PRIMARY KEY CLUSTERED ([ACCOUNTING_ID] ASC, [Eff_Date] ASC, [SEQ] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
+    CONSTRAINT [PK_MPCCOM_ACCOUNTING] PRIMARY KEY CLUSTERED ([ACCOUNTING_ID] ASC, [Eff_Date] ASC, [SEQ] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

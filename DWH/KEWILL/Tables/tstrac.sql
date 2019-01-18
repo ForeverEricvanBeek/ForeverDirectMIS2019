@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [KEWILL].[tstrac] (
     [dosvlg]       BIGINT        NOT NULL,
     [tsttgr]       NVARCHAR (15) NULL,
-    [tsacdt]       DATETIME2 (7) NOT NULL,
-    [tsacty]       DATETIME2 (7) NOT NULL,
+    [tsacdt]       DATE          NOT NULL,
+    [tsacty]       TIME (7)      NOT NULL,
     [tstzma]       NVARCHAR (6)  NULL,
     [volgnr]       INT           NOT NULL,
     [deskod]       NVARCHAR (5)  NULL,
@@ -34,4 +34,6 @@
     [ProcessLogID] BIGINT        NULL,
     CONSTRAINT [PK_tstrac_1] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [tsacty] ASC, [volgnr] ASC, [Eff_Date] ASC) ON [DWH_KEWILL]
 ) ON [DWH_KEWILL];
+
+
 

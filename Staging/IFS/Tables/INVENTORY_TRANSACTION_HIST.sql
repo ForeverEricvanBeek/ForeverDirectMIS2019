@@ -17,7 +17,7 @@
     [REJECT_CODE]                    NVARCHAR (8)    NULL,
     [TRANSACTION]                    NVARCHAR (4000) NULL,
     [PRE_ACCOUNTING_ID]              INT             NULL,
-    [COST]                           INT             NULL,
+    [COST]                           DECIMAL (18, 2) NULL,
     [DATE_APPLIED]                   DATETIME2 (7)   NULL,
     [DIRECTION]                      NVARCHAR (1)    NULL,
     [ORDER_TYPE]                     NVARCHAR (4000) NULL,
@@ -75,4 +75,6 @@
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL
 );
+
+
 

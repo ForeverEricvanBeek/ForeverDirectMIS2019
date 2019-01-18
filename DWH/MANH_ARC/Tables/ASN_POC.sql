@@ -122,6 +122,8 @@
     [ORA_ROWSCN]                     BIGINT          NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_MANH_ASN_POC] PRIMARY KEY CLUSTERED ([ASN_ID] ASC) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_MANH_ASN_POC] PRIMARY KEY CLUSTERED ([ASN_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 

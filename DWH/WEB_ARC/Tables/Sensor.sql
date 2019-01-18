@@ -13,6 +13,8 @@
     [IsDeleted]       CHAR (1)        NULL,
     [BatchID]         BIGINT          NULL,
     [ProcessLogID]    BIGINT          NULL,
-    CONSTRAINT [PK_Sensor] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Sensor_ID] ASC) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_Sensor] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Sensor_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 

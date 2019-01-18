@@ -23,5 +23,8 @@
     [ER_USER_NAVIGATION_ID] INT             NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL
-);
+)
+WITH (DATA_COMPRESSION = PAGE);
+
+
 

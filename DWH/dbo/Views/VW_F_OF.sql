@@ -84,7 +84,7 @@ SELECT
 FROM		MANH.PROD_TRKG_TRAN AS PT
 LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
 ON			OD.Order_ID = PT.TC_ORDER_ID
-LEFT JOIN	WEB.Pickers AS PS
+LEFT JOIN	WEB.Picker AS PS
 ON			'0' + PS.Picker_ID = PT.REF_FIELD_1
 AND			PS.ActInd = 'Y'
 AND			PS.IsDeleted = 'N'

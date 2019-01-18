@@ -13,6 +13,8 @@
     [IsDeleted]       CHAR (1)       NULL,
     [BatchID]         BIGINT         NULL,
     [ProcessLogID]    BIGINT         NULL,
-    CONSTRAINT [PK_WEB_ActiveDirectoryUsers] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ID] ASC) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_WEB_ActiveDirectoryUsers] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 

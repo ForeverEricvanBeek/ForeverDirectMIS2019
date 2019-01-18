@@ -22,7 +22,7 @@
     [REJECT_CODE]              NVARCHAR (8)    NULL,
     [DATE_APPLIED]             DATETIME2 (7)   NULL,
     [USERID]                   NVARCHAR (30)   NULL,
-    [NET_UNIT_WEIGHT]          INT             NULL,
+    [NET_UNIT_WEIGHT]          DECIMAL (18, 2) NULL,
     [CUSTOMS_STAT_NO]          NVARCHAR (10)   NULL,
     [INTRASTAT_ALT_QTY]        INT             NULL,
     [INTRASTAT_ALT_UNIT_MEAS]  NVARCHAR (10)   NULL,
@@ -36,16 +36,16 @@
     [OPPOSITE_COUNTRY]         NVARCHAR (2)    NULL,
     [OPPONENT_NUMBER]          NVARCHAR (20)   NULL,
     [OPPONENT_NAME]            NVARCHAR (4000) NULL,
-    [ORDER_UNIT_PRICE]         INT             NULL,
-    [UNIT_ADD_COST_AMOUNT]     INT             NULL,
-    [UNIT_CHARGE_AMOUNT]       INT             NULL,
+    [ORDER_UNIT_PRICE]         DECIMAL (18, 2) NULL,
+    [UNIT_ADD_COST_AMOUNT]     DECIMAL (18, 2) NULL,
+    [UNIT_CHARGE_AMOUNT]       DECIMAL (18, 2) NULL,
     [MODE_OF_TRANSPORT]        NVARCHAR (4000) NULL,
     [MODE_OF_TRANSPORT_DB]     NVARCHAR (1)    NULL,
     [INVOICE_SERIE]            NVARCHAR (20)   NULL,
     [INVOICE_NUMBER]           NVARCHAR (50)   NULL,
-    [INVOICED_UNIT_PRICE]      INT             NULL,
-    [UNIT_ADD_COST_AMOUNT_INV] INT             NULL,
-    [UNIT_CHARGE_AMOUNT_INV]   INT             NULL,
+    [INVOICED_UNIT_PRICE]      DECIMAL (18, 2) NULL,
+    [UNIT_ADD_COST_AMOUNT_INV] DECIMAL (18, 2) NULL,
+    [UNIT_CHARGE_AMOUNT_INV]   DECIMAL (18, 2) NULL,
     [DELIVERY_TERMS]           NVARCHAR (3)    NULL,
     [TRIANGULATION]            NVARCHAR (4000) NULL,
     [TRIANGULATION_DB]         NVARCHAR (20)   NULL,
@@ -63,4 +63,6 @@
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL
 );
+
+
 

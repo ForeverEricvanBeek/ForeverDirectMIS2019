@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [KEWILL].[tstrac] (
     [dosvlg]       BIGINT        NULL,
     [tsttgr]       NVARCHAR (15) NULL,
-    [tsacdt]       DATETIME2 (7) NULL,
-    [tsacty]       DATETIME2 (7) NULL,
+    [tsacdt]       DATE          NULL,
+    [tsacty]       TIME (7)      NULL,
     [tstzma]       NVARCHAR (6)  NULL,
     [volgnr]       INT           NULL,
     [deskod]       NVARCHAR (5)  NULL,
@@ -29,4 +29,6 @@
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL
 );
+
+
 

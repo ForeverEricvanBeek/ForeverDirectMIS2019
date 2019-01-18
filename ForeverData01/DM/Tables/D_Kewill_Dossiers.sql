@@ -1,0 +1,28 @@
+﻿CREATE TABLE [DM].[D_Kewill_Dossiers] (
+    [D_Kewill_Dossiers_Skey] BIGINT        IDENTITY (1, 1) NOT NULL,
+    [Dossier_ID]             BIGINT        NOT NULL,
+    [Inv_Date_Kewill]        DATETIME2 (7) NULL,
+    [Reference]              NVARCHAR (15) NULL,
+    [Department]             NVARCHAR (4)  NULL,
+    [Shipment_ID]            NVARCHAR (50) NULL,
+    [Order_ID]               NVARCHAR (50) NULL,
+    [Ship_Confirm_Date]      DATETIME2 (7) NULL,
+    [Dock_Time]              DATETIME2 (7) NULL,
+    [Ship_Via]               NVARCHAR (4)  NULL,
+    [KPI_Inbound]            DATETIME2 (7) NULL,
+    [KPI_Outbound]           INT           NULL,
+    [CheckSum]               NVARCHAR (32) NULL,
+    [CheckSumSCD1]           NVARCHAR (32) NULL,
+    [CheckSumSCD2]           NVARCHAR (32) NULL,
+    [IsActual]               INT           NOT NULL,
+    [IsInferred]             INT           NULL,
+    [IsDeleted]              INT           NULL,
+    [EffectiveDate]          DATE          NOT NULL,
+    [ExpiryDate]             DATE          NULL,
+    [InsertDateTime]         DATETIME2 (7) NULL,
+    [UpdateDateTime]         DATETIME2 (7) NULL,
+    [BatchID]                BIGINT        NOT NULL,
+    [ProcessLogID]           BIGINT        NULL,
+    CONSTRAINT [PK_Kewill_Dossiers] PRIMARY KEY CLUSTERED ([D_Kewill_Dossiers_Skey] ASC) WITH (FILLFACTOR = 80)
+);
+

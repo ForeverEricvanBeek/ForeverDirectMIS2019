@@ -1,0 +1,26 @@
+﻿CREATE TABLE [DM].[D_IFS_OF_Order] (
+    [D_IFS_OF_Order_Skey] BIGINT          IDENTITY (1, 1) NOT NULL,
+    [DateKey]             DATE            NULL,
+    [Authorize_Code]      NVARCHAR (20)   NULL,
+    [Order_NO]            NVARCHAR (12)   NOT NULL,
+    [Country_Code]        NVARCHAR (2)    NULL,
+    [Master_Order]        NVARCHAR (50)   NULL,
+    [Status]              NVARCHAR (4000) NULL,
+    [Order_Facility_Code] NVARCHAR (20)   NULL,
+    [Country_Name]        NVARCHAR (50)   NULL,
+    [Order_Type]          NVARCHAR (3)    NULL,
+    [CheckSum]            NVARCHAR (32)   NULL,
+    [CheckSumSCD1]        NVARCHAR (32)   NULL,
+    [CheckSumSCD2]        NVARCHAR (32)   NULL,
+    [IsActual]            INT             NOT NULL,
+    [IsInferred]          INT             NULL,
+    [IsDeleted]           INT             NULL,
+    [EffectiveDate]       DATE            NOT NULL,
+    [ExpiryDate]          DATE            NULL,
+    [InsertDateTime]      DATETIME2 (7)   NULL,
+    [UpdateDateTime]      DATETIME2 (7)   NULL,
+    [BatchID]             BIGINT          NOT NULL,
+    [ProcessLogID]        BIGINT          NULL,
+    CONSTRAINT [PK_D_IFS_OF_Order] PRIMARY KEY CLUSTERED ([D_IFS_OF_Order_Skey] ASC) WITH (FILLFACTOR = 80)
+);
+

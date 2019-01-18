@@ -1,4 +1,6 @@
-﻿CREATE VIEW FDV.VW_F_OF_Activity
+﻿
+
+CREATE VIEW [FDV].[VW_F_OF_Activity]
 AS
 
 SELECT
@@ -19,7 +21,7 @@ SELECT
 	ELSE 'Unknown'
   END									AS LANE
 FROM		SCHAEFER.UserStatistic US
-INNER JOIN	WEB.Pickers PI
+INNER JOIN	WEB.Picker PI
 ON			PI.Picker_ID = SUBSTRING(US.PickerID,2,5)
 AND			PI.ActInd = 'Y'
 WHERE		US.ActInd = 'Y'

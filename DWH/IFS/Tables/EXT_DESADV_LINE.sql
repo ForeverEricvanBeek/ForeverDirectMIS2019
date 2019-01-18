@@ -6,7 +6,7 @@
     [LINE_NO]                  NVARCHAR (2000) NULL,
     [RELEASE_NO]               NVARCHAR (2000) NULL,
     [PART_NO]                  NVARCHAR (2000) NULL,
-    [DESPATCH_QTY]             INT             NULL,
+    [DESPATCH_QTY]             BIGINT          NULL,
     [SALES_UNIT_MEAS]          NVARCHAR (2000) NULL,
     [SALES_PART_NO]            NVARCHAR (2000) NULL,
     [SUPPLIER_ORDER_NO]        NVARCHAR (2000) NULL,
@@ -47,4 +47,6 @@
     [ProcessLogID]             BIGINT          NULL,
     CONSTRAINT [PK_EXT_DESADV_LINE] PRIMARY KEY CLUSTERED ([MESSAGE_ID] ASC, [DELNOTE_NO] ASC, [SEQUENCE_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 

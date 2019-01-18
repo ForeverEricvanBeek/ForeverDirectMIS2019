@@ -15,6 +15,13 @@ FROM (
 			, OD.CREATED_DTTM
 	 FROM DWH.MANH.ORDERS AS OD
 	 WHERE OD.ActInd = 'Y'
+	 UNION ALL
+	 SELECT
+			dbo.fn_StripCharacters(ISNULL(OD.D_STATE_PROV,'0') + ISNULL(OD.D_POSTAL_CODE,'0') + ISNULL(OD.D_NAME,'0'), '^a-z0-9') + dbo.fn_StripCharacters(ISNULL(OD.D_ADDRESS_1,'0') + ISNULL(OD.D_ADDRESS_2,'0'), '^0-9') AS Customer_ID
+			, OD.TC_ORDER_ID			AS Customer_Order
+			, OD.CREATED_DTTM
+	 FROM DWH.MANH_ARC.ORDERS AS OD
+	 WHERE OD.ActInd = 'Y'
 ) X
 GROUP BY
    X.Customer_ID

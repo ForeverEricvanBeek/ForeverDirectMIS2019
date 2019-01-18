@@ -229,6 +229,8 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_tsdsmd] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC) ON [DWH_KEWILL_ARC]
+    CONSTRAINT [PK_tsdsmd] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_KEWILL_ARC]
 ) ON [DWH_KEWILL_ARC];
+
+
 

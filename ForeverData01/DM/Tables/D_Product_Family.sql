@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [DM].[D_Product_Family] (
     [D_Product_Family_Skey] BIGINT        IDENTITY (1, 1) NOT NULL,
-    [Prod_ID]               NVARCHAR (5)  NOT NULL,
+    [FAM_Prod_ID]           NVARCHAR (5)  NOT NULL,
     [Description]           NVARCHAR (35) NULL,
     [CheckSum]              NVARCHAR (32) NULL,
     [CheckSumSCD1]          NVARCHAR (32) NULL,
@@ -16,4 +16,6 @@
     [ProcessLogID]          BIGINT        NULL,
     CONSTRAINT [PK_D_Product_Family] PRIMARY KEY CLUSTERED ([D_Product_Family_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

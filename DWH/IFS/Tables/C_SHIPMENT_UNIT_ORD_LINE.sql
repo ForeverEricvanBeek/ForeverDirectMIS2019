@@ -13,7 +13,7 @@
     [ENG_CHG_LEVEL]           NVARCHAR (25)   NULL,
     [SERIAL_NO]               NVARCHAR (50)   NULL,
     [WAIV_DEV_REJ_NO]         NVARCHAR (15)   NULL,
-    [NET_WEIGHT]              INT             NULL,
+    [NET_WEIGHT]              DECIMAL (18, 2) NULL,
     [VOLUME]                  INT             NULL,
     [QUANTITY_ON_LABEL]       INT             NULL,
     [LOT_BATCH_NO_ON_LABEL]   NVARCHAR (25)   NULL,
@@ -30,6 +30,8 @@
     [ProcessLogID]            BIGINT          NULL,
     CONSTRAINT [PK_C_SHIPMENT_UNIT_ORD_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [KEY_UNIT_ID] ASC, [SHIP_UNIT_ORDER_LINE_ID] ASC, [SHIPMENT_ID] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

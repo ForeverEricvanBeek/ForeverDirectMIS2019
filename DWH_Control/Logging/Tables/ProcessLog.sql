@@ -41,3 +41,11 @@
     CONSTRAINT [FK_ProcessLog_ParentProcessLog] FOREIGN KEY ([ProcessLogParentID]) REFERENCES [Logging].[ProcessLog] ([ProcessLogID])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [<Name of Missing Index, sysname,>]
+    ON [Logging].[ProcessLog]([IsSuccessful] ASC, [ExecutionStartDate] ASC)
+    INCLUDE([PackageName]);
+

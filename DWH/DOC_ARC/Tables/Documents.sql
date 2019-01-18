@@ -18,6 +18,8 @@
     [IsDeleted]         CHAR (1)       NULL,
     [BatchID]           BIGINT         NULL,
     [ProcessLogID]      BIGINT         NULL,
-    CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [id] ASC) ON [DWH_DOC_ARC]
+    CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [id] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_DOC_ARC]
 ) ON [DWH_DOC_ARC];
+
+
 

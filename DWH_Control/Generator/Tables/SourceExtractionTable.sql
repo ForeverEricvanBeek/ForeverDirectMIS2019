@@ -7,8 +7,9 @@
     [SourceTable]             NVARCHAR (128)  NOT NULL,
     [TargetTable]             NVARCHAR (128)  NULL,
     [TargetConnection]        NVARCHAR (50)   NOT NULL,
+    [ArchiveDate]             NVARCHAR (50)   NULL,
     [ExtractionType]          NVARCHAR (2)    NOT NULL,
-    [ArchiveType]             NVARCHAR (2)    NULL,
+    [ArchiveType]             NVARCHAR (3)    NULL,
     [CleansingType]           NVARCHAR (2)    NULL,
     [IncrementalSchema]       NVARCHAR (128)  NULL,
     [IncrementalTable]        NVARCHAR (128)  NULL,
@@ -20,6 +21,8 @@
     [Options]                 NVARCHAR (1000) NULL,
     [IsActive]                BIT             NOT NULL
 );
+
+
 
 
 

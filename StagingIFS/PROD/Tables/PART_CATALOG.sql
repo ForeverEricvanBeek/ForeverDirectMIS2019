@@ -45,9 +45,9 @@
     [GTIN_SERIES_DB]                NVARCHAR (20)   NULL,
     [STOP_ARRIVAL_ISSUED_SERIAL]    NVARCHAR (4000) NULL,
     [STOP_ARRIVAL_ISSUED_SERIAL_DB] NVARCHAR (5)    NULL,
-    [WEIGHT_NET]                    INT             NULL,
+    [WEIGHT_NET]                    DECIMAL (18, 4) NULL,
     [UOM_FOR_WEIGHT_NET]            NVARCHAR (30)   NULL,
-    [VOLUME_NET]                    INT             NULL,
+    [VOLUME_NET]                    DECIMAL (18, 2) NULL,
     [UOM_FOR_VOLUME_NET]            NVARCHAR (30)   NULL,
     [FREIGHT_FACTOR]                INT             NULL,
     [ALLOW_AS_NOT_CONSUMED]         NVARCHAR (4000) NULL,
@@ -58,4 +58,6 @@
     [ProcessLogID]                  BIGINT          NULL,
     CONSTRAINT [PK_PART_CATALOG] PRIMARY KEY CLUSTERED ([PART_NO] ASC)
 );
+
+
 

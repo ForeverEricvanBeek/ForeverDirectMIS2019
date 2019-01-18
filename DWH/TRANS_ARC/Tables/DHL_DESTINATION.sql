@@ -19,5 +19,8 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL
-);
+)
+WITH (DATA_COMPRESSION = PAGE);
+
+
 

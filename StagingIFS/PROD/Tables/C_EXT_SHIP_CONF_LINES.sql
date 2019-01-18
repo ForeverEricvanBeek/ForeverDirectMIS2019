@@ -15,7 +15,7 @@
     [HANDLING_UNIT_ID]       NVARCHAR (50)   NULL,
     [PACK_SEQ]               INT             NULL,
     [PACKAGE_UNIT_ID]        NVARCHAR (50)   NULL,
-    [GROSS_WEIGHT]           INT             NULL,
+    [GROSS_WEIGHT]           DECIMAL (18, 2) NULL,
     [PARCEL_NO]              NVARCHAR (35)   NULL,
     [QTY_IN_HANDLING_UNIT]   INT             NULL,
     [QTY_IN_PACKAGE_UNIT]    INT             NULL,
@@ -32,4 +32,6 @@
     [ProcessLogID]           BIGINT          NULL,
     CONSTRAINT [PK_C_EXT_SHIP_CONF_LINES] PRIMARY KEY CLUSTERED ([SEQ_ID] ASC)
 );
+
+
 
