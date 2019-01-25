@@ -78,6 +78,13 @@
             string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
             string varTaskName = "Dataflow Load " + varName;
             string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
+            
+            string varSourceDatabase = "";
+            if (varExtractionSourceSchema == "IFS") {
+                varSourceDatabase = @"[FDODWHP01\DWHIFS].StagingIFS_PK";
+            } else {
+                varSourceDatabase = @"StagingPK";
+            }
             #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -217,7 +224,7 @@
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
                                     	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-                                    	LEFT JOIN	[FDODWHP01\DWHIFS].StagingIFS_PK." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MSPK.BatchID IS NULL
                                     	AND			MS.IsDeleted = 'N'
@@ -229,7 +236,7 @@
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
                                     	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-                                    	LEFT JOIN	[FDODWHP01\DWHIFS].StagingIFS_PK." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MSPK.BatchID IS NULL
                                     	AND			MS.IsDeleted = 'N'
@@ -237,7 +244,6 @@
                                     
                                     UPDATE		DWH." + varTargetSchema + @"." + varTargetTable + @" SET
                                     	IsDeleted = 'Y'
-                                    	, ActInd = 'N'
                                     	, End_Date = GETDATE()
                                     FROM		CTE_DELETED MSPK
                                     WHERE		" + VarPrimKeyJoin2 + @" 1=1;";#>

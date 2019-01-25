@@ -14,8 +14,8 @@
         string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
                                             AS (
                                                 select TC.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  , COLUMN_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  
-                                                from [StagingIFS].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                JOIN [StagingIFS].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
+                                                from [Staging].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                                JOIN [Staging].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
                                                 ON	TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG
                                                 AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA
                                                 AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME
@@ -36,7 +36,7 @@
                                                     ,SC.[Options]
                                                     ,SC.[ConnectionString]
                                                     ,ST.[ExtractionType]
-                                                    ,ST.[TargetConnection] + '_PK' AS TargetConnection
+                                                    ,ST.[TargetConnection] + 'PK' AS TargetConnection
                                                     ,ST.[TargetSchema]
                                                     ,ST.[TargetTable]
                                                     ,ST.[IncrementalSchema]
@@ -55,8 +55,8 @@
                                             ON		    ST.[TargetSchema] = CS.[TABLE_SCHEMA]
                                                 AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                 WHERE   ST.[IsActive] = 1
-                                                AND		ST.[ExtractionType] <> 'F'
-                                                AND ST.IsLoading = 0
+                                                AND		ST.[CleansingType] = 'PK'
+                                                AND		ST.SourceConnection = 'WMS'
                                             ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
@@ -175,11 +175,12 @@
                                                     ,ISNULL(ISNULL(sc.[TargetColumnScale], ic.NUMERIC_SCALE),0) as [TargetColumnScale]
                                                     ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
                                                     ,dc.[DataTypeExpression]
-                                                    FROM         [StagingIFS_PK].INFORMATION_SCHEMA.COLUMNS ic
+                                                    FROM         [StagingPK].INFORMATION_SCHEMA.COLUMNS ic
                                                     INNER JOIN	  [Generator].[SourceExtractionTable] st
                                                     on			  st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME
                                                     AND          st.[IsActive] =  1
-                                                    AND          st.IsLoading = 0
+                                                    AND		     st.[CleansingType] = 'PK'
+                                                    AND		     st.SourceConnection = 'WMS'
                                                     INNER JOIN	  [Generator].[SourceExtractionColumn] sc
                                                     ON			  sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable
                                                     AND          sc.[IsActive] =  1
@@ -228,10 +229,10 @@
             }
             
             if (varExtractionArchiveTable.Length >0) {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
-                varExtractionSQLStatement += "UNION ALL SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionArchiveTable + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
+                varExtractionSQLStatement += "UNION ALL SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionArchiveTable;
             } else {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
             }
             #>
     
@@ -526,19 +527,22 @@
 
         <!-- create overall package. One per Target schema.-->
         <# string sqlTargetSchemas = @"SELECT DISTINCT
-                                        [TargetConnection]
+                                        [TargetConnection] + 'PK' AS TargetConnection
+                                        , TargetConnection AS tempTargetConnection
                                         ,[TargetSchema]
                                         ,'Total' AS [TargetTable]
                                         ,'CTRL-PK' AS PackagePrefix
                                         ,[IsStaging]
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
-                                        AND st.IsLoading = 0
+                                        AND st.[CleansingType] = 'PK'
+                                        AND st.SourceConnection = 'WMS'
                                         ";
         
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
             string varTargetConnection = rowTargetSchemas["TargetConnection"].ToString();
+            string vartempTargetConnection = rowTargetSchemas["tempTargetConnection"].ToString();
             string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
             string varTargetTable = rowTargetSchemas["TargetTable"].ToString();
             string varPackagePrefix = rowTargetSchemas["PackagePrefix"].ToString();
@@ -601,11 +605,12 @@
                                                             FROM      [Generator].[SourceExtractionTable] st 
                                                             JOIN	  [Generator].[Connection] con 	
                                                             ON		  [st].[SourceConnection] = [con].[Name]
-                                                            WHERE     [TargetConnection] = '"  + varTargetConnection + @"' 
+                                                            WHERE     [TargetConnection] = '"  + vartempTargetConnection + @"' 
                                                             AND       [TargetSchema] = '" + varTargetSchema + @"' 
                                                             AND       [st].[IsActive] = 1 
                                                             AND       [IsStaging] = '" + varTargetIsStaging + @"' 
-                                                            AND st.IsLoading = 0
+                                                            AND       st.[CleansingType] = 'PK'
+                                                            AND       st.SourceConnection = 'WMS'
                                                             ORDER BY  [SourceTable]
                                                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);

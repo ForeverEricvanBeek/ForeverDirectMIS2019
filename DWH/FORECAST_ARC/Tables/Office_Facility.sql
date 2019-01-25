@@ -9,8 +9,10 @@
     [IsDeleted]       CHAR (1)      NULL,
     [BatchID]         BIGINT        NULL,
     [ProcessLogID]    BIGINT        NULL,
-    CONSTRAINT [PK_Office_Facility] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_FORECAST_ARC]
+    CONSTRAINT [PK_Office_Facility] PRIMARY KEY CLUSTERED ([ID] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_FORECAST_ARC]
 ) ON [DWH_FORECAST_ARC];
+
+
 
 
 

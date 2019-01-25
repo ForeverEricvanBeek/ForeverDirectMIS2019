@@ -1,4 +1,4 @@
-CREATE TABLE [EXTRA].[ORDERS_SHIP_DATE] (
+﻿CREATE TABLE [EXTRA].[ORDERS_SHIP_DATE] (
     [TC_Order_ID]             NVARCHAR (50) NOT NULL,
     [Order_Create_Date]       DATETIME2 (7) NULL,
     [Order_Cuttoff_Time]      TIME (7)      NULL,
@@ -10,7 +10,7 @@ CREATE TABLE [EXTRA].[ORDERS_SHIP_DATE] (
     [IsDeleted]               CHAR (1)      NULL,
     [BatchID]                 BIGINT        NULL,
     [ProcessLogID]            BIGINT        NULL,
-    CONSTRAINT [PK_ORDERS_SHIP_DATE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TC_Order_ID] ASC) ON [DWH_EXTRA]
+    CONSTRAINT [PK_ORDERS_SHIP_DATE] PRIMARY KEY CLUSTERED ([TC_Order_ID] ASC, [Eff_Date] ASC) ON [DWH_EXTRA]
 ) ON [DWH_EXTRA];
 
 
@@ -18,9 +18,8 @@ CREATE TABLE [EXTRA].[ORDERS_SHIP_DATE] (
 
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [NI_EXTRA_ORDERS_SHIP_DATE_ORDERID_ACTIND]
-    ON [EXTRA].[ORDERS_SHIP_DATE]([TC_Order_ID] ASC, [ActInd] ASC)
-    INCLUDE([Order_Planned_Ship_Date]) WITH (FILLFACTOR = 90)
-    ON [DWH_EXTRA];
+
 

@@ -1,8 +1,8 @@
 <#@ template language="C#" hostspecific="true" tier="3"#>
 <#@ import namespace="System.Data" #>
-<#@ import namespace="Varigence.Languages.Biml.Connection" #>
-<#@ import namespace="Varigence.Biml.Extensions" #>
-<#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#>
+<#@ import namespace="Varigence.Languages.biml.Connection" #>
+<#@ import namespace="Varigence.biml.Extensions" #>
+<#@ import namespace="Varigence.Hadron.CoreLowerer.SchemaManagement"#>
 <#@ include file="ProjectSettings.cs" #>
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <Packages>
@@ -42,15 +42,24 @@
                                             ,dbcol.[Column_id] AS [ColumnPosition]
                                             ,dbtyp.[name] AS [ColumnDataType]
                                             ,CASE
-												WHEN dbtyp.[name] = 'nvarchar' THEN dbcol.[max_length]/2 
+												WHEN dbtyp.[name] = 'nvarchar' AND dbcol.[max_length] <> -1 THEN dbcol.[max_length]/2 
 												ELSE dbcol.[max_length]
 											END AS [ColumnDataLength]
                                             ,dbcol.[scale] AS [ColumnDataScale]
                                             ,dbcol.[precision] AS [ColumnDataPrecision]
                                             ,dbcol.[is_nullable] AS [ColumnNotNullFlag]
+                                            , CASE
+                                        		WHEN col.ColumnType = 'bk' THEN 'NOT NULL'
+                                        		WHEN col.ColumnType = 'sk' THEN 'NULL'
+                                        		ELSE 'NULL'
+                                        	END	AS [ColumnPK]
                                             FROM       DWH.sys.all_columns dbcol
                                             JOIN       DWH.sys.types dbtyp
                                             ON         dbtyp.system_type_id =  dbcol.system_type_id
+                                            LEFT JOIN   DWH_Control.Generator.Datamart2Column col
+                                            ON			col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS
+                                            AND			col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  SUBSTRING(OBJECT_NAME(dbcol.object_id,DB_ID('" + DWHDBName + @"')),4,99) collate SQL_Latin1_General_CP1_CS_AS
+                                            AND			col.[IsActive] =  1 
                                             WHERE      OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + DWHDBName + @"')) =  '" + varDWHSchema + @"' 
                                             AND        OBJECT_NAME(dbcol.object_id,DB_ID('" + DWHDBName + @"')) =  '" + varDWHTable + @"' 
                                             AND        dbtyp.[name] != 'sysname'
@@ -178,8 +187,9 @@
             if (rowBusinessKeys.Length > 0) {
                 for(int i = 0; i < rowBusinessKeys.Length; i ++) {
                     string varColumnName = (string)rowBusinessKeys[i]["ColumnName"];
+                    string varColumnType = (string)rowBusinessKeys[i]["ColumnDataType"];
                     varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
-                    if (varLoadingType.ToLower() == "ui-t3") {
+                    if (varLoadingType.ToLower() == "ui-t3" && (varColumnType.ToLower() == "nvarchar" || varColumnType.ToLower() == "varchar")) {
                         varBKJoinClause += "AND ms." + varColumnName + " collate SQL_Latin1_General_CP1_CS_AS = mt." + varColumnName;
                     } else {
                         varBKJoinClause += "AND ms." + varColumnName + " = mt." + varColumnName;  
@@ -254,10 +264,8 @@
                 } else if (AllNumericDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
                     varSqlTableVarClause += ", " + varColumnName + " " + varColumnDataType2 + "(" + varColumnDataPrecision + "," + varColumnDataScale + ")";
                 }
-                 if (varLoadingType.ToLower() == "ui-t3" && rowSourceColumns[i]["ColumnNotNullFlag"].ToString() == "True") {
-                    varSqlTableVarClause += @" NULL" + "\n";
-                 } else if (varLoadingType.ToLower() == "ui-t3" && rowSourceColumns[i]["ColumnNotNullFlag"].ToString() == "False") {
-                     varSqlTableVarClause += @" NOT NULL" + "\n";
+                 if (varLoadingType.ToLower() == "ui-t3") {
+                    varSqlTableVarClause += " " + rowSourceColumns[i]["ColumnPK"].ToString() + "\n";
                  } else {
                      varSqlTableVarClause +=  "\n";
                  }

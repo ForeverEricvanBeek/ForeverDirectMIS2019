@@ -14,7 +14,7 @@
     </RootPath>
     <RootNamespace>Staging</RootNamespace>
     <AssemblyName>Staging</AssemblyName>
-    <ModelCollation>1033, CI</ModelCollation>
+    <ModelCollation>1033,CS</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -23,6 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CS_AS</DefaultCollation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -379,11 +380,6 @@
     <Build Include="WEB\Tables\OF_Issues.sql" />
     <Build Include="WEB\Tables\Messages.sql" />
     <Build Include="WEB\Tables\Holiday.sql" />
-    <Build Include="SCHAEFER\Tables\logSteuerTrace.sql" />
-    <Build Include="SCHAEFER\Tables\logPickingService.sql" />
-    <Build Include="SCHAEFER\Tables\logPblServer.sql" />
-    <Build Include="SCHAEFER\Tables\logHcom.sql" />
-    <Build Include="SCHAEFER\Tables\logError.sql" />
     <Build Include="MANH\Tables\LPN_NOTES.sql" />
     <Build Include="EXTRA\Tables\ORDERS_SHIP_DATE.sql" />
     <Build Include="DOC\Tables\PlanetPress.sql" />
