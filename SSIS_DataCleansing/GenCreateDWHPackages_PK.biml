@@ -54,7 +54,6 @@
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
             string varExtractionSourceConnection  = rowSourceExtractionTable["SourceConnection"].ToString();
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
-            string varExtractionAlternativeSchema = rowSourceExtractionTable["AlternativeSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
             string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
             string varExtractionOptions = rowSourceExtractionTable["Options"].ToString();
@@ -80,10 +79,13 @@
             string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
             
             string varSourceDatabase = "";
+            string varExtractionAlternativeSchema = "";
             if (varExtractionSourceSchema == "IFS") {
                 varSourceDatabase = @"[FDODWHP01\DWHIFS].StagingIFS_PK";
+                varExtractionAlternativeSchema = rowSourceExtractionTable["AlternativeSchema"].ToString();
             } else {
                 varSourceDatabase = @"StagingPK";
+                varExtractionAlternativeSchema = rowSourceExtractionTable["TargetSchema"].ToString();
             }
             #>
     

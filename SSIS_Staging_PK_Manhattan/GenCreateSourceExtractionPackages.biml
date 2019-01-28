@@ -45,6 +45,7 @@
                                                     ,ST.[IncrementalKeyColumn]
                                                     ,ST.[IsStaging]
                                                     ,ST.[ArchiveTable]
+                                                    ,ST.[ArchiveSchema]
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,'PK' PackagePrefix
                                                     ,ST.[WhereStatement]
@@ -66,6 +67,7 @@
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
             string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
             string varExtractionArchiveTable = rowSourceExtractionTable["ArchiveTable"].ToString();
+            string varExtractionArchiveSchema = rowSourceExtractionTable["ArchiveSchema"].ToString();
             string varExtractionOptions = rowSourceExtractionTable["Options"].ToString();
             string varExtractionConnectionString = rowSourceExtractionTable["ConnectionString"].ToString();
             string varExtractionType = rowSourceExtractionTable["ExtractionType"].ToString();
@@ -150,65 +152,18 @@
             string varSQLSelectSourceExtractionControl = "SELECT MAX(LastDate) AS LastDate, MAX(LastID) AS LastID from (SELECT CONVERT(VARCHAR, MAX([LastExtractionDate]), 120) AS LastDate, MAX(LastExtractionID) AS LastID \nFROM [Control].[SourceExtractionControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionSourceSchema+"' \nAND [SourceTable] = '"+varExtractionSourceTable+"' UNION SELECT CONVERT(DATE,'20000101',120), CAST(0 AS BIGINT))a";
             string varSQLUpdateSourceExtractionControl = "MERGE [Control].[SourceExtractionControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionSourceSchema+"' as [SourceSchema] \n , '"+varExtractionSourceTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastExtractionDate] \n , ? as [LastExtractionID]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastExtractionDate] \n , S.[LastExtractionID]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastExtractionDate] = S.[LastExtractionDate] \n , [LastExtractionID] = S.[LastExtractionID] ;";
             string varExtractionSourceSchemaPlus = varTableBeginCharacter + varExtractionSourceSchema + varTableCloseCharacter +".";
+            string varExtractionArchiveSchemaPlus = varTableBeginCharacter + varExtractionArchiveSchema + varTableCloseCharacter +".";
             
             if (varExtractionSourceSchema == "") {
                 varExtractionSourceSchemaPlus = "";
             }
             
             string varExtractionSourceTablePlus = varTableBeginCharacter + varExtractionSourceTable  + varTableCloseCharacter;
+            string varExtractionArchiveTablePlus = varTableBeginCharacter + varExtractionArchiveTable  + varTableCloseCharacter;
             string varName = varExtractionSourceConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
             
             string varPackageName    = varExtractionPackagePrefix + "-" + varName;
 
-            string sqlSourceExtractionColumn = @"SELECT 
-                                                    ISNULL(sc.[SourceColumnName],ic.COLUMN_NAME) as[SourceColumnName]
-                                                    ,ISNULL(sc.[SourceColumnExpression],ic.COLUMN_NAME)	as [SourceColumnExpression]
-                                                    ,ISNULL(sc.[SourceColumnType], ic.DATA_TYPE) as [SourceColumnType]
-                                                    ,ISNULL(ISNULL(sc.[SourceColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [SourceColumnLength]
-                                                    ,ISNULL(ISNULL(sc.[SourceColumnPrecision], ic.NUMERIC_PRECISION),0) as [SourceColumnPrecision]
-                                                    ,ISNULL(ISNULL(sc.[SourceColumnScale], ic.NUMERIC_SCALE),0) as [SourceColumnScale]
-                                                    ,ISNULL(sc.[TargetColumnName],ic.COLUMN_NAME) as [TargetColumnName]
-                                                    ,ISNULL(sc.[TargetColumnExpression],ic.COLUMN_NAME) as [TargetColumnExpression]
-                                                    ,ISNULL(sc.[TargetColumnType], ic.DATA_TYPE) as [TargetColumnType]
-                                                    ,ISNULL(ISNULL(sc.[TargetColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [TargetColumnLength]
-                                                    ,ISNULL(ISNULL(sc.[TargetColumnPrecision], ic.NUMERIC_PRECISION),0) as [TargetColumnPrecision]
-                                                    ,ISNULL(ISNULL(sc.[TargetColumnScale], ic.NUMERIC_SCALE),0) as [TargetColumnScale]
-                                                    ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
-                                                    ,dc.[DataTypeExpression]
-                                                    FROM         [StagingPK].INFORMATION_SCHEMA.COLUMNS ic
-                                                    INNER JOIN	  [Generator].[SourceExtractionTable] st
-                                                    on			  st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME
-                                                    AND          st.[IsActive] =  1
-                                                    AND		     st.[CleansingType] = 'PK'
-                                                    AND		     st.SourceConnection = 'WMS'
-                                                    INNER JOIN	  [Generator].[SourceExtractionColumn] sc
-                                                    ON			  sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable
-                                                    AND          sc.[IsActive] =  1
-                                                    LEFT JOIN    [Generator].[DataTypeConversion]     dc
-                                                    ON           ic.DATA_TYPE collate SQL_Latin1_General_CP1_CS_AS =  [DataType] collate SQL_Latin1_General_CP1_CS_AS
-                                                    WHERE        st.[SourceConnection] = '" + varExtractionSourceConnection + @"'
-                                                    AND          st.[SourceSchema] = '" + varExtractionSourceSchema + @"' 
-                                                    AND         st.[SourceTable] = '" + varExtractionSourceTable + @"' 
-                                                    AND		  ic.COLUMN_NAME not in ('BatchID','ProcessLogID')
-                                                    ORDER BY     ic.ORDINAL_POSITION
-                                                    ";
-            DataTable tableSourceExtractionColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionColumn);
-            int varSourceExtractionColumnCount = tableSourceExtractionColumn.Rows.Count;
-            
-            string varSQLStatementColumns = "";
-            foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName             =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
-                if (varSourceColumnName == rowSourceExtractionColumn["SourceColumnName"].ToString() && varExtractionSourceType == "SQLServer") {
-                    varSourceColumnName = "[" + varSourceColumnName + "]";
-                }
-                int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                varSQLStatementColumns += ", " + varSourceColumnName;
-            }
-            if (varSQLStatementColumns.Length > 0) { //remove first comma
-                varSQLStatementColumns = varSQLStatementColumns.Substring(2, varSQLStatementColumns.Length - 2);
-            } else {
-                varSQLStatementColumns = "*";
-            }
             string varExtractionSQLStatement = "";
             string varExtractionDateConversion = "";
             string varExtractionIDConversion = "0";
@@ -227,15 +182,52 @@
                     varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
                     break;
             }
+
+            string varSQLStatementColumns = "";
+            string sqlsourcecolumns = @"select 
+                                            COL.TABLE_NAME
+                                            , COL.COLUMN_NAME
+                                            , COL.ORDINAL_POSITION
+                                        from		StagingPK.INFORMATION_SCHEMA.COLUMNS COL
+                                        LEFT JOIN	[StagingPK].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                        ON			TC.TABLE_NAME = COL.TABLE_NAME
+                                        AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
+                                        LEFT JOIN	[StagingPK].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
+                                        ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
+                                        AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
+                                        AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
+                                        AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
+                                        LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
+                                        ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
+                                        AND			DWC.DWHTable			= COL.TABLE_NAME
+                                        AND			DWC.DWHColumnName		= COL.COLUMN_NAME
+                                        where		COL.TABLE_NAME= '" + varTargetTable + @"'
+                                        and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
+                                        and         COL.COLUMN_NAME NOT IN ('BatchID','ProcessLogID')
+                                        order by 
+                                        COL.TABLE_NAME
+                                        , COL.ORDINAL_POSITION
+                                        ";
+            DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
+            foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
+                string VarSourceColumnName = rowsourcecolumns["COLUMN_NAME"].ToString();
+                varSQLStatementColumns += " ," + VarSourceColumnName + "";
+            }
+
+            if (varSQLStatementColumns.Length > 0) { //remove first comma
+                varSQLStatementColumns = varSQLStatementColumns.Substring(2, varSQLStatementColumns.Length - 2);
+            } else {
+                varSQLStatementColumns = "*";
+            }
             
             if (varExtractionArchiveTable.Length >0) {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
-                varExtractionSQLStatement += "UNION ALL SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionArchiveTable;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + @"
+                                             UNION ALL
+                                             SELECT " + varSQLStatementColumns + " FROM " + varExtractionArchiveSchemaPlus + varExtractionArchiveTablePlus;
             } else {
                 varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus;
             }
             #>
-    
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
                     <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
@@ -391,55 +383,11 @@
                                         <DerivedColumns Name="Derived Column <#=varName#>">
                                             <InputPath OutputPathName="<#=varOutputPathName#>" />
                                             <Columns>
-                                                <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                                                    string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                    string varTargetColumnExpression = rowSourceExtractionColumn["TargetColumnExpression"].ToString();
-                                                    string varSourceColumnType = rowSourceExtractionColumn["SourceColumnType"].ToString();
-                                                    string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
-                                                    
-                                                    if (varTargetColumnExpression == varSourceColumnName && varExtractionSourceType == "SQLServer")  {
-                                                        varTargetColumnExpression = "[" + varTargetColumnExpression + "]";
-                                                    }
-                                                    
-                                                    if (AllCharacterDataTypes.ToLower().IndexOf("-"+varSourceColumnType.ToLower()+"-") != -1) {#>
-                                                        <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true">TRIM(<#=varTargetColumnExpression#>)</Column>
-                                                        <#} else if (varSourceColumnName != rowSourceExtractionColumn["TargetColumnExpression"].ToString()) {#>
-                                                        <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true"><#=varTargetColumnExpression#></Column>
-                                                    <#}
-                                                } #>
                                                 <Column Name="BatchID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditBatchID]</Column>
                                                 <Column Name="ProcessLogID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditProcessLogID]</Column>
                                             </Columns>
                                         </DerivedColumns>
-    
-                                        <#DataRow[] DataConversionRows;
-                                        string FilterExpression = "ColumnConversionNecessary = 1";
-                                        DataConversionRows = tableSourceExtractionColumn.Select(FilterExpression);
-                                        
-                                        if (DataConversionRows.Count() > 0) {                         #>
-                                            <DataConversion Name="Data Conversion <#=varName#>">
-                                            <InputPath OutputPathName="Derived Column <#=varName#>.Output" />
-                                                <Columns>
-                                                    <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows)  {
-                                                        string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                        string varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
-                                                        string varTargetColumnType = rowSourceExtractionColumn["TargetColumnType"].ToString();
-                                                        string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
-                                                        int varTargetColumnLength = (int)rowSourceExtractionColumn["TargetColumnLength"];
-                                                        int varTargetColumnPrecision = (int)rowSourceExtractionColumn["TargetColumnPrecision"];
-                                                        int varTargetColumnScale = (int)rowSourceExtractionColumn["TargetColumnScale"];
-                                                        int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                                                        
-                                                        if (varSourceColumnConversionNecessary == 1) {#>
-                                                            <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="dc.<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" Length="<#=varTargetColumnLength#>" Precision="<#=varTargetColumnPrecision#>" Scale="<#=varTargetColumnScale#>" />
-                                                        <#}
-                                                    }#>
-                                                </Columns>
-                                            </DataConversion>
-                                            <#varOutputPathName = "Data Conversion " + varName;
-                                            } else {
-                                                varOutputPathName = "Derived Column " + varName;
-                                            }#>
+                                            <#varOutputPathName = "Derived Column " + varName;#>
     
                                             <RowCount Name="RowCount Extraction <#=varName#>" VariableName="RC.RowCountExtract">
                                                 <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
@@ -457,26 +405,11 @@
                                                         string varSourceColumnName = "";
                                                         string varTargetColumnName = "";
                                                         int varSourceColumnConversionNecessary  = 0;
-                                                        // Check if there is an entry for this column in the SourceExtractonColumn table. This overrides the default 1-on-1 mapping
-                                                        FilterExpression = "TargetColumnName = '" + column.Name + "'";
-                                                        DataRow[] SourceExtractionRows;
-                                                        // This should return only a single row
-                                                        SourceExtractionRows = tableSourceExtractionColumn.Select(FilterExpression);
-                                                        if (SourceExtractionRows.Count() > 0) {
-                                                            DataRow rowSourceExtractionColumn  = SourceExtractionRows[0];
-                                                            varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                            varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
-                                                            varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                                                        } else {
-                                                            varSourceColumnName = column.Name;
+                                                               varSourceColumnName = column.Name;
                                                             varTargetColumnName = column.Name;
-                                                        }
-                                                        if (varSourceColumnConversionNecessary == 1)  { #>
-                                                            <Column SourceColumn="dc.<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
-                                                            <#} else {#>
+                                                        #>
                                                             <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
-                                                        <#}        
-                                                    }#>
+                                                        <#}#>
                                                     </Columns>
                                                 <#}#>
                                             </OleDbDestination>
