@@ -13,6 +13,8 @@
     [IsDeleted]          CHAR (1)       NULL,
     [BatchID]            BIGINT         NULL,
     [ProcessLogID]       BIGINT         NULL,
-    CONSTRAINT [PK_Pickers] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [Picker_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_Pickers] PRIMARY KEY CLUSTERED ([Picker_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 

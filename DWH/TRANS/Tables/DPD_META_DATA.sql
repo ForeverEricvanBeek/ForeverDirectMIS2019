@@ -8,8 +8,10 @@
     [IsDeleted]       CHAR (1)     NULL,
     [BatchID]         BIGINT       NULL,
     [ProcessLogID]    BIGINT       NULL,
-    CONSTRAINT [PK_DPD_META_DATA] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [META_DATA_ID] ASC) ON [DWH_TRANS]
+    CONSTRAINT [PK_DPD_META_DATA] PRIMARY KEY CLUSTERED ([META_DATA_ID] ASC, [Eff_Date] ASC) ON [DWH_TRANS]
 ) ON [DWH_TRANS];
+
+
 
 
 

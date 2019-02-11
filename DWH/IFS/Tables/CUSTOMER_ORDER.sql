@@ -134,8 +134,10 @@
     [IsDeleted]                     CHAR (1)        NULL,
     [BatchID]                       BIGINT          NULL,
     [ProcessLogID]                  BIGINT          NULL,
-    CONSTRAINT [PK_CUSTOMER_ORDER] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ORDER_NO] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_CUSTOMER_ORDER] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

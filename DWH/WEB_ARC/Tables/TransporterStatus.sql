@@ -12,6 +12,8 @@
     [IsDeleted]                     CHAR (1)      NULL,
     [BatchID]                       BIGINT        NULL,
     [ProcessLogID]                  BIGINT        NULL,
-    CONSTRAINT [PK_Transporter_Status] PRIMARY KEY CLUSTERED ([TransporterStatus_Carrier] ASC, [Eff_Date] ASC, [TransporterStatus_ShipVia] ASC, [TransporterStatus_Status] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_Transporter_Status] PRIMARY KEY CLUSTERED ([TransporterStatus_Carrier] ASC, [TransporterStatus_ShipVia] ASC, [TransporterStatus_Status] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 

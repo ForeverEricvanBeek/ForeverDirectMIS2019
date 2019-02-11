@@ -13,8 +13,10 @@
     [IsDeleted]           CHAR (1)        NULL,
     [BatchID]             BIGINT          NULL,
     [ProcessLogID]        BIGINT          NULL,
-    CONSTRAINT [PK_PRES_OBJECT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PO_ID] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_PRES_OBJECT] PRIMARY KEY CLUSTERED ([PO_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

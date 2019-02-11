@@ -24,8 +24,9 @@
     [ER_USER_TASK_GRP_ID]   INT             NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL
-)
-WITH (DATA_COMPRESSION = PAGE);
+) ON [DWH_MANH_ARC];
+
+
 
 
 

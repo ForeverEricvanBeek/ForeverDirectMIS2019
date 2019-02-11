@@ -34,8 +34,10 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_C_EXT_SHIP_CONF_LINES] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SEQ_ID] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_C_EXT_SHIP_CONF_LINES] PRIMARY KEY CLUSTERED ([SEQ_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

@@ -14,10 +14,10 @@
     [NET_CURR_CODE]            NVARCHAR (3)    NULL,
     [NET_RATE]                 INT             NULL,
     [NET_DIV_FACTOR]           INT             NULL,
-    [NET_CURR_AMOUNT]          INT             NULL,
-    [NET_DOM_AMOUNT]           INT             NULL,
-    [VAT_CURR_AMOUNT]          INT             NULL,
-    [VAT_DOM_AMOUNT]           INT             NULL,
+    [NET_CURR_AMOUNT]          DECIMAL (18, 2) NULL,
+    [NET_DOM_AMOUNT]           DECIMAL (18, 2) NULL,
+    [VAT_CURR_AMOUNT]          DECIMAL (18, 2) NULL,
+    [VAT_DOM_AMOUNT]           DECIMAL (18, 2) NULL,
     [DB_NET_AMOUNT]            NVARCHAR (2000) NULL,
     [DB_VAT_AMOUNT]            NVARCHAR (2000) NULL,
     [VAT_CURR_CODE]            NVARCHAR (3)    NULL,
@@ -89,8 +89,10 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_INVOICE_ITEM] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [Eff_Date] ASC, [INVOICE_ID] ASC, [ITEM_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_INVOICE_ITEM] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [ITEM_ID] ASC, [COMPANY] ASC, [Eff_Date] ASC) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

@@ -11,8 +11,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_tsfire] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC, [tsrefc] ASC) ON [DWH_KEWILL]
+    CONSTRAINT [PK_tsfire] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [tsrefc] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_KEWILL]
 ) ON [DWH_KEWILL];
+
+
 
 
 

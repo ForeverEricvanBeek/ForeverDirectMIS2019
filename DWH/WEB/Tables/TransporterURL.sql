@@ -9,6 +9,8 @@
     [IsDeleted]              CHAR (1)       NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
-    CONSTRAINT [PK_Transporter_URL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TransporterURL_ShipVia] ASC) ON [DWH_WEB]
+    CONSTRAINT [PK_Transporter_URL] PRIMARY KEY CLUSTERED ([TransporterURL_ShipVia] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_WEB]
 ) ON [DWH_WEB];
+
+
 

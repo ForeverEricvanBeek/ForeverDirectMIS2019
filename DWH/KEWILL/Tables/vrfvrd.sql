@@ -74,8 +74,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_vrfvrd] PRIMARY KEY CLUSTERED ([artkd] ASC, [Eff_Date] ASC, [rnropd] ASC, [vrfilk] ASC, [vrvrdt] ASC) ON [DWH_KEWILL]
+    CONSTRAINT [PK_vrfvrd] PRIMARY KEY CLUSTERED ([vrfilk] ASC, [rnropd] ASC, [artkd] ASC, [vrvrdt] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_KEWILL]
 ) ON [DWH_KEWILL];
+
+
 
 
 

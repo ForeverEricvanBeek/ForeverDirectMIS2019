@@ -8,8 +8,10 @@
     [IsDeleted]          CHAR (1)       NULL,
     [BatchID]            BIGINT         NULL,
     [ProcessLogID]       BIGINT         NULL,
-    CONSTRAINT [PK_hourtypes] PRIMARY KEY CLUSTERED ([bktype_id] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90, DATA_COMPRESSION = PAGE) ON [DWH_ATIMO_ARC]
+    CONSTRAINT [PK_hourtypes] PRIMARY KEY CLUSTERED ([bktype_id] ASC, [Eff_Date] ASC) ON [DWH_ATIMO_ARC]
 ) ON [DWH_ATIMO_ARC];
+
+
 
 
 

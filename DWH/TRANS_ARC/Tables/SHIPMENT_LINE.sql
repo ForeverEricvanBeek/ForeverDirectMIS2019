@@ -31,8 +31,10 @@
     [IsDeleted]                   CHAR (1)      NULL,
     [BatchID]                     BIGINT        NULL,
     [ProcessLogID]                BIGINT        NULL,
-    CONSTRAINT [PK_SHIPMENT_LINE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INTERFACE_ID] ASC, [SEQ_NR] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_TRANS_ARC]
+    CONSTRAINT [PK_SHIPMENT_LINE] PRIMARY KEY CLUSTERED ([INTERFACE_ID] ASC, [SEQ_NR] ASC, [Eff_Date] ASC) ON [DWH_TRANS_ARC]
 ) ON [DWH_TRANS_ARC];
+
+
 
 
 

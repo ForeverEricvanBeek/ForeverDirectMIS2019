@@ -19,8 +19,10 @@
     [IsDeleted]            CHAR (1)       NULL,
     [BatchID]              BIGINT         NULL,
     [ProcessLogID]         BIGINT         NULL,
-    CONSTRAINT [PK_KIALA_DEPOT] PRIMARY KEY CLUSTERED ([DEPOT_CODE] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_TRANS_ARC]
+    CONSTRAINT [PK_KIALA_DEPOT] PRIMARY KEY CLUSTERED ([DEPOT_CODE] ASC, [Eff_Date] ASC) ON [DWH_TRANS_ARC]
 ) ON [DWH_TRANS_ARC];
+
+
 
 
 

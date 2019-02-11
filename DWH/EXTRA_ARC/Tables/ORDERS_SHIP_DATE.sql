@@ -10,8 +10,10 @@
     [IsDeleted]               CHAR (1)      NULL,
     [BatchID]                 BIGINT        NULL,
     [ProcessLogID]            BIGINT        NULL,
-    CONSTRAINT [PK_ORDERS_SHIP_DATE] PRIMARY KEY CLUSTERED ([TC_Order_ID] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_EXTRA_ARC]
+    CONSTRAINT [PK_ORDERS_SHIP_DATE] PRIMARY KEY CLUSTERED ([TC_Order_ID] ASC, [Eff_Date] ASC) ON [DWH_EXTRA_ARC]
 ) ON [DWH_EXTRA_ARC];
+
+
 
 
 

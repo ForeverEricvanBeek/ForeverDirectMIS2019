@@ -12,15 +12,17 @@
     [PHONE]              VARCHAR (30)   NOT NULL,
     [FAX]                VARCHAR (30)   NOT NULL,
     [MAIL]               VARCHAR (50)   NULL,
-    [WEB]                VARCHAR (50)   NULL,
+    [WEB_ARC]            VARCHAR (50)   NULL,
     [Eff_Date]           DATE           NOT NULL,
     [End_Date]           DATE           NULL,
     [ActInd]             CHAR (1)       NULL,
     [IsDeleted]          CHAR (1)       NULL,
     [BatchID]            BIGINT         NULL,
     [ProcessLogID]       BIGINT         NULL,
-    CONSTRAINT [PK__DPD_DEPO__57A33E281273C1CD] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [GEOPOSTDEPOTNUMBER] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_TRANS_ARC]
+    CONSTRAINT [PK__DPD_DEPO__57A33E281273C1CD] PRIMARY KEY CLUSTERED ([GEOPOSTDEPOTNUMBER] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_TRANS_ARC]
 ) ON [DWH_TRANS_ARC];
+
+
 
 
 

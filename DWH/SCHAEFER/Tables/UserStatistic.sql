@@ -12,8 +12,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_UserStatistic] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LoggedIn] ASC, [PickerID] ASC) ON [DWH_SCHAEFER]
+    CONSTRAINT [PK_UserStatistic] PRIMARY KEY CLUSTERED ([PickerID] ASC, [LoggedIn] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_SCHAEFER]
 ) ON [DWH_SCHAEFER];
+
+
 
 
 

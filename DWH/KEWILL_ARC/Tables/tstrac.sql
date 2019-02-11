@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [KEWILL_ARC].[tstrac] (
     [dosvlg]       BIGINT        NOT NULL,
     [tsttgr]       NVARCHAR (15) NULL,
-    [tsacdt]       DATETIME2 (7) NOT NULL,
-    [tsacty]       DATETIME2 (7) NOT NULL,
+    [tsacdt]       DATE          NOT NULL,
+    [tsacty]       TIME (7)      NOT NULL,
     [tstzma]       NVARCHAR (6)  NULL,
     [volgnr]       INT           NOT NULL,
     [deskod]       NVARCHAR (5)  NULL,
@@ -32,8 +32,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_tstrac_1] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [Eff_Date] ASC, [tsacty] ASC, [volgnr] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_KEWILL_ARC]
+    CONSTRAINT [PK_tstrac] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [tsacty] ASC, [volgnr] ASC, [Eff_Date] ASC) ON [DWH_KEWILL_ARC]
 ) ON [DWH_KEWILL_ARC];
+
+
 
 
 

@@ -209,8 +209,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_tseecb] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [tseA00] ASC, [tseA01] ASC, [tseA02] ASC, [tseA03] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_KEWILL_ARC]
+    CONSTRAINT [PK_tseecb] PRIMARY KEY CLUSTERED ([tseA00] ASC, [tseA01] ASC, [tseA02] ASC, [tseA03] ASC, [Eff_Date] ASC) ON [DWH_KEWILL_ARC]
 ) ON [DWH_KEWILL_ARC];
+
+
 
 
 

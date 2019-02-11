@@ -15,8 +15,8 @@
     [REL_NO]                 NVARCHAR (4)    NULL,
     [LINE_ITEM_NO]           INT             NULL,
     [SERIAL_NO]              NVARCHAR (50)   NULL,
-    [NET_WEIGHT]             INT             NULL,
-    [HANDLING_UNIT_WEIGHT]   INT             NULL,
+    [NET_WEIGHT]             DECIMAL (18, 2) NULL,
+    [HANDLING_UNIT_WEIGHT]   DECIMAL (18, 2) NULL,
     [VOLUME]                 INT             NULL,
     [TYPE_OF_GOODS]          NVARCHAR (35)   NULL,
     [SSCC]                   NVARCHAR (18)   NULL,
@@ -35,8 +35,10 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_SHIPMENT_PACKAGE_UNIT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PACKAGE_UNIT_ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_SHIPMENT_PACKAGE_UNIT] PRIMARY KEY CLUSTERED ([PACKAGE_UNIT_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

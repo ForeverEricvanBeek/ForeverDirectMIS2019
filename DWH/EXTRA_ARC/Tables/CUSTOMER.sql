@@ -16,8 +16,10 @@
     [IsDeleted]                 CHAR (1)       NULL,
     [BatchID]                   BIGINT         NULL,
     [ProcessLogID]              BIGINT         NULL,
-    CONSTRAINT [PK_CUSTOMER] PRIMARY KEY CLUSTERED ([Customer_ID] ASC, [Customer_First_Order_Date] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_EXTRA_ARC]
+    CONSTRAINT [PK_CUSTOMER] PRIMARY KEY CLUSTERED ([Customer_ID] ASC, [Customer_First_Order_Date] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_EXTRA_ARC]
 ) ON [DWH_EXTRA_ARC];
+
+
 
 
 

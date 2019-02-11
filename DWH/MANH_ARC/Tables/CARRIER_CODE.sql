@@ -82,8 +82,10 @@
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
-    CONSTRAINT [PK_MANH_CARRIER_CODE] PRIMARY KEY CLUSTERED ([CARRIER_ID] ASC, [Eff_Date] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_MANH_ARC]
+    CONSTRAINT [PK_MANH_CARRIER_CODE] PRIMARY KEY CLUSTERED ([CARRIER_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

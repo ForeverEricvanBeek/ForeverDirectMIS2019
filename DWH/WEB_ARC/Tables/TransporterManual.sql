@@ -9,6 +9,8 @@
     [IsDeleted]                     CHAR (1)       NULL,
     [BatchID]                       BIGINT         NULL,
     [ProcessLogID]                  BIGINT         NULL,
-    CONSTRAINT [PK_Transporter_Manual] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TransporterManual_Code] ASC, [TransporterManual_New] ASC, [TransporterManual_ShipViaCode] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_Transporter_Manual] PRIMARY KEY CLUSTERED ([TransporterManual_Code] ASC, [TransporterManual_New] ASC, [TransporterManual_ShipViaCode] ASC, [Eff_Date] ASC) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 

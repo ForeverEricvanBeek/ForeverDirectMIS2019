@@ -19,8 +19,10 @@
     [Created_By]               NVARCHAR (255)  NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_QAScansBI_1] PRIMARY KEY CLUSTERED ([ID] ASC)
-);
+    CONSTRAINT [PK_QAScansBI] PRIMARY KEY CLUSTERED ([ID] ASC) ON [DWH_WEB]
+) ON [DWH_WEB];
+
+
 
 
 

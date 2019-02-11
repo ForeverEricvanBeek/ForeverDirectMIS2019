@@ -1,0 +1,115 @@
+﻿
+
+ CREATE VIEW [FDV].[VW_F_Obsolescense] as
+ select
+ LBM.INITIAL_CONTRACT as Contract,
+  IC.ITEM_NAME as SKU_Name,
+ IC.ITEM_ID as SKU_Code,
+ WI.BATCH_NBR as Lot_Code,
+ SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY) as Inventory_Netto_QTY,
+ MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(11,2))) as Inventory_Cost_Price,
+ (SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY))*MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(11,2))) as Inventory_Netto_Value,
+ LBM.EXPIRATION_DATE as Expiration_Date,
+ ISNULL(DATEDIFF(dd,getdate(),LBM.EXPIRATION_DATE),0) as Days_to_Expire
+ from MANH.WM_INVENTORY WI
+ join MANH.ITEM_CBO IC
+ on
+ WI.ITEM_ID=IC.ITEM_ID
+ AND
+ WI.INBOUND_OUTBOUND_INDICATOR is not null
+ AND
+ IC.ActInd='Y'
+ and
+ WI.ActInd='Y'
+ left join  IFS.LOT_BATCH_MASTER LBM
+ ON
+ LBM.PART_NO=IC.ITEM_NAME
+ AND
+ LBM.LOT_BATCH_NO=WI.BATCH_NBR
+ and
+ LBM.ActInd='Y'
+ and 
+ LBM.EXPIRATION_DATE>'2000-01-01'
+ left join IFS.INVENTORY_PART_UNIT_COST_SUM IPUC
+ on
+ IPUC.PART_NO= IC.ITEM_NAME
+ AND IPUC.LOT_BATCH_NO=WI.BATCH_NBR
+ AND IPUC.ActInd='Y'
+ LEFT JOIN       MANH.LPN_LOCK LL 
+ on
+ LL.LPN_ID=WI.LPN_ID
+ and 
+ LL.ActInd='Y'
+ 
+ --where IC.ITEM_NAME='065L'
+ --and
+ where
+  WI.BATCH_NBR<>'*'
+  and
+  WI.MARKED_FOR_DELETE='N'
+  and
+  WI.ActInd='Y'
+  and
+  IC.ActInd='Y'
+  and
+  LBM.INITIAL_CONTRACT='FD01'
+  and 
+  LL.INVENTORY_LOCK_CODE is null
+ group by  IC.ITEM_NAME,LBM.EXPIRATION_DATE,WI.BATCH_NBR,IC.ITEM_ID,LBM.INITIAL_CONTRACT
+ having  SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY)>0
+-- order by 7 asc
+/*union
+--tijdelijk uitgehackt omdat deze records niet van eerste belang zijn in obsolescense rapport en zwaar op de performace drukken
+ 
+SELECT IPIS.CONTRACT as Contract,  
+       IPIS.PART_NO as SKU_Name,
+	   I.ITEM_ID as SKU_Code,  
+       IPIS.LOT_BATCH_NO as Lot_Code,  
+       --sum(IPIS.QTY_ONHAND) Inventory_QTY,  
+        SUM(IPIS.QTY_ONHAND)-SUM(IPIS.QTY_RESERVED) as Inventory_Netto_QTY,
+	   ITH.COST Inventory_Cost_Price,
+	  (SUM(IPIS.QTY_ONHAND)-SUM(IPIS.QTY_RESERVED))*ITH.COST as Inventory_Netto_Value,
+	   LBM.EXPIRATION_DATE,
+	   DATEDIFF(dd,getdate(),LBM.EXPIRATION_DATE) as Days_to_Expire
+FROM IFS.INVENTORY_PART_IN_STOCK IPIS 
+JOIN  MANH.ITEM_CBO I
+on
+IPIS.PART_NO=I.ITEM_NAME
+and
+I.ActInd='Y'
+join  IFS.LOT_BATCH_MASTER LBM
+ON
+LBM.PART_NO=IPIS.PART_NO
+AND
+LBM.LOT_BATCH_NO=IPIS.LOT_BATCH_NO
+and
+LBM.ActInd='Y'
+and 
+LBM.EXPIRATION_DATE>'2000-01-01'
+
+JOIN (SELECT ITH2.CONTRACT,  
+				ITH2.PART_NO, 
+				ITH2.LOT_BATCH_NO, 
+				MAX(ITH2.COST) COST 
+				FROM IFS.INVENTORY_TRANSACTION_HIST ITH2 
+				where ITH2.DATE_APPLIED<=GETDATE()
+				and ITH2.ActInd='Y' 
+				and ITH2.CONTRACT='FD01'  
+				GROUP BY ITH2.CONTRACT
+				,ITH2.PART_NO
+				,ITH2.LOT_BATCH_NO
+				) ITH
+ON IPIS.CONTRACT=ITH.CONTRACT  
+AND IPIS.PART_NO=ITH.PART_NO  
+AND IPIS.LOT_BATCH_NO=ITH.LOT_BATCH_NO  
+AND IPIS.ActInd='Y'
+and  ITH.COST is not null
+
+GROUP BY IPIS.CONTRACT  
+       ,IPIS.PART_NO 
+	   ,I.ITEM_ID 
+       ,IPIS.LOT_BATCH_NO  
+	   ,ITH.COST
+	   ,LBM.EXPIRATION_DATE
+	   ,DATEDIFF(dd,getdate(),LBM.EXPIRATION_DATE)
+having  sum(IPIS.QTY_ONHAND)=0*/

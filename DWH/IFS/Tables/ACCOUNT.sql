@@ -81,8 +81,10 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_ACCOUNT] PRIMARY KEY CLUSTERED ([ACCOUNT] ASC, [COMPANY] ASC, [Eff_Date] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_ACCOUNT] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [ACCOUNT] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

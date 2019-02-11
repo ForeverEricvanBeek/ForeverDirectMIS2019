@@ -39,8 +39,10 @@
     [IsDeleted]            CHAR (1)        NULL,
     [BatchID]              BIGINT          NULL,
     [ProcessLogID]         BIGINT          NULL,
-    CONSTRAINT [PK_INTRASTAT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INTRASTAT_ID] ASC) ON [DWH_IFS]
+    CONSTRAINT [PK_INTRASTAT] PRIMARY KEY CLUSTERED ([INTRASTAT_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

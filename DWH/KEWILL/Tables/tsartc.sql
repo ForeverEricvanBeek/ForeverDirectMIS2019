@@ -22,8 +22,10 @@
     [IsDeleted]    CHAR (1)        NULL,
     [BatchID]      BIGINT          NULL,
     [ProcessLogID] BIGINT          NULL,
-    CONSTRAINT [PK_tsartc] PRIMARY KEY CLUSTERED ([artkd] ASC, [colkd] ASC, [Eff_Date] ASC, [rnropd] ASC) ON [DWH_KEWILL]
+    CONSTRAINT [PK_tsartc] PRIMARY KEY CLUSTERED ([rnropd] ASC, [artkd] ASC, [colkd] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_KEWILL]
 ) ON [DWH_KEWILL];
+
+
 
 
 

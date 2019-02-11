@@ -1,5 +1,6 @@
 ﻿
-CREATE VIEW VW_F_OF_Productivity
+
+CREATE VIEW [dbo].[VW_F_OF_Productivity]
 AS
 
 SELECT 

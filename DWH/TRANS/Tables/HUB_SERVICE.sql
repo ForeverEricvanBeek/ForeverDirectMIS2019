@@ -11,8 +11,10 @@
     [IsDeleted]        CHAR (1)       NULL,
     [BatchID]          BIGINT         NULL,
     [ProcessLogID]     BIGINT         NULL,
-    CONSTRAINT [PK_HUB_SERVICE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [HUB_SERVICE_ID] ASC) ON [DWH_TRANS]
+    CONSTRAINT [PK_HUB_SERVICE] PRIMARY KEY CLUSTERED ([HUB_SERVICE_ID] ASC, [Eff_Date] ASC) ON [DWH_TRANS]
 ) ON [DWH_TRANS];
+
+
 
 
 

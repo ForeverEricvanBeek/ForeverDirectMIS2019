@@ -13,8 +13,10 @@
     [IsDeleted]              CHAR (1)      NULL,
     [BatchID]                BIGINT        NULL,
     [ProcessLogID]           BIGINT        NULL,
-    CONSTRAINT [PK_FORWARDER_POD] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FORWARDER_POD_ID] ASC) ON [DWH_TRANS]
+    CONSTRAINT [PK_FORWARDER_POD] PRIMARY KEY CLUSTERED ([FORWARDER_POD_ID] ASC, [Eff_Date] ASC) ON [DWH_TRANS]
 ) ON [DWH_TRANS];
+
+
 
 
 

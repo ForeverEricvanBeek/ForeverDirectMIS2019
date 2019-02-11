@@ -5,18 +5,18 @@
     [ITEM_ID]                    INT             NULL,
     [INVOICE_DATE]               DATETIME2 (7)   NULL,
     [INVOICED_QTY]               INT             NULL,
-    [COST]                       INT             NULL,
-    [SALE_UNIT_PRICE]            INT             NULL,
-    [DISCOUNT]                   INT             NULL,
-    [BASE_SALE_UNIT_PRICE]       INT             NULL,
-    [CURR_DISCOUNT]              INT             NULL,
-    [ORDER_DISCOUNT]             INT             NULL,
-    [ORDER_CURR_DISCOUNT]        INT             NULL,
-    [NET_AMOUNT]                 INT             NULL,
+    [COST]                       DECIMAL (18, 2) NULL,
+    [SALE_UNIT_PRICE]            DECIMAL (18, 2) NULL,
+    [DISCOUNT]                   DECIMAL (18, 2) NULL,
+    [BASE_SALE_UNIT_PRICE]       DECIMAL (18, 2) NULL,
+    [CURR_DISCOUNT]              DECIMAL (18, 2) NULL,
+    [ORDER_DISCOUNT]             DECIMAL (18, 2) NULL,
+    [ORDER_CURR_DISCOUNT]        DECIMAL (18, 2) NULL,
+    [NET_AMOUNT]                 DECIMAL (18, 2) NULL,
     [PRICE_QTY]                  INT             NULL,
-    [NET_CURR_AMOUNT]            INT             NULL,
-    [GROSS_AMOUNT]               INT             NULL,
-    [GROSS_CURR_AMOUNT]          INT             NULL,
+    [NET_CURR_AMOUNT]            DECIMAL (18, 2) NULL,
+    [GROSS_AMOUNT]               DECIMAL (18, 2) NULL,
+    [GROSS_CURR_AMOUNT]          DECIMAL (18, 2) NULL,
     [CATALOG_DESC]               NVARCHAR (200)  NULL,
     [CUSTOMER_NAME]              NVARCHAR (100)  NULL,
     [COUNTRY_DESC]               NVARCHAR (50)   NULL,
@@ -56,8 +56,8 @@
     [PAYER_NAME]                 NVARCHAR (100)  NULL,
     [CUSTOMER_PRICE_GROUP]       NVARCHAR (10)   NULL,
     [CUSTOMER_PRICE_GRP_DESC]    NVARCHAR (35)   NULL,
-    [ADDITIONAL_DISCOUNT]        INT             NULL,
-    [ADDITIONAL_CURR_DISCOUNT]   INT             NULL,
+    [ADDITIONAL_DISCOUNT]        DECIMAL (18, 2) NULL,
+    [ADDITIONAL_CURR_DISCOUNT]   DECIMAL (18, 2) NULL,
     [BRANCH]                     NVARCHAR (20)   NULL,
     [CREATION_DATE]              DATETIME2 (7)   NULL,
     [INVOICE_NO]                 NVARCHAR (50)   NULL,
@@ -68,7 +68,7 @@
     [SALES_PART_REBATE_GROUP]    NVARCHAR (10)   NULL,
     [REBATE_ASSORTMENT_ID]       NVARCHAR (50)   NULL,
     [REBATE_ASSORT_NODE_ID]      NVARCHAR (50)   NULL,
-    [CASE_CREDIT]                INT             NULL,
+    [CASE_CREDIT]                DECIMAL (18, 2) NULL,
     [C_SALES_CODE1]              NVARCHAR (4000) NULL,
     [C_SALES_CODE1_DESC]         NVARCHAR (4000) NULL,
     [C_SALES_CODE2]              NVARCHAR (4000) NULL,
@@ -83,8 +83,10 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
-    CONSTRAINT [PK_CUST_ORD_INVO_STAT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [STATISTIC_NO] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_IFS_ARC]
+    CONSTRAINT [PK_CUST_ORD_INVO_STAT] PRIMARY KEY CLUSTERED ([STATISTIC_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

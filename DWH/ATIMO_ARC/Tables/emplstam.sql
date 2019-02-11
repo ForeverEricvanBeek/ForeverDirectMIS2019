@@ -20,8 +20,10 @@
     [IsDeleted]              CHAR (1)       NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
-    CONSTRAINT [PK_emplstam] PRIMARY KEY CLUSTERED ([pers_key] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90, DATA_COMPRESSION = PAGE) ON [DWH_ATIMO_ARC]
+    CONSTRAINT [PK_emplstam] PRIMARY KEY CLUSTERED ([pers_key] ASC, [Eff_Date] ASC) ON [DWH_ATIMO_ARC]
 ) ON [DWH_ATIMO_ARC];
+
+
 
 
 

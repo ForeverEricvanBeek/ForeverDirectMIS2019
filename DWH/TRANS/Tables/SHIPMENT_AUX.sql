@@ -15,8 +15,10 @@
     [IsDeleted]           CHAR (1)     NULL,
     [BatchID]             BIGINT       NULL,
     [ProcessLogID]        BIGINT       NULL,
-    CONSTRAINT [PK_LABEL_AUX] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [INTERFACE_ID] ASC) ON [DWH_TRANS]
+    CONSTRAINT [PK_LABEL_AUX] PRIMARY KEY CLUSTERED ([INTERFACE_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_TRANS]
 ) ON [DWH_TRANS];
+
+
 
 
 

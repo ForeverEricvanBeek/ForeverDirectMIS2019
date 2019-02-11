@@ -18,8 +18,10 @@
     [Status]           NVARCHAR (15)  NULL,
     [BatchID]          BIGINT         NULL,
     [ProcessLogID]     BIGINT         NULL,
-    CONSTRAINT [PK_Messages_1] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (DATA_COMPRESSION = PAGE) ON [DWH_WEB_ARC]
+    CONSTRAINT [PK_Messages_1] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 95) ON [DWH_WEB_ARC]
 ) ON [DWH_WEB_ARC];
+
+
 
 
 

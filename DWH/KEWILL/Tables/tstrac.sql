@@ -32,8 +32,10 @@
     [IsDeleted]    CHAR (1)      NULL,
     [BatchID]      BIGINT        NULL,
     [ProcessLogID] BIGINT        NULL,
-    CONSTRAINT [PK_tstrac_1] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [tsacty] ASC, [volgnr] ASC, [Eff_Date] ASC) ON [DWH_KEWILL]
+    CONSTRAINT [PK_tstrac] PRIMARY KEY CLUSTERED ([dosvlg] ASC, [tsacty] ASC, [volgnr] ASC, [Eff_Date] ASC) ON [DWH_KEWILL]
 ) ON [DWH_KEWILL];
+
+
 
 
 

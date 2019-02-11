@@ -144,11 +144,13 @@
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
                             string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
                             string MergeSQlStatement = "";
+                            string MergeArchiveSQlStatement = "";
                             string SQLHashStringSource = "";
                             string SQLHashStringTarget = "";
                             string VarPrimKeyJoin = "";
                             string VarPrimKeyJoin2 = "";
                             string varPrimKeyColumsPK = "";
+                            string varPrimKeyColumsPK_UNION = "";
                             string VarFuncColumn = "";
                             string VarFuncColumnSource = "";
                             
@@ -215,7 +217,8 @@
                                 if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
                                     VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName +"] AND ";
                                     VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName + "1] AND ";
-                                    varPrimKeyColumsPK = varPrimKeyColumsPK + " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
+                                    varPrimKeyColumsPK += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
+                                    varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
                                 }
                             }
                             
@@ -225,11 +228,13 @@
                                 string varSQLRowCountSourceTable = @"WITH CTE_DELETED AS (
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
-                                    	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @"
+                                    	            UNION ALL
+                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @") MS
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MSPK.BatchID IS NULL
-                                    	AND			MS.IsDeleted = 'N'
+                                    	WHERE		MS.IsDeleted = 'N'
+                                    	AND         MSPK.BatchID IS NULL
                                     )
                                     
                                     SELECT COUNT (*) FROM CTE_DELETED;";
@@ -240,11 +245,27 @@
                                     	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MSPK.BatchID IS NULL
-                                    	AND			MS.IsDeleted = 'N'
+                                    	WHERE		MS.IsDeleted = 'N'
+                                    	AND         MSPK.BatchID IS NULL
                                     )
                                     
                                     UPDATE		DWH." + varTargetSchema + @"." + varTargetTable + @" SET
+                                    	IsDeleted = 'Y'
+                                    	, End_Date = GETDATE()
+                                    FROM		CTE_DELETED MSPK
+                                    WHERE		" + VarPrimKeyJoin2 + @" 1=1;";
+                                    
+                                    MergeArchiveSQlStatement = @"WITH CTE_DELETED AS (
+                                    	SELECT
+                                    	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
+                                    	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
+                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+                                    	ON			"+ VarPrimKeyJoin + @" 1=1
+                                    	WHERE		MS.IsDeleted = 'N'
+                                    	AND         MSPK.BatchID IS NULL
+                                    )
+                                    
+                                    UPDATE		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" SET
                                     	IsDeleted = 'Y'
                                     	, End_Date = GETDATE()
                                     FROM		CTE_DELETED MSPK
@@ -257,6 +278,16 @@
                                     
                                 <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
+                                        <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                        <Parameter Name="2" VariableName="Audit.AuditBatchID" DataType="Int64" />
+                                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                    </Parameters>
+                                </ExecuteSQL>
+                                    
+                                <ExecuteSQL Name="SQL Merge Archive <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <DirectInput><![CDATA[<#=@MergeArchiveSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
                                         <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
