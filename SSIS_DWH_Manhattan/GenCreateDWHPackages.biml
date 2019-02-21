@@ -277,6 +277,7 @@
                             string VarPrimKeyJoin = "";
                             string VarFuncColumn = "";
                             string VarFuncColumnSource = "";
+                            string varColumns = "";
                             
                             string sqlsourcecolumns = @"select 
                                                             COL.TABLE_NAME
@@ -285,7 +286,7 @@
                                                             , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
                                                             , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
                                                             , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
-                                                            , COL.ORDINAL_POSITION
+                                                            , CASE WHEN COL.COLUMN_NAME IN ('Eff_Date','End_Date','ActInd','IsDeleted','BatchID','ProcessLogID') THEN COL.ORDINAL_POSITION*100 ELSE COL.ORDINAL_POSITION END AS ORDINAL_POSITION
                                                             , CASE
                                                             WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
                                                             WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
@@ -310,7 +311,7 @@
                                                         and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
                                                         order by 
                                                         COL.TABLE_NAME
-                                                        , COL.ORDINAL_POSITION
+                                                        , CASE WHEN COL.COLUMN_NAME IN ('Eff_Date','End_Date','ActInd','IsDeleted','BatchID','ProcessLogID') THEN COL.ORDINAL_POSITION*100 ELSE COL.ORDINAL_POSITION END
                                                         ";
                             DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
                             foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
@@ -323,9 +324,11 @@
                                 if (VarSourceColumnName == "ProcessLogID") {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"] ";
                                     MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ")";
+                                    varColumns = varColumns + "["+ VarSourceColumnName +"] "; 
                                 } else {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"], ";
                                     MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ",";
+                                    varColumns = varColumns + "["+ VarSourceColumnName +"], "; 
                                 }
                                 if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
                                     if (VarColumnExpression == "1") {
@@ -377,7 +380,7 @@
                                                                     	OUTPUT $action   AS action, 
                                                                     	"+ VarFuncColumnSource + @" GETDATE()-1 AS Eff_Date , '31-DEC-9999' AS End_Date  , 'Y' AS ActInd , 
                                                                     	CASE WHEN S.BatchID IS NULL THEN 'Y'	ELSE 'N' END AS IsDeleted, ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT 
-                                                                    	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  DWH." + varTargetSchema + "." + varTargetTable + " SELECT * FROM @" + varTargetTable + "_TEMP;";
+                                                                    	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  DWH." + varTargetSchema + "." + varTargetTable + "(" + varColumns + @") SELECT " + varColumns + @" FROM @" + varTargetTable + "_TEMP;";
                             } else {
                                 MergeTempTable = MergeTempTable + MergeSQlStatement;
                                 MergeSQlStatement = MergeTempTable +    @"FROM (MERGE DWH."+varTargetSchema + @"."+ varTargetTable + @" T 
@@ -392,7 +395,7 @@
                                                                         	 THEN UPDATE SET T.ActInd = 'N' , T.IsDeleted = 'Y' , T.End_Date     =  GETDATE()-2 OUTPUT $action   AS action, 
                                                                         	"+ VarFuncColumnSource + @" GETDATE()-1 AS Eff_Date , '31-DEC-9999' AS End_Date  , 'Y' AS ActInd , 
                                                                         	CASE WHEN S.BatchID IS NULL THEN 'Y'	ELSE 'N' END AS IsDeleted, ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT 
-                                                                        	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  DWH." + varTargetSchema + "." + varTargetTable + " SELECT * FROM @" + varTargetTable + "_TEMP;";
+                                                                        	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  DWH." + varTargetSchema + "." + varTargetTable + "(" + varColumns + @") SELECT " + varColumns + @" FROM @" + varTargetTable + "_TEMP;";
                             } 
                             
                             if (varExtractionType == "FS") {

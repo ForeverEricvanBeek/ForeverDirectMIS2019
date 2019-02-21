@@ -466,13 +466,14 @@
                 break;
         }
         
-        string varStgRowCountSQLStatement = @"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
-        string varDWHRowCountSQLStatement = @"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
-        string varTargetRowCountSQLStatement = @"SELECT COUNT(1) AS [Total]
-        , COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual]
-        , COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred]
-        , COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] 
-        FROM " + varDatamartTableFull;#>
+        string varStgRowCountSQLStatement = @"SELECT 1  AS [Total_Stg]";//@"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
+        string varDWHRowCountSQLStatement = @"SELECT 1  AS [Total_DWH]";//@"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
+        string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total]
+        //, COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual]
+        //, COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred]
+        //, COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] 
+        //FROM " + varDatamartTableFull;
+        #>
         
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
             <Parameters>
