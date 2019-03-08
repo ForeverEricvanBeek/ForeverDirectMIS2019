@@ -20,6 +20,7 @@
     [ItemIssue]          TINYINT         NULL,
     [WeightIssue]        BIT             NULL,
     [Special_Instr]      NVARCHAR (500)  NULL,
+    [Cold_Protection]    NVARCHAR (25)   NULL,
     [MinWeight]          DECIMAL (18, 4) NULL,
     [MaxWeight]          DECIMAL (18, 4) NULL,
     [Weight]             DECIMAL (18, 4) NULL,
@@ -41,6 +42,8 @@
     [ProcessLogID]       BIGINT          NULL,
     CONSTRAINT [PK_D_Pack_QC] PRIMARY KEY CLUSTERED ([D_Pack_QC_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
 
 

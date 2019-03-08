@@ -8,6 +8,7 @@
     [FD_Region_Code]   NVARCHAR (7)  NOT NULL,
     [FD_Home_Country]  NVARCHAR (7)  NULL,
     [FD_OP_Country]    NVARCHAR (7)  NULL,
+    [FLPI_Country]     VARCHAR (28)  NOT NULL,
     [EU_FTA]           VARCHAR (11)  NULL,
     [CheckSum]         NVARCHAR (32) NULL,
     [CheckSumSCD1]     NVARCHAR (32) NULL,
@@ -23,6 +24,8 @@
     [ProcessLogID]     BIGINT        NULL,
     CONSTRAINT [PK_D_Country] PRIMARY KEY CLUSTERED ([D_Country_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
 
 

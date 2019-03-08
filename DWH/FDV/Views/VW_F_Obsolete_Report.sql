@@ -19,8 +19,8 @@ With CTE_1 as (
          , cast(DATEADD(DAY,Case when SK.Order_Type='OF' then -90 when SK.Order_Type='BK' then -100 end ,OB.Expiration_Date) as date) Lock_Date
          , DATEDIFF(DD,getdate(),DATEADD(DAY,Case when SK.Order_Type='OF' then -90 when SK.Order_Type='BK' then -100 end,OB.Expiration_Date))+1 Days_Until_Lockdate
          , Case when DATEDIFF(DD,getdate(),DATEADD(DAY,Case when SK.Order_Type='OF' then -90 when SK.Order_Type='BK' then -100 end,OB.Expiration_Date))<0 then 'Locken' else 'OK' end as Locken
-       FROM          ForeverData01.DM.F_Obsolescense OB
-       LEFT JOIN     ForeverData01.DM.D_SKU SK
+       FROM          [$(ForeverData01)].DM.F_Obsolescense OB
+       LEFT JOIN     [$(ForeverData01)].DM.D_SKU SK
        ON                   OB.SKU_Name = SK.SKU_Name
 	  
 )
@@ -72,8 +72,8 @@ select
               select 
                 SK.SKU_Name
                 , ISNULL(OB.Number_Of_Units_Shipped,0) Number_Of_Units
-              from       ForeverData01.DM.F_Outbound OB
-              right join    ForeverData01.DM.D_SKU SK
+              from       [$(ForeverData01)].DM.F_Outbound OB
+              right join    [$(ForeverData01)].DM.D_SKU SK
 			  on                   SK.D_SKU_Skey=OB.D_SKU1_Skey
 			  and				   SK.IsDeleted=0
 			  --and				  cast(cast(OB.DateKey as varchar)as date) >= cast(dateadd(month,-6,getdate()) as datetime)
@@ -84,7 +84,7 @@ select
 			--										or         od.Order_Facility_Code  like '%SITA%')
 			  where cast(cast(OB.DateKey as varchar)as date) >= cast(dateadd(month,-6,getdate()) as datetime) --between '2018-07-17' and '2019-01-17'
 			  and OB.D_Order_Skey not in (SELECT D_Order_Skey 
-			  										from ForeverData01.[DM].[D_Order] od
+			  										from [$(ForeverData01)].[DM].[D_Order] od
 			 										where      od.Order_Facility_Code  like '%SCR%'
 													or         od.Order_Facility_Code  like '%SAM%'
 													or         od.Order_Facility_Code  like '%SITA%')
@@ -102,7 +102,7 @@ select
        SELECT 
          SKU_Name
          , cast(sum(Requested_QTY)-sum(In_Work_QTY) as float) Number_Of_Units   
-       FROM          ForeverData01.DM.D_Work_Orders
+       FROM          [$(ForeverData01)].DM.D_Work_Orders
        where      Create_Date_Time >= cast(dateadd(month,-6,getdate()) as datetime) --between '2018-07-17' and '2019-01-17'
        and                  FU_SKU is null
        and                  Status ='CLOSED'
@@ -158,7 +158,7 @@ select
        Select 
          OB.SKU_Name
          , cast(SUM(OB.Inventory_Netto_QTY) as float) Sum_Netto_Qty
-       from          ForeverData01.DM.F_Obsolescense OB
+       from          [$(ForeverData01)].DM.F_Obsolescense OB
        group BY 
          OB.SKU_Name
 )

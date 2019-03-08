@@ -273,7 +273,7 @@
                                     <Result Name="LastID" VariableName="User.LastExtractionID" />
                                 </Results>
                             </ExecuteSQL>
-                            <# if (!varIsLoading) {#>
+                            <# if (!varIsLoading && 1==2) {#>
                             <ExecuteSQL Name="SQL Truncate table <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                             </ExecuteSQL>

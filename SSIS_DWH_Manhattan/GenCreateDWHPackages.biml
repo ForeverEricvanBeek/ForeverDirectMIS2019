@@ -323,7 +323,7 @@
                                 string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
                                 if (VarSourceColumnName == "ProcessLogID") {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"] ";
-                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ")";
+                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ");";
                                     varColumns = varColumns + "["+ VarSourceColumnName +"] "; 
                                 } else {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"], ";
@@ -346,12 +346,16 @@
                                 }
                             }
                             
+                            
+                            MergeTempTable = MergeTempTable + @" WITH MERGE_CTE AS (
+                                                                SELECT" + varColumns + @" FROM DWH."+varTargetSchema + @"."+ varTargetTable + @")";
                             SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
                             SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
                             string quote = "<>";
                             if(varExtractionType == "MN" ) {
-                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE DWH."+varTargetSchema + "."+ varTargetTable + " T " +
-                                                                        	"USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
+                                MergeTempTable = MergeTempTable + MergeSQlStatement; 
+                                MergeSQlStatement = MergeTempTable + @"FROM (MERGE MERGE_CTE T 
+                                                                        	USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
                                                                         	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
                                                                         	" WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
                                                                         	VarFuncColumn + "  ? , ? ) "+
@@ -369,7 +373,7 @@
                                                                         	VarFuncColumnSource + "  ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT WHERE MERGE_OUT.action = 'DELETE'; ";
                             } else if (varExtractionType == "I" ) {
                                 MergeTempTable = MergeTempTable + MergeSQlStatement;                                
-                                MergeSQlStatement = MergeTempTable + @"FROM (MERGE DWH."+varTargetSchema + @"."+ varTargetTable + @" T 
+                                MergeSQlStatement = MergeTempTable + @"FROM (MERGE MERGE_CTE T 
                                                                     	USING Staging." +varTargetSchema + "."+ varTargetTable + @" S 
                                                                     	ON "+ VarPrimKeyJoin + @" 1=1 AND  T.ActInd = 'Y' AND T.IsDeleted = 'N' 
                                                                     	WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
@@ -383,7 +387,7 @@
                                                                     	WHERE MERGE_OUT.action = 'UPDATE' AND IsDeleted <> 'Y'; INSERT INTO  DWH." + varTargetSchema + "." + varTargetTable + "(" + varColumns + @") SELECT " + varColumns + @" FROM @" + varTargetTable + "_TEMP;";
                             } else {
                                 MergeTempTable = MergeTempTable + MergeSQlStatement;
-                                MergeSQlStatement = MergeTempTable +    @"FROM (MERGE DWH."+varTargetSchema + @"."+ varTargetTable + @" T 
+                                MergeSQlStatement = MergeTempTable +    @"FROM (MERGE MERGE_CTE T 
                                                                         	USING Staging." +varTargetSchema + "."+ varTargetTable + @" S 
                                                                         	ON "+ VarPrimKeyJoin + @" 1=1 AND  T.ActInd = 'Y' AND T.IsDeleted = 'N' 
                                                                         	WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
