@@ -86,7 +86,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Reports','DWH_Control')
+                                            AND          c.[Name] in ('Reports','ReportsADO','DWH_Control')
 
                                             UNION ALL
                                             
@@ -97,6 +97,7 @@
                                               , 'FALSE'
                                               , lr.Output
                                             FROM		Generator.LoadReportTables lr
+                                            WHERE		lr.Output = 'CSV'
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -117,16 +118,21 @@
                         <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpressioncsv#></Expression></Expressions>
                     </FlatFileConnection>
                     <#break;
+                    case "SQLServerADO":#>
+                <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
+                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                    </Connection>
+                <#break;
                 case "SQLServer":#>
                 <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
                         <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
                     </Connection>
-                <#
-                break;
+                <#break;
                 default:
                 break;
             }
         }#>
+        <SmtpConnection Name="reportMail" SmtpServer="FDXEXMP01.foreverdirect.local" />
     </Connections>
     
     <Databases>

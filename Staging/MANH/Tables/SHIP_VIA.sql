@@ -20,6 +20,11 @@
     [SHIP_VIA]                  NVARCHAR (4)    NOT NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
+    [CREATED_DTTM]              DATETIME2 (7)   NULL,
+    [CUSTOM_SHIPVIA_ATTRIB]     NVARCHAR (10)   NULL,
+    [LAST_UPDATED_DTTM]         DATETIME2 (7)   NULL,
     CONSTRAINT [PK_MANH_SHIP_VIA] PRIMARY KEY CLUSTERED ([SHIP_VIA_ID] ASC)
 );
+
+
 

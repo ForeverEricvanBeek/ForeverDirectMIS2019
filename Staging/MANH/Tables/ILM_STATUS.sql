@@ -4,6 +4,10 @@
     [DESCRIPTION]          NVARCHAR (50) NOT NULL,
     [BatchID]              BIGINT        NULL,
     [ProcessLogID]         BIGINT        NULL,
+    [CREATED_DTTM]         DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]    DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_ILM_STATUS] PRIMARY KEY CLUSTERED ([ILM_STATUS] ASC)
 );
+
+
 

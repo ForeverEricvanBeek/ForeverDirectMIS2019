@@ -159,6 +159,9 @@
     [ACTUAL_COST]            NUMERIC (13, 4) NOT NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
+    [TC_ORDER_LINE_ID]       NVARCHAR (30)   NULL,
     CONSTRAINT [PK_MANH_PKT_DTL] PRIMARY KEY CLUSTERED ([PKT_DTL_ID] ASC)
 );
+
+
 

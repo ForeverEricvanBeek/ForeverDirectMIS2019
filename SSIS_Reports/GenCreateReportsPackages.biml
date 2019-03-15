@@ -37,6 +37,10 @@
 													,ST.RunParam1
 													,ST.RunParam2
 													,ST.Output
+													,ST.Filename
+													,ST.EmailTo
+													,ST.EmailCC
+													,ST.EmailBCC
                                                     ,'Reports' AS PackagePrefix
                                                     FROM      [Generator].[LoadReportTables] ST
                                                     LEFT JOIN [Generator].[Connection] SC
@@ -61,6 +65,10 @@
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
             string varExtractionOutput = rowSourceExtractionTable["Output"].ToString();
+            string varExtractionFilename = rowSourceExtractionTable["Filename"].ToString();
+            string varExtractionEmailTo = rowSourceExtractionTable["EmailTo"].ToString();
+            string varExtractionEmailCC = rowSourceExtractionTable["EmailCC"].ToString();
+            string varExtractionEmailBCC = rowSourceExtractionTable["EmailBCC"].ToString();
             string varExtractionRunSchedule = rowSourceExtractionTable["RunSchedule"].ToString();
             string varExtractionRunParam1 = rowSourceExtractionTable["RunParam1"].ToString();
             string varExtractionRunParam2 = rowSourceExtractionTable["RunParam2"].ToString();
@@ -76,6 +84,7 @@
             string varTableCloseCharacter = varSQLServTableCloseCharacter;
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
+             string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
     
             string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable + varSQLServTableCloseCharacter;
             string varExtractionSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionSourceSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionSourceTable + varSQLServTableCloseCharacter;
@@ -87,8 +96,8 @@
             string varSQLRowCountSourceTable = "SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
             string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
-            string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
-            
+            string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT ([SourceConnection], [SourceSchema], [SourceTable], [ExtractionType], [BatchID], [RowCountExtract],[RowCountTarget],[RowCountError],[LastLoadDate])VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
+
             string varExtractionSourceSchemaPlus = varTableBeginCharacter + varExtractionSourceSchema + varTableCloseCharacter +".";
             if (varExtractionSourceSchema == "") {
                 varExtractionSourceSchemaPlus = "";
@@ -123,6 +132,7 @@
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable>
+                    <Variable Name="varFileAttachments" DataType="String" Namespace="User">\\FDODWHD01\StagingFiles\test.csv</Variable>
                 </Variables>
     
                 <Tasks>
@@ -180,6 +190,11 @@
                             string MergeSQlStatementColumnsInsert = "";
                             string MergeSQlStatementColumnsInto = "";
                             
+                            string ExcelHeaderRow = "";
+                            string ExcelRowsValue = "";
+                            string ExcelRowsStyle = "";
+                            string ExcelScale = "0";
+
                             string sqlsourcecolumns = @"select 
                                                             COL.TABLE_NAME
                                                             , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
@@ -195,6 +210,8 @@
                                                             WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
                                                             ELSE '[' + COL.DATA_TYPE + ']'
                                                             END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
+                                                            , COL.DATA_TYPE AS DATA_TYPE
+                                                            , COL.NUMERIC_SCALE AS NUMERIC_SCALE
                                                         from		Reports.INFORMATION_SCHEMA.COLUMNS COL
                                                         LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
                                                         ON			TC.TABLE_NAME = COL.TABLE_NAME
@@ -219,9 +236,12 @@
                                 string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
                                 string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
                                 string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
+                                string VarExcelDataType = rowsourcecolumns["DATA_TYPE"].ToString();
+                                string VarExcelDataScale = rowsourcecolumns["NUMERIC_SCALE"].ToString();
                                 string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
                                 string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
                                 string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
+                                string varTargetColumnPosition = rowsourcecolumns["ORDINAL_POSITION"].ToString();
                                 if (VarSourceColumnName == "ProcessLogID") {
                                     MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"] ";
                                 } else {
@@ -230,9 +250,31 @@
                             
                                 if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID") {
                                     MergeSQlStatementColumnsInto = MergeSQlStatementColumnsInto + "["+ VarSourceColumnName +"], ";
+                                    ExcelHeaderRow = ExcelHeaderRow + "worksheet.Cells[1, " + varTargetColumnPosition + "].Value = \"" + VarTargetColumnName + "\";" + "\n";
+                                    if(VarExcelDataType == "numeric" || VarExcelDataType == "decimal") {
+                                        if (VarExcelDataScale == "2") {
+                                            ExcelScale = "0.00";
+                                        } else if (VarExcelDataScale == "4") {
+                                            ExcelScale = "0.0000";
+                                        } else {
+                                            ExcelScale = "0";
+                                        }
+                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"" + ExcelScale + "\";" + "\n";
+                                    } else if (VarExcelDataType == "bigint" || VarExcelDataType == "int" || VarExcelDataType == "smallint" || VarExcelDataType == "tinyint") {
+                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"0\";" + "\n";
+                                    } else if (VarExcelDataType == "datetime2") {
+                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"dd-MM-yyyy HH:mm\";" + "\n";                                       
+                                    } else {
+                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"].ToString();" + "\n";
+                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"General\";" + "\n";
+                                    }
                                 }
                             }
-                            
+
+                            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varSourceSchema + "." + varSourceTable;
                             string MergeSQlStatement = "INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
                             MergeSQlStatement = MergeSQlStatement + ") SELECT ";
@@ -275,10 +317,113 @@
                                     </Transformations>
                                 </Dataflow>
                             <#}#>
-                                
+                            <#if (varExtractionOutput == "Excel") {#>
+                            <Script ProjectCoreName="<#=varScriptCoreName#>" Name="Script <#=varExtractionFilename#>">
+                                <ScriptTaskProject>
+                                    <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varSourceTable#>">
+                                        <AssemblyReferences>
+                                            <AssemblyReference AssemblyPath="System.dll" />
+                                            <AssemblyReference AssemblyPath="System.IO.dll" />
+                                            <AssemblyReference AssemblyPath="System.Data.dll" />
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
+                                            <AssemblyReference AssemblyPath="System.Windows.Forms.dll" />
+                                            <AssemblyReference AssemblyPath="System.Core.dll" />
+                                            <AssemblyReference AssemblyPath="C:\Windows\Microsoft.NET\assembly\GAC_64\EPPlus\v4.0_4.5.3.1__ea159fdaa78159a1\EPPlus.dll" />
+                                            <AssemblyReference AssemblyPath="System.Xml.dll" />
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask" />
+                                        </AssemblyReferences>
+                                        <Files>
+                                            <File Path="AssemblyInfo.cs">
+#region Namespaces
+using System;
+using System.IO;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.SqlServer.Dts.Runtime;
+using System.Windows.Forms;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+#endregion
+
+namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
+	[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
+	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase {
+		public void Main() {
+            using (var package = new ExcelPackage()) {
+                string vOutputPath = (string)Dts.Variables["DirExport"].Value;
+                string vTimeStamp  = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>_" + vTimeStamp  + ".xlsx";
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
+                string mySqlStatement = "<#=sqlStatementScript#>";
+                int row_index = 2;
+                System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
+                myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
+                System.Data.SqlClient.SqlCommand myCommand = new System.Data.SqlClient.SqlCommand(mySqlStatement, myADONETConnection);
+                SqlDataReader reader = myCommand.ExecuteReader(CommandBehavior.CloseConnection);
+                
+                Dts.Variables["varFileAttachments"].Value = vOutputPathFull;
+                
+                #region ExcelHeader
+                <#=ExcelHeaderRow#>
+                #endregion
+
+                #region ExcelBody
+                while (reader.Read()) {
+                    ;
+                    <#=ExcelRowsValue#>
+                    <#=ExcelRowsStyle#>
+                    row_index += 1;
+                }
+                #endregion
+
+                reader.Close();
+                myADONETConnection.Close();
+
+                #region ExcelFooter
+                worksheet.Cells.AutoFitColumns(0); 
+                package.Workbook.Properties.Title = "<#=varExtractionFilename#>";
+                package.Workbook.Properties.Author = "Data warehouse";
+                package.Workbook.Properties.Comments = "<#=varExtractionFilename#> report";
+                package.Workbook.Properties.Company = "Forever Direct EU";
+                #endregion
+
+                var xlFile = new System.IO.FileInfo(vOutputPathFull);
+                package.SaveAs(xlFile);
+            }
+			Dts.TaskResult = (int)ScriptResults.Success;
+		}
+        enum ScriptResults
+        {
+            Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+            Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+        };
+
+	}
+}
+                                            </File>
+                                        </Files>
+                                        <ReadOnlyVariables>
+                                            <Variable Namespace="$Project" DataType="String" VariableName="DirExport" />
+                                        </ReadOnlyVariables>
+                                        <ReadWriteVariables>
+                                            <Variable Namespace="User" DataType="String" VariableName="varFileAttachments" />
+                                        </ReadWriteVariables>
+                                    </ScriptTaskProject>
+                                </ScriptTaskProject>
+                            </Script>
+                            <#}#>
+                            <#if (!string.IsNullOrEmpty(varExtractionEmailTo)) {#>
+                            <SendMail Name="Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="<#=varExtractionEmailTo#>" CCLine="<#=varExtractionEmailCC#>" BCCLine="<#=varExtractionEmailBCC#>" Subject="Email report <#=varExtractionFilename#>">
+                                <DirectInput>This is an automated email containing an Data warehouse report.
+If no attachment is included please contant the BI team.
+                                </DirectInput>
+                                <Expressions>
+                                    <Expression PropertyName="FileAttachments">@[User::varFileAttachments]</Expression>
+                                </Expressions>
+                            </SendMail>
+                            <#}#>
                         </Tasks>
                     </Container>
-    
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
                         <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?</DirectInput>
                         <Parameters>

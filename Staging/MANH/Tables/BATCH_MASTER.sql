@@ -30,6 +30,9 @@
     [HAS_SOFT_CHECK_ERROR]   SMALLINT       NOT NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
+    [GLOBAL_RECALL_SUCCESS]  INT            NULL,
     CONSTRAINT [PK_MANH_BATCH_MASTER] PRIMARY KEY CLUSTERED ([BATCH_MASTER_ID] ASC)
 );
+
+
 

@@ -27,6 +27,12 @@
     [LOCN_HDR_ID]               NUMERIC (8)     NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
+    [CREATED_DTTM]              DATETIME2 (7)   NULL,
+    [INVN_LOCK_CODE]            NVARCHAR (2)    NULL,
+    [LAST_UPDATED_DTTM]         DATETIME2 (7)   NULL,
+    [LOCN_PUTAWAY_LOCK]         NVARCHAR (2)    NULL,
     CONSTRAINT [PK_MANH_PICK_LOCN_HDR] PRIMARY KEY CLUSTERED ([PICK_LOCN_HDR_ID] ASC)
 );
+
+
 

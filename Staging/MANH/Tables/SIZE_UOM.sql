@@ -23,6 +23,10 @@
     [AUDIT_LAST_UPDATED_DTTM]        DATETIME2 (7)   NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [CREATED_DTTM]                   DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]              DATETIME2 (7)   NULL,
     CONSTRAINT [PK_MANH_SIZE_UOM] PRIMARY KEY CLUSTERED ([SIZE_UOM_ID] ASC)
 );
+
+
 

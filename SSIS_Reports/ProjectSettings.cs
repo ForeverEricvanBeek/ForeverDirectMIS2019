@@ -21,6 +21,7 @@ if (projectDatabaseInstanceName.Length == 0) {
 
 string GeneratorSchemaName = @"generator";
 string conGeneratorConnectionString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
+string conGeneratorConnectionADOString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + ";Integrated Security=True;Application Name=SSIS-{AAF98637-B89A-43A7-B91E-71AB7DE9C917}ReportsADO;";
 
 string EffectiveDate = "1900-01-01 00:00:00";
 string ExpiryDate = "9999-12-31 23:59:59";

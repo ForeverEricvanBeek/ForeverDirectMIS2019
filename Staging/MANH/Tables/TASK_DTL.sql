@@ -80,6 +80,9 @@
     [TRANS_INVN_TYPE]       SMALLINT        NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL,
+    [TOTE_NBR]              NVARCHAR (50)   NULL,
     CONSTRAINT [PK_MANH_TASK_DTL] PRIMARY KEY CLUSTERED ([TASK_DTL_ID] ASC)
 );
+
+
 

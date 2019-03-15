@@ -26,6 +26,10 @@
     [STAT_CODE]            SMALLINT      NOT NULL,
     [BatchID]              BIGINT        NULL,
     [ProcessLogID]         BIGINT        NULL,
+    [CREATED_DTTM]         DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]    DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_FROZN_INVN_CONFIG] PRIMARY KEY CLUSTERED ([FROZN_INVN_CONFIG_ID] ASC)
 );
+
+
 

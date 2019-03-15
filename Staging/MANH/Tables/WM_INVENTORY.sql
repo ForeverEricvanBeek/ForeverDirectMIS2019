@@ -38,6 +38,9 @@
     [RECALL_ID]                   INT             NULL,
     [BatchID]                     BIGINT          NULL,
     [ProcessLogID]                BIGINT          NULL,
+    [CUMULATIVE_QTY]              NUMERIC (13, 4) NULL,
     CONSTRAINT [PK_MANH_WM_INVENTORY] PRIMARY KEY CLUSTERED ([WM_INVENTORY_ID] ASC)
 );
+
+
 

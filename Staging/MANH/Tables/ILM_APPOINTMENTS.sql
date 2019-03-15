@@ -61,6 +61,14 @@
     [HAS_SOFT_CHECK_ERRORS]     SMALLINT       NULL,
     [BatchID]                   BIGINT         NULL,
     [ProcessLogID]              BIGINT         NULL,
+    [ACTUAL_CHECKIN_DTTM]       DATETIME2 (7)  NULL,
+    [BP_ID]                     INT            NULL,
+    [CREATED_DTTM]              DATETIME2 (7)  NULL,
+    [HAS_ALERTS]                INT            NULL,
+    [HAS_IMPORT_ERROR]          INT            NULL,
+    [SCHEDULED_DTTM]            DATETIME2 (7)  NULL,
     CONSTRAINT [PK_MANH_ILM_APPOINTMENTS] PRIMARY KEY CLUSTERED ([APPOINTMENT_ID] ASC)
 );
+
+
 

@@ -61,6 +61,9 @@
     [TASK_RULE_PARM_ID]      INT            NOT NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
+    [PICK_CART_TYPE]         NVARCHAR (1)   NULL,
     CONSTRAINT [PK_MANH_TASK_HDR] PRIMARY KEY CLUSTERED ([TASK_HDR_ID] ASC)
 );
+
+
 

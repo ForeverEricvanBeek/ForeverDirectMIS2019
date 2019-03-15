@@ -42,6 +42,12 @@
     [WM_VERSION_ID]            INT             NOT NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
+    [CREATED_DTTM]             DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]        DATETIME2 (7)   NULL,
+    [LOCN_DYN_ASSGN_SEQ]       NVARCHAR (24)   NULL,
+    [LOCN_PUTWY_SEQ]           NVARCHAR (24)   NULL,
     CONSTRAINT [PK_MANH_LOCN_HDR] PRIMARY KEY CLUSTERED ([LOCN_HDR_ID] ASC)
 );
+
+
 

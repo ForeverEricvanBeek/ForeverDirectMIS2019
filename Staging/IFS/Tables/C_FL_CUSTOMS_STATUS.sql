@@ -1,0 +1,16 @@
+﻿CREATE TABLE [IFS].[C_FL_CUSTOMS_STATUS] (
+    [ORDER_NO]       NVARCHAR (20)  NULL,
+    [CONTRACT]       NVARCHAR (5)   NULL,
+    [PART_NO]        NVARCHAR (25)  NULL,
+    [LOT_BATCH_NO]   NVARCHAR (20)  NULL,
+    [CUSTOMS_STATUS] NVARCHAR (25)  NULL,
+    [LB_SUBSTR]      NVARCHAR (10)  NULL,
+    [VENDOR_NO]      NVARCHAR (20)  NULL,
+    [DEF_ADDR]       NVARCHAR (50)  NULL,
+    [COUNTRY_CODE]   NVARCHAR (2)   NULL,
+    [EU_MEMBER]      NVARCHAR (200) NULL,
+    [ROWVERSION]     DATETIME2 (7)  NULL,
+    [BatchID]        BIGINT         NULL,
+    [ProcessLogID]   BIGINT         NULL
+);
+

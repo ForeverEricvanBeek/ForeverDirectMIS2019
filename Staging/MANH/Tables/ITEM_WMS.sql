@@ -132,6 +132,13 @@
     [SRL_NBR_REQD]                   SMALLINT        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [CC_DLR_TOLER_VALUE]             NUMERIC (13, 4) NULL,
+    [CC_PCNT_TOLER_VALUE]            NUMERIC (13, 4) NULL,
+    [CC_UNIT_TOLER_VALUE]            INT             NULL,
+    [CC_WGT_TOLER_VALUE]             NUMERIC (13, 4) NULL,
+    [DISPOSITION_TYPE]               NVARCHAR (3)    NULL,
     CONSTRAINT [PK_MANH_ITEM_WMS] PRIMARY KEY CLUSTERED ([ITEM_ID] ASC)
 );
+
+
 

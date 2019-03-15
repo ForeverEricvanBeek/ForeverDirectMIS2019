@@ -47,6 +47,11 @@
     [GENDER_ID]                   NVARCHAR (1)   NULL,
     [BatchID]                     BIGINT         NULL,
     [ProcessLogID]                BIGINT         NULL,
+    [ISPASSWORDMANAGEDINTERNALLY] INT            NULL,
+    [PASSWORD_RESET_DATE_TIME]    DATETIME2 (7)  NULL,
+    [PASSWORD_TOKEN]              NVARCHAR (255) NULL,
     CONSTRAINT [PK_MANH_UCL_USER] PRIMARY KEY CLUSTERED ([UCL_USER_ID] ASC)
 );
+
+
 

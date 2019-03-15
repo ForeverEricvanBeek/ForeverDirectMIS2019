@@ -25,6 +25,10 @@
     [LOCN_HDR_ID]              INT            NULL,
     [BatchID]                  BIGINT         NULL,
     [ProcessLogID]             BIGINT         NULL,
+    [DOCK_DOOR_LOCN_ID]        NVARCHAR (10)  NULL,
+    [OUTBD_STAGING_LOCN_ID]    NVARCHAR (10)  NULL,
     CONSTRAINT [PK_MANH_DOCK_DOOR] PRIMARY KEY CLUSTERED ([DOCK_DOOR_ID] ASC)
 );
+
+
 

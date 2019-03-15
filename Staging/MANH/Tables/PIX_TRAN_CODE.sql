@@ -13,6 +13,10 @@
     [WM_VERSION_ID]         INT           NOT NULL,
     [BatchID]               BIGINT        NULL,
     [ProcessLogID]          BIGINT        NULL,
+    [CREATED_DTTM]          DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]     DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_PIX_TRAN_CODE] PRIMARY KEY CLUSTERED ([PIX_TRAN_CODE_ID] ASC)
 );
+
+
 

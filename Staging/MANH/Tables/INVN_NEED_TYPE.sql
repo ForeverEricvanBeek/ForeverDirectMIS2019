@@ -23,6 +23,10 @@
     [INVN_NEED_TYPE_ID]          INT           NOT NULL,
     [BatchID]                    BIGINT        NULL,
     [ProcessLogID]               BIGINT        NULL,
+    [CREATED_DTTM]               DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]          DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_INVN_NEED_TYPE] PRIMARY KEY CLUSTERED ([INVN_NEED_TYPE_ID] ASC)
 );
+
+
 

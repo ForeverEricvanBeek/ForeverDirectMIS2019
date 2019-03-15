@@ -80,6 +80,9 @@
     [BUSINESS_PARTNER_ID]            NVARCHAR (10)   NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [AVERAGE_MOVEMENT]               NUMERIC (9, 2)  NULL,
     CONSTRAINT [PK_MANH_ITEM_FACILITY_MAPPING_WMS] PRIMARY KEY CLUSTERED ([ITEM_FACILITY_MAPPING_ID] ASC)
 );
+
+
 

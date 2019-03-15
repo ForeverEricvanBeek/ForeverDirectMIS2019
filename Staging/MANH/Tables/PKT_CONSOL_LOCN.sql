@@ -50,6 +50,11 @@
     [WM_VERSION_ID]           INT             NOT NULL,
     [BatchID]                 BIGINT          NULL,
     [ProcessLogID]            BIGINT          NULL,
+    [CREATED_DTTM]            DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]       DATETIME2 (7)   NULL,
+    [PKT_CONSOL_FLAG]         NVARCHAR (1)    NULL,
     CONSTRAINT [PK_MANH_PKT_CONSOL_LOCN] PRIMARY KEY CLUSTERED ([PKT_CONSOL_LOCN_ID] ASC)
 );
+
+
 
