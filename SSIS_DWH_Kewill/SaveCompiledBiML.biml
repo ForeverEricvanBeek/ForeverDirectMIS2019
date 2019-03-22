@@ -1,15 +1,2 @@
-<Biml xmlns="http://schemas.varigence.com/biml.xsd">  
-  <#
-      string xBiml = RootNode.GetBiml();
-       XmlDocument xmlDoc = new XmlDocument();
-       xmlDoc.LoadXml(xBiml);
-       string sFile = @"\\FDODWHD01\StagingFiles\Biml\myBimlFileDWH_Kewill.xml";
-
-       xmlDoc.Save(sFile);
-       #>
-</Biml>  
-
-<!--Directives:--> 
-<#@ template tier="5"#> 
-<#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#> 
-<#@ import namespace="System.Xml"#> 
+<#@ template language ="C#" tier="3"#>
+<#=CallBimlScript(@"..\SSIS_BIML\SaveBiML.biml", "DWH_Kewill")#>
