@@ -87,17 +87,6 @@
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
                                             AND          c.[Name] in ('Reports','ReportsADO','DWH_Control')
-
-                                            UNION ALL
-                                            
-                                            SELECT
-                                              lr.TargetTable
-                                              , N'\' + lr.TargetTable + '.' + lr.Output
-                                              , 'FlatFileType=Delimited&&RowDelimiter=LF&&ColumnNamesInFirstDataRow=false&&IsUnicode=false&&DataRowsToSkip=0&&ColumnDelimiter=Comma'
-                                              , 'FALSE'
-                                              , lr.Output
-                                            FROM		Generator.LoadReportTables lr
-                                            WHERE		lr.Output = 'CSV'
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -107,17 +96,11 @@
             bool ConnectionIsProjectConn = (bool)Connection["IsProjectConnection"];
             string ConnectionType = Connection["Type"].ToString();
             string ConnectionExpression = @"@[$Project::Con" + ConnectionName + "]";
-            string ConnectionExpressioncsv = @"@[$Project::DirExport]" + @"+"""+ ConnectionString.Replace("\\","\\\\") + @"""";
             string ConnectionSSISOptions = "";
             if (ConnectionIsProjectConn) {
                 ConnectionSSISOptions = ProjectConnectionOption;
             }
             switch (ConnectionType) {
-                case "CSV":#>
-                    <FlatFileConnection Name="<#=ConnectionName#>" FileFormat="<#=ConnectionName#>_FFF" FilePath="<#=ConnectionString#>">
-                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpressioncsv#></Expression></Expressions>
-                    </FlatFileConnection>
-                    <#break;
                     case "SQLServerADO":#>
                 <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
                         <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
@@ -172,6 +155,7 @@
                 <Parameter Name="InstanceName" DataType="String" IsRequired="true"><#=projectDatabaseInstanceName#></Parameter>
                 <Parameter Name="DirWork" DataType="String" IsRequired="true"><#=projectWorkDir#></Parameter>
                 <Parameter Name="DirExport" DataType="String" IsRequired="true"><#=ExportDir#></Parameter>
+                <Parameter Name="DirReports" DataType="String" IsRequired="true"><#=ReportsDir#></Parameter>
                 <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
