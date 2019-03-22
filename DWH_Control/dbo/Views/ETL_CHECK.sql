@@ -1,5 +1,6 @@
 ﻿
-CREATE VIEW ETL_CHECK
+
+CREATE VIEW [dbo].[ETL_CHECK]
 AS
 
 SELECT
@@ -24,8 +25,8 @@ FROM (
 	 , PL.BatchID
 	 , PL.PackageName
 	 , PL.ExtractionType
-	 , PL.RowCountExtract
-	 , PL.RowCountTarget
+	 , COALESCE(PL.RowCountExtract,RowCountSourceSTG,0) AS RowCountExtract
+	 , COALESCE(PL.RowCountTarget,RowCountSourceDWH,0) AS RowCountTarget
 	 , PL.IsSuccessful
 	 , PL.ExecutionStartDate
 	 , PL.ExecutionEndDate
@@ -63,8 +64,8 @@ FROM (
 	 , PL.BatchID
 	 , PL.PackageName
 	 , PL.ExtractionType
-	 , PL.RowCountExtract
-	 , PL.RowCountTarget
+	 , COALESCE(PL.RowCountExtract,RowCountSourceSTG,0) AS RowCountExtract
+	 , COALESCE(PL.RowCountTarget,RowCountSourceDWH,0) AS RowCountTarget
 	 , PL.IsSuccessful
 	 , PL.ExecutionStartDate
 	 , PL.ExecutionEndDate

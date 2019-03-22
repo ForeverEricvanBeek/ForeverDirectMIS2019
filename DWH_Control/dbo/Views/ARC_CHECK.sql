@@ -1,6 +1,7 @@
 ﻿
 
 
+
 CREATE VIEW [dbo].[ARC_CHECK]
 AS
 
@@ -35,10 +36,11 @@ FROM (
 	 , PM.EventDescription
 	FROM Logging.ProcessLog AS PL
 	LEFT JOIN Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = PL.ProcessLogID
-	WHERE PL.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE()) AS DATE) AND PL.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE())) AS DATE)
+	WHERE PL.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE()) AS DATE) 
+	AND PL.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE())) AS DATE)
 	AND PL.IsSuccessful IS NULL
 	AND PL.PackageName LIKE '%_ARC-%'
-	AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE()) AS DATE) AND P1.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE())) AS DATE)
+	AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE()) AS DATE) AND P1.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE())) AS DATE)
 	AND P1.BatchID > PL.BatchID AND P1.PackageName = PL.PackageName)
 	
 
@@ -75,10 +77,11 @@ FROM (
 	 , PM.EventDescription
 	FROM Logging.ProcessLog AS PL
 	LEFT JOIN Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = PL.ProcessLogID
-	WHERE PL.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE()) AS DATE) AND PL.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE())) AS DATE)
+	WHERE PL.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE()) AS DATE) 
+	AND PL.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE())) AS DATE)
 	AND PL.IsSuccessful = 1
 	AND PL.PackageName LIKE '%_ARC-%'
-	AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE()) AS DATE) AND P1.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7) -1), GETDATE())) AS DATE)
+	AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate >= CAST(DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE()) AS DATE) AND P1.ExecutionStartDate < CAST(DATEADD(DAY,1,DATEADD(day, -1 * (( DATEPART(WEEKDAY, GETDATE()) % 7)), GETDATE())) AS DATE)
 	AND P1.BatchID > PL.BatchID AND P1.PackageName = PL.PackageName)
 ) AS T1
 WHERE (T1.BatchID > 0

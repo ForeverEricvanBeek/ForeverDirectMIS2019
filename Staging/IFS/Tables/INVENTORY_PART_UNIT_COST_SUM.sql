@@ -4,12 +4,14 @@
     [CONFIGURATION_ID] NVARCHAR (50)   NOT NULL,
     [LOT_BATCH_NO]     NVARCHAR (20)   NOT NULL,
     [SERIAL_NO]        NVARCHAR (50)   NOT NULL,
-    [INVENTORY_VALUE]  DECIMAL (18, 2) NULL,
+    [INVENTORY_VALUE]  DECIMAL (18, 5) NULL,
     [OBJID]            NVARCHAR (4000) NULL,
     [OBJVERSION]       NVARCHAR (2000) NULL,
     [BatchID]          BIGINT          NULL,
     [ProcessLogID]     BIGINT          NULL
 );
+
+
 
 
 

@@ -10,6 +10,8 @@
     [ArchiveDate]             NVARCHAR (50)   NULL,
     [ExtractionType]          NVARCHAR (2)    NOT NULL,
     [ArchiveType]             NVARCHAR (3)    NULL,
+    [ArchiveSchema]           NVARCHAR (128)  NULL,
+    [ArchiveTable]            NVARCHAR (128)  NULL,
     [CleansingType]           NVARCHAR (2)    NULL,
     [IncrementalSchema]       NVARCHAR (128)  NULL,
     [IncrementalTable]        NVARCHAR (128)  NULL,
@@ -21,6 +23,8 @@
     [Options]                 NVARCHAR (1000) NULL,
     [IsActive]                BIT             NOT NULL
 );
+
+
 
 
 

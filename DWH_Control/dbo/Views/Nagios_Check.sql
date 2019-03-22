@@ -1,4 +1,5 @@
 ﻿
+
 CREATE VIEW [dbo].[Nagios_Check]
 AS
 
@@ -15,8 +16,8 @@ WITH CTE AS (
 			WHEN pk.name LIKE 'Load Fact%' THEN 'F'
 			ELSE 'X'
 		END) AS DECIMAL(18,2))	AS Packages
-	FROM		[$(SSISDB)].catalog.packages pk 
-	INNER JOIN	[$(SSISDB)].catalog.projects pj 
+	FROM		SSISDB.catalog.packages pk 
+	INNER JOIN	SSISDB.catalog.projects pj 
 	ON			pj.project_id = pk.project_id
 )
 
@@ -35,10 +36,10 @@ SELECT
 		WHEN AL.Source = 'Datamart2 Dimensions' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_Datamart2' AND Tabel = 'D') THEN 100
 		WHEN AL.Source = 'Datamart2 Fact' AND AL.CombinedWeight < (SELECT Packages FROM CTE WHERE Bron = 'SSIS_Datamart2' AND Tabel = 'F') THEN CAST((AL.CombinedWeight / (SELECT Packages FROM CTE WHERE Bron = 'SSIS_Datamart2' AND Tabel = 'F')) * 100 AS INT)
 		WHEN AL.Source = 'Datamart2 Fact' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_Datamart2' AND Tabel = 'F') THEN 100
-		WHEN AL.Source = 'ForeverData Dimensions' AND AL.CombinedWeight < (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D') THEN CAST((AL.CombinedWeight / (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D')) * 100 AS INT)
-		WHEN AL.Source = 'ForeverData Dimensions' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D') THEN 100
-		WHEN AL.Source = 'ForeverData Fact' AND AL.CombinedWeight < (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F') THEN CAST((AL.CombinedWeight / (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F')) * 100 AS INT)
-		WHEN AL.Source = 'ForeverData Fact' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F') THEN 100
+		--WHEN AL.Source = 'ForeverData Dimensions' AND AL.CombinedWeight < (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D') THEN CAST((AL.CombinedWeight / (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D')) * 100 AS INT)
+		--WHEN AL.Source = 'ForeverData Dimensions' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'D') THEN 100
+		--WHEN AL.Source = 'ForeverData Fact' AND AL.CombinedWeight < (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F') THEN CAST((AL.CombinedWeight / (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F')) * 100 AS INT)
+		--WHEN AL.Source = 'ForeverData Fact' AND AL.CombinedWeight >= (SELECT Packages FROM CTE WHERE Bron = 'SSIS_ForeverData01' AND Tabel = 'F') THEN 100
    END AS Status
    , CASE
 		WHEN AL.Source = 'Staging' THEN 1
@@ -47,8 +48,8 @@ SELECT
 		WHEN AL.Source = 'Datamart Fact' THEN 4
 		WHEN AL.Source = 'Datamart2 Dimensions' THEN 5
 		WHEN AL.Source = 'Datamart2 Fact' THEN 6
-		WHEN AL.Source = 'ForeverData Dimensions' THEN 7
-		WHEN AL.Source = 'ForeverData Fact' THEN 8
+		--WHEN AL.Source = 'ForeverData Dimensions' THEN 7
+		--WHEN AL.Source = 'ForeverData Fact' THEN 8
 	END AS Sort
 FROM (
 	SELECT  
@@ -63,7 +64,7 @@ FROM (
 			, Source
 			, Date
 			, Weight
-		FROM	Control.JobControl
+		FROM	DWH_Control.Control.JobControl
 		WHERE	Date >= CAST(GETDATE() AS DATE)
 		AND		Source <> 'Datamart'
 		AND		Source <> 'Datamart2'
@@ -78,8 +79,8 @@ FROM (
 			WHEN PackageName LIKE '%Fact-Datamart-DM%' THEN 'Datamart Fact'
 			WHEN PackageName LIKE '%Dim-Datamart2-DM%' THEN 'Datamart2 Dimensions'
 			WHEN PackageName LIKE '%Fact-Datamart2-DM%' THEN 'Datamart2 Fact'
-			WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
-			WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
+			--WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
+			--WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
 		  END AS Source
 		  , GETDATE()
 		  , COUNT(CASE
@@ -87,8 +88,8 @@ FROM (
 			WHEN PackageName LIKE '%Fact-Datamart-DM%' THEN 'Datamart Fact'
 			WHEN PackageName LIKE '%Dim-Datamart2-DM%' THEN 'Datamart2 Dimensions'
 			WHEN PackageName LIKE '%Fact-Datamart2-DM%' THEN 'Datamart2 Fact'
-			WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
-			WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
+			--WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
+			--WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
 		  END) AS Weight
 		FROM ( 	
 			SELECT
@@ -97,7 +98,7 @@ FROM (
 			LEFT JOIN Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = PL.ProcessLogID
 			WHERE PL.ExecutionStartDate >= cast(floor(cast(getdate() as float)) as datetime) AND PL.ExecutionStartDate < cast(floor(cast(getdate()+1 as float)) as datetime)
 			AND PL.IsSuccessful = 1
-			AND	(PL.PackageName LIKE '%Load Dim-Datamart%' OR PL.PackageName LIKE '%Load Fact-Datamart%' OR PL.PackageName LIKE '%Load Fact-ForeverData01%' OR PL.PackageName LIKE '%Load Dim-ForeverData01%')
+			AND	(PL.PackageName LIKE '%Load Dim-Datamart%' OR PL.PackageName LIKE '%Load Fact-Datamart%' /*OR PL.PackageName LIKE '%Load Fact-ForeverData01%' OR PL.PackageName LIKE '%Load Dim-ForeverData01%'*/)
 			GROUP BY
 			  PL.PackageName
 		) AA
@@ -107,8 +108,8 @@ FROM (
 			WHEN PackageName LIKE '%Fact-Datamart-DM%' THEN 'Datamart Fact'
 			WHEN PackageName LIKE '%Dim-Datamart2-DM%' THEN 'Datamart2 Dimensions'
 			WHEN PackageName LIKE '%Fact-Datamart2-DM%' THEN 'Datamart2 Fact'
-			WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
-			WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
+			--WHEN PackageName LIKE '%Dim-ForeverData01-DM%' THEN 'ForeverData Dimensions'
+			--WHEN PackageName LIKE '%Fact-ForeverData01-DM%' THEN 'ForeverData Fact'
 		  END
 
 		UNION
@@ -119,10 +120,10 @@ FROM (
 		SELECT 'Datamart','Datamart2 Dimensions',GETDATE(),0
 		UNION
 		SELECT 'Datamart','Datamart2 Fact',GETDATE(),0
-		UNION
+		/*UNION
 		SELECT 'Datamart','ForeverData Dimensions',GETDATE(),0
 		UNION
-		SELECT 'Datamart','ForeverData Fact',GETDATE(),0
+		SELECT 'Datamart','ForeverData Fact',GETDATE(),0*/
 		UNION
 		SELECT 'DWH','DWH',GETDATE(),0
 		UNION
