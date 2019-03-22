@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="70"
-  DTS:VersionGUID="{153116EC-09E6-4CBE-8C36-35161A6730EB}">
+  DTS:VersionBuild="74"
+  DTS:VersionGUID="{C0C3F7F2-4815-4092-9FBC-30AF0126364A}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -34,7 +34,7 @@
       DTS:ObjectName="Excel Connection Manager">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\Biml\BiML Reports metadata.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\FDODWHD01\StagingFiles\BimlBI\BiML Reports metadata.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -278,14 +278,34 @@
                       name="EmailCC"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EMailBCC]"
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[RunParam3]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EMailBCC]"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
                       length="255"
-                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EMailBCC]"
-                      name="EMailBCC"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[RunParam3]"
+                      name="RunParam3"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailBCC]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EmailBCC]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailBCC]"
+                      name="EmailBCC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailAttachment]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EmailAttachment]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailAttachment]"
+                      name="EmailAttachment"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
@@ -369,10 +389,20 @@
                       length="255"
                       name="EmailCC" />
                     <externalMetadataColumn
-                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EMailBCC]"
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
                       dataType="wstr"
                       length="255"
-                      name="EMailBCC" />
+                      name="RunParam3" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EmailBCC]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmailBCC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[EmailAttachment]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmailAttachment" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -458,6 +488,12 @@
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[RunParam2]"
                       name="RunParam2" />
                     <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      name="RunParam3" />
+                    <outputColumn
                       refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailTo]"
                       dataType="wstr"
                       length="255"
@@ -470,11 +506,17 @@
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailCC]"
                       name="EmailCC" />
                     <outputColumn
-                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EMailBCC]"
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailBCC]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EMailBCC]"
-                      name="EMailBCC" />
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailBCC]"
+                      name="EmailBCC" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailAttachment]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailAttachment]"
+                      name="EmailAttachment" />
                     <outputColumn
                       refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -680,12 +722,26 @@
                       externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[EmailCC]"
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailCC]" />
                     <inputColumn
-                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[EMailBCC]"
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[EmailBCC]"
                       cachedDataType="wstr"
                       cachedLength="255"
-                      cachedName="EMailBCC"
+                      cachedName="EmailBCC"
                       externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[EmailBCC]"
-                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EMailBCC]" />
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailBCC]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[RunParam3]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam3"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[RunParam3]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[EmailAttachment]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="EmailAttachment"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[EmailAttachment]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[EmailAttachment]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -776,6 +832,16 @@
                       dataType="wstr"
                       length="500"
                       name="EmailBCC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      dataType="wstr"
+                      length="50"
+                      name="RunParam3" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[EmailAttachment]"
+                      dataType="wstr"
+                      length="1"
+                      name="EmailAttachment" />
                   </externalMetadataColumns>
                 </input>
               </inputs>

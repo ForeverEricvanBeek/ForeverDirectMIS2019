@@ -7,17 +7,12 @@ string projectWorkDir = @"\\FDODWHD01\StagingFiles";
 string CacheDir = projectWorkDir + @"\Biml\SSIS Cache";
 string ExportDir = projectWorkDir + @"\Biml\Output";
 string ArchiveDir = projectWorkDir + @"\Biml\Archive";
+string ReportsDir = @"\\Fdofs01\data\Reports";
 string ErrorDir = projectWorkDir + @"\Biml\Error";
 string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't include the server name.
 string SystemConnection = "DWH_Control";
 
-string projectServerNameAndDatabaseInstanceName = "";
-
-if (projectDatabaseInstanceName.Length == 0) {
-     projectServerNameAndDatabaseInstanceName = projectServerName;
-} else {
-     projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
-}
+string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
 
 string GeneratorSchemaName = @"generator";
 string conGeneratorConnectionString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
