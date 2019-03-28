@@ -210,7 +210,7 @@
                             string sqlsourcecolumns = @"select 
                                                             COL.TABLE_NAME
                                                             , COL.COLUMN_NAME	AS COLUMN_NAME
-                                                            , COL.ORDINAL_POSITION
+                                                            , CASE WHEN COL.COLUMN_NAME IN ('Eff_Date','End_Date','ActInd','IsDeleted','BatchID','ProcessLogID') THEN COL.ORDINAL_POSITION*100 ELSE COL.ORDINAL_POSITION END AS ORDINAL_POSITION
                                                         from		DWH.INFORMATION_SCHEMA.COLUMNS COL
                                                         LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
                                                         ON			TC.TABLE_NAME = COL.TABLE_NAME
@@ -228,7 +228,7 @@
                                                         and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
                                                         order by 
                                                         COL.TABLE_NAME
-                                                        , COL.ORDINAL_POSITION
+                                                        , CASE WHEN COL.COLUMN_NAME IN ('Eff_Date','End_Date','ActInd','IsDeleted','BatchID','ProcessLogID') THEN COL.ORDINAL_POSITION*100 ELSE COL.ORDINAL_POSITION END
                                                         ";
                             DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
                             foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
