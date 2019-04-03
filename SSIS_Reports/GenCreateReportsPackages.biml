@@ -45,6 +45,7 @@
 													,ST.EmailCC
 													,ST.EmailBCC
 													,ST.EmailAttachment
+													,ST.IgnoreEmpty
                                                     ,'Reports' AS PackagePrefix
                                                     FROM      [Generator].[LoadReportTables] ST
                                                     LEFT JOIN [Generator].[Connection] SC
@@ -79,6 +80,7 @@
             string varExtractionRunParam1 = rowSourceExtractionTable["RunParam1"].ToString();
             string varExtractionRunParam2 = rowSourceExtractionTable["RunParam2"].ToString();
             string varExtractionRunParam3 = rowSourceExtractionTable["RunParam3"].ToString();
+            int varExtractionIgnoreEmpty = (int)rowSourceExtractionTable["IgnoreEmpty"];
             string varDestinationConnection = varExtractionTargetTable;
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
@@ -151,6 +153,7 @@
                     <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable>
                     <Variable Name="varFileAttachments" DataType="String" Namespace="User">\\FDODWHD01\StagingFiles\test.csv</Variable>
                     <Variable Name="varEmailBody" DataType="String" Namespace="User">Something went wrong!</Variable>
+                    <Variable Name="IgnoreEmpty" DataType="Int32" Namespace="User"><#=varExtractionIgnoreEmpty#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -179,7 +182,7 @@
                         </Results>
                     </ExecuteSQL>
     
-                    <Container Name="SC Load <#=varName#>" ConstraintMode="Linear">
+                    <Container Name="SC Load <#=varName#>">
                         <Tasks>
                             <ExecuteSQL Name="SQL Get last extraction date <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <DirectInput><#=varSQLSelectSourceExtractionControl#></DirectInput>
@@ -195,11 +198,25 @@
     
                             if (varExtractionType == "F") {#>
                                 <ExecuteSQL Name="SQL Truncate target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Get last extraction date <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                     <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                                 </ExecuteSQL>
                             <#}#>
     
                             <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <#if (varExtractionType == "F") {#>
+                                            <Input OutputPathName="SQL Truncate target <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <#} else {#>
+                                            <Input OutputPathName="SQL Get last extraction date <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />   
+                                        <#}#>    
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
                                 <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                             </ExecuteSQL>
@@ -306,7 +323,6 @@
                                         ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"General\";" + "\n";
                                     }
                                 }
-                                
                             }
                             CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
                             CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
@@ -320,6 +336,11 @@
                             
                             #>
                                 <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <PrecedenceConstraints LogicalType="And">
+                                        <Inputs>
+                                            <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        </Inputs>
+                                    </PrecedenceConstraints>
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
@@ -341,11 +362,21 @@
                                 </ExecuteSQL>
     
                             <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
                                 <Results><Result Name="0" VariableName="RC.RowCountTarget" /></Results>
                             </ExecuteSQL>
     
                             <ExecuteSQL Name="SQL Update contol record <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Target row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <DirectInput><#=varSQLUpdateDWHControl#></DirectInput>
                                 <Parameters>
                                     <Parameter Name="0" VariableName="BatchID" DataType="Int64" />
@@ -358,6 +389,11 @@
                                 
                             <#if (varExtractionOutput == "CSV") {#>
                             <Script ProjectCoreName="<#=varScriptCoreName#>" Name="Script <#=varExtractionFilename#>">
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Update contol record <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="ExpressionAndConstraint" Expression="@[RC::RowCountExtract] > 0"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <ScriptTaskProject>
                                     <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varSourceTable#>">
                                         <AssemblyReferences>
@@ -453,6 +489,11 @@ Report is located at: ";
                             <#}#>
                             <#if (varExtractionOutput == "Excel") {#>
                             <Script ProjectCoreName="<#=varScriptCoreName#>" Name="Script <#=varExtractionFilename#>">
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Update contol record <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="ExpressionAndConstraint" Expression="@[RC::RowCountExtract] > 0" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <ScriptTaskProject>
                                     <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varSourceTable#>">
                                         <AssemblyReferences>
@@ -558,6 +599,11 @@ Report is located at: ";
                             <#}#>
                             <#if (!string.IsNullOrEmpty(varExtractionEmailTo)) {#>
                             <SendMail Name="Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="<#=varExtractionEmailTo#>" CCLine="<#=varExtractionEmailCC#>" BCCLine="<#=varExtractionEmailBCC#>" Subject="Email report <#=varExtractionFilename#>">
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="Script <#=varExtractionFilename#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <DirectInput>User::varEmailBody</DirectInput>
                                 <Expressions>
                                 <#if (varExtractionEmailAttachment == "Y") {#>
@@ -567,7 +613,19 @@ Report is located at: ";
                                 </Expressions>
                             </SendMail>
                             <#}#>
-
+                            <#if (!string.IsNullOrEmpty(varExtractionEmailTo)) {#>
+                            <SendMail Name="Empty Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="<#=varExtractionEmailTo#>" CCLine="<#=varExtractionEmailCC#>" BCCLine="<#=varExtractionEmailBCC#>" Subject="Empty Email report <#=varExtractionFilename#>">
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Update contol record <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="ExpressionAndConstraint" Expression="@[RC::RowCountExtract] == 0 &amp;&amp; @[User::IgnoreEmpty] == 0" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <DirectInput>Report is empty, no data found</DirectInput>
+                                <Expressions>
+                                    <Expression PropertyName="MessageSourceType">0</Expression>
+                                </Expressions>
+                            </SendMail>
+                            <#}#>
                         </Tasks>
                     </Container>
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">

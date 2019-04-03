@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="78"
-  DTS:VersionGUID="{A4CE70E3-5177-4540-99E7-9030A121B981}">
+  DTS:VersionBuild="79"
+  DTS:VersionGUID="{B16347DA-EC63-4E11-838D-C49E7BA8975F}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -1268,8 +1268,7 @@
                       name="EmailAttachment" />
                     <externalMetadataColumn
                       refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IgnoreEmpty]"
-                      dataType="wstr"
-                      length="50"
+                      dataType="i4"
                       name="IgnoreEmpty" />
                   </externalMetadataColumns>
                 </input>
@@ -1436,12 +1435,12 @@
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="184,42"
-          Id="Package\Load Predicates\Connection"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="184,42"
           Id="Package\Load Predicates\Generator_Connection"
           TopLeft="522,139" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Predicates\Connection"
+          TopLeft="522,53" />
         <EdgeLayout
           Id="Package\Load Predicates.Paths[Excel Source Output]"
           TopLeft="614,95">
