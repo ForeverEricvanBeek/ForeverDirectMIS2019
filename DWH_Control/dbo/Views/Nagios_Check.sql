@@ -16,8 +16,8 @@ WITH CTE AS (
 			WHEN pk.name LIKE 'Load Fact%' THEN 'F'
 			ELSE 'X'
 		END) AS DECIMAL(18,2))	AS Packages
-	FROM		SSISDB.catalog.packages pk 
-	INNER JOIN	SSISDB.catalog.projects pj 
+	FROM		[$(SSISDB)].catalog.packages pk 
+	INNER JOIN	[$(SSISDB)].catalog.projects pj 
 	ON			pj.project_id = pk.project_id
 )
 
@@ -64,7 +64,7 @@ FROM (
 			, Source
 			, Date
 			, Weight
-		FROM	DWH_Control.Control.JobControl
+		FROM	Control.JobControl
 		WHERE	Date >= CAST(GETDATE() AS DATE)
 		AND		Source <> 'Datamart'
 		AND		Source <> 'Datamart2'

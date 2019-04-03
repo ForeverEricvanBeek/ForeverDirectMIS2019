@@ -6,7 +6,9 @@
 <#@ include file="ProjectSettings.cs" #>
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <Packages>
-        <#string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (
+        <#
+        string allSourceTables = "";
+        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (
                                                     select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS
                                                     from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
                                                     JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
@@ -54,6 +56,7 @@
                                                     ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
+            allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["SourceTable"].ToString() + "',";
             string varExtractionSourceConnection  = rowSourceExtractionTable["SourceConnection"].ToString();
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
@@ -88,7 +91,7 @@
             string varTableCloseCharacter = varSQLServTableCloseCharacter;
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
-             string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
+            string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
     
             string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable + varSQLServTableCloseCharacter;
             string varExtractionSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionSourceSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionSourceTable + varSQLServTableCloseCharacter;
@@ -119,6 +122,16 @@
                 <Parameters>
                     <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                     <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+                    <#  string sqlparam1columns = @"SELECT 
+                                      ViewPredicatesName
+                                      ,ViewPredicatesValue
+                                  FROM DWH_Control.Generator.LoadReportTablePredicates
+                                  WHERE SourceTable = '" + varTargetTable + @"'
+                                  AND IsActive = 1";
+                    DataTable tableparam1columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam1columns);
+                    foreach (DataRow rowparam1columns in tableparam1columns.Rows) {
+                        #><Parameter Name="<#=rowparam1columns["ViewPredicatesName"].ToString()#>_PP" DataType="String"><#=rowparam1columns["ViewPredicatesName"].ToString()#></Parameter><#
+                    }#>
                 </Parameters>
     
                 <Variables>
@@ -137,7 +150,7 @@
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable>
                     <Variable Name="varFileAttachments" DataType="String" Namespace="User">\\FDODWHD01\StagingFiles\test.csv</Variable>
-                    <Variable Name="varEmailBody" DataType="String" Namespace="User">Something went wrong!</Variable>    
+                    <Variable Name="varEmailBody" DataType="String" Namespace="User">Something went wrong!</Variable>
                 </Variables>
     
                 <Tasks>
@@ -201,7 +214,19 @@
                             string CSVHeaderRow = "";
                             string CSVRowsValue = "";
                             string ExcelScale = "0";
+                            string WhereClause = "WHERE 1=1";
 
+                            string sqlwherecolumns = @"SELECT 
+                                                          ViewPredicatesColumn
+                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
+                                                      WHERE SourceTable = '" + varTargetTable + @"'
+                                                      AND IsActive = 1";
+                            DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
+                            foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
+                                string VarWhereColumn = rowwherecolumns["ViewPredicatesColumn"].ToString();
+                                WhereClause =  WhereClause + " AND " + VarWhereColumn + "?";
+                            }
+                            
                             string sqlsourcecolumns = @"select 
                                                             COL.TABLE_NAME
                                                             , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
@@ -286,12 +311,12 @@
                             CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
                             CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
 
-                            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varSourceSchema + "." + varSourceTable;
+                            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable;
                             string MergeSQlStatement = "INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
                             MergeSQlStatement = MergeSQlStatement + ") SELECT ";
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
-                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable;
+                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable + " " + WhereClause;
                             
                             #>
                                 <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
@@ -299,6 +324,19 @@
                                     <Parameters>
                                         <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
                                         <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                        <#  var x = 2;
+                                            string sqlparamcolumns = @"SELECT 
+                                                          ViewPredicatesName
+                                                          ,ViewPredicatesValue
+                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
+                                                      WHERE SourceTable = '" + varSourceTable + @"'
+                                                      AND IsActive = 1";
+                                            DataTable tableparamcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparamcolumns);
+                                            foreach (DataRow rowparamcolumns in tableparamcolumns.Rows) {
+                                                #><Parameter Name="<#=x#>" VariableName="<#=rowparamcolumns["ViewPredicatesName"].ToString()#>_PP" DataType="String" /><#
+
+                                                x = x + 1;
+                                            }#>
                                     </Parameters>
                                 </ExecuteSQL>
     
@@ -529,6 +567,7 @@ Report is located at: ";
                                 </Expressions>
                             </SendMail>
                             <#}#>
+
                         </Tasks>
                     </Container>
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
@@ -565,6 +604,7 @@ Report is located at: ";
             </Package>
         <#}
 
+        allSourceTables = allSourceTables.Substring(0, allSourceTables.Length - 1);
         string sqlTargetSchemas = @"SELECT DISTINCT
                                     [TargetConnection]
                                     ,[TargetSchema]
@@ -599,6 +639,21 @@ Report is located at: ";
                     <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
                     <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+                    <#  string sqlvarcolumns = @"SELECT 
+                                      ViewPredicatesName
+                                      ,ViewPredicatesValue
+                                      ,ViewPredicatesExpression
+                                  FROM DWH_Control.Generator.LoadReportTablePredicates
+                                  WHERE SourceTable IN (" + allSourceTables + @")
+                                  AND IsActive = 1";
+                    DataTable tablevarcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlvarcolumns);
+                    foreach (DataRow rowvarcolumns in tablevarcolumns.Rows) {
+                        if((bool)rowvarcolumns["ViewPredicatesExpression"]) {  
+                            #><Variable Name="<#=rowvarcolumns["ViewPredicatesName"].ToString()#>_CV" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=rowvarcolumns["ViewPredicatesValue"].ToString()#></Variable><#
+                        } else {
+                            #><Variable Name="<#=rowvarcolumns["ViewPredicatesName"].ToString()#>_CV" DataType="String" Namespace="User"><#=rowvarcolumns["ViewPredicatesValue"].ToString()#></Variable><#
+                        }
+                    }#>
                 </Variables>
     
                 <Tasks>
@@ -665,6 +720,16 @@ Report is located at: ";
                                     <ParameterBindings>
                                         <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
                                         <ParameterBinding VariableName="Audit.AuditProcessLogID"  Name="ProcessLogParentID" />
+                                        <#  string sqlparam2columns = @"SELECT 
+                                                          ViewPredicatesName
+                                                          ,ViewPredicatesValue
+                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
+                                                      WHERE SourceTable = '" + varSourceTable + @"'
+                                                      AND IsActive = 1";
+                                            DataTable tableparam2columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam2columns);
+                                            foreach (DataRow rowparam2columns in tableparam2columns.Rows) {
+                                                #><ParameterBinding VariableName="User.<#=rowparam2columns["ViewPredicatesName"].ToString()#>_CV" Name="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" /><#
+                                            }#>
                                     </ParameterBindings>
                                     <Expressions>
                                         <Expression PropertyName="Disable"><#=varPackageRun#></Expression>

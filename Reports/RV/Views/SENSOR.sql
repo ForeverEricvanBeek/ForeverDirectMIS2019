@@ -1,5 +1,7 @@
 ﻿
-CREATE VIEW RV.SENSOR
+
+
+CREATE VIEW [RV].[SENSOR]
 AS
 SELECT
   SR.Sensor_Name
@@ -7,6 +9,7 @@ SELECT
   , SR.Sensor_Temp
   , SR.Sensor_Humidity
   , SR.Sensor_Dew 
+  , SR.ActInd
 FROM	[$(DWH)].WEB.Sensor SR
-WHERE	SR.ActInd = 'Y'
-AND		SR.Sensor_Date >= DATEADD(MONTH,-1,GETDATE())
+--WHERE	SR.ActInd = 'Y'
+--AND		SR.Sensor_Date >= DATEADD(MONTH,-1,GETDATE())
