@@ -206,21 +206,6 @@
                                     <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                                 </ExecuteSQL>
                             <#}#>
-    
-                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                <PrecedenceConstraints LogicalType="And">
-                                    <Inputs>
-                                        <#if (varExtractionType == "F") {#>
-                                            <Input OutputPathName="SQL Truncate target <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
-                                        <#} else {#>
-                                            <Input OutputPathName="SQL Get last extraction date <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />   
-                                        <#}#>    
-                                    </Inputs>
-                                </PrecedenceConstraints>
-                                <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
-                                <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
-                            </ExecuteSQL>
-    
                             <#
                             string MergeSQlStatementColumnsInsert = "";
                             string MergeSQlStatementColumnsInto = "";
@@ -241,7 +226,7 @@
                             DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
                             foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
                                 string VarWhereColumn = rowwherecolumns["ViewPredicatesColumn"].ToString();
-                                WhereClause =  WhereClause + " AND " + VarWhereColumn + "?";
+                                WhereClause =  WhereClause + " AND " + VarWhereColumn + "'?'";
                             }
                             
                             string sqlsourcecolumns = @"select 
@@ -334,7 +319,38 @@
                             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
                             MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable + " " + WhereClause;
                             
+                            varSQLRowCountSourceTable = varSQLRowCountSourceTable + " " + WhereClause;
                             #>
+                            
+                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <#if (varExtractionType == "F") {#>
+                                            <Input OutputPathName="SQL Truncate target <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <#} else {#>
+                                            <Input OutputPathName="SQL Get last extraction date <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />   
+                                        <#}#>    
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
+                                <Parameters>
+                                    <#  var x1 = 0;
+                                        string sqlparam2columns = @"SELECT 
+                                                      ViewPredicatesName
+                                                      ,ViewPredicatesValue
+                                                  FROM DWH_Control.Generator.LoadReportTablePredicates
+                                                  WHERE SourceTable = '" + varSourceTable + @"'
+                                                  AND IsActive = 1";
+                                        DataTable tableparam2columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam2columns);
+                                        foreach (DataRow rowparam2columns in tableparam2columns.Rows) {
+                                            #><Parameter Name="<#=x1#>" VariableName="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" DataType="String" /><#
+
+                                            x1 = x1 + 1;
+                                        }#>
+                                </Parameters>
+                                <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
+                            </ExecuteSQL>
+                            
                                 <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <PrecedenceConstraints LogicalType="And">
                                         <Inputs>

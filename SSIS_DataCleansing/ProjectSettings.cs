@@ -12,6 +12,7 @@ string ErrorDir = projectWorkDir + @"\Biml\Error";
 string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't include the server name.
 string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
+int DaysBack = 3;
 
 string projectServerNameAndDatabaseInstanceName = "";
 

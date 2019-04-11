@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadataIFS"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="65"
-  DTS:VersionGUID="{864008C3-67A1-48C8-964A-E20EC7A82C3F}">
+  DTS:VersionBuild="68"
+  DTS:VersionGUID="{CBE87939-FC13-4043-BCC5-D5C7B516962D}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -1499,7 +1499,8 @@
                       name="Order" />
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[WhereStatement]"
-                      dataType="nText"
+                      dataType="wstr"
+                      length="4000"
                       name="WhereStatement" />
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsLoading]"
@@ -1508,7 +1509,7 @@
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Parent]"
                       dataType="wstr"
-                      length="128"
+                      length="256"
                       name="Parent" />
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveTable]"
@@ -2319,12 +2320,12 @@
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="237,42"
-          Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
-          TopLeft="522,139" />
-        <NodeLayout
-          Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
           TopLeft="522,53" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
+          TopLeft="522,139" />
         <EdgeLayout
           Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
           TopLeft="640.5,95">

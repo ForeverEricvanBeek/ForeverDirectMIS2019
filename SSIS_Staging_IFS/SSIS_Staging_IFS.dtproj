@@ -141,9 +141,11 @@
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-MANUFACTURED_PART.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-PURCHASE_RECEIPT_RETURN.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-ACCOUNTING_GROUP.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="201912.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-BAD_DEBT_QRY.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-LEDGER_ITEM.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-ACCOUNTING_BALANCE.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="EXTR-StagingIFS-PROD-PURCH_INFO_SERVICES_RPV.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="201915.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="DWH_Control.conmgr" />
@@ -5525,23 +5527,6 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="201912.dtsx">
-              <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{A58A4454-3E5C-4E41-8A90-0DA74442BC33}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">201912</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">9</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionComments">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{994F730C-AC1A-4252-87FF-E687B4A5310E}</SSIS:Property>
-                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
-                <SSIS:Property SSIS:Name="Description">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
-              </SSIS:Properties>
-              <SSIS:Parameters />
-            </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="EXTR-StagingIFS-PROD-BAD_DEBT_QRY.dtsx">
               <SSIS:Properties>
                 <SSIS:Property SSIS:Name="ID">{53F9EE99-B52D-4FBC-9B8D-5C01FAEC1AD8}</SSIS:Property>
@@ -5633,6 +5618,115 @@
                   </SSIS:Properties>
                 </SSIS:Parameter>
               </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="EXTR-StagingIFS-PROD-ACCOUNTING_BALANCE.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{F565246A-39B3-445E-A5EA-59EEC46AA6A0}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">EXTR-StagingIFS-PROD-ACCOUNTING_BALANCE</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{35AA6C69-82E1-4A8D-9536-A3212385A6FA}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters>
+                <SSIS:Parameter SSIS:Name="BatchID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{35B46B67-F131-4217-A71E-001637C42712}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{4DCF65B1-74DF-4B0C-9118-C4E805102FAD}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+              </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="EXTR-StagingIFS-PROD-PURCH_INFO_SERVICES_RPV.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{68AEA7C6-2668-4126-B872-FC06DA6EBD13}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">EXTR-StagingIFS-PROD-PURCH_INFO_SERVICES_RPV</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{DE585318-4536-4C9C-A61E-6EBF2563CEB4}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters>
+                <SSIS:Parameter SSIS:Name="BatchID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{9DD12E9C-228D-4972-B3DB-F34B6469A08E}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{E67C8EF4-9FDE-4624-8EA8-B8245FBC9AE3}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+              </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="201915.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{F97E8AE6-C145-4CEC-9271-A35B308DC48C}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">201915</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">10</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{F4FC34FB-1DCF-42ED-8E4F-0B2457C70A1D}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters />
             </SSIS:PackageMetaData>
           </SSIS:PackageInfo>
         </SSIS:DeploymentInfo>

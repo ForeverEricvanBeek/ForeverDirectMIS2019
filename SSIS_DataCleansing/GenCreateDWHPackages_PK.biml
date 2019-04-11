@@ -110,6 +110,7 @@
                     <Variable Name="ExtractionType" DataType="String" Namespace="User">CL</Variable>
                     <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
+                    <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
                 </Variables>
     
                 <Tasks>
@@ -228,13 +229,12 @@
                                 string varSQLRowCountSourceTable = @"WITH CTE_DELETED AS (
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
-                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @"
+                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())
                                     	            UNION ALL
-                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @") MS
+                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())) MS 
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MS.IsDeleted = 'N'
-                                    	AND         MSPK.BatchID IS NULL
+                                    	WHERE		MSPK.BatchID IS NULL
                                     )
                                     
                                     SELECT COUNT (*) FROM CTE_DELETED;";
@@ -246,6 +246,7 @@
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
+                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -262,6 +263,7 @@
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
+                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -273,26 +275,24 @@
                                     
                                 <ExecuteSQL Name="SQL Deleted rows count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                     <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                        <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                    </Parameters>
                                     <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                                 </ExecuteSQL>    
                                     
                                 <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
                                     <Parameters>
-                                        <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
-                                        <Parameter Name="2" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
                                     </Parameters>
                                 </ExecuteSQL>
                                     
                                 <ExecuteSQL Name="SQL Merge Archive <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <DirectInput><![CDATA[<#=@MergeArchiveSQlStatement#>]]></DirectInput>
                                     <Parameters>
-                                        <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
-                                        <Parameter Name="2" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
                                     </Parameters>
                                 </ExecuteSQL>
                         </Tasks>
