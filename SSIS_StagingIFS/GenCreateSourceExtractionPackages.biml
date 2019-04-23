@@ -48,6 +48,7 @@
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
                                                     ,ST.[WhereStatement]
+                                                    ,ST.[WhereStatement2]
                                                     ,ST.[Parent]
                                                 FROM      [Generator].[SourceExtractionTable] ST
                                                 LEFT JOIN [Generator].[Connection]            SC
@@ -78,11 +79,19 @@
             string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
+            string varExtractionWhereStatement2 = rowSourceExtractionTable["WhereStatement2"].ToString();
             if (varExtractionWhereStatement.Length > 0) {
                 if (varExtractionType == "MI" || varExtractionType == "MN" || varExtractionType == "MF") {
                     varExtractionWhereStatement = "AND "+ varExtractionWhereStatement;
                 } else {
                     varExtractionWhereStatement = varExtractionWhereStatement;
+                }
+            }
+            if (varExtractionWhereStatement2.Length > 0) {
+                if (varExtractionType == "MI" || varExtractionType == "MN" || varExtractionType == "MF") {
+                    varExtractionWhereStatement2 = "AND "+ varExtractionWhereStatement2;
+                } else {
+                    varExtractionWhereStatement2 = varExtractionWhereStatement2;
                 }
             }
             
@@ -211,25 +220,25 @@
             }
             
             if (varExtractionType == "MX") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + "\"";
             } else if (varExtractionType == "MI" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MI") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + "\"";
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionIDConversion + " " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + "\"";
             } else if (varExtractionType == "MN" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MN") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + "\"";
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + " " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + "\"";
             } else if (varExtractionType == "MO" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MO") {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " AND " + varExtractionIncrementalKey + " IN (" + varExtractionWhereIn + ")\"";
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + " AND " + varExtractionIncrementalKey + " IN (" + varExtractionWhereIn + ")\"";
             } else if (varExtractionType == "MF" && (varIsLoading))  {
-                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE 1=1 " + varExtractionWhereStatement + " AND 1=" + varExtractionisLoadingWhere;
+                varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE 1=1 " + varExtractionWhereStatement + " " + varExtractionWhereStatement2 + " AND 1=" + varExtractionisLoadingWhere;
             } else if (varExtractionType == "MF") {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement + " " + varExtractionWhereStatement2;
             } else  {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement + " " + varExtractionWhereStatement2;
             }
             #>
     

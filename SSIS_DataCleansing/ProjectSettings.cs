@@ -13,6 +13,7 @@ string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't
 string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 int DaysBack = 3;
+int CleanMonths = 6;
 
 string projectServerNameAndDatabaseInstanceName = "";
 

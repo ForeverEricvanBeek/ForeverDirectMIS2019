@@ -48,6 +48,7 @@
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,'PK' PackagePrefix
                                                     ,ST.[WhereStatement]
+                                                    ,ST.[WherePKStatement]
                                                 FROM      [Generator].[SourceExtractionTable] ST
                                                 LEFT JOIN [Generator].[Connection]            SC
                                                 ON        ST.[SourceConnection] = SC.[Name]
@@ -78,8 +79,12 @@
             string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
+            string varExtractionWherePKStatement = rowSourceExtractionTable["WherePKStatement"].ToString();
             if (varExtractionWhereStatement.Length > 0) {
-                varExtractionWhereStatement = "AND "+varExtractionWhereStatement;
+                varExtractionWhereStatement = " AND "+varExtractionWhereStatement;
+            }
+            if (varExtractionWherePKStatement.Length > 0) {
+                varExtractionWherePKStatement = " AND "+varExtractionWherePKStatement;
             }
             
             string ConnectionStringXSD = varExtractionOptions.Replace("\\","\\\\");
@@ -228,10 +233,10 @@
             }
             
             if (varExtractionArchiveTable.Length >0) {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
-                varExtractionSQLStatement += "UNION ALL SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionArchiveTable + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement + varExtractionWherePKStatement;
+                varExtractionSQLStatement += "UNION ALL SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionArchiveTable + " WHERE 1=1 " + varExtractionWhereStatement + varExtractionWherePKStatement;
             } else {
-                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement;
+                varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE 1=1 " + varExtractionWhereStatement + varExtractionWherePKStatement;
             }
             #>
     

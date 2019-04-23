@@ -41,6 +41,7 @@
                                                     ,ST.SourceSchema AS AlternativeSchema
                                                     ,CS.PK AS [PrimaryKey]
                                                     ,'CL' AS PackagePrefix
+                                                    , ST.CleansingFrom
                                                     FROM      [Generator].[SourceExtractionTable] ST
                                                     LEFT JOIN [Generator].[Connection] SC
                                                     ON        ST.[SourceConnection] = SC.[Name]
@@ -68,6 +69,7 @@
             string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
+            string varCleanFrom = rowSourceExtractionTable["CleansingFrom"].ToString();
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
             string varTargetTable = varExtractionTargetTable;
@@ -111,6 +113,7 @@
                     <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
+                    <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
                 </Variables>
     
                 <Tasks>
@@ -229,9 +232,9 @@
                                 string varSQLRowCountSourceTable = @"WITH CTE_DELETED AS (
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
-                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())
+                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE()) AND " + varCleanFrom + @"
                                     	            UNION ALL
-                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())) MS 
+                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE()) AND " + varCleanFrom + @") MS 
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MSPK.BatchID IS NULL
@@ -247,6 +250,7 @@
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
                                     	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
+                                    	AND         MS." + varCleanFrom + @"
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -264,6 +268,7 @@
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
                                     	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
+                                    	AND         MS." + varCleanFrom + @"
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -278,6 +283,8 @@
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
                                         <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                        <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <Parameter Name="3" VariableName="User.CleanMonths" DataType="Int32" />
                                     </Parameters>
                                     <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                                 </ExecuteSQL>    
@@ -286,6 +293,7 @@
                                     <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                        <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
                                     </Parameters>
                                 </ExecuteSQL>
                                     
@@ -293,6 +301,7 @@
                                     <DirectInput><![CDATA[<#=@MergeArchiveSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                        <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
                                     </Parameters>
                                 </ExecuteSQL>
                         </Tasks>
