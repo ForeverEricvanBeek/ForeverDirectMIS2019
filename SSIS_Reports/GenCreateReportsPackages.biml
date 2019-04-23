@@ -102,7 +102,7 @@
             string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable   + varSQLServTableCloseCharacter;
             string varTargetSchemaTablePlus = varTargetSchemaPlus    + "." + varTargetTablePlus;
             string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
-            string varSQLRowCountSourceTable = "SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
+            string varSQLRowCountSourceTable = "\"SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
             string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
             string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT ([SourceConnection], [SourceSchema], [SourceTable], [ExtractionType], [BatchID], [RowCountExtract],[RowCountTarget],[RowCountError],[LastLoadDate])VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
@@ -118,6 +118,122 @@
             string varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
+
+            string MergeSQlStatementColumnsInsert = "";
+            string MergeSQlStatementColumnsInto = "";
+            
+            string ExcelHeaderRow = "";
+            string ExcelRowsValue = "";
+            string ExcelRowsStyle = "";
+            string CSVHeaderRow = "";
+            string CSVRowsValue = "";
+            string ExcelScale = "0";
+            string WhereClause = "WHERE 1=1";
+
+            string sqlwherecolumns = @"SELECT 
+                                          ViewPredicatesColumn
+                                          , ViewPredicatesName
+                                      FROM DWH_Control.Generator.LoadReportTablePredicates
+                                      WHERE SourceTable = '" + varTargetTable + @"'
+                                      AND IsActive = 1";
+            DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
+            foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
+                string VarWhereColumnExpression = rowwherecolumns["ViewPredicatesColumn"].ToString();
+                string VarWhereColumnName = rowwherecolumns["ViewPredicatesName"].ToString();
+                WhereClause =  WhereClause + " AND " + VarWhereColumnExpression + "\" + @[$Package::" + VarWhereColumnName + "_PP] + \"";
+            }
+            
+            string sqlsourcecolumns = @"select 
+                                            COL.TABLE_NAME
+                                            , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
+                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
+                                            , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
+                                            , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
+                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
+                                            , COL.ORDINAL_POSITION
+                                            , CASE
+                                            WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
+                                            WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
+                                            WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
+                                            WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
+                                            ELSE '[' + COL.DATA_TYPE + ']'
+                                            END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
+                                            , COL.DATA_TYPE AS DATA_TYPE
+                                            , COL.NUMERIC_SCALE AS NUMERIC_SCALE
+                                        from		Reports.INFORMATION_SCHEMA.COLUMNS COL
+                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                        ON			TC.TABLE_NAME = COL.TABLE_NAME
+                                        AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
+                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
+                                        ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
+                                        AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
+                                        AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
+                                        AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
+                                        LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
+                                        ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
+                                        AND			DWC.DWHTable			= COL.TABLE_NAME
+                                        AND			DWC.DWHColumnName		= COL.COLUMN_NAME
+                                        where		COL.TABLE_NAME= '" + varTargetTable + @"'
+                                        and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
+                                        order by 
+                                        COL.TABLE_NAME
+                                        , COL.ORDINAL_POSITION
+                                        ";
+            DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
+            foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
+                string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
+                string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
+                string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
+                string VarExcelDataType = rowsourcecolumns["DATA_TYPE"].ToString();
+                string VarExcelDataScale = rowsourcecolumns["NUMERIC_SCALE"].ToString();
+                string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
+                string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
+                string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
+                string varTargetColumnPosition = rowsourcecolumns["ORDINAL_POSITION"].ToString();
+                if (VarSourceColumnName == "ProcessLogID") {
+                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"] ";
+                } else {
+                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"], ";
+                }
+            
+                if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID") {
+                    MergeSQlStatementColumnsInto = MergeSQlStatementColumnsInto + "["+ VarSourceColumnName +"], ";
+                    ExcelHeaderRow = ExcelHeaderRow + "worksheet.Cells[1, " + varTargetColumnPosition + "].Value = \"" + VarTargetColumnName + "\";" + "\n";
+                    CSVHeaderRow = CSVHeaderRow + "\"" + VarTargetColumnName + "\" + \",\" + ";
+                    CSVRowsValue = CSVRowsValue + "reader[\"" + VarTargetColumnName + "\"]" + " + \",\" + ";
+                    if(VarExcelDataType == "numeric" || VarExcelDataType == "decimal") {
+                        if (VarExcelDataScale == "2") {
+                            ExcelScale = "0.00";
+                        } else if (VarExcelDataScale == "4") {
+                            ExcelScale = "0.0000";
+                        } else {
+                            ExcelScale = "0";
+                        }
+                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"" + ExcelScale + "\";" + "\n";
+                    } else if (VarExcelDataType == "bigint" || VarExcelDataType == "int" || VarExcelDataType == "smallint" || VarExcelDataType == "tinyint") {
+                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"0\";" + "\n";
+                    } else if (VarExcelDataType == "datetime2") {
+                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
+                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"dd-MM-yyyy HH:mm\";" + "\n";                                       
+                    } else {
+                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"].ToString();" + "\n";
+                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"General\";" + "\n";
+                    }
+                }
+            }
+            CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
+            CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
+
+            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable;
+            string MergeSQlStatement = "\"INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
+            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
+            MergeSQlStatement = MergeSQlStatement + ") SELECT ";
+            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
+            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable + " " + WhereClause + "\"";
+            
+            varSQLRowCountSourceTable = varSQLRowCountSourceTable + " " + WhereClause + "\"";
             #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -154,6 +270,8 @@
                     <Variable Name="varFileAttachments" DataType="String" Namespace="User">\\FDOFS01\Data\Reports\Temp\test.csv</Variable>
                     <Variable Name="varEmailBody" DataType="String" Namespace="User">Something went wrong!</Variable>
                     <Variable Name="IgnoreEmpty" DataType="Int32" Namespace="User"><#=varExtractionIgnoreEmpty#></Variable>
+                    <Variable Name="sqlCountDWH" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>
+                    <Variable Name="sqlInsertReport" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@MergeSQlStatement#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -188,15 +306,7 @@
                                 <DirectInput><#=varSQLSelectSourceExtractionControl#></DirectInput>
                                 <Results><Result Name="0" VariableName="User.LastExtractionDate" /></Results>
                             </ExecuteSQL>
-                            <#string varTaskName = "Dataflow Load " + varName;
-                            string varSQLPackageTaskColumn = @"SELECT [ColumnName]
-                                                                	   ,[ColumnId]
-                                                                FROM       [dbo].[PackageTaskColumn]
-                                                                WHERE      [PackageName] = '" + varPackageName + @"' 
-                                                                AND        [TaskName]    = '" + varTaskName + @"'
-                                                                ";
-    
-                            if (varExtractionType == "F") {#>
+                            <#if (varExtractionType == "F") {#>
                                 <ExecuteSQL Name="SQL Truncate target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
@@ -206,122 +316,7 @@
                                     <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
                                 </ExecuteSQL>
                             <#}#>
-                            <#
-                            string MergeSQlStatementColumnsInsert = "";
-                            string MergeSQlStatementColumnsInto = "";
-                            
-                            string ExcelHeaderRow = "";
-                            string ExcelRowsValue = "";
-                            string ExcelRowsStyle = "";
-                            string CSVHeaderRow = "";
-                            string CSVRowsValue = "";
-                            string ExcelScale = "0";
-                            string WhereClause = "WHERE 1=1";
 
-                            string sqlwherecolumns = @"SELECT 
-                                                          ViewPredicatesColumn
-                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
-                                                      WHERE SourceTable = '" + varTargetTable + @"'
-                                                      AND IsActive = 1";
-                            DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
-                            foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
-                                string VarWhereColumn = rowwherecolumns["ViewPredicatesColumn"].ToString();
-                                WhereClause =  WhereClause + " AND " + VarWhereColumn + "'?'";
-                            }
-                            
-                            string sqlsourcecolumns = @"select 
-                                                            COL.TABLE_NAME
-                                                            , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
-                                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
-                                                            , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
-                                                            , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
-                                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
-                                                            , COL.ORDINAL_POSITION
-                                                            , CASE
-                                                            WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
-                                                            WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                                            WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                                            WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
-                                                            ELSE '[' + COL.DATA_TYPE + ']'
-                                                            END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
-                                                            , COL.DATA_TYPE AS DATA_TYPE
-                                                            , COL.NUMERIC_SCALE AS NUMERIC_SCALE
-                                                        from		Reports.INFORMATION_SCHEMA.COLUMNS COL
-                                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                        ON			TC.TABLE_NAME = COL.TABLE_NAME
-                                                        AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
-                                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
-                                                        ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
-                                                        AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
-                                                        AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
-                                                        AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
-                                                        LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
-                                                        ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
-                                                        AND			DWC.DWHTable			= COL.TABLE_NAME
-                                                        AND			DWC.DWHColumnName		= COL.COLUMN_NAME
-                                                        where		COL.TABLE_NAME= '" + varTargetTable + @"'
-                                                        and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
-                                                        order by 
-                                                        COL.TABLE_NAME
-                                                        , COL.ORDINAL_POSITION
-                                                        ";
-                            DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
-                            foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
-                                string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
-                                string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
-                                string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
-                                string VarExcelDataType = rowsourcecolumns["DATA_TYPE"].ToString();
-                                string VarExcelDataScale = rowsourcecolumns["NUMERIC_SCALE"].ToString();
-                                string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
-                                string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
-                                string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
-                                string varTargetColumnPosition = rowsourcecolumns["ORDINAL_POSITION"].ToString();
-                                if (VarSourceColumnName == "ProcessLogID") {
-                                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"] ";
-                                } else {
-                                    MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"], ";
-                                }
-                            
-                                if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID") {
-                                    MergeSQlStatementColumnsInto = MergeSQlStatementColumnsInto + "["+ VarSourceColumnName +"], ";
-                                    ExcelHeaderRow = ExcelHeaderRow + "worksheet.Cells[1, " + varTargetColumnPosition + "].Value = \"" + VarTargetColumnName + "\";" + "\n";
-                                    CSVHeaderRow = CSVHeaderRow + "\"" + VarTargetColumnName + "\" + \",\" + ";
-                                    CSVRowsValue = CSVRowsValue + "reader[\"" + VarTargetColumnName + "\"]" + " + \",\" + ";
-                                    if(VarExcelDataType == "numeric" || VarExcelDataType == "decimal") {
-                                        if (VarExcelDataScale == "2") {
-                                            ExcelScale = "0.00";
-                                        } else if (VarExcelDataScale == "4") {
-                                            ExcelScale = "0.0000";
-                                        } else {
-                                            ExcelScale = "0";
-                                        }
-                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
-                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"" + ExcelScale + "\";" + "\n";
-                                    } else if (VarExcelDataType == "bigint" || VarExcelDataType == "int" || VarExcelDataType == "smallint" || VarExcelDataType == "tinyint") {
-                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
-                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"0\";" + "\n";
-                                    } else if (VarExcelDataType == "datetime2") {
-                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"];" + "\n";
-                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"dd-MM-yyyy HH:mm\";" + "\n";                                       
-                                    } else {
-                                        ExcelRowsValue = ExcelRowsValue + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Value = reader[\"" + VarTargetColumnName + "\"].ToString();" + "\n";
-                                        ExcelRowsStyle = ExcelRowsStyle + "worksheet.Cells[row_index, " + varTargetColumnPosition + "].Style.Numberformat.Format = \"General\";" + "\n";
-                                    }
-                                }
-                            }
-                            CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
-                            CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
-
-                            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable;
-                            string MergeSQlStatement = "INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
-                            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
-                            MergeSQlStatement = MergeSQlStatement + ") SELECT ";
-                            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
-                            MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable + " " + WhereClause;
-                            
-                            varSQLRowCountSourceTable = varSQLRowCountSourceTable + " " + WhereClause;
-                            #>
-                            
                             <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
@@ -332,50 +327,22 @@
                                         <#}#>    
                                     </Inputs>
                                 </PrecedenceConstraints>
-                                <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
-                                <Parameters>
-                                    <#  var x1 = 0;
-                                        string sqlparam2columns = @"SELECT 
-                                                      ViewPredicatesName
-                                                      ,ViewPredicatesValue
-                                                  FROM DWH_Control.Generator.LoadReportTablePredicates
-                                                  WHERE SourceTable = '" + varSourceTable + @"'
-                                                  AND IsActive = 1";
-                                        DataTable tableparam2columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam2columns);
-                                        foreach (DataRow rowparam2columns in tableparam2columns.Rows) {
-                                            #><Parameter Name="<#=x1#>" VariableName="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" DataType="String" /><#
-
-                                            x1 = x1 + 1;
-                                        }#>
-                                </Parameters>
+                                <VariableInput VariableName="User.sqlCountDWH" />
                                 <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                             </ExecuteSQL>
                             
-                                <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <PrecedenceConstraints LogicalType="And">
-                                        <Inputs>
-                                            <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
-                                    <Parameters>
-                                        <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                        <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
-                                        <#  var x = 2;
-                                            string sqlparamcolumns = @"SELECT 
-                                                          ViewPredicatesName
-                                                          ,ViewPredicatesValue
-                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
-                                                      WHERE SourceTable = '" + varSourceTable + @"'
-                                                      AND IsActive = 1";
-                                            DataTable tableparamcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparamcolumns);
-                                            foreach (DataRow rowparamcolumns in tableparamcolumns.Rows) {
-                                                #><Parameter Name="<#=x#>" VariableName="<#=rowparamcolumns["ViewPredicatesName"].ToString()#>_PP" DataType="String" /><#
-
-                                                x = x + 1;
-                                            }#>
-                                    </Parameters>
-                                </ExecuteSQL>
+                            <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <VariableInput VariableName="User.sqlInsertReport" />
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
+                                    <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                </Parameters>
+                            </ExecuteSQL>
     
                             <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
