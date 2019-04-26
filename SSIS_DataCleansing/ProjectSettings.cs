@@ -14,6 +14,7 @@ string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 int DaysBack = 3;
 int CleanMonths = 6;
+string Environment = "DEV";
 
 string projectServerNameAndDatabaseInstanceName = "";
 

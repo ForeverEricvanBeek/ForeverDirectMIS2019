@@ -44,8 +44,7 @@
         st.[TargetSchema]
         ,st.[TargetConnection]
         FROM      [Generator].[SourceExtractionTable] st
-        WHERE     st.IsActive = 1 AND IsStaging = 0 AND st.CleansingType = 'PK'
-        ";
+        WHERE     st.IsActive = 1 AND IsStaging = 0 AND st.CleansingType IN ('PK','PK_F')";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
             string TargetSchema = DBSchema["TargetSchema"].ToString();
@@ -65,6 +64,7 @@
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
                 <Parameter Name="DaysBack" DataType="Int32" IsRequired="true"><#=DaysBack#></Parameter>
                 <Parameter Name="CleanMonths" DataType="Int32" IsRequired="true"><#=CleanMonths#></Parameter>
+                <Parameter Name="Environment" DataType="String" IsRequired="true"><#=Environment#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
                     string ConnectionName = Connection["ConnectionName"].ToString();
                     string ConnectionString = Connection["ConnectionString"].ToString();
@@ -86,7 +86,7 @@
                                         Left JOIN [Generator].[Connection] con
                                         on [st].[SourceConnection] = [con].[Name]	
                                         WHERE st.[IsActive] =  1
-                                        AND st.CleansingType = 'PK'
+                                        AND st.CleansingType IN ('PK','PK_F')
                                         UNION
                                         SELECT DISTINCT
                                         [TargetConnection]
@@ -97,7 +97,7 @@
                                         ,'CTRL_CL' AS PackagePrefix
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
-                                        AND st.CleansingType = 'PK'
+                                        AND st.CleansingType IN ('PK','PK_F')
                                         ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {

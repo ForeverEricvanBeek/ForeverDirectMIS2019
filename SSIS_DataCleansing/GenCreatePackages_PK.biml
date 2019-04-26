@@ -42,6 +42,9 @@
                                                     ,CS.PK AS [PrimaryKey]
                                                     ,'CL' AS PackagePrefix
                                                     , ST.CleansingFrom
+                                                    , ST.CleansingType
+                                                    , ST.CleansingDate
+                                                    , ST.CleansingDateType
                                                     FROM      [Generator].[SourceExtractionTable] ST
                                                     LEFT JOIN [Generator].[Connection] SC
                                                     ON        ST.[SourceConnection] = SC.[Name]
@@ -49,7 +52,7 @@
                                                     ON		ST.[TargetSchema] = CS.[TABLE_SCHEMA]
                                                     AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                     WHERE     ST.[IsActive] = 1 AND ST.IsStaging = 0
-                                                    AND		ST.CleansingType = 'PK'
+                                                    AND		ST.CleansingType IN ('PK','PK_F')
                                                     ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
@@ -70,6 +73,9 @@
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
             string varCleanFrom = rowSourceExtractionTable["CleansingFrom"].ToString();
+            string varCleansingType = rowSourceExtractionTable["CleansingType"].ToString();
+            string varCleansingDate = rowSourceExtractionTable["CleansingDate"].ToString();
+            string varCleansingDateType = rowSourceExtractionTable["CleansingDateType"].ToString();
             string varTargetConnection = varExtractionTargetConnection;
             string varTargetSchema = varExtractionTargetSchema;
             string varTargetTable = varExtractionTargetTable;
@@ -114,6 +120,7 @@
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
                     <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
+                    <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
                 </Variables>
     
                 <Tasks>
@@ -147,13 +154,14 @@
                             <#
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
                             string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
-                            string MergeSQlStatement = "";
-                            string MergeArchiveSQlStatement = "";
                             string SQLHashStringSource = "";
                             string SQLHashStringTarget = "";
                             string VarPrimKeyJoin = "";
                             string VarPrimKeyJoin2 = "";
                             string varPrimKeyColumsPK = "";
+                            string varPrimKeyColumsPKDeleted = "";
+                            string varPrimKeyColumsPKNew = "";
+                            string varPrimKeyColumsPKChanged = "";
                             string varPrimKeyColumsPK_UNION = "";
                             string VarFuncColumn = "";
                             string VarFuncColumnSource = "";
@@ -200,13 +208,6 @@
                                 string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
                                 string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
                                 string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
-                                if (VarSourceColumnName == "ProcessLogID") {
-                                    MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"] ";
-                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ")";
-                                } else {
-                                    MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"], ";
-                                    MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ",";
-                                }
                                 if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
                                     if (VarColumnExpression == "1") {
                                         VarFuncColumn = VarFuncColumn + VarTargetColumnName +", ";
@@ -221,20 +222,45 @@
                                 if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
                                     VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName +"] AND ";
                                     VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName + "1] AND ";
-                                    varPrimKeyColumsPK += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
+                                    varPrimKeyColumsPKDeleted += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
+                                    varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
+                                    varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
                                     varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
                                 }
                             }
+                            string varCleanFromDateTypeDay = "";
+                            string varCleanFromDateTypeMonth = "";
+                            if (varCleansingDateType == "String") {
+                                varCleanFromDateTypeDay = "CONVERT(NVARCHAR(8),DATEADD(DAY,-?,GETDATE()),112) + '000000'";
+                                varCleanFromDateTypeMonth = "CONVERT(NVARCHAR(8),DATEADD(MONTH,-?,GETDATE()),112) + '000000'";
+                            } else {
+                                varCleanFromDateTypeDay = "CAST(DATEADD(DAY, - ?, GETDATE()) AS DATE)";
+                                varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
+                            }
                             
+                            string varCleanFromCount = varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+                            string varCleanFromDeleted = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+                            string varCleanFromNew = @"MS." + varCleansingDate + " <=  " + varCleanFromDateTypeDay + @"
+                                                        AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
+                                                        WHERE MSPK." + varCleansingDate + " <=  " + varCleanFromDateTypeDay;
+                            string varCleanFromChanged = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth + @"
+                                                            AND MS." + varCleansingDate + " <> MSPK." + varCleansingDate;
                             SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
                             SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
-                            string quote = "<>";
                                 string varSQLRowCountSourceTable = @"WITH CTE_DELETED AS (
                                     	SELECT
-                                    	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
-                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE()) AND " + varCleanFrom + @"
-                                    	            UNION ALL
-                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE()) AND " + varCleanFrom + @") MS 
+                                    	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
+                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+                                    	if (varCleansingType == "PK") {
+                                    	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+                                    	}
+                                    	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @"
+                                    	UNION ALL
+                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+                                    	if (varCleansingType == "PK") {
+                                    	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+                                    	}
+                                    	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @") MS 
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MSPK.BatchID IS NULL
@@ -242,15 +268,19 @@
                                     
                                     SELECT COUNT (*) FROM CTE_DELETED;";
                                 
-                                MergeSQlStatement = @"WITH CTE_DELETED AS (
+                                string MergeDeletedSQlStatement = @"WITH CTE_DELETED AS (
                                     	SELECT
-                                    	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
+                                    	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
                                     	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
-                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
-                                    	AND         MS." + varCleanFrom + @"
+                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
+                                    	if (varCleansingType == "PK") {
+                                    	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
+                                    	AND         " + varCleanFromDeleted;
+                                    	}
+                                    	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -260,15 +290,62 @@
                                     FROM		CTE_DELETED MSPK
                                     WHERE		" + VarPrimKeyJoin2 + @" 1=1;";
                                     
-                                    MergeArchiveSQlStatement = @"WITH CTE_DELETED AS (
+                                string MergeNewSQlStatement = @"WITH CTE_NEW AS (
+                                    	SELECT
+                                    	  " + varPrimKeyColumsPKNew + @" MSPK.Issue_? AS Issue
+                                    	FROM		" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+                                    	LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+                                    	ON			"+ VarPrimKeyJoin + @"
+                                    	MS.ActInd = 'Y'
+                                    	AND         MS.IsDeleted = 'N'";
+                                    	if (varCleansingType == "PK") {
+                                    	    MergeNewSQlStatement = MergeNewSQlStatement + @"
+                                    	AND         " + varCleanFromNew;
+                                    	}
+                                    	
+                                    	if (varCleansingType == "PK") {
+                                    	    MergeNewSQlStatement = MergeNewSQlStatement + "AND MS.OBJVERSION IS NULL";
+                                    	} else {
+                                    	    MergeNewSQlStatement = MergeNewSQlStatement + "WHERE MS.OBJVERSION IS NULL";   
+                                    	}
+                                    MergeNewSQlStatement = MergeNewSQlStatement + 
+                                    @"
+                                    )
+                                    
+                                    UPDATE		CTE_NEW SET Issue = 1";
+ 
+                                string MergeChangedSQlStatement = @"WITH CTE_CHANGED AS (
+                                    	SELECT
+                                    	  " + varPrimKeyColumsPKChanged + @" MSPK.Issue_? AS Issue
+                                    	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+                                    	ON			"+ VarPrimKeyJoin + @" 1=1
+                                    	WHERE		MS.ActInd = 'Y'
+                                    	AND         MS.IsDeleted = 'N'
+                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
+                                    	if (varCleansingType == "PK") {
+                                    	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+                                    	AND         " + varCleanFromChanged;
+                                    	}
+                                        MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+                                    	AND			MSPK.OBJVERSION IS NULL
+                                    )
+                                    
+                                    UPDATE		CTE_CHANGED SET Issue = 2";
+                                    
+                                string MergeArchiveSQlStatement = @"WITH CTE_DELETED AS (
                                     	SELECT
                                     	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
                                     	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
                                     	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
                                     	ON			"+ VarPrimKeyJoin + @" 1=1
                                     	WHERE		MS.IsDeleted = 'N'
-                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())
-                                    	AND         MS." + varCleanFrom + @"
+                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
+                                    	if (varCleansingType == "PK") {
+                                    	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
+                                    	AND         " + varCleanFrom;
+                                    	}
+                                    	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
                                     	AND         MSPK.BatchID IS NULL
                                     )
                                     
@@ -281,27 +358,49 @@
                                 <ExecuteSQL Name="SQL Deleted rows count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                     <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
                                     <Parameters>
-                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                        <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
-                                        <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
-                                        <Parameter Name="3" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="3" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#} else {#>
+                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#}#>
                                     </Parameters>
                                     <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                                 </ExecuteSQL>    
                                     
-                                <ExecuteSQL Name="SQL Merge <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><![CDATA[<#=@MergeSQlStatement#>]]></DirectInput>
+                                <ExecuteSQL Name="SQL Deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <DirectInput><![CDATA[<#=@MergeDeletedSQlStatement#>]]></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                        <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#}#>
                                     </Parameters>
                                 </ExecuteSQL>
-                                    
-                                <ExecuteSQL Name="SQL Merge Archive <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><![CDATA[<#=@MergeArchiveSQlStatement#>]]></DirectInput>
+
+                                <ExecuteSQL Name="SQL New in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <DirectInput><![CDATA[<#=@MergeNewSQlStatement#>]]></DirectInput>
                                     <Parameters>
-                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                        <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="0" VariableName="User.Environment" DataType="String" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="3" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#}#>
+                                    </Parameters>
+                                </ExecuteSQL>
+                                
+                                <ExecuteSQL Name="SQL Changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <DirectInput><![CDATA[<#=@MergeChangedSQlStatement#>]]></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0" VariableName="User.Environment" DataType="String" />
+                                        <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#}#>
                                     </Parameters>
                                 </ExecuteSQL>
                         </Tasks>
@@ -349,7 +448,7 @@
                                     ,[IsStaging]
                                     FROM [Generator].[SourceExtractionTable] st
                                     WHERE st.[IsActive] = 1 AND st.IsStaging = 0
-                                    AND st.CleansingType = 'PK'
+                                    AND st.CleansingType IN ('PK','PK_F')
                                     ";
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
@@ -417,7 +516,7 @@
                             ON		  [st].[SourceConnection] = [con].[Name]
                             WHERE     [TargetSchema] = '" + varTargetSchema + @"' 
                             AND       [st].[IsActive] = 1  AND st.IsStaging = 0
-                            AND       st.CleansingType = 'PK'
+                            AND       st.CleansingType IN ('PK','PK_F')
                             ORDER BY  [SourceTable]
                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
