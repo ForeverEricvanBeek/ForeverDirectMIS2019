@@ -89,13 +89,217 @@
             string varSourceDatabase = "";
             string varExtractionAlternativeSchema = "";
             if (varExtractionSourceSchema == "IFS") {
-                varSourceDatabase = @"[FDODWHP01\DWHIFS].StagingIFS_PK";
+                varSourceDatabase = @"[FDODWHP01\\DWHIFS].StagingIFS_PK";
                 varExtractionAlternativeSchema = rowSourceExtractionTable["AlternativeSchema"].ToString();
             } else {
                 varSourceDatabase = @"StagingPK";
                 varExtractionAlternativeSchema = rowSourceExtractionTable["TargetSchema"].ToString();
             }
-            #>
+    string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
+    string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
+    string SQLHashStringSource = "";
+    string SQLHashStringTarget = "";
+    string VarPrimKeyJoin = "";
+    string VarPrimKeyJoin2 = "";
+    string varPrimKeyColumsPK = "";
+    string varPrimKeyColumsPKDeleted = "";
+    string varPrimKeyColumsPKNew = "";
+    string varPrimKeyColumsPKChanged = "";
+    string varPrimKeyColumsPK_UNION = "";
+    string VarFuncColumn = "";
+    string VarFuncColumnSource = "";
+    
+    string sqlsourcecolumns = @"select 
+                                    COL.TABLE_NAME
+                                    , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
+                                    , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
+                                    , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
+                                    , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
+                                    , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
+                                    , COL.ORDINAL_POSITION
+                                    , CASE
+                                    WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
+                                    WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
+                                    WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
+                                    WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
+                                    ELSE '[' + COL.DATA_TYPE + ']'
+                                    END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
+                                from		DWH.INFORMATION_SCHEMA.COLUMNS COL
+                                LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
+                                ON			TC.TABLE_NAME = COL.TABLE_NAME
+                                AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
+                                LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
+                                ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
+                                AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
+                                AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
+                                AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
+                                LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
+                                ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
+                                AND			DWC.DWHTable			= COL.TABLE_NAME
+                                AND			DWC.DWHColumnName		= COL.COLUMN_NAME
+                                where		COL.TABLE_NAME= '" + varTargetTable + @"'
+                                and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
+                                order by 
+                                COL.TABLE_NAME
+                                , COL.ORDINAL_POSITION
+                                ";
+    DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
+    foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
+        string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
+        string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
+        string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
+        string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
+        string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
+        string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
+        if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
+            if (VarColumnExpression == "1") {
+                VarFuncColumn = VarFuncColumn + VarTargetColumnName +", ";
+                VarFuncColumnSource = VarFuncColumnSource + VarTargetColumnNameExp +" AS " + VarSourceColumnName + ", ";
+            } else {
+                SQLHashStringSource = SQLHashStringSource + " ISNULL(CAST(S.["+ VarTargetColumnName +"] AS VARCHAR(100)),'') + ";
+                SQLHashStringTarget = SQLHashStringTarget + " ISNULL(CAST(T.["+ VarSourceColumnName +"] AS VARCHAR(100)),'') + ";
+                VarFuncColumn = VarFuncColumn + "["+ VarTargetColumnName +"], ";
+                VarFuncColumnSource = VarFuncColumnSource + "S.["+ VarTargetColumnName +"], ";
+            }
+        }
+        if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
+            VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName +"] AND ";
+            VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName + "1] AND ";
+            varPrimKeyColumsPKDeleted += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
+            varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
+            varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
+            varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
+        }
+    }
+    string varCleanFromDateTypeDay = "";
+    string varCleanFromDateTypeMonth = "";
+    if (varCleansingDateType == "String") {
+        varCleanFromDateTypeDay = "CONVERT(NVARCHAR(8),DATEADD(DAY,-?,GETDATE()),112) + '000000'";
+        varCleanFromDateTypeMonth = "CONVERT(NVARCHAR(8),DATEADD(MONTH,-?,GETDATE()),112) + '000000'";
+    } else {
+        varCleanFromDateTypeDay = "CAST(DATEADD(DAY, - ?, GETDATE()) AS DATE)";
+        varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
+    }
+    
+    string varCleanFromCount = varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+    string varCleanFromDeleted = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+    string varCleanFromNew = @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @"
+                                AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
+                                WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
+    string varCleanFromChanged = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth + @"
+                                    AND MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
+    SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
+    SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
+        string varSQLRowCountSourceTable = "\"" + @"WITH CTE_DELETED AS (
+            	SELECT
+            	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
+            	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+            	if (varCleansingType == "PK") {
+            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+            	}
+            	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @"
+            	UNION ALL
+            	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+            	if (varCleansingType == "PK") {
+            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+            	}
+            	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @") MS 
+            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+            	ON			"+ VarPrimKeyJoin + @" 1=1
+            	WHERE		MSPK.BatchID IS NULL
+            )
+            
+            SELECT COUNT (*) FROM CTE_DELETED;" + "\"";
+        string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (
+            	SELECT
+            	  " + varPrimKeyColumsPKDeleted + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+            	ON			"+ VarPrimKeyJoin + @" 1=1
+            	WHERE		MS.IsDeleted = 'N'
+            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+            	if (varCleansingType == "PK") {
+            	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
+            	AND         " + varCleanFromDeleted;
+            	}
+            	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
+            	AND         MSPK.BatchID IS NULL
+            )
+            
+            UPDATE		CTE_DELETED SET Issue = 3;
+            
+            UPDATE		DWH." + varTargetSchema + @"." + varTargetTable + @" SET
+            	IsDeleted = 'Y'
+            	, End_Date = GETDATE()
+            FROM		CTE_DELETED MSPK
+            WHERE		" + VarPrimKeyJoin2 + @" 1=1;" + "\"";
+
+        string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (
+            	SELECT
+            	  " + varPrimKeyColumsPKNew + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	FROM		" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+            	LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+            	ON			"+ VarPrimKeyJoin + @"
+            	MS.ActInd = 'Y'
+            	AND         MS.IsDeleted = 'N'";
+            	if (varCleansingType == "PK") {
+            	    MergeNewSQlStatement = MergeNewSQlStatement + @"
+            	AND         " + varCleanFromNew;
+            	}
+            	
+            	if (varCleansingType == "PK") {
+            	    MergeNewSQlStatement = MergeNewSQlStatement + "AND MS.OBJVERSION IS NULL";
+            	} else {
+            	    MergeNewSQlStatement = MergeNewSQlStatement + "WHERE MS.OBJVERSION IS NULL";   
+            	}
+            MergeNewSQlStatement = MergeNewSQlStatement + 
+            @"
+            )
+            
+            UPDATE		CTE_NEW SET Issue = 1" + "\"";
+
+        string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (
+            	SELECT
+            	  " + varPrimKeyColumsPKChanged + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
+            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+            	ON			"+ VarPrimKeyJoin + @" 1=1
+            	WHERE		MS.ActInd = 'Y'
+            	AND         MS.IsDeleted = 'N'
+            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+            	if (varCleansingType == "PK") {
+            	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+            	AND         " + varCleanFromChanged;
+            	}
+                MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+            	AND			MSPK.BatchID IS NULL
+            )
+            
+            UPDATE		CTE_CHANGED SET Issue = 2" + "\"";
+            
+        string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (
+            	SELECT
+            	  " + varPrimKeyColumsPKDeleted + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
+            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
+            	ON			"+ VarPrimKeyJoin + @" 1=1
+            	WHERE		MS.IsDeleted = 'N'
+            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+            	if (varCleansingType == "PK") {
+            	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
+            	AND         " + varCleanFromDeleted;
+            	}
+            	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
+            	AND         MSPK.BatchID IS NULL
+            )
+            
+            UPDATE		CTE_DELETED_ARC SET Issue = 4;
+            
+            UPDATE		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" SET
+            	IsDeleted = 'Y'
+            	, End_Date = GETDATE()
+            FROM		CTE_DELETED_ARC MSPK
+            WHERE		" + VarPrimKeyJoin2 + @" 1=1;" + "\"";#>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
@@ -121,6 +325,11 @@
                     <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
                     <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
                     <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
+                    <Variable Name="varSQLRowCountSourceTable" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>    
+                    <Variable Name="MergeDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeDeletedSQlStatement#></Variable>    
+                    <Variable Name="MergeNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeNewSQlStatement#></Variable>   
+                    <Variable Name="MergeChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeChangedSQlStatement#></Variable>    
+                    <Variable Name="MergeArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeArchiveSQlStatement#></Variable>   
                 </Variables>
     
                 <Tasks>
@@ -151,212 +360,8 @@
     
                     <Container Name="SC Load <#=varName#>" ConstraintMode="Linear">
                         <Tasks>
-                            <#
-                            string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
-                            string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
-                            string SQLHashStringSource = "";
-                            string SQLHashStringTarget = "";
-                            string VarPrimKeyJoin = "";
-                            string VarPrimKeyJoin2 = "";
-                            string varPrimKeyColumsPK = "";
-                            string varPrimKeyColumsPKDeleted = "";
-                            string varPrimKeyColumsPKNew = "";
-                            string varPrimKeyColumsPKChanged = "";
-                            string varPrimKeyColumsPK_UNION = "";
-                            string VarFuncColumn = "";
-                            string VarFuncColumnSource = "";
-                            
-                            string sqlsourcecolumns = @"select 
-                                                            COL.TABLE_NAME
-                                                            , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
-                                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
-                                                            , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
-                                                            , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
-                                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
-                                                            , COL.ORDINAL_POSITION
-                                                            , CASE
-                                                            WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
-                                                            WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                                            WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                                            WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
-                                                            ELSE '[' + COL.DATA_TYPE + ']'
-                                                            END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
-                                                        from		DWH.INFORMATION_SCHEMA.COLUMNS COL
-                                                        LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                        ON			TC.TABLE_NAME = COL.TABLE_NAME
-                                                        AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
-                                                        LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
-                                                        ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
-                                                        AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
-                                                        AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
-                                                        AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
-                                                        LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
-                                                        ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
-                                                        AND			DWC.DWHTable			= COL.TABLE_NAME
-                                                        AND			DWC.DWHColumnName		= COL.COLUMN_NAME
-                                                        where		COL.TABLE_NAME= '" + varTargetTable + @"'
-                                                        and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
-                                                        order by 
-                                                        COL.TABLE_NAME
-                                                        , COL.ORDINAL_POSITION
-                                                        ";
-                            DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
-                            foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
-                                string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
-                                string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
-                                string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
-                                string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
-                                string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
-                                string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
-                                if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
-                                    if (VarColumnExpression == "1") {
-                                        VarFuncColumn = VarFuncColumn + VarTargetColumnName +", ";
-                                        VarFuncColumnSource = VarFuncColumnSource + VarTargetColumnNameExp +" AS " + VarSourceColumnName + ", ";
-                                    } else {
-                                        SQLHashStringSource = SQLHashStringSource + " ISNULL(CAST(S.["+ VarTargetColumnName +"] AS VARCHAR(100)),'') + ";
-                                        SQLHashStringTarget = SQLHashStringTarget + " ISNULL(CAST(T.["+ VarSourceColumnName +"] AS VARCHAR(100)),'') + ";
-                                        VarFuncColumn = VarFuncColumn + "["+ VarTargetColumnName +"], ";
-                                        VarFuncColumnSource = VarFuncColumnSource + "S.["+ VarTargetColumnName +"], ";
-                                    }
-                                }
-                                if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
-                                    VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName +"] AND ";
-                                    VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName + "1] AND ";
-                                    varPrimKeyColumsPKDeleted += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
-                                    varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
-                                    varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
-                                    varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
-                                }
-                            }
-                            string varCleanFromDateTypeDay = "";
-                            string varCleanFromDateTypeMonth = "";
-                            if (varCleansingDateType == "String") {
-                                varCleanFromDateTypeDay = "CONVERT(NVARCHAR(8),DATEADD(DAY,-?,GETDATE()),112) + '000000'";
-                                varCleanFromDateTypeMonth = "CONVERT(NVARCHAR(8),DATEADD(MONTH,-?,GETDATE()),112) + '000000'";
-                            } else {
-                                varCleanFromDateTypeDay = "CAST(DATEADD(DAY, - ?, GETDATE()) AS DATE)";
-                                varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
-                            }
-                            
-                            string varCleanFromCount = varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-                            string varCleanFromDeleted = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-                            string varCleanFromNew = @"MS." + varCleansingDate + " <=  " + varCleanFromDateTypeDay + @"
-                                                        AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
-                                                        WHERE MSPK." + varCleansingDate + " <=  " + varCleanFromDateTypeDay;
-                            string varCleanFromChanged = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth + @"
-                                                            AND MS." + varCleansingDate + " <> MSPK." + varCleansingDate;
-                            SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
-                            SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
-                                string varSQLRowCountSourceTable = @"WITH CTE_DELETED AS (
-                                    	SELECT
-                                    	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
-                                    	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-                                    	if (varCleansingType == "PK") {
-                                    	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
-                                    	}
-                                    	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @"
-                                    	UNION ALL
-                                    	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-                                    	if (varCleansingType == "PK") {
-                                    	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
-                                    	}
-                                    	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @") MS 
-                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-                                    	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MSPK.BatchID IS NULL
-                                    )
-                                    
-                                    SELECT COUNT (*) FROM CTE_DELETED;";
-                                
-                                string MergeDeletedSQlStatement = @"WITH CTE_DELETED AS (
-                                    	SELECT
-                                    	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
-                                    	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-                                    	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MS.IsDeleted = 'N'
-                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
-                                    	if (varCleansingType == "PK") {
-                                    	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
-                                    	AND         " + varCleanFromDeleted;
-                                    	}
-                                    	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
-                                    	AND         MSPK.BatchID IS NULL
-                                    )
-                                    
-                                    UPDATE		DWH." + varTargetSchema + @"." + varTargetTable + @" SET
-                                    	IsDeleted = 'Y'
-                                    	, End_Date = GETDATE()
-                                    FROM		CTE_DELETED MSPK
-                                    WHERE		" + VarPrimKeyJoin2 + @" 1=1;";
-                                    
-                                string MergeNewSQlStatement = @"WITH CTE_NEW AS (
-                                    	SELECT
-                                    	  " + varPrimKeyColumsPKNew + @" MSPK.Issue_? AS Issue
-                                    	FROM		" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-                                    	LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-                                    	ON			"+ VarPrimKeyJoin + @"
-                                    	MS.ActInd = 'Y'
-                                    	AND         MS.IsDeleted = 'N'";
-                                    	if (varCleansingType == "PK") {
-                                    	    MergeNewSQlStatement = MergeNewSQlStatement + @"
-                                    	AND         " + varCleanFromNew;
-                                    	}
-                                    	
-                                    	if (varCleansingType == "PK") {
-                                    	    MergeNewSQlStatement = MergeNewSQlStatement + "AND MS.OBJVERSION IS NULL";
-                                    	} else {
-                                    	    MergeNewSQlStatement = MergeNewSQlStatement + "WHERE MS.OBJVERSION IS NULL";   
-                                    	}
-                                    MergeNewSQlStatement = MergeNewSQlStatement + 
-                                    @"
-                                    )
-                                    
-                                    UPDATE		CTE_NEW SET Issue = 1";
- 
-                                string MergeChangedSQlStatement = @"WITH CTE_CHANGED AS (
-                                    	SELECT
-                                    	  " + varPrimKeyColumsPKChanged + @" MSPK.Issue_? AS Issue
-                                    	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-                                    	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MS.ActInd = 'Y'
-                                    	AND         MS.IsDeleted = 'N'
-                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
-                                    	if (varCleansingType == "PK") {
-                                    	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-                                    	AND         " + varCleanFromChanged;
-                                    	}
-                                        MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-                                    	AND			MSPK.OBJVERSION IS NULL
-                                    )
-                                    
-                                    UPDATE		CTE_CHANGED SET Issue = 2";
-                                    
-                                string MergeArchiveSQlStatement = @"WITH CTE_DELETED AS (
-                                    	SELECT
-                                    	  " + varPrimKeyColumsPK + @" NULL AS GARBAGE
-                                    	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
-                                    	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-                                    	ON			"+ VarPrimKeyJoin + @" 1=1
-                                    	WHERE		MS.IsDeleted = 'N'
-                                    	AND		    MS.Eff_Date <= DATEADD(DAY,-?,GETDATE())";
-                                    	if (varCleansingType == "PK") {
-                                    	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
-                                    	AND         " + varCleanFrom;
-                                    	}
-                                    	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
-                                    	AND         MSPK.BatchID IS NULL
-                                    )
-                                    
-                                    UPDATE		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" SET
-                                    	IsDeleted = 'Y'
-                                    	, End_Date = GETDATE()
-                                    FROM		CTE_DELETED MSPK
-                                    WHERE		" + VarPrimKeyJoin2 + @" 1=1;";#>
-                                    
                                 <ExecuteSQL Name="SQL Deleted rows count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                    <DirectInput><#=varSQLRowCountSourceTable#></DirectInput>
+                                    <VariableInput VariableName="User.varSQLRowCountSourceTable" />
                                     <Parameters>
                                         <#if (varCleansingType == "PK") {#>
                                             <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
@@ -372,7 +377,7 @@
                                 </ExecuteSQL>    
                                     
                                 <ExecuteSQL Name="SQL Deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><![CDATA[<#=@MergeDeletedSQlStatement#>]]></DirectInput>
+                                    <VariableInput VariableName="User.MergeDeletedSQlStatement" />
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
                                         <#if (varCleansingType == "PK") {#>
@@ -382,24 +387,22 @@
                                 </ExecuteSQL>
 
                                 <ExecuteSQL Name="SQL New in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><![CDATA[<#=@MergeNewSQlStatement#>]]></DirectInput>
+                                    <VariableInput VariableName="User.MergeNewSQlStatement" />
                                     <Parameters>
-                                            <Parameter Name="0" VariableName="User.Environment" DataType="String" />
                                         <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
-                                            <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
-                                            <Parameter Name="3" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
                                         <#}#>
                                     </Parameters>
                                 </ExecuteSQL>
                                 
                                 <ExecuteSQL Name="SQL Changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <DirectInput><![CDATA[<#=@MergeChangedSQlStatement#>]]></DirectInput>
+                                    <VariableInput VariableName="User.MergeChangedSQlStatement" />
                                     <Parameters>
-                                        <Parameter Name="0" VariableName="User.Environment" DataType="String" />
-                                        <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
                                         <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="2" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
                                         <#}#>
                                     </Parameters>
                                 </ExecuteSQL>
