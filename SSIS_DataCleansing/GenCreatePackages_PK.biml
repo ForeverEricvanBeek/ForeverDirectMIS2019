@@ -108,6 +108,8 @@
     string varPrimKeyColumsPK_UNION = "";
     string VarFuncColumn = "";
     string VarFuncColumnSource = "";
+    string varDeletedInsertColumns = "";
+    string varDeletedINsertColumnsSource = "";
     
     string sqlsourcecolumns = @"select 
                                     COL.TABLE_NAME
@@ -169,6 +171,8 @@
             varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
             varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
             varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
+            varDeletedInsertColumns += VarSourceColumnName + ", ";
+            varDeletedINsertColumnsSource += VarSourceColumnName + "1, ";
         }
     }
     string varCleanFromDateTypeDay = "";
@@ -181,13 +185,6 @@
         varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
     }
     
-    string varCleanFromCount = varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-    string varCleanFromDeleted = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-    string varCleanFromNew = @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @"
-                                AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
-                                WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
-    string varCleanFromChanged = @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth + @"
-                                    AND MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
     SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
     SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
         string varSQLRowCountSourceTable = "\"" + @"WITH CTE_DELETED AS (
@@ -195,13 +192,13 @@
             	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
             	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
-            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
             	}
             	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @"
             	UNION ALL
             	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
-            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleanFromCount;
+            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
             	}
             	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @") MS 
             	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
@@ -210,29 +207,26 @@
             )
             
             SELECT COUNT (*) FROM CTE_DELETED;" + "\"";
+            
         string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (
             	SELECT
-            	  " + varPrimKeyColumsPKDeleted + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	  " + varPrimKeyColumsPKDeleted + @" 
+            	  MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1
             	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
             	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
             	ON			"+ VarPrimKeyJoin + @" 1=1
             	WHERE		MS.IsDeleted = 'N'
+            	AND			MS.ActInd = 'Y'
             	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
             	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
-            	AND         " + varCleanFromDeleted;
+            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
             	}
             	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
             	AND         MSPK.BatchID IS NULL
             )
             
-            UPDATE		CTE_DELETED SET Issue = 3;
-            
-            UPDATE		DWH." + varTargetSchema + @"." + varTargetTable + @" SET
-            	IsDeleted = 'Y'
-            	, End_Date = GETDATE()
-            FROM		CTE_DELETED MSPK
-            WHERE		" + VarPrimKeyJoin2 + @" 1=1;" + "\"";
+            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
 
         string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (
             	SELECT
@@ -244,7 +238,9 @@
             	AND         MS.IsDeleted = 'N'";
             	if (varCleansingType == "PK") {
             	    MergeNewSQlStatement = MergeNewSQlStatement + @"
-            	AND         " + varCleanFromNew;
+            	AND         " + @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @"
+                                AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
+                                WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
             	}
             	
             	if (varCleansingType == "PK") {
@@ -254,52 +250,54 @@
             	}
             MergeNewSQlStatement = MergeNewSQlStatement + 
             @"
+            AND			MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
             )
             
-            UPDATE		CTE_NEW SET Issue = 1" + "\"";
+            UPDATE CTE_NEW SET Issue = 1" + "\"";
 
         string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (
             	SELECT
             	  " + varPrimKeyColumsPKChanged + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
             	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
             	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @" 1=1
-            	WHERE		MS.ActInd = 'Y'
+            	ON			"+ VarPrimKeyJoin + @" 1=1";
+            	if (varCleansingType == "PK") {
+            	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+            	    AND     MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
+            	}
+            	MergeChangedSQlStatement = MergeChangedSQlStatement + @"
+            	AND			MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
+            	WHERE       MS.ActInd = 'Y'
             	AND         MS.IsDeleted = 'N'
             	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
             	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND         " + varCleanFromChanged;
+            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
             	}
                 MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND			MSPK.BatchID IS NULL
+            	AND			MSPK.BatchID IS NOT NULL
             )
             
-            UPDATE		CTE_CHANGED SET Issue = 2" + "\"";
+            UPDATE CTE_CHANGED SET Issue = 2" + "\"";
             
         string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (
             	SELECT
             	  " + varPrimKeyColumsPKDeleted + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
             	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
             	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @" 1=1
+            	ON			"+ VarPrimKeyJoin + @"
+            				MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
             	WHERE		MS.IsDeleted = 'N'
             	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
             	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
-            	AND         " + varCleanFromDeleted;
+            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
             	}
             	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
             	AND         MSPK.BatchID IS NULL
             )
             
-            UPDATE		CTE_DELETED_ARC SET Issue = 4;
-            
-            UPDATE		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" SET
-            	IsDeleted = 'Y'
-            	, End_Date = GETDATE()
-            FROM		CTE_DELETED_ARC MSPK
-            WHERE		" + VarPrimKeyJoin2 + @" 1=1;" + "\"";#>
+            UPDATE CTE_DELETED_ARC SET Issue = 4;" + "\"";#>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
