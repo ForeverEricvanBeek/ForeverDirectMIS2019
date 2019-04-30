@@ -250,7 +250,7 @@
             	}
             MergeNewSQlStatement = MergeNewSQlStatement + 
             @"
-            AND			MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
+            AND			(MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)
             )
             
             UPDATE CTE_NEW SET Issue = 1" + "\"";
@@ -266,7 +266,7 @@
             	    AND     MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
             	}
             	MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND			MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
+            	AND			(MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)
             	WHERE       MS.ActInd = 'Y'
             	AND         MS.IsDeleted = 'N'
             	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
@@ -282,12 +282,13 @@
             
         string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (
             	SELECT
-            	  " + varPrimKeyColumsPKDeleted + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
+            	  " + varPrimKeyColumsPKDeleted + @" 
+            	  MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1
             	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
             	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @"
-            				MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3
+            	ON			"+ VarPrimKeyJoin + @"  1=1
             	WHERE		MS.IsDeleted = 'N'
+            	AND			MS.ActInd = 'Y'
             	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
             	if (varCleansingType == "PK") {
             	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
@@ -297,7 +298,7 @@
             	AND         MSPK.BatchID IS NULL
             )
             
-            UPDATE CTE_DELETED_ARC SET Issue = 4;" + "\"";#>
+            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";#>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
