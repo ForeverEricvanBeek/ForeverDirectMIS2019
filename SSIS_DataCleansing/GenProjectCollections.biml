@@ -81,7 +81,7 @@
                                         ,[TargetSchema] AS [SourceSchema]
                                         ,[TargetTable] AS [SourceTable]
                                         ,[ExtractionType]
-                                        ,'CL' AS PackagePrefix
+                                        ,'CL_FIND' AS PackagePrefix
                                         FROM [Generator].[SourceExtractionTable] st
                                         Left JOIN [Generator].[Connection] con
                                         on [st].[SourceConnection] = [con].[Name]	
@@ -94,7 +94,30 @@
                                         ,[TargetSchema]
                                         ,'Total' AS [SourceTable]
                                         ,null
-                                        ,'CTRL_CL' AS PackagePrefix
+                                        ,'CTRL_CL_FIND' AS PackagePrefix
+                                        FROM [Generator].[SourceExtractionTable] st
+                                        WHERE st.[IsActive] =  1
+                                        AND st.CleansingType IN ('PK','PK_F')
+                                        UNION
+                                        SELECT 'Staging' AS [SourceConnection]
+                                        ,'SQLServer' AS [ConnectionType]
+                                        ,[TargetSchema] AS [SourceSchema]
+                                        ,[TargetTable] AS [SourceTable]
+                                        ,[ExtractionType]
+                                        ,'CL_ACTION' AS PackagePrefix
+                                        FROM [Generator].[SourceExtractionTable] st
+                                        Left JOIN [Generator].[Connection] con
+                                        on [st].[SourceConnection] = [con].[Name]	
+                                        WHERE st.[IsActive] =  1
+                                        AND st.CleansingType IN ('PK','PK_F')
+                                        UNION
+                                        SELECT DISTINCT
+                                        [TargetConnection]
+                                        ,null
+                                        ,[TargetSchema]
+                                        ,'Total' AS [SourceTable]
+                                        ,null
+                                        ,'CTRL_CL_ACTION' AS PackagePrefix
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
                                         AND st.CleansingType IN ('PK','PK_F')
