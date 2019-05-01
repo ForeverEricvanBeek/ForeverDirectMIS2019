@@ -187,27 +187,7 @@
     
     SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
     SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
-        string varSQLRowCountSourceTable = "\"" + @"WITH CTE_DELETED AS (
-            	SELECT
-            	  " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
-            	FROM		(SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-            	if (varCleansingType == "PK") {
-            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-            	}
-            	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @"
-            	UNION ALL
-            	            SELECT " + varPrimKeyColumsPK_UNION + @"IsDeleted FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" WHERE IsDeleted = 'N' AND Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-            	if (varCleansingType == "PK") {
-            	    varSQLRowCountSourceTable = varSQLRowCountSourceTable + " AND " + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-            	}
-            	varSQLRowCountSourceTable = varSQLRowCountSourceTable + @") MS 
-            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @" 1=1
-            	WHERE		MSPK.BatchID IS NULL
-            )
-            
-            SELECT COUNT (*) FROM CTE_DELETED;" + "\"";
-            
+
         string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (
             	SELECT
             	  " + varPrimKeyColumsPKDeleted + @" 
@@ -298,7 +278,41 @@
             	AND         MSPK.BatchID IS NULL
             )
             
-            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";#>
+            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
+            
+            string ActionDeletedSQlStatement = "\"" + @"WITH CTE_ACTION AS (
+                                    SELECT " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
+                                    FROM " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MS
+                                    WHERE MS.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" = 3
+                                    )
+                                    
+                                    UPDATE DWH." + varTargetSchema + @"." + varTargetTable + @" SET
+                                    	IsDeleted = 'Y'
+                                    	, End_Date = GETDATE()
+                                    FROM		CTE_ACTION MSPK
+                                    WHERE		" + VarPrimKeyJoin2 + @" 
+                                                 ActInd = 'Y' 
+                                    AND         IsDeleted = 'N';" + "\"";
+                                    
+            string ActionNewSQlStatement = "\"" + @"" + "\"";
+            
+            string ActionChangedSQlStatement = "\"" + @"" + "\"";
+            
+            string ActionArchiveSQlStatement = "\"" + @"WITH CTE_ACTION AS (
+                                    SELECT " + varPrimKeyColumsPKDeleted + @" NULL AS GARBAGE
+                                    FROM " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MS
+                                    WHERE MS.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" = 4
+                                    )
+                                    
+                                    UPDATE DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" SET
+                                    	IsDeleted = 'Y'
+                                    	, End_Date = GETDATE()
+                                    FROM		CTE_ACTION MSPK
+                                    WHERE		" + VarPrimKeyJoin2 + @" 
+                                                 ActInd = 'Y' 
+                                    AND         IsDeleted = 'N';" + "\"";
+            
+            #>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
@@ -324,11 +338,14 @@
                     <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
                     <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
                     <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
-                    <Variable Name="varSQLRowCountSourceTable" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>    
                     <Variable Name="MergeDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeDeletedSQlStatement#></Variable>    
                     <Variable Name="MergeNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeNewSQlStatement#></Variable>   
                     <Variable Name="MergeChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeChangedSQlStatement#></Variable>    
-                    <Variable Name="MergeArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeArchiveSQlStatement#></Variable>   
+                    <Variable Name="MergeArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeArchiveSQlStatement#></Variable>
+                    <Variable Name="ActionDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=ActionDeletedSQlStatement#></Variable>
+                    <Variable Name="ActionNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=ActionNewSQlStatement#></Variable>
+                    <Variable Name="ActionChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=ActionChangedSQlStatement#></Variable>
+                    <Variable Name="ActionArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=ActionArchiveSQlStatement#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -359,23 +376,7 @@
     
                     <Container Name="SC Load <#=varName#>" ConstraintMode="Linear">
                         <Tasks>
-                                <ExecuteSQL Name="SQL Deleted rows count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                    <VariableInput VariableName="User.varSQLRowCountSourceTable" />
-                                    <Parameters>
-                                        <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
-                                            <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
-                                            <Parameter Name="3" VariableName="User.CleanMonths" DataType="Int32" />
-                                        <#} else {#>
-                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                            <Parameter Name="1" VariableName="User.DaysBack" DataType="Int32" />
-                                        <#}#>
-                                    </Parameters>
-                                    <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
-                                </ExecuteSQL>    
-                                    
-                                <ExecuteSQL Name="SQL Deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <ExecuteSQL Name="SQL find deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <VariableInput VariableName="User.MergeDeletedSQlStatement" />
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
@@ -385,7 +386,7 @@
                                     </Parameters>
                                 </ExecuteSQL>
 
-                                <ExecuteSQL Name="SQL New in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <ExecuteSQL Name="SQL find new in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <VariableInput VariableName="User.MergeNewSQlStatement" />
                                     <Parameters>
                                         <#if (varCleansingType == "PK") {#>
@@ -396,7 +397,7 @@
                                     </Parameters>
                                 </ExecuteSQL>
                                 
-                                <ExecuteSQL Name="SQL Changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <ExecuteSQL Name="SQL find changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <VariableInput VariableName="User.MergeChangedSQlStatement" />
                                     <Parameters>
                                         <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
@@ -405,6 +406,37 @@
                                         <#}#>
                                     </Parameters>
                                 </ExecuteSQL>
+                                    
+                                <ExecuteSQL Name="SQL Action delete in DWH <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <VariableInput VariableName="User.ActionDeletedSQlStatement" />
+                                    <Parameters>
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#}#>
+                                    </Parameters>
+                                </ExecuteSQL>   
+                                    
+                                <ExecuteSQL Name="SQL Action new in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <VariableInput VariableName="User.ActionNewSQlStatement" />
+                                    <Parameters>
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                            <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#}#>
+                                    </Parameters>
+                                </ExecuteSQL>
+                                
+                                <ExecuteSQL Name="SQL Action changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                    <VariableInput VariableName="User.ActionChangedSQlStatement" />
+                                    <Parameters>
+                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                        <#if (varCleansingType == "PK") {#>
+                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                        <#}#>
+                                    </Parameters>
+                                </ExecuteSQL>    
                         </Tasks>
                     </Container>
     

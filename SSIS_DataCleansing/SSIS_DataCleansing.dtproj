@@ -30,10 +30,11 @@
         </SSIS:Properties>
         <SSIS:Packages>
           <SSIS:Package SSIS:Name="201916.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="CTRL_CL-IFS-Total.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="CL-IFS-INVOICE.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="CL-IFS-ACCOUNT.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="CL-IFS-INVOICE.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="CL-IFS-RECEIPT_INVENTORY_LOCATION.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="CL-IFS-SUPPLIER_INFO.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="CTRL_CL-IFS-Total.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="DWH.conmgr" />
@@ -206,16 +207,16 @@
               </SSIS:Properties>
               <SSIS:Parameters />
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="CTRL_CL-IFS-Total.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="CL-IFS-ACCOUNT.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{7505920F-31B0-4904-8EBC-2FB4ED426298}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">CTRL_CL-IFS-Total</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{7D5109A1-3849-405D-8CD7-BB31945870F7}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">CL-IFS-ACCOUNT</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{A85B544B-2ABE-4792-BF6C-65BC566B803D}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{7E1C1C80-4B34-4441-A12B-4FAFB1D93841}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -224,7 +225,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{AD1AFC89-42EB-4E24-B766-B95812B96A77}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{84A9FA95-9FFC-4164-8A10-20BB1237F847}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -238,7 +239,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{2AC9ECC4-1B68-4824-AFA8-43B0B8DFAC43}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{904BE126-6734-47FB-BB5B-9F0360523D63}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -254,14 +255,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="CL-IFS-INVOICE.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{1870C08E-E17F-448F-8F8C-BC7058889AFF}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{1BD0BE7B-2A92-4D74-B7ED-C5A74A0117F3}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">CL-IFS-INVOICE</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{3636B446-E8DB-4E18-9175-EA4082F53129}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{FCB269A7-13A9-4E01-A537-597C920EA830}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -270,7 +271,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{91A6BDB0-92D2-431F-B3A7-BCA6E31BA6A4}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{1BE2F2E4-4A25-4BC1-9D4A-10AA3B727396}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -284,7 +285,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{001708B2-2A6A-4B45-A380-FEA60D88ADA8}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{19BEA6A5-17C0-493C-BD0B-F2C441FB02CA}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -298,16 +299,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="CL-IFS-ACCOUNT.dtsx">
+            <SSIS:PackageMetaData SSIS:Name="CL-IFS-RECEIPT_INVENTORY_LOCATION.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{BD715F5B-855B-493E-8C30-AAA138CDD734}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">CL-IFS-ACCOUNT</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{626E0AB4-C324-4346-AE80-86259F6627AD}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">CL-IFS-RECEIPT_INVENTORY_LOCATION</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{C14BA228-580F-4E17-9E34-C8C5CED13FAE}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{00939075-95B6-46F1-A79A-55EE8D26A08F}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -316,7 +317,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{5983C387-4274-4A7F-AE7A-B57781F2A415}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{A1DB9934-1919-4BA4-A9C2-0DA8270138E2}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -330,7 +331,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{AC8DD536-09BB-4CEB-A6C1-92B9E0051B0F}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{83880EED-DD85-4F54-A8F1-A26FF5012185}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -346,14 +347,14 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="CL-IFS-SUPPLIER_INFO.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{DF7B7286-F5FA-43A9-A6B2-A36FCBC8AB44}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{A89F85ED-293A-42AA-8120-022F7C2A7177}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">CL-IFS-SUPPLIER_INFO</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{970A11D6-7951-49F4-A5F3-3C6492380B62}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{76AABD50-A7F5-4B6E-89BD-EF6FA5456FC2}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -362,7 +363,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{974B31BC-6132-4F56-A9B3-9C2DC2F0C060}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{2C2BF7E4-44D0-4893-8D1A-2CAA2FDC5A74}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -376,7 +377,53 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{08417D62-29F6-40FE-9B7D-F0AEF480F664}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{BACBDE48-69A5-42EA-BD5D-DF21E03A1E74}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+              </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="CTRL_CL-IFS-Total.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{E7BB04E4-1261-4504-BCD1-EF1681F0D7A6}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">CTRL_CL-IFS-Total</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{3653D1CF-8112-4801-9496-A7FADE4E8D43}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters>
+                <SSIS:Parameter SSIS:Name="BatchID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{92CCB91D-9491-443E-B5F0-A60CAB51959F}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{0DF2CF8D-8907-4685-AC27-1901C01EB569}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
