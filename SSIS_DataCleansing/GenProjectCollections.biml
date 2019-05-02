@@ -11,7 +11,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Staging','DWH','DWH_Control')
+                                            AND          c.[Name] in ('Staging','DWH','DWH_Control','PROD','StagingIFS_TEMP')
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -50,7 +50,7 @@
             string TargetSchema = DBSchema["TargetSchema"].ToString();
             string TargetConnection = DBSchema["TargetConnection"].ToString();#>
             <Schema Name="<#=TargetSchema#>" DatabaseName="<#=TargetConnection#>" />
-        <#}#>     
+        <#}#> 
     </Schemas>
     
     <Projects>
@@ -87,6 +87,7 @@
                                         on [st].[SourceConnection] = [con].[Name]	
                                         WHERE st.[IsActive] =  1
                                         AND st.CleansingType IN ('PK','PK_F')
+                                        AND st.Test = 1
                                         UNION
                                         SELECT DISTINCT
                                         [TargetConnection]
@@ -98,6 +99,7 @@
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
                                         AND st.CleansingType IN ('PK','PK_F')
+                                        AND st.Test = 1
                                         UNION
                                         SELECT 'Staging' AS [SourceConnection]
                                         ,'SQLServer' AS [ConnectionType]
@@ -110,6 +112,7 @@
                                         on [st].[SourceConnection] = [con].[Name]	
                                         WHERE st.[IsActive] =  1
                                         AND st.CleansingType IN ('PK','PK_F')
+                                        AND st.Test = 1
                                         UNION
                                         SELECT DISTINCT
                                         [TargetConnection]
@@ -121,6 +124,7 @@
                                         FROM [Generator].[SourceExtractionTable] st
                                         WHERE st.[IsActive] =  1
                                         AND st.CleansingType IN ('PK','PK_F')
+                                        AND st.Test = 2
                                         ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {

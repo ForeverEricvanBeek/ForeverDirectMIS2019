@@ -53,6 +53,7 @@
                                                     AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                     WHERE     ST.[IsActive] = 1 AND ST.IsStaging = 0
                                                     AND		ST.CleansingType IN ('PK','PK_F')
+                                                    AND ST.Test = 1
                                                     ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
@@ -415,6 +416,7 @@
                                     FROM [Generator].[SourceExtractionTable] st
                                     WHERE st.[IsActive] = 1 AND st.IsStaging = 0
                                     AND st.CleansingType IN ('PK','PK_F')
+                                    AND st.Test = 1
                                     ";
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
@@ -483,6 +485,7 @@
                             WHERE     [TargetSchema] = '" + varTargetSchema + @"' 
                             AND       [st].[IsActive] = 1  AND st.IsStaging = 0
                             AND       st.CleansingType IN ('PK','PK_F')
+                            AND st.Test = 1
                             ORDER BY  [SourceTable]
                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
