@@ -5,61 +5,11 @@
     <#@ import namespace="Varigence.Biml.Extensions" #>
     <#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#>
     <#@ include file="ProjectSettings.cs" #>
-    
-    <!-- http://www.varigence.com/Documentation/Language/Element/AstRootNode -->
-    
-    <!-- declare packages -->
     <Packages>
-    <# // PrimaryKey constraint wordt per tabel opgehaald.
-    string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
-                                        AS (
-                                            select TC.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  , COLUMN_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  
-                                            from [StagingIFS].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                            JOIN [StagingIFS].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
-                                            ON	TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG
-                                            AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA
-                                            AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME
-                                        )
-                                        ,CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (
-                                            select distinct T1.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS  , T1.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS ,
-                                            STUFF((SELECT  ',' + T2.COLUMN_NAME
-                                            from COLUMN_CONSTRAINTS T2
-                                            where T1.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS = T2.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS AND T1.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS = T2.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS
-                                            FOR XML PATH('')),1 ,1, '')    PK
-                                            from COLUMN_CONSTRAINTS T1
-                                        )
-                                            SELECT   
-                                                ST.[SourceConnection]
-                                                ,ST.[SourceSchema]
-                                                ,ST.[SourceTable]
-                                                ,SC.[Type] AS [SourceType]
-                                                ,SC.[Options]
-                                                ,SC.[ConnectionString]
-                                                ,ST.[ExtractionType]
-                                                ,ST.[TargetConnection]
-                                                ,ST.[TargetSchema]
-                                                ,ST.[TargetTable]
-                                                ,ST.[IncrementalSchema]
-                                                ,ST.[IncrementalTable]
-                                                ,ST.[IncrementalUpdateColumn]
-                                                ,ST.[IncrementalKeyColumn]
-                                                ,ST.[IsStaging] 
-                                                ,ST.IsLoading
-                                                ,CS.PK AS [PrimaryKey]
-                                                ,'CL_ACTION' AS PackagePrefix
-                                                ,ST.[WhereStatement]
-                                            FROM      [Generator].[SourceExtractionTable] ST
-                                            LEFT JOIN [Generator].[Connection]            SC
-                                            ON        ST.[SourceConnection] = SC.[Name]
-                                            LEFT JOIN CONSTRAINTS CS
-                                        ON		    ST.[TargetSchema] = CS.[TABLE_SCHEMA]
-                                            AND		ST.[TargetTable]  = CS.[TABLE_NAME]
-                                            WHERE   ST.[IsActive] = 1
-                                            AND     ST.Test = 1
-                                        ";
+    <#
+    string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  , COLUMN_NAME COLLATE SQL_Latin1_General_CP1_CS_AS from [StagingIFS].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [StagingIFS].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON	TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS  , T1.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS , STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS = T2.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS AND T1.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS = T2.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT   ST.[SourceConnection],ST.[SourceSchema],ST.[SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],ST.[TargetConnection],ST.[TargetSchema],ST.[TargetTable],ST.[IncrementalSchema],ST.[IncrementalTable],ST.[IncrementalUpdateColumn],ST.[IncrementalKeyColumn],ST.[IsStaging] ,ST.IsLoading,CS.PK AS [PrimaryKey],'CL_ACTION' AS PackagePrefix,ST.[WhereStatement]FROM [Generator].[SourceExtractionTable] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable]  = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1 AND ST.Test = 1";
     DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlSourceExtractionTable);
-    foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
-    {
+    foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
         string varExtractionSourceConnection = rowSourceExtractionTable["SourceConnection"].ToString();
         string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
         string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
@@ -76,11 +26,8 @@
         string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
         string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
         string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
-
-        bool varIsStaging = (bool)rowSourceExtractionTable["IsStaging"];
-        bool varIsLoading = (bool)rowSourceExtractionTable["IsLoading"];
         string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
-            string varTargetConnection = "";
+        string varTargetConnection = "";
         if (varExtractionTargetConnection == "StagingIFS") {
             varTargetConnection = "StagingIFS_TEMP";
         } else {
@@ -89,45 +36,18 @@
         string varTargetSchema = varExtractionTargetSchema;
         string varTargetTable = varExtractionTargetTable;
         string varTargetName = varTargetConnection+"-"+varExtractionTargetSchema+"-"+varExtractionTargetTable;
-        string varIncrementalName = varTargetConnection+"-"+varExtractionIncrementalSchema+"-"+varExtractionIncrementalTable;
         string varOutputPathName = "";
-        string varTableBeginCharacter = varSQLServTableBeginCharacter;
-        string varTableCloseCharacter = varSQLServTableCloseCharacter;
-        string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
-        string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
-
-        varTableBeginCharacter = varOracleObjectBeginEndCharacter;
-        varTableCloseCharacter = varOracleObjectBeginEndCharacter;
-        varColumnBeginCharacter = varOracleObjectBeginEndCharacter;
-        varColumnCloseCharacter = varOracleObjectBeginEndCharacter;
-
-        
-        //Add name qualifier to the table names
-        string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
-        string varExtractionIncrementalSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionIncrementalSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionIncrementalTable + varSQLServTableCloseCharacter;
-        string varIncrementalSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionIncrementalSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionIncrementalTable + varSQLServTableCloseCharacter;
-        string varIncrementalTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable      + varSQLServTableCloseCharacter;
+        string varTableBeginCharacter = varOracleObjectBeginEndCharacter;
+        string varTableCloseCharacter = varOracleObjectBeginEndCharacter;
         string varTargetSchemaPlus = varSQLServTableBeginCharacter + varTargetSchema + varSQLServTableCloseCharacter;
         string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable + varSQLServTableCloseCharacter;
         string varTargetSchemaTablePlus = varTargetSchemaPlus + "." + varTargetTablePlus;
-        
-        string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
-         
-        string varSQLMaxIncrementalKeyTargetTable = "";
-        if (varExtractionType == "MI" && (!varIsLoading)) {
-            varSQLMaxIncrementalKeyTargetTable = "SELECT MAX(" + varExtractionModifiedDate + ") FROM " + varExtractionTargetSchemaTablePlus;
-        } else {
-            varSQLMaxIncrementalKeyTargetTable = "SELECT '0'";
-        }
         string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
-        string varSQLSelectSourceExtractionControl = "SELECT MAX(LastDate) AS LastDate, MAX(LastID) AS LastID from (SELECT CONVERT(VARCHAR, MAX([LastExtractionDate]), 120) AS LastDate, MAX(LastExtractionID) AS LastID \nFROM [Control].[SourceExtractionControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionSourceSchema+"' \nAND [SourceTable] = '"+varExtractionSourceTable+"' UNION SELECT CONVERT(DATE,'20000101',120), CAST(0 AS BIGINT))a";
-        string varSQLUpdateSourceExtractionControl = "MERGE [Control].[SourceExtractionControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionSourceSchema+"' as [SourceSchema] \n , '"+varExtractionSourceTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastExtractionDate] \n , ? as [LastExtractionID]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastExtractionDate] \n , S.[LastExtractionID]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastExtractionDate] = S.[LastExtractionDate] \n , [LastExtractionID] = S.[LastExtractionID] ;";
+        string varSQLGetPK = "SELECT ";
         string varExtractionSourceSchemaPlus = varTableBeginCharacter + varExtractionSourceSchema + varTableCloseCharacter +".";
-        
         if (varExtractionSourceSchema == "") {
             varExtractionSourceSchemaPlus = "";
         }
-        
         string varExtractionSourceTablePlus = varTableBeginCharacter + varExtractionSourceTable  + varTableCloseCharacter;
         string varName = "";
         if (varExtractionSourceConnection == "PROD") {
@@ -135,44 +55,12 @@
         } else {
             varName = varExtractionSourceConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
         }
-        
-        string varPackageName    = varExtractionPackagePrefix + "-" + varName;
-
-        string sqlSourceExtractionColumn = @"SELECT 
-                                                ISNULL(sc.[SourceColumnName],ic.COLUMN_NAME) as[SourceColumnName]
-                                                ,ISNULL(sc.[SourceColumnExpression],ic.COLUMN_NAME)	as [SourceColumnExpression]
-                                                ,ISNULL(sc.[SourceColumnType], ic.DATA_TYPE) as [SourceColumnType]
-                                                ,ISNULL(ISNULL(sc.[SourceColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [SourceColumnLength]
-                                                ,ISNULL(ISNULL(sc.[SourceColumnPrecision], ic.NUMERIC_PRECISION),0) as [SourceColumnPrecision]
-                                                ,ISNULL(ISNULL(sc.[SourceColumnScale], ic.NUMERIC_SCALE),0) as [SourceColumnScale]
-                                                ,ISNULL(sc.[TargetColumnName],ic.COLUMN_NAME) as [TargetColumnName]
-                                                ,ISNULL(sc.[TargetColumnExpression],ic.COLUMN_NAME) as [TargetColumnExpression]
-                                                ,ISNULL(sc.[TargetColumnType], ic.DATA_TYPE) as [TargetColumnType]
-                                                ,ISNULL(ISNULL(sc.[TargetColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [TargetColumnLength]
-                                                ,ISNULL(ISNULL(sc.[TargetColumnPrecision], ic.NUMERIC_PRECISION),0) as [TargetColumnPrecision]
-                                                ,ISNULL(ISNULL(sc.[TargetColumnScale], ic.NUMERIC_SCALE),0) as [TargetColumnScale]
-                                                ,CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary]
-                                                ,dc.[DataTypeExpression]
-                                                FROM         [StagingIFS].INFORMATION_SCHEMA.COLUMNS ic
-                                                INNER JOIN	  [Generator].[SourceExtractionTable] st
-                                                on			  st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME
-                                                AND          st.[IsActive] =  1
-                                                --AND          st.IsLoading = 0
-                                                LEFT JOIN	  [Generator].[SourceExtractionColumn] sc
-                                                ON			  sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable
-                                                AND          sc.[IsActive] =  1
-                                                LEFT JOIN    [Generator].[DataTypeConversion]     dc
-                                                ON           ic.DATA_TYPE collate SQL_Latin1_General_CP1_CS_AS =  [DataType] collate SQL_Latin1_General_CP1_CS_AS
-                                                WHERE        st.[SourceConnection] = '" + varExtractionSourceConnection + @"'
-                                                AND          st.[SourceSchema] = '" + varExtractionSourceSchema + @"' 
-                                                AND         st.[SourceTable] = '" + varExtractionSourceTable + @"' 
-                                                AND		  ic.COLUMN_NAME not in ('BatchID','ProcessLogID')
-                                                ORDER BY     ic.ORDINAL_POSITION
-                                                ";
+        string varPackageName = varExtractionPackagePrefix + "-" + varName;
+        string varTaskName = "Dataflow Extract " + varName;
+        string varSQLStatementColumns = "";
+        string sqlSourceExtractionColumn = @"SELECT ISNULL(sc.[SourceColumnName],ic.COLUMN_NAME) as[SourceColumnName],ISNULL(sc.[SourceColumnExpression],ic.COLUMN_NAME)	as [SourceColumnExpression],ISNULL(sc.[SourceColumnType], ic.DATA_TYPE) as [SourceColumnType],ISNULL(ISNULL(sc.[SourceColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [SourceColumnLength],ISNULL(ISNULL(sc.[SourceColumnPrecision], ic.NUMERIC_PRECISION),0) as [SourceColumnPrecision],ISNULL(ISNULL(sc.[SourceColumnScale], ic.NUMERIC_SCALE),0) as [SourceColumnScale],ISNULL(sc.[TargetColumnName],ic.COLUMN_NAME) as [TargetColumnName],ISNULL(sc.[TargetColumnExpression],ic.COLUMN_NAME) as [TargetColumnExpression],ISNULL(sc.[TargetColumnType], ic.DATA_TYPE) as [TargetColumnType],ISNULL(ISNULL(sc.[TargetColumnLength], ic.CHARACTER_MAXIMUM_LENGTH),0)	as [TargetColumnLength],ISNULL(ISNULL(sc.[TargetColumnPrecision], ic.NUMERIC_PRECISION),0) as [TargetColumnPrecision],ISNULL(ISNULL(sc.[TargetColumnScale], ic.NUMERIC_SCALE),0) as [TargetColumnScale],CASE WHEN sc.[SourceColumnType] <> [TargetColumnType] OR sc.[SourceColumnLength] <> [TargetColumnLength] OR sc.[SourceColumnPrecision] <> [TargetColumnPrecision] OR sc.[SourceColumnScale] <> [TargetColumnScale] THEN 1 ELSE 0 END AS [ColumnConversionNecessary],dc.[DataTypeExpression] FROM [StagingIFS].INFORMATION_SCHEMA.COLUMNS ic INNER JOIN [Generator].[SourceExtractionTable] st on st.TargetSchema = ic.TABLE_SCHEMA and st.TargetTable = ic.TABLE_NAME AND st.[IsActive] =  1 LEFT JOIN [Generator].[SourceExtractionColumn] sc ON sc.TargetColumnName = ic.COLUMN_NAME and sc.SourceSchema = st.SourceSchema and sc.SourceTable = st.SourceTable AND sc.[IsActive] =  1 LEFT JOIN [Generator].[DataTypeConversion]     dc ON ic.DATA_TYPE collate SQL_Latin1_General_CP1_CS_AS =  [DataType] collate SQL_Latin1_General_CP1_CS_AS WHERE st.[SourceConnection] = '" + varExtractionSourceConnection + @"'AND st.[SourceSchema] = '" + varExtractionSourceSchema + @"' AND st.[SourceTable] = '" + varExtractionSourceTable + @"' AND ic.COLUMN_NAME not in ('BatchID','ProcessLogID') ORDER BY ic.ORDINAL_POSITION";
         DataTable tableSourceExtractionColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlSourceExtractionColumn);
         int varSourceExtractionColumnCount = tableSourceExtractionColumn.Rows.Count;
-        
-        string varSQLStatementColumns = "";
         foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
             string varSourceColumnName =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
             if (varSourceColumnName == rowSourceExtractionColumn["SourceColumnName"].ToString() && varExtractionSourceType == "SQLServer") {
@@ -181,358 +69,294 @@
             int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
             varSQLStatementColumns += ", " + varSourceColumnName;
         }
-        if (varSQLStatementColumns.Length > 0) { //remove first comma
+        if (varSQLStatementColumns.Length > 0) {
             varSQLStatementColumns = varSQLStatementColumns.Substring(2, varSQLStatementColumns.Length - 2);
         } else {
             varSQLStatementColumns = "*";
         }
-        string varExtractionSQLStatement = "";
         string varExtractionDateConversion = "";
-        switch (varExtractionSourceType) {
-            case "SQLServer":
-                varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
-                break;
-            case "Oracle":
-                varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)-3"; 
-                break;
-            case "ODBC":
-                varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
-                break;
-            default:
-                varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
-                break;
+        if (varExtractionSourceType == "SQLServer") {
+            varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
+        } else if (varExtractionSourceType == "Oracle") {
+            varExtractionDateConversion = "TO_DATE(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, &apos;yyyy-mm-dd hh24:mi:ss&apos;)-3"; 
+        } else if (varExtractionSourceType == "ODBC") {
+            varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
+        } else {
+            varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
         }
-        
-
-        varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE " + varExtractionWhereStatement;
-    #>
-    
-            <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
-                <Parameters>
-                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-                </Parameters>
-                <Variables>
-                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
-                    <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit">0</Variable>
-                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                    <Variable Name="RowCountExtract" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="RowCountTarget" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="RowCountError" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="MaxIncrementalKey" DataType="String" Namespace="RC">0</Variable>
-                    <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
-                    <Variable Name="LastExtractionID" DataType="String" Namespace="User">0</Variable>
-                    <Variable Name="InValues" DataType="String" Namespace="User">0</Variable>
-                    <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
-                    <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
-                    <Variable Name="sSourceFolder" DataType="String" Namespace="User"></Variable>
-                    <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable> 
-                </Variables>
+        string varExtractionSQLStatement = "SELECT " + varSQLStatementColumns + " FROM " + varExtractionSourceSchemaPlus + varExtractionSourceTablePlus + " WHERE " + varExtractionWhereStatement;
+        varSQLGetPK = varSQLGetPK + varExtractionTargetTablePK + @" FROM " + varTargetSchemaPlus + "." + varTargetTablePlus;
+        #>
+        <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
+            <Variables>
+                <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+                <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable> 
+                <Variable Name="SourcePKSQL" DataType="String" Namespace="User"></Variable>
+            </Variables>
+            <Tasks>
+                <Container Name="SC Extract <#=varName#>" ConstraintMode="Linear">
                     <Tasks>
-                    <Container Name="SC Extract <#=varName#>" ConstraintMode="Linear">
-                        <Tasks>
-                            <ExecuteSQL Name="SQL Truncate table <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
-                            </ExecuteSQL>
-                            <#string varTaskName = "Dataflow Extract " + varName;
-                            string varSQLPackageTaskColumn = @"SELECT [ColumnName],[ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
-                            #>
-                            
+                        <ExecuteSQL Name="SQL Truncate table <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <DirectInput><#=varSQLTruncateTargetTable#></DirectInput>
+                        </ExecuteSQL>
+                        
+                        <ExecuteSQL Name="SQL Get PK <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <DirectInput><#=varSQLGetPK#></DirectInput>
+                            <Results>
+                                <Result Name="0" VariableName="User.SourcePKSQL" />
+                            </Results>
+                        </ExecuteSQL>
+                        
                         <Dataflow Name="<#=varTaskName#>">
-
-                                <Transformations>
-                                    <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
-                                        <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
-                                        <VariableInput VariableName="User.SourceExtractionSQL" />
-                                    </OleDbSource>
-                                    <#varOutputPathName = "OLEDB Source " + varName;#>
+                            <Transformations>
+                                <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
+                                    <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
+                                    <VariableInput VariableName="User.SourceExtractionSQL" />
+                                </OleDbSource>
+                                <#varOutputPathName = "OLEDB Source " + varName;#>
     
-                                        <DerivedColumns Name="Derived Columns Error <#=varName#>"> 
-
-                                            <InputPath OutputPathName="<#=varOutputPathName#>.Error" />
-                                            <#// Voeg primary key toe aan error message
-                                            string varExtractionTargetTablePKLogging =" + (DT_WSTR,50)" + varExtractionTargetTablePK.Replace(",","+ \"; \" + (DT_WSTR,50)");
-                                            if (varExtractionTargetTablePK.Length > 1 && varExtractionSourceType != "CSV" && varExtractionSourceType != "CSV_L" && varExtractionSourceType != "XML_Kewill") {
-                                                varExtractionTargetTablePKLogging = varExtractionTargetTablePKLogging;
-                                            } else {
-                                                varExtractionTargetTablePKLogging = " + \"unknown\"";
+                                <DerivedColumns Name="Derived Columns Error <#=varName#>"> 
+    
+                                    <InputPath OutputPathName="<#=varOutputPathName#>.Error" />
+                                    <#// Voeg primary key toe aan error message
+                                    string varExtractionTargetTablePKLogging =" + (DT_WSTR,50)" + varExtractionTargetTablePK.Replace(",","+ \"; \" + (DT_WSTR,50)");
+                                    if (varExtractionTargetTablePK.Length > 1 && varExtractionSourceType != "CSV" && varExtractionSourceType != "CSV_L" && varExtractionSourceType != "XML_Kewill") {
+                                        varExtractionTargetTablePKLogging = varExtractionTargetTablePKLogging;
+                                    } else {
+                                        varExtractionTargetTablePKLogging = " + \"unknown\"";
+                                    }#>
+                                    <Columns>
+                                        <Column Name="RecordType" DataType="String" Length="1"  ReplaceExisting="false">(DT_WSTR,1)"E"</Column>
+                                        <Column Name="ErrorMessage" DataType="String" Length="200" ReplaceExisting="false">(DT_WSTR,6)"Code: " + (DT_WSTR,12)[ErrorCode] + (DT_WSTR,10)"; Column: " + (DT_WSTR,2)" (" + (DT_WSTR,4)[ErrorColumn] + (DT_WSTR,1)")" + " Key: "<#=varExtractionTargetTablePKLogging#></Column>
+                                    </Columns>
+                                </DerivedColumns>
+   
+                                <UnionAll Name="Union <#=varName#>">
+                                    <InputPaths>
+                                        <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
+                                        <InputPath OutputPathName="Derived Columns Error <#=varName#>.Output" /> 
+                                    </InputPaths>
+                                </UnionAll>
+                                <#varOutputPathName = "Union " + varName + ".Output";#>
+                                
+                                <DerivedColumns Name="Derived Column <#=varName#>">
+                                    <InputPath OutputPathName="<#=varOutputPathName#>" />
+                                    <Columns>
+                                        <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
+                                            string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
+                                            string varTargetColumnExpression = rowSourceExtractionColumn["TargetColumnExpression"].ToString();
+                                            string varSourceColumnType = rowSourceExtractionColumn["SourceColumnType"].ToString();
+                                            string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
+                                            
+                                            if (varTargetColumnExpression == varSourceColumnName && varExtractionSourceType == "SQLServer")  {
+                                                varTargetColumnExpression = "[" + varTargetColumnExpression + "]";
+                                            }
+                                            
+                                            if (AllCharacterDataTypes.ToLower().IndexOf("-"+varSourceColumnType.ToLower()+"-") != -1) {#>
+                                                <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true">TRIM(<#=varTargetColumnExpression#>)</Column>
+                                                <#} else if (varSourceColumnName != rowSourceExtractionColumn["TargetColumnExpression"].ToString()) {#>
+                                                <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true"><#=varTargetColumnExpression#></Column>
+                                            <#}
+                                        } #>
+                                        <Column Name="BatchID" DataType="Int64" Length="8" ReplaceExisting="false">-1</Column>
+                                        <Column Name="ProcessLogID" DataType="Int64" Length="8" ReplaceExisting="false">-1</Column>
+                                    </Columns>
+                                </DerivedColumns>
+    
+                                <#DataRow[] DataConversionRows;
+                                string FilterExpression = "ColumnConversionNecessary = 1";
+                                DataConversionRows = tableSourceExtractionColumn.Select(FilterExpression);
+                                
+                                if (DataConversionRows.Count() > 0) {#>
+                                    <DataConversion Name="Data Conversion <#=varName#>">
+                                    <InputPath OutputPathName="Derived Column <#=varName#>.Output" />
+                                        <Columns>
+                                            <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows)  {
+                                                string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
+                                                string varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
+                                                string varTargetColumnType = rowSourceExtractionColumn["TargetColumnType"].ToString();
+                                                string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
+                                                int varTargetColumnLength = (int)rowSourceExtractionColumn["TargetColumnLength"];
+                                                int varTargetColumnPrecision = (int)rowSourceExtractionColumn["TargetColumnPrecision"];
+                                                int varTargetColumnScale = (int)rowSourceExtractionColumn["TargetColumnScale"];
+                                                int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
+                                                
+                                                if (varSourceColumnConversionNecessary == 1) {#>
+                                                    <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="dc.<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" Length="<#=varTargetColumnLength#>" Precision="<#=varTargetColumnPrecision#>" Scale="<#=varTargetColumnScale#>" />
+                                                <#}
                                             }#>
-                                            <Columns>
-                                                <Column Name="RecordType" DataType="String" Length="1"  ReplaceExisting="false">(DT_WSTR,1)"E"</Column>
-                                                <Column Name="ErrorMessage" DataType="String" Length="200" ReplaceExisting="false">(DT_WSTR,6)"Code: " + (DT_WSTR,12)[ErrorCode] + (DT_WSTR,10)"; Column: " + (DT_WSTR,2)" (" + (DT_WSTR,4)[ErrorColumn] + (DT_WSTR,1)")" + " Key: "<#=varExtractionTargetTablePKLogging#></Column>
-                                            </Columns>
-                                        </DerivedColumns>
-    
-                                        <RowCount Name="RowCount Error <#=varName#>" VariableName="RC.RowCountError">
-                                            <InputPath OutputPathName="Derived Columns Error <#=varName#>.Output" />
-                                        </RowCount>
-                                            <UnionAll Name="Union <#=varName#>">
-                                                <InputPaths>
-                                                    <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
-                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" /> 
-                                                </InputPaths>
-                                            </UnionAll>
-                                            <#varOutputPathName = "Union " + varName + ".Output";#>
-                                        
-                                        <DerivedColumns Name="Derived Column <#=varName#>">
-                                            <InputPath OutputPathName="<#=varOutputPathName#>" />
-                                            <Columns>
-                                                <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                                                    string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                    string varTargetColumnExpression = rowSourceExtractionColumn["TargetColumnExpression"].ToString();
-                                                    string varSourceColumnType = rowSourceExtractionColumn["SourceColumnType"].ToString();
-                                                    string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
-                                                    
-                                                    if (varTargetColumnExpression == varSourceColumnName && varExtractionSourceType == "SQLServer")  {
-                                                        varTargetColumnExpression = "[" + varTargetColumnExpression + "]";
-                                                    }
-                                                    
-                                                    if (AllCharacterDataTypes.ToLower().IndexOf("-"+varSourceColumnType.ToLower()+"-") != -1) {#>
-                                                        <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true">TRIM(<#=varTargetColumnExpression#>)</Column>
-                                                        <#} else if (varSourceColumnName != rowSourceExtractionColumn["TargetColumnExpression"].ToString()) {#>
-                                                        <Column Name="<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" ReplaceExisting="true"><#=varTargetColumnExpression#></Column>
-                                                    <#}
-                                                } #>
-                                                <Column Name="BatchID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditBatchID]</Column>
-                                                <Column Name="ProcessLogID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditProcessLogID]</Column>
-                                            </Columns>
-                                        </DerivedColumns>
-    
-                                        <#DataRow[] DataConversionRows;
-                                        string FilterExpression = "ColumnConversionNecessary = 1";
-                                        DataConversionRows = tableSourceExtractionColumn.Select(FilterExpression);
-                                        
-                                        if (DataConversionRows.Count() > 0) {                         #>
-                                            <DataConversion Name="Data Conversion <#=varName#>">
-                                            <InputPath OutputPathName="Derived Column <#=varName#>.Output" />
-                                                <Columns>
-                                                    <#foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows)  {
-                                                        string varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                        string varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
-                                                        string varTargetColumnType = rowSourceExtractionColumn["TargetColumnType"].ToString();
-                                                        string varTargetDataTypeExpression = rowSourceExtractionColumn["DataTypeExpression"].ToString();
-                                                        int varTargetColumnLength = (int)rowSourceExtractionColumn["TargetColumnLength"];
-                                                        int varTargetColumnPrecision = (int)rowSourceExtractionColumn["TargetColumnPrecision"];
-                                                        int varTargetColumnScale = (int)rowSourceExtractionColumn["TargetColumnScale"];
-                                                        int varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                                                        
-                                                        if (varSourceColumnConversionNecessary == 1) {#>
-                                                            <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="dc.<#=varSourceColumnName#>" DataType="<#=varTargetDataTypeExpression#>" Length="<#=varTargetColumnLength#>" Precision="<#=varTargetColumnPrecision#>" Scale="<#=varTargetColumnScale#>" />
-                                                        <#}
-                                                    }#>
-                                                </Columns>
-                                            </DataConversion>
-                                            <#varOutputPathName = "Data Conversion " + varName;
-                                            } else {
-                                                varOutputPathName = "Derived Column " + varName;
-                                            }#>
-    
-                                            <RowCount Name="RowCount Extraction <#=varName#>" VariableName="RC.RowCountExtract">
-                                                <InputPath OutputPathName="<#=varOutputPathName#>.Output" />
-                                            </RowCount>
+                                        </Columns>
+                                    </DataConversion>
+                                <#varOutputPathName = "Data Conversion " + varName;
+                                } else {
+                                    varOutputPathName = "Derived Column " + varName;
+                                }#>
                                     
-                                            <OleDbDestination Name="OLEDB Target <#=varName#>" ConnectionName="<#=varTargetConnection#>" ValidateExternalMetadata="false" TableLock="false">
-                                                <InputPath OutputPathName = "RowCount Extraction <#=varName#>.Output" />
-                                                <ExternalTableOutput Table = "<#=varTargetSchemaTablePlus#>" />
-                                                <#var StgConnection = RootNode.DbConnections[StagingConnection];
-                                                var StgMetadata = StgConnection.ImportDB(varTargetSchema, varTargetTable, ImportOptions.ExcludeForeignKey | ImportOptions.ExcludeColumnDefault | ImportOptions.ExcludeViews);
-                                                //There is only one item in this collection.
-                                                foreach (var TabTargetTable in StgMetadata.TableNodes.Where(item => item.Name == varTargetTable)) {#>
-                                                    <Columns>
-                                                    <#foreach (var column in TabTargetTable.Columns) {
-                                                        string varSourceColumnName = "";
-                                                        string varTargetColumnName = "";
-                                                        int varSourceColumnConversionNecessary  = 0;
-                                                        // Check if there is an entry for this column in the SourceExtractonColumn table. This overrides the default 1-on-1 mapping
-                                                        FilterExpression = "TargetColumnName = '" + column.Name + "'";
-                                                        DataRow[] SourceExtractionRows;
-                                                        // This should return only a single row
-                                                        SourceExtractionRows = tableSourceExtractionColumn.Select(FilterExpression);
-                                                        if (SourceExtractionRows.Count() > 0) {
-                                                            DataRow rowSourceExtractionColumn  = SourceExtractionRows[0];
-                                                            varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
-                                                            varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
-                                                            varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
-                                                        } else {
-                                                            varSourceColumnName = column.Name;
-                                                            varTargetColumnName = column.Name;
-                                                        }
-                                                        if (varSourceColumnConversionNecessary == 1)  { #>
-                                                            <Column SourceColumn="dc.<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
-                                                            <#} else {#>
-                                                            <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
-                                                        <#}        
-                                                    }#>
-                                                    </Columns>
-                                                <#}#>
-                                            </OleDbDestination>
-                                        </Transformations>
-                                    </Dataflow>
-                        </Tasks>
-                    </Container>
-                </Tasks>
-            </Package>
-        <#}#>
-
-
-
-       <!-- create overall package. One per Target schema.-->
-        <# string sqlTargetSchemas = @"SELECT DISTINCT
-                                        [TargetConnection]
-                                        ,[TargetSchema]
-                                        ,'Total' AS [TargetTable]
-                                        ,'CTRL_CL_ACTION' AS PackagePrefix
-                                        ,[IsStaging]
-                                        FROM [Generator].[SourceExtractionTable] st
-                                        WHERE st.[IsActive] =  1
-                                        AND st.IsLoading = 0
-                                        AND st.Test = 1
-                                        ";
-        
-        DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlTargetSchemas);
-        foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
-            string varTargetConnection = rowTargetSchemas["TargetConnection"].ToString();
-            string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
-            string varTargetTable = rowTargetSchemas["TargetTable"].ToString();
-            string varPackagePrefix = rowTargetSchemas["PackagePrefix"].ToString();
-            string varTargetIsStaging = rowTargetSchemas["IsStaging"].ToString();
-            string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-            string varPackageName = "";
-            if (varTargetConnection == "StagingIFS") {
-                varPackageName = varPackagePrefix + "-IFS-" + varTargetTable;
-            } else {
-                varPackageName = varPackagePrefix + "-" + varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-            }
-             #>
-
-    <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" MaxConcurrentExecutables="4" MaxErrorCount="0">
-                <Parameters>
-                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-                </Parameters>
-
-                <Variables>
-                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                    <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
-                    <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit" >-1</Variable>
-                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                </Variables>
-                
-                <Tasks>
-                    <Container Name="SC Extract <#=varName#>" ConstraintMode="Parallel" MaxErrorCount="0">
-                        <Tasks>
-                            <#string sqlSourcePackages = @"SELECT [SourceConnection]
-                                                            ,[Type] AS ConnectionType
-                                                            ,[SourceSchema] AS [SourceSchema]
-                                                            ,[TargetTable] AS [SourceTable]
-                                                            ,'CL_ACTION' AS PackagePrefix
-                                                            ,NULL as [Parent]
-                                                            FROM      [Generator].[SourceExtractionTable] st 
-                                                            JOIN	  [Generator].[Connection] con 	
-                                                            ON		  [st].[SourceConnection] = [con].[Name]
-                                                            WHERE     [TargetConnection] = '"  + varTargetConnection + @"' 
-                                                            AND       [TargetSchema] = '" + varTargetSchema + @"' 
-                                                            AND       [st].[IsActive] = 1 
-                                                            AND       [IsStaging] = '" + varTargetIsStaging + @"' 
-                                                            AND st.IsLoading = 0
-                                                            AND st.Test = 1
-                                                            ORDER BY  [SourceTable], [Order]
-                                                            ";
-                            DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlSourcePackages);
-                            foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
-                                string varSourceConnection = rowSourcePackages["SourceConnection"].ToString();
-                                string varConnectionType = rowSourcePackages["ConnectionType"].ToString();
-                                string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
-                                string varSourceTable = rowSourcePackages["SourceTable"].ToString();
-                                string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
-                                string varParent = rowSourcePackages["Parent"].ToString();
-                                string varPackage = "";
-                                string varPackage2 = "";
-                                string varPackage3 = "";
-                                string varPackage4 = "";
-                                if (varTargetConnection == "StagingIFS") {
-                                    varPackage = varPackagePrfx + "-IFS-" + varSourceTable + ".dtsx";
-                                    varPackage2 = varPackagePrfx + "-IFS-" + varSourceTable + "_p2.dtsx";
-                                    varPackage3 = varPackagePrfx + "-IFS-" + varSourceTable + "_p3.dtsx";
-                                    varPackage4 = varPackagePrfx + "-IFS-" + varSourceTable + "_p4.dtsx";
-                                } else {
-                                    varPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + ".dtsx";
-                                    varPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p2.dtsx";
-                                    varPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p3.dtsx";
-                                    varPackage4 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p4.dtsx";
-                                }
-                                string varScriptName = varSourceTable + "_script_1";
-                                string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
-                                string varScriptTaskName = "Task_" + varSourceTable + "_script_1";
-                                string varScriptName2 = varSourceTable + "_script_2";
-                                string varScriptCoreName2 = "ST_232feca_" + varSourceTable + "_script_2";
-                                string varScriptTaskName2 = "Task_" + varSourceTable + "_script_2";
-                                string varScriptName3 = varSourceTable + "_script_3";
-                                string varScriptCoreName3 = "ST_232feca_" + varSourceTable + "_script_3";
-                                string varScriptTaskName3 = "Task_" + varSourceTable + "_script_3";
-                                string varPackageXML = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceConnection + ".dtsx";
-                                string varParentPackage = "";
-                                string varParentPackage2 = "";
-                                string varParentPackage3 = "";
-                                string varParentPackage4 = "";
-                                if (varTargetConnection == "StagingIFS") {
-                                    varParentPackage = varPackagePrfx + "-IFS-" + varParent + ".dtsx";
-                                    varParentPackage2 = varPackagePrfx + "-IFS-" + varParent + "_p2.dtsx";
-                                    varParentPackage3 = varPackagePrfx + "-IFS-" + varParent + "_p3.dtsx";
-                                    varParentPackage4 = varPackagePrfx + "-IFS-" + varParent + "_p4.dtsx";
-                                } else {
-                                    varParentPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + ".dtsx";
-                                    varParentPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p2.dtsx";
-                                    varParentPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p3.dtsx";
-                                    varParentPackage4 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p4.dtsx";   
-                                }
-                                                            #>
-                                <ExecutePackage Name="<#=varPackage#>">
-                                    <#if (varParent.Length > 0) {#>
-                                    <PrecedenceConstraints LogicalType="Or">
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varParentPackage#>.Output"/>
-                                            <Input OutputPathName="<#=varParentPackage2#>.Output"/>
-                                            <Input OutputPathName="<#=varParentPackage3#>.Output"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
+                                <OleDbDestination Name="OLEDB Target <#=varName#>" ConnectionName="<#=varTargetConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                    <InputPath OutputPathName = "Data Conversion <#=varName#>.Output" />
+                                    <ExternalTableOutput Table = "<#=varTargetSchemaTablePlus#>" />
+                                    <#var StgConnection = RootNode.DbConnections[StagingConnection];
+                                    var StgMetadata = StgConnection.ImportDB(varTargetSchema, varTargetTable, ImportOptions.ExcludeForeignKey | ImportOptions.ExcludeColumnDefault | ImportOptions.ExcludeViews);
+                                    //There is only one item in this collection.
+                                    foreach (var TabTargetTable in StgMetadata.TableNodes.Where(item => item.Name == varTargetTable)) {#>
+                                        <Columns>
+                                        <#foreach (var column in TabTargetTable.Columns) {
+                                            string varSourceColumnName = "";
+                                            string varTargetColumnName = "";
+                                            int varSourceColumnConversionNecessary  = 0;
+                                            // Check if there is an entry for this column in the SourceExtractonColumn table. This overrides the default 1-on-1 mapping
+                                            FilterExpression = "TargetColumnName = '" + column.Name + "'";
+                                            DataRow[] SourceExtractionRows;
+                                            // This should return only a single row
+                                            SourceExtractionRows = tableSourceExtractionColumn.Select(FilterExpression);
+                                            if (SourceExtractionRows.Count() > 0) {
+                                                DataRow rowSourceExtractionColumn  = SourceExtractionRows[0];
+                                                varSourceColumnName = rowSourceExtractionColumn["SourceColumnName"].ToString();
+                                                varTargetColumnName = rowSourceExtractionColumn["TargetColumnName"].ToString();
+                                                varSourceColumnConversionNecessary = (int)rowSourceExtractionColumn["ColumnConversionNecessary"];
+                                            } else {
+                                                varSourceColumnName = column.Name;
+                                                varTargetColumnName = column.Name;
+                                            }
+                                            if (varSourceColumnConversionNecessary == 1)  { #>
+                                                <Column SourceColumn="dc.<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
+                                                <#} else {#>
+                                                <Column SourceColumn="<#=varSourceColumnName#>" TargetColumn="<#=varTargetColumnName#>" />
+                                            <#}        
+                                        }#>
+                                        </Columns>
                                     <#}#>
-                                    <ExternalProjectPackage Package="<#=varPackage#>"/>
-                                    <ParameterBindings>
-                                        <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                        <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
-                                    </ParameterBindings>
-                                </ExecutePackage>
-                                
-                                <Script ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varScriptName#>">
-                                    <PrecedenceConstraints>
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varPackage#>.Output" EvaluationValue="Failure"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <ScriptTaskProject>
-                                        <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varScriptTaskName#>">
-                                            <AssemblyReferences>
-                                                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
-                                                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask.dll" />
-                                                <AssemblyReference AssemblyPath="System.dll" />
-                                                <AssemblyReference AssemblyPath="System.AddIn.dll" />
-                                                <AssemblyReference AssemblyPath="System.Data.dll" />
-                                                <AssemblyReference AssemblyPath="System.Windows.Forms.dll" />
-                                                <AssemblyReference AssemblyPath="System.Xml.dll" />
-                                            </AssemblyReferences>
-                                            <Files>
-                                                <File Path="AssemblyInfo.cs">
+                                </OleDbDestination>
+                            </Transformations>
+                        </Dataflow>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    <#}#>
+
+    <!-- create overall package. One per Target schema.-->
+    <#string sqlTargetSchemas = @"SELECT DISTINCT [TargetConnection],[TargetSchema],'Total' AS [TargetTable],'CTRL_CL_ACTION' AS PackagePrefix ,[IsStaging] FROM [Generator].[SourceExtractionTable] st WHERE st.[IsActive] =  1 AND st.IsLoading = 0 AND st.Test = 1";
+    DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlTargetSchemas);
+    foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
+        string varTargetConnection = rowTargetSchemas["TargetConnection"].ToString();
+        string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
+        string varTargetTable = rowTargetSchemas["TargetTable"].ToString();
+        string varPackagePrefix = rowTargetSchemas["PackagePrefix"].ToString();
+        string varTargetIsStaging = rowTargetSchemas["IsStaging"].ToString();
+        string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
+        string varPackageName = "";
+        if (varTargetConnection == "StagingIFS") {
+            varPackageName = varPackagePrefix + "-IFS-" + varTargetTable;
+        } else {
+            varPackageName = varPackagePrefix + "-" + varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
+        }
+    #>
+        <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" MaxConcurrentExecutables="4" MaxErrorCount="0">
+            <Variables>
+                <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+            </Variables>
+                
+            <Tasks>
+                <Container Name="SC Extract <#=varName#>" ConstraintMode="Parallel" MaxErrorCount="0">
+                    <Tasks>
+                        <#string sqlSourcePackages = @"SELECT [SourceConnection]
+                                                        ,[Type] AS ConnectionType
+                                                        ,[SourceSchema] AS [SourceSchema]
+                                                        ,[TargetTable] AS [SourceTable]
+                                                        ,'CL_ACTION' AS PackagePrefix
+                                                        ,NULL as [Parent]
+                                                        FROM      [Generator].[SourceExtractionTable] st 
+                                                        JOIN	  [Generator].[Connection] con 	
+                                                        ON		  [st].[SourceConnection] = [con].[Name]
+                                                        WHERE     [TargetConnection] = '"  + varTargetConnection + @"' 
+                                                        AND       [TargetSchema] = '" + varTargetSchema + @"' 
+                                                        AND       [st].[IsActive] = 1 
+                                                        AND       [IsStaging] = '" + varTargetIsStaging + @"' 
+                                                        AND st.IsLoading = 0
+                                                        AND st.Test = 1
+                                                        ORDER BY  [SourceTable], [Order]
+                                                        ";
+                        DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionStringIFS, sqlSourcePackages);
+                        foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
+                            string varSourceConnection = rowSourcePackages["SourceConnection"].ToString();
+                            string varConnectionType = rowSourcePackages["ConnectionType"].ToString();
+                            string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
+                            string varSourceTable = rowSourcePackages["SourceTable"].ToString();
+                            string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
+                            string varParent = rowSourcePackages["Parent"].ToString();
+                            string varPackage = "";
+                            string varPackage2 = "";
+                            string varPackage3 = "";
+                            string varPackage4 = "";
+                            if (varTargetConnection == "StagingIFS") {
+                                varPackage = varPackagePrfx + "-IFS-" + varSourceTable + ".dtsx";
+                                varPackage2 = varPackagePrfx + "-IFS-" + varSourceTable + "_p2.dtsx";
+                                varPackage3 = varPackagePrfx + "-IFS-" + varSourceTable + "_p3.dtsx";
+                                varPackage4 = varPackagePrfx + "-IFS-" + varSourceTable + "_p4.dtsx";
+                            } else {
+                                varPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + ".dtsx";
+                                varPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p2.dtsx";
+                                varPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p3.dtsx";
+                                varPackage4 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varSourceTable + "_p4.dtsx";
+                            }
+                            string varScriptName = varSourceTable + "_script_1";
+                            string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
+                            string varScriptTaskName = "Task_" + varSourceTable + "_script_1";
+                            string varScriptName2 = varSourceTable + "_script_2";
+                            string varScriptCoreName2 = "ST_232feca_" + varSourceTable + "_script_2";
+                            string varScriptTaskName2 = "Task_" + varSourceTable + "_script_2";
+                            string varScriptName3 = varSourceTable + "_script_3";
+                            string varScriptCoreName3 = "ST_232feca_" + varSourceTable + "_script_3";
+                            string varScriptTaskName3 = "Task_" + varSourceTable + "_script_3";
+                            string varPackageXML = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceConnection + ".dtsx";
+                            string varParentPackage = "";
+                            string varParentPackage2 = "";
+                            string varParentPackage3 = "";
+                            string varParentPackage4 = "";
+                            if (varTargetConnection == "StagingIFS") {
+                                varParentPackage = varPackagePrfx + "-IFS-" + varParent + ".dtsx";
+                                varParentPackage2 = varPackagePrfx + "-IFS-" + varParent + "_p2.dtsx";
+                                varParentPackage3 = varPackagePrfx + "-IFS-" + varParent + "_p3.dtsx";
+                                varParentPackage4 = varPackagePrfx + "-IFS-" + varParent + "_p4.dtsx";
+                            } else {
+                                varParentPackage = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + ".dtsx";
+                                varParentPackage2 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p2.dtsx";
+                                varParentPackage3 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p3.dtsx";
+                                varParentPackage4 = varPackagePrfx + "-" + varSourceConnection + "-" + varSourceSchema + "-" + varParent + "_p4.dtsx";   
+                            }#>
+                            <ExecutePackage Name="<#=varPackage#>">
+                                <#if (varParent.Length > 0) {#>
+                                <PrecedenceConstraints LogicalType="Or">
+                                    <Inputs>
+                                        <Input OutputPathName="<#=varParentPackage#>.Output"/>
+                                        <Input OutputPathName="<#=varParentPackage2#>.Output"/>
+                                        <Input OutputPathName="<#=varParentPackage3#>.Output"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <#}#>
+                                <ExternalProjectPackage Package="<#=varPackage#>"/>
+                            </ExecutePackage>
+                            
+                            <Script ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varScriptName#>">
+                                <PrecedenceConstraints>
+                                    <Inputs>
+                                        <Input OutputPathName="<#=varPackage#>.Output" EvaluationValue="Failure"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <ScriptTaskProject>
+                                    <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName#>" Name="<#=varScriptTaskName#>">
+                                        <AssemblyReferences>
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask.dll" />
+                                            <AssemblyReference AssemblyPath="System.dll" />
+                                            <AssemblyReference AssemblyPath="System.AddIn.dll" />
+                                            <AssemblyReference AssemblyPath="System.Data.dll" />
+                                            <AssemblyReference AssemblyPath="System.Windows.Forms.dll" />
+                                            <AssemblyReference AssemblyPath="System.Xml.dll" />
+                                        </AssemblyReferences>
+                                        <Files>
+                                            <File Path="AssemblyInfo.cs">
 using System;
 using System.Data;
 using Microsoft.SqlServer.Dts.Runtime;
@@ -540,66 +364,62 @@ using System.Windows.Forms;
 
 namespace ST_c1460709233e45a7af989d19c79a53aa
 {
-	[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
-	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
-	{
-		public void Main()
-	{
-		int waitTimes = Convert.ToInt32(Dts.Variables["$Project::WaitTimes_1"].Value);
+[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
+public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
+{
+	public void Main()
+{
+	int waitTimes = Convert.ToInt32(Dts.Variables["$Project::WaitTimes_1"].Value);
 
-		System.Threading.Thread.Sleep(waitTimes*1000);
-		Dts.TaskResult = (int)ScriptResults.Success;
-	}
-		enum ScriptResults
-	{
-		Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
-		Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
-	};
-
-	}
+	System.Threading.Thread.Sleep(waitTimes*1000);
+	Dts.TaskResult = (int)ScriptResults.Success;
 }
-                                                </File>
-                                            </Files>
-                                            <ReadOnlyVariables>
-                                                <Variable Namespace="$Project" DataType="Int32" VariableName="WaitTimes_1" />
-                                            </ReadOnlyVariables>
-                                            <ReadWriteVariables /> 
-                                        </ScriptTaskProject>
-                                    </ScriptTaskProject>
-                                </Script>
+	enum ScriptResults
+{
+	Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+	Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+};
 
-                                <ExecutePackage Name="<#=varPackage2#>">
-                                    <PrecedenceConstraints>
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varScriptName#>.Output"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <ExternalProjectPackage Package="<#=varPackage#>"/>
-                                    <ParameterBindings>
-                                        <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                        <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
-                                    </ParameterBindings>
-                                </ExecutePackage>
-                                
-                                <Script ProjectCoreName="<#=varScriptCoreName2#>" Name="<#=varScriptName2#>">
-                                    <PrecedenceConstraints>
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varPackage2#>.Output" EvaluationValue="Failure"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <ScriptTaskProject>
-                                        <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName2#>" Name="<#=varScriptTaskName2#>">
-                                            <AssemblyReferences>
-                                                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
-                                                <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask.dll" />
-                                                <AssemblyReference AssemblyPath="System.dll" />
-                                                <AssemblyReference AssemblyPath="System.AddIn.dll" />
-                                                <AssemblyReference AssemblyPath="System.Data.dll" />
-                                                <AssemblyReference AssemblyPath="System.Windows.Forms.dll" />
-                                                <AssemblyReference AssemblyPath="System.Xml.dll" />
-                                            </AssemblyReferences>
-                                            <Files>
-                                                <File Path="AssemblyInfo.cs">
+}
+}
+                                            </File>
+                                        </Files>
+                                        <ReadOnlyVariables>
+                                            <Variable Namespace="$Project" DataType="Int32" VariableName="WaitTimes_1" />
+                                        </ReadOnlyVariables>
+                                        <ReadWriteVariables /> 
+                                    </ScriptTaskProject>
+                                </ScriptTaskProject>
+                            </Script>
+
+                            <ExecutePackage Name="<#=varPackage2#>">
+                                <PrecedenceConstraints>
+                                    <Inputs>
+                                        <Input OutputPathName="<#=varScriptName#>.Output"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <ExternalProjectPackage Package="<#=varPackage#>"/>
+                            </ExecutePackage>
+                            
+                            <Script ProjectCoreName="<#=varScriptCoreName2#>" Name="<#=varScriptName2#>">
+                                <PrecedenceConstraints>
+                                    <Inputs>
+                                        <Input OutputPathName="<#=varPackage2#>.Output" EvaluationValue="Failure"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <ScriptTaskProject>
+                                    <ScriptTaskProject ProjectCoreName="<#=varScriptCoreName2#>" Name="<#=varScriptTaskName2#>">
+                                        <AssemblyReferences>
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ManagedDTS.dll" />
+                                            <AssemblyReference AssemblyPath="Microsoft.SqlServer.ScriptTask.dll" />
+                                            <AssemblyReference AssemblyPath="System.dll" />
+                                            <AssemblyReference AssemblyPath="System.AddIn.dll" />
+                                            <AssemblyReference AssemblyPath="System.Data.dll" />
+                                            <AssemblyReference AssemblyPath="System.Windows.Forms.dll" />
+                                            <AssemblyReference AssemblyPath="System.Xml.dll" />
+                                        </AssemblyReferences>
+                                        <Files>
+                                            <File Path="AssemblyInfo.cs">
 using System;
 using System.Data;
 using Microsoft.SqlServer.Dts.Runtime;
@@ -607,52 +427,47 @@ using System.Windows.Forms;
 
 namespace ST_c1460709233e45a7af989d19c79a53aa
 {
-	[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
-	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
-	{
-		public void Main()
-	{
-		int waitTimes = Convert.ToInt32(Dts.Variables["$Project::WaitTimes_2"].Value);
+[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
+public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
+{
+	public void Main()
+{
+	int waitTimes = Convert.ToInt32(Dts.Variables["$Project::WaitTimes_2"].Value);
 
-		System.Threading.Thread.Sleep(waitTimes*1000);
-		Dts.TaskResult = (int)ScriptResults.Success;
-	}
-		enum ScriptResults
-	{
-		Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
-		Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
-	};
-
-	}
+	System.Threading.Thread.Sleep(waitTimes*1000);
+	Dts.TaskResult = (int)ScriptResults.Success;
 }
-                                                </File>
-                                            </Files>
-                                            <ReadOnlyVariables>
-                                                <Variable Namespace="$Project" DataType="Int32" VariableName="WaitTimes_2" />
-                                            </ReadOnlyVariables>
-                                            <ReadWriteVariables /> 
-                                        </ScriptTaskProject>
+	enum ScriptResults
+{
+	Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+	Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+};
+
+}
+}
+                                            </File>
+                                        </Files>
+                                        <ReadOnlyVariables>
+                                            <Variable Namespace="$Project" DataType="Int32" VariableName="WaitTimes_2" />
+                                        </ReadOnlyVariables>
+                                        <ReadWriteVariables /> 
                                     </ScriptTaskProject>
-                                </Script>
+                                </ScriptTaskProject>
+                            </Script>
 
-                                <ExecutePackage Name="<#=varPackage3#>" FailParentOnFailure="true">
-                                    <PrecedenceConstraints>
-                                        <Inputs>
-                                            <Input OutputPathName="<#=varScriptName2#>.Output"/>
-                                        </Inputs>
-                                    </PrecedenceConstraints>
-                                    <ExternalProjectPackage Package="<#=varPackage#>"/>
-                                    <ParameterBindings>
-                                        <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                        <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
-                                    </ParameterBindings>
-                                </ExecutePackage>
-                            <#}#>
-                        </Tasks>
-                    </Container>
-
-                </Tasks>
-            </Package>
-        <#}#>
+                            <ExecutePackage Name="<#=varPackage3#>" FailParentOnFailure="true">
+                                <PrecedenceConstraints>
+                                    <Inputs>
+                                        <Input OutputPathName="<#=varScriptName2#>.Output"/>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <ExternalProjectPackage Package="<#=varPackage#>"/>
+                            </ExecutePackage>
+                        <#}#>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    <#}#>
     </Packages>
 </Biml>
