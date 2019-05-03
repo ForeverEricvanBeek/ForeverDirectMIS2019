@@ -6,90 +6,25 @@
 <#@ include file="ProjectSettings.cs" #>
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <Packages>
-        <#string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (
-                                                    select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS
-                                                    from [Staging].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                    JOIN [Staging].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
-                                                    ON	TC.CONSTRAINT_CATALOG	= CCL.CONSTRAINT_CATALOG
-                                                    AND	TC.CONSTRAINT_SCHEMA	= CCL.CONSTRAINT_SCHEMA
-                                                    AND TC.CONSTRAINT_NAME		= CCL.CONSTRAINT_NAME
-                                                    )
-                                                    ,CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (
-                                                    select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS,
-                                                    STUFF((SELECT  ',' + T2.COLUMN_NAME
-                                                    from COLUMN_CONSTRAINTS T2
-                                                    where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME
-                                                    FOR XML PATH('')),1 ,1, '') PK
-                                                    from COLUMN_CONSTRAINTS T1
-                                                    )
-                                                    SELECT 'Staging' AS [SourceConnection]
-                                                    ,ST.[TargetSchema] AS [SourceSchema]
-                                                    ,ST.[TargetTable] AS [SourceTable]
-                                                    ,SC.[Type] AS [SourceType]
-                                                    ,SC.[Options]
-                                                    ,SC.[ConnectionString]
-                                                    ,ST.[ExtractionType]
-                                                    ,'DWH' AS [TargetConnection]
-                                                    ,ST.[TargetSchema]
-                                                    ,ST.[TargetTable]
-                                                    ,ST.[IncrementalSchema]
-                                                    ,ST.[IncrementalTable]
-                                                    ,ST.[IncrementalUpdateColumn]
-                                                    ,ST.[IncrementalKeyColumn]
-                                                    ,ST.[IsStaging] 
-                                                    ,ST.[DeleteStaging]
-                                                    ,ST.SourceSchema AS AlternativeSchema
-                                                    ,CS.PK AS [PrimaryKey]
-                                                    ,'CL_FIND' AS PackagePrefix
-                                                    , ST.CleansingFrom
-                                                    , ST.CleansingType
-                                                    , ST.CleansingDate
-                                                    , ST.CleansingDateType
-                                                    FROM      [Generator].[SourceExtractionTable] ST
-                                                    LEFT JOIN [Generator].[Connection] SC
-                                                    ON        ST.[SourceConnection] = SC.[Name]
-                                                    LEFT JOIN CONSTRAINTS CS
-                                                    ON		ST.[TargetSchema] = CS.[TABLE_SCHEMA]
-                                                    AND		ST.[TargetTable]  = CS.[TABLE_NAME]
-                                                    WHERE     ST.[IsActive] = 1 AND ST.IsStaging = 0
-                                                    AND		ST.CleansingType IN ('PK','PK_F')
-                                                    AND ST.Test = 1
-                                                    ";
+        <#string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Staging].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Staging].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1)SELECT 'Staging' AS [SourceConnection],ST.[TargetSchema] AS [SourceSchema],ST.[TargetTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'DWH' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],ST.[IncrementalSchema],ST.[IncrementalTable],ST.[IncrementalUpdateColumn],ST.[IncrementalKeyColumn],ST.[IsStaging] ,ST.[DeleteStaging],ST.SourceSchema AS AlternativeSchema,CS.PK AS [PrimaryKey],'CL_FIND' AS PackagePrefix, ST.CleansingFrom, ST.CleansingType, ST.CleansingDate, ST.CleansingDateType FROM [Generator].[SourceExtractionTable] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable]  = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1 AND ST.IsStaging = 0 AND ST.CleansingType IN ('PK','PK_F') AND ST.Test = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
-            string varExtractionSourceConnection  = rowSourceExtractionTable["SourceConnection"].ToString();
-            string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
-            string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
-            string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
-            string varExtractionOptions = rowSourceExtractionTable["Options"].ToString();
-            string varExtractionConnectionString = rowSourceExtractionTable["ConnectionString"].ToString();
-            string varExtractionType = rowSourceExtractionTable["ExtractionType"].ToString();
-            string varExtractionTargetConnection = rowSourceExtractionTable["TargetConnection"].ToString();
-            string varExtractionTargetSchema = rowSourceExtractionTable["TargetSchema"].ToString();
-            string varExtractionTargetTable = rowSourceExtractionTable["TargetTable"].ToString();
-            string varExtractionIncrementalSchema = rowSourceExtractionTable["IncrementalSchema"].ToString();
-            string varExtractionIncrementalTable = rowSourceExtractionTable["IncrementalTable"].ToString();
-            string varExtractionModifiedDate = rowSourceExtractionTable["IncrementalUpdateColumn"].ToString();
-            string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
-            string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
-            string varExtractionPackagePrefix = rowSourceExtractionTable["PackagePrefix"].ToString();
-            string varCleanFrom = rowSourceExtractionTable["CleansingFrom"].ToString();
             string varCleansingType = rowSourceExtractionTable["CleansingType"].ToString();
             string varCleansingDate = rowSourceExtractionTable["CleansingDate"].ToString();
             string varCleansingDateType = rowSourceExtractionTable["CleansingDateType"].ToString();
-            string varTargetConnection = varExtractionTargetConnection;
-            string varTargetSchema = varExtractionTargetSchema;
-            string varTargetTable = varExtractionTargetTable;
-            string varTargetName = varTargetConnection+"-"+varExtractionTargetSchema+"-"+varExtractionTargetTable;
-            string varIncrementalName = varTargetConnection+"-"+varExtractionIncrementalSchema+"-"+varExtractionIncrementalTable;
+            string varTargetConnection = rowSourceExtractionTable["TargetConnection"].ToString();
+            string varTargetSchema = rowSourceExtractionTable["TargetSchema"].ToString();
+            string varTargetTable = rowSourceExtractionTable["TargetTable"].ToString();
+            string varTargetName = varTargetConnection + "-" + rowSourceExtractionTable["TargetSchema"].ToString() + "-" + rowSourceExtractionTable["TargetTable"].ToString();
+            string varIncrementalName = varTargetConnection + "-" + rowSourceExtractionTable["IncrementalSchema"].ToString() + "-" + rowSourceExtractionTable["IncrementalTable"].ToString();
             string varOutputPathName = "";
-            string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
+            string varName = rowSourceExtractionTable["TargetConnection"].ToString() + "-" + rowSourceExtractionTable["SourceSchema"].ToString() + "-" + rowSourceExtractionTable["SourceTable"].ToString();
             string varTaskName = "Dataflow Load " + varName;
-            string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
+            string varPackageName = rowSourceExtractionTable["PackagePrefix"].ToString() + "-" + varTargetSchema + "-" + varTargetTable;
             
             string varSourceDatabase = "";
             string varExtractionAlternativeSchema = "";
-            if (varExtractionSourceSchema == "IFS") {
+            if (rowSourceExtractionTable["SourceSchema"].ToString() == "IFS") {
                 varSourceDatabase = @"[FDODWHP01\\DWHIFS].StagingIFS_PK";
                 varExtractionAlternativeSchema = rowSourceExtractionTable["AlternativeSchema"].ToString();
             } else {
@@ -98,8 +33,6 @@
             }
     string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
     string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
-    string SQLHashStringSource = "";
-    string SQLHashStringTarget = "";
     string VarPrimKeyJoin = "";
     string VarPrimKeyJoin2 = "";
     string varPrimKeyColumsPK = "";
@@ -107,67 +40,17 @@
     string varPrimKeyColumsPKNew = "";
     string varPrimKeyColumsPKChanged = "";
     string varPrimKeyColumsPK_UNION = "";
-    string VarFuncColumn = "";
-    string VarFuncColumnSource = "";
+
     string varDeletedInsertColumns = "";
     string varDeletedINsertColumnsSource = "";
     
-    string sqlsourcecolumns = @"select 
-                                    COL.TABLE_NAME
-                                    , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
-                                    , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
-                                    , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
-                                    , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
-                                    , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
-                                    , COL.ORDINAL_POSITION
-                                    , CASE
-                                    WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
-                                    WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                    WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                    WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
-                                    ELSE '[' + COL.DATA_TYPE + ']'
-                                    END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
-                                from		DWH.INFORMATION_SCHEMA.COLUMNS COL
-                                LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                ON			TC.TABLE_NAME = COL.TABLE_NAME
-                                AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
-                                LEFT JOIN	[DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
-                                ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
-                                AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
-                                AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
-                                AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
-                                LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
-                                ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
-                                AND			DWC.DWHTable			= COL.TABLE_NAME
-                                AND			DWC.DWHColumnName		= COL.COLUMN_NAME
-                                where		COL.TABLE_NAME= '" + varTargetTable + @"'
-                                and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
-                                order by 
-                                COL.TABLE_NAME
-                                , COL.ORDINAL_POSITION
-                                ";
+    string sqlsourcecolumns = @"select COL.TABLE_NAME, COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2, CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey], CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn, COL.ORDINAL_POSITION, CASE WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')' WHEN COL.DATA_TYPE = 'numeric' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'decimal' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'datetime2' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')' ELSE '[' + COL.DATA_TYPE + ']' END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE from DWH.INFORMATION_SCHEMA.COLUMNS COL LEFT JOIN [DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC ON TC.TABLE_NAME = COL.TABLE_NAME AND TC.TABLE_SCHEMA = COL.TABLE_SCHEMA LEFT JOIN [DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU ON TC.CONSTRAINT_CATALOG = CCU.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCU.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCU.CONSTRAINT_NAME AND COL.COLUMN_NAME = CCU.COLUMN_NAME LEFT JOIN DWH_Control.Generator.DWHExtractionColumn DWC ON DWC.DWHSchema = COL.TABLE_SCHEMA AND DWC.DWHTable = COL.TABLE_NAME AND DWC.DWHColumnName = COL.COLUMN_NAME where COL.TABLE_NAME= '" + varTargetTable + @"' and COL.TABLE_SCHEMA = '" + varTargetSchema + @"' order by COL.TABLE_NAME, COL.ORDINAL_POSITION";
     DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
     foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
         string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
-        string VarTargetColumnName = rowsourcecolumns["TARGET_COLUMN_NAME"].ToString();
-        string VarTempColumnName = rowsourcecolumns["DATATYPE"].ToString();
-        string VarTargetColumnNameExp = rowsourcecolumns["TARGET_COLUMN_NAME2"].ToString();
-        string VarColumnPK = rowsourcecolumns["PrimaryKey"].ToString();
-        string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
-        if (VarSourceColumnName != "SOURCE_DATE" && VarSourceColumnName != "Eff_Date" && VarSourceColumnName != "End_Date" && VarSourceColumnName != "ActInd" && VarSourceColumnName != "IsDeleted"&& VarSourceColumnName != "BatchID" && VarSourceColumnName != "ProcessLogID") {
-            if (VarColumnExpression == "1") {
-                VarFuncColumn = VarFuncColumn + VarTargetColumnName +", ";
-                VarFuncColumnSource = VarFuncColumnSource + VarTargetColumnNameExp +" AS " + VarSourceColumnName + ", ";
-            } else {
-                SQLHashStringSource = SQLHashStringSource + " ISNULL(CAST(S.["+ VarTargetColumnName +"] AS VARCHAR(100)),'') + ";
-                SQLHashStringTarget = SQLHashStringTarget + " ISNULL(CAST(T.["+ VarSourceColumnName +"] AS VARCHAR(100)),'') + ";
-                VarFuncColumn = VarFuncColumn + "["+ VarTargetColumnName +"], ";
-                VarFuncColumnSource = VarFuncColumnSource + "S.["+ VarTargetColumnName +"], ";
-            }
-        }
-        if (VarColumnPK == "1" && VarSourceColumnName != "Eff_Date") {
-            VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName +"] AND ";
-            VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ VarTargetColumnName + "1] AND ";
+        if (rowsourcecolumns["PrimaryKey"].ToString() == "1" && VarSourceColumnName != "Eff_Date") {
+            VarPrimKeyJoin = VarPrimKeyJoin + " MS.["+ VarSourceColumnName +"] = MSPK.["+ rowsourcecolumns["TARGET_COLUMN_NAME"].ToString() +"] AND ";
+            VarPrimKeyJoin2 = VarPrimKeyJoin2 + " ["+ VarSourceColumnName +"] = MSPK.["+ rowsourcecolumns["TARGET_COLUMN_NAME"].ToString() + "1] AND ";
             varPrimKeyColumsPKDeleted += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "1], ";
             varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
             varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
@@ -185,356 +68,118 @@
         varCleanFromDateTypeDay = "CAST(DATEADD(DAY, - ?, GETDATE()) AS DATE)";
         varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
     }
-    
-    SQLHashStringSource = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringSource + "''), 3, 32))  ";
-    SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
 
-        string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (
-            	SELECT
-            	  " + varPrimKeyColumsPKDeleted + @" 
-            	  MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1
-            	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @" 1=1
-            	WHERE		MS.IsDeleted = 'N'
-            	AND			MS.ActInd = 'Y'
-            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-            	if (varCleansingType == "PK") {
-            	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
-            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-            	}
-            	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
-            	AND         MSPK.BatchID IS NULL
-            )
-            
-            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
+    string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+        	if (varCleansingType == "PK") {
+        	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
+        	AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+        	}
+        	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
 
-        string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (
-            	SELECT
-            	  " + varPrimKeyColumsPKNew + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
-            	FROM		" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-            	ON			"+ VarPrimKeyJoin + @"
-            	MS.ActInd = 'Y'
-            	AND         MS.IsDeleted = 'N'";
-            	if (varCleansingType == "PK") {
-            	    MergeNewSQlStatement = MergeNewSQlStatement + @"
-            	AND         " + @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @"
-                                AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @"
-                                WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
-            	}
-            	
-            	if (varCleansingType == "PK") {
-            	    MergeNewSQlStatement = MergeNewSQlStatement + "AND MS.OBJVERSION IS NULL";
-            	} else {
-            	    MergeNewSQlStatement = MergeNewSQlStatement + "WHERE MS.OBJVERSION IS NULL";   
-            	}
-            MergeNewSQlStatement = MergeNewSQlStatement + 
-            @"
-            AND			(MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)
-            )
-            
-            UPDATE CTE_NEW SET Issue = 1" + "\"";
+    string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (SELECT " + varPrimKeyColumsPKNew + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue FROM " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS ON "+ VarPrimKeyJoin + @" MS.ActInd = 'Y' AND MS.IsDeleted = 'N'";
+        	if (varCleansingType == "PK") {
+        	    MergeNewSQlStatement = MergeNewSQlStatement + @" AND " + @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @" AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @" WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
+        	}
+        	if (varCleansingType == "PK") {
+        	    MergeNewSQlStatement = MergeNewSQlStatement + " AND MS.OBJVERSION IS NULL";
+        	} else {
+        	    MergeNewSQlStatement = MergeNewSQlStatement + " WHERE MS.OBJVERSION IS NULL";   
+        	}
+        MergeNewSQlStatement = MergeNewSQlStatement + @" AND (MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)) UPDATE CTE_NEW SET Issue = 1" + "\"";
 
-        string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (
-            	SELECT
-            	  " + varPrimKeyColumsPKChanged + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue
-            	FROM		DWH." + varTargetSchema + @"." + varTargetTable + @" MS
-            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @" 1=1";
-            	if (varCleansingType == "PK") {
-            	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	    AND     MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
-            	}
-            	MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND			(MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)
-            	WHERE       MS.ActInd = 'Y'
-            	AND         MS.IsDeleted = 'N'
-            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-            	if (varCleansingType == "PK") {
-            	    MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-            	}
-                MergeChangedSQlStatement = MergeChangedSQlStatement + @"
-            	AND			MSPK.BatchID IS NOT NULL
-            )
-            
-            UPDATE CTE_CHANGED SET Issue = 2" + "\"";
-            
-        string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (
-            	SELECT
-            	  " + varPrimKeyColumsPKDeleted + @" 
-            	  MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1
-            	FROM		DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS
-            	LEFT JOIN	" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK
-            	ON			"+ VarPrimKeyJoin + @"  1=1
-            	WHERE		MS.IsDeleted = 'N'
-            	AND			MS.ActInd = 'Y'
-            	AND		    MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
-            	if (varCleansingType == "PK") {
-            	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
-            	AND         " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
-            	}
-            	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @"
-            	AND         MSPK.BatchID IS NULL
-            )
-            
-            INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
-            #>
+    string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (SELECT " + varPrimKeyColumsPKChanged + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1";
+        	if (varCleansingType == "PK") {
+        	    MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
+        	}
+        	MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND (MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL) WHERE MS.ActInd = 'Y' AND MS.IsDeleted = 'N' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+        	if (varCleansingType == "PK") {
+        	    MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+        	}
+            MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND MSPK.BatchID IS NOT NULL) UPDATE CTE_CHANGED SET Issue = 2" + "\"";
+        
+    string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS LEFT JOIN" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @"  1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+        	if (varCleansingType == "PK") {
+        	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
+        	}
+        	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
+    #>
     
-            <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
-                <Parameters>
-                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-                </Parameters>
-    
-                <Variables>
-                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
-                    <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit">-1</Variable>
-                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                    <Variable Name="RowCountExtract" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="RowCountTarget" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="RowCountError" DataType="Int32" Namespace="RC">0</Variable>
-                    <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
-                    <Variable Name="ExtractionType" DataType="String" Namespace="User">CL</Variable>
-                    <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"></Variable>
-                    <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
-                    <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
-                    <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
-                    <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
-                    <Variable Name="MergeDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeDeletedSQlStatement#></Variable>    
-                    <Variable Name="MergeNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeNewSQlStatement#></Variable>   
-                    <Variable Name="MergeChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeChangedSQlStatement#></Variable>    
-                    <Variable Name="MergeArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeArchiveSQlStatement#></Variable>
-                </Variables>
-    
-                <Tasks>
-                    <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
-                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?,@ExtractionType = ?</DirectInput>
-                        <Parameters>
-                            <Parameter Name="0"  VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
-                            <Parameter Name="1"  VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                            <Parameter Name="2"  VariableName="BatchID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="3"  VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="4"  VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="5"  VariableName="User.PackageName" Direction="Input" DataType="String" />
-                            <Parameter Name="6"  VariableName="System.PackageID" Direction="Input" DataType="String" />
-                            <Parameter Name="7"  VariableName="System.PackageName" Direction="Input" DataType="String" />
-                            <Parameter Name="8"  VariableName="System.VersionGUID" Direction="Input" DataType="String" />
-                            <Parameter Name="9"  VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
-                            <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
-                            <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
-                            <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
-                            <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
-                            <Parameter Name="14" VariableName="User.ExtractionType" Direction="Input" DataType="String" />
-                        </Parameters>
-                        <Results>
-                            <Result Name="0" VariableName="Audit.AuditBatchID" />
-                            <Result Name="1" VariableName="Audit.AuditProcessLogID" />
-                        </Results>
-                    </ExecuteSQL>
-    
-                    <Container Name="SC Load <#=varName#>" ConstraintMode="Linear">
-                        <Tasks>
-                                <ExecuteSQL Name="SQL find deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <VariableInput VariableName="User.MergeDeletedSQlStatement" />
-                                    <Parameters>
-                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                        <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
-                                        <#}#>
-                                    </Parameters>
-                                </ExecuteSQL>
+        <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
+            <Variables>
+                <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+                <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"></Variable>
+                <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
+                <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
+                <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
+                <Variable Name="MergeDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeDeletedSQlStatement#></Variable>    
+                <Variable Name="MergeNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeNewSQlStatement#></Variable>   
+                <Variable Name="MergeChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeChangedSQlStatement#></Variable>    
+                <Variable Name="MergeArchiveSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeArchiveSQlStatement#></Variable>
+            </Variables>
 
-                                <ExecuteSQL Name="SQL find new in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <VariableInput VariableName="User.MergeNewSQlStatement" />
-                                    <Parameters>
-                                        <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
-                                            <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
-                                        <#}#>
-                                    </Parameters>
-                                </ExecuteSQL>
-                                
-                                <ExecuteSQL Name="SQL find changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
-                                    <VariableInput VariableName="User.MergeChangedSQlStatement" />
-                                    <Parameters>
-                                        <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
-                                        <#if (varCleansingType == "PK") {#>
-                                            <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
-                                        <#}#>
-                                    </Parameters>
-                                </ExecuteSQL>
-                        </Tasks>
-                    </Container>
-    
-                    <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?</DirectInput>
-                        <Parameters>
-                            <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="4" VariableName="User.LastExtractionDate" Direction="Input" DataType="String" />
-                            <Parameter Name="5" VariableName="RC.RowCountExtract" Direction="Input" DataType="Int32" />
-                            <Parameter Name="6" VariableName="RC.RowCountTarget" Direction="Input" DataType="Int32" />
-                            <Parameter Name="7" VariableName="RC.RowCountError" Direction="Input" DataType="Int32" />
-                        </Parameters>
-                    </ExecuteSQL>
-                </Tasks>
-    
-                <Events>
-                    <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
-                        <Tasks>
-                            <ExecuteSQL Name="SQL Error Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                                <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
-                                <Parameters>
-                                    <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                                    <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                                    <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
-                                    <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
-                                    <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
-                                </Parameters>
-                            </ExecuteSQL>
-                        </Tasks>
-                    </Event>
-                </Events>
-            </Package>
-        <#}
-
-        string sqlTargetSchemas = @"SELECT DISTINCT
-                                    [TargetConnection]
-                                    ,[TargetSchema]
-                                    ,'Total' AS [TargetTable]
-                                    ,'CTRL_CL_FIND' AS PackagePrefix
-                                    ,[IsStaging]
-                                    FROM [Generator].[SourceExtractionTable] st
-                                    WHERE st.[IsActive] = 1 AND st.IsStaging = 0
-                                    AND st.CleansingType IN ('PK','PK_F')
-                                    AND st.Test = 1
-                                    ";
-        DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
-        foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
-            string varTargetConnection = rowTargetSchemas["TargetConnection"].ToString();
-            string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
-            string varTargetTable = rowTargetSchemas["TargetTable"].ToString();
-            string varPackagePrefix = rowTargetSchemas["PackagePrefix"].ToString();
-            string varTargetIsStaging = rowTargetSchemas["IsStaging"].ToString();
-            string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-            string varPackageName = varPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;#>
-    
-            <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
-                <Parameters>
-                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-                </Parameters>
-    
-                <Variables>
-                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
-                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                    <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                    <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
-                    <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
-                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                </Variables>
-    
-                <Tasks>
-                    <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
-                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
-                        <Parameters>
-                            <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
-                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
-                            <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
-                            <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
-                            <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
-                            <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
-                            <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
-                            <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
-                            <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
-                            <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
-                        </Parameters>
-                        <Results>
-                            <Result Name="0" VariableName="Audit.AuditBatchID" />
-                            <Result Name="1" VariableName="Audit.AuditProcessLogID" />
-                        </Results>
-                    </ExecuteSQL>
-                    
-                    <Container Name="SC Extract <#=varName#>" ConstraintMode="Parallel">
-                        <Tasks>
-                            <#string sqlSourcePackages  = @"SELECT    [SourceConnection]
-                             ,[Type] AS ConnectionType
-                             ,[TargetSchema] AS[SourceSchema]
-                             ,[TargetTable] AS [SourceTable]
-                             ,'CL_FIND' AS PackagePrefix
-                            FROM      [Generator].[SourceExtractionTable] st 
-                            JOIN	  [Generator].[Connection] con 	
-                            ON		  [st].[SourceConnection] = [con].[Name]
-                            WHERE     [TargetSchema] = '" + varTargetSchema + @"' 
-                            AND       [st].[IsActive] = 1  AND st.IsStaging = 0
-                            AND       st.CleansingType IN ('PK','PK_F')
-                            AND st.Test = 1
-                            ORDER BY  [SourceTable]
-                            ";
-                            DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
-                            foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
-                                string varSourceConnection = rowSourcePackages["SourceConnection"].ToString();
-                                string varConnectionType = rowSourcePackages["ConnectionType"].ToString();
-                                string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
-                                string varSourceTable = rowSourcePackages["SourceTable"].ToString();
-                                string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
-                                string varPackage = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceTable+ ".dtsx";#>
-                                <ExecutePackage Name="<#=varPackage#>">
-                                    <ExternalProjectPackage Package="<#=varPackage#>"/>
-                                    <ParameterBindings>
-                                        <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                        <ParameterBinding VariableName="Audit.AuditProcessLogID"  Name="ProcessLogParentID" />
-                                    </ParameterBindings>
-                                </ExecutePackage>
-                            <#}#>
-                        </Tasks>
-                    </Container>
-    
-                    <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
-                        <Parameters>
-                            <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                            <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                        </Parameters>
-                    </ExecuteSQL>
-                </Tasks>
-    
-                <Events>
-                    <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
-                        <Tasks>
-                        <ExecuteSQL Name="SQL Error Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                            <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
+            <Tasks>
+                <Container Name="SC Load <#=varName#>" ConstraintMode="Linear">
+                    <Tasks>
+                        <ExecuteSQL Name="SQL find deleted in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <VariableInput VariableName="User.MergeDeletedSQlStatement" />
                             <Parameters>
-                                <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="2" VariableName="User.PackageName" Direction="Input" DataType="String"/>
-                                <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
-                                <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                                <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                <#if (varCleansingType == "PK") {#>
+                                    <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                <#}#>
                             </Parameters>
                         </ExecuteSQL>
-                        </Tasks>
-                    </Event>
-                </Events>
-            </Package>
-      <#}#>
+
+                        <ExecuteSQL Name="SQL find new in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <VariableInput VariableName="User.MergeNewSQlStatement" />
+                            <Parameters>
+                            <#if (varCleansingType == "PK") {#>
+                                <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                <Parameter Name="2" VariableName="User.DaysBack" DataType="Int32" />
+                            <#}#>
+                            </Parameters>
+                        </ExecuteSQL>
+                        
+                        <ExecuteSQL Name="SQL find changed in source <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <VariableInput VariableName="User.MergeChangedSQlStatement" />
+                            <Parameters>
+                                <Parameter Name="0" VariableName="User.DaysBack" DataType="Int32" />
+                                <#if (varCleansingType == "PK") {#>
+                                    <Parameter Name="1" VariableName="User.CleanMonths" DataType="Int32" />
+                                <#}#>
+                            </Parameters>
+                        </ExecuteSQL>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    <#}
+    string sqlTargetSchemas = @"SELECT DISTINCT [TargetConnection] ,[TargetSchema] ,'Total' AS [TargetTable] ,'CTRL_CL_FIND' AS PackagePrefix ,[IsStaging] FROM [Generator].[SourceExtractionTable] st WHERE st.[IsActive] = 1 AND st.IsStaging = 0 AND st.CleansingType IN ('PK','PK_F') AND st.Test = 1";
+    DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
+    foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
+        string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
+        string varName = rowTargetSchemas["TargetConnection"].ToString() + "-" + rowTargetSchemas["TargetSchema"].ToString() + "-" + rowTargetSchemas["TargetTable"].ToString();
+        string varPackageName = rowTargetSchemas["PackagePrefix"].ToString() + "-" + rowTargetSchemas["TargetSchema"].ToString() + "-" + rowTargetSchemas["TargetTable"].ToString();#>
+        <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+            <Variables>
+                <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+            </Variables>
+            <Tasks>
+                <Container Name="SC Extract <#=varName#>" ConstraintMode="Parallel">
+                    <Tasks>
+                    <#string sqlSourcePackages = @"SELECT [SourceConnection],[Type] AS ConnectionType,[TargetSchema] AS[SourceSchema],[TargetTable] AS [SourceTable],'CL_FIND' AS PackagePrefix FROM [Generator].[SourceExtractionTable] st JOIN [Generator].[Connection] con ON [st].[SourceConnection] = [con].[Name] WHERE [TargetSchema] = '" + varTargetSchema + @"'  AND [st].[IsActive] = 1  AND st.IsStaging = 0 AND st.CleansingType IN ('PK','PK_F') AND st.Test = 1 ORDER BY [SourceTable]";
+                    DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
+                    foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
+                        string varPackage = rowSourcePackages["PackagePrefix"].ToString() + "-" + rowSourcePackages["SourceSchema"].ToString() + "-" + rowSourcePackages["SourceTable"].ToString()+ ".dtsx";#>
+                        <ExecutePackage Name="<#=varPackage#>">
+                            <ExternalProjectPackage Package="<#=varPackage#>"/>
+                        </ExecutePackage>
+                    <#}#>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    <#}#>
     </Packages>
 </Biml>

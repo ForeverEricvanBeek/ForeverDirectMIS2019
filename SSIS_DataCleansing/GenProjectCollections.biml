@@ -11,7 +11,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Staging','DWH','DWH_Control','PROD','StagingIFS_TEMP')
+                                            AND          c.[Name] in ('Staging','DWH','DWH_Control','PROD','StagingIFS_TEMP','StagingIFS_PK')
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
