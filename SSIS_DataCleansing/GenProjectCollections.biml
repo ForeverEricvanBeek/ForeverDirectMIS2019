@@ -65,6 +65,7 @@
                 <Parameter Name="DaysBack" DataType="Int32" IsRequired="true"><#=DaysBack#></Parameter>
                 <Parameter Name="CleanMonths" DataType="Int32" IsRequired="true"><#=CleanMonths#></Parameter>
                 <Parameter Name="Environment" DataType="String" IsRequired="true"><#=Environment#></Parameter>
+                <Parameter Name="StopTime" DataType="Int32" IsRequired="true"><#=StopTime#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
                     string ConnectionName = Connection["ConnectionName"].ToString();
                     string ConnectionString = Connection["ConnectionString"].ToString();

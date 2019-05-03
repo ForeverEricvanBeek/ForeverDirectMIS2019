@@ -15,6 +15,7 @@ string StagingConnection = "Staging";
 int DaysBack = 3;
 int CleanMonths = 6;
 string Environment = "DEV";
+int StopTime = 22;
 
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
 
