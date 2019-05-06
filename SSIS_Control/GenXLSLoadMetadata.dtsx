@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="63"
-  DTS:VersionGUID="{8CA09998-FC48-42BB-A4DC-972C5A7044B8}">
+  DTS:VersionBuild="65"
+  DTS:VersionGUID="{A8549590-5C40-4C5D-BC88-E4E679A71B27}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -3229,6 +3229,20 @@
                       cachedName="CleansingDateType"
                       externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingDateType]"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingDateType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[CleansingSource]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CleansingSource"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingSource]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingSource]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[CleansingWhere]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CleansingWhere"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingWhere]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingWhere]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3319,7 +3333,7 @@
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingType]"
                       dataType="wstr"
-                      length="2"
+                      length="5"
                       name="CleansingType" />
                     <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[ArchiveType]"
@@ -3356,6 +3370,20 @@
                       dataType="wstr"
                       length="50"
                       name="CleansingDateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingSource]"
+                      dataType="wstr"
+                      length="50"
+                      name="CleansingSource" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Test]"
+                      dataType="bool"
+                      name="Test" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingWhere]"
+                      dataType="wstr"
+                      length="1000"
+                      name="CleansingWhere" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3683,6 +3711,26 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingDateType]"
                       name="CleansingDateType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingSource]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[CleansingSource]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingSource]"
+                      name="CleansingSource"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingWhere]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[CleansingWhere]"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[CleansingWhere]"
+                      name="CleansingWhere"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3807,6 +3855,16 @@
                       dataType="wstr"
                       length="255"
                       name="CleansingDateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[CleansingSource]"
+                      dataType="wstr"
+                      length="255"
+                      name="CleansingSource" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[CleansingWhere]"
+                      dataType="wstr"
+                      length="255"
+                      name="CleansingWhere" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -3863,6 +3921,12 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingType]"
                       name="CleansingType" />
                     <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingSource]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingSource]"
+                      name="CleansingSource" />
+                    <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingDate]"
                       dataType="wstr"
                       length="255"
@@ -3874,6 +3938,12 @@
                       length="255"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingDateType]"
                       name="CleansingDateType" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingWhere]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingWhere]"
+                      name="CleansingWhere" />
                     <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[CleansingFrom]"
                       dataType="wstr"
@@ -9673,14 +9743,14 @@
         <NodeLayout
           Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
-          TopLeft="522,53" />
+          TopLeft="521,53" />
         <NodeLayout
           Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
           TopLeft="522,139" />
         <EdgeLayout
           Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
-          TopLeft="640.5,95">
+          TopLeft="640,95">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"

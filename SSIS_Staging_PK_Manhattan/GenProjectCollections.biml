@@ -11,7 +11,7 @@
                                             ,[Options]
                                             FROM      [Generator].[Connection]
                                             WHERE     [Type] IN ('FlatFile','CSV','CSV_L')
-                                            AND		  [Name] IN ('WMS')
+                                            AND		  [Name] IN ('WMS', 'StagingIFS_PK')
                                             AND       [IsActive] = 1
                                             ";
         DataTable tableSourceFlatFile = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceFlatFile);
@@ -67,7 +67,7 @@
                                           ,c.[Type]
                                         FROM [Generator].[Connection] c 
                                         WHERE c.[IsActive] = 1
-                                        AND c.[Name] IN ('WMS','StagingPK','DWH_Control')
+                                        AND c.[Name] IN ('WMS','StagingIFS_PK','StagingPK','DWH_Control')
                                         ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -162,8 +162,7 @@
                                 ,st.[TargetConnection] + 'PK' AS TargetConnection
                                 FROM      [Generator].[SourceExtractionTable] st
                                 WHERE     st.IsActive = 1
-                                AND		  st.SourceConnection = 'WMS'
-                                AND		st.[CleansingType] = 'PK'
+                                AND		  st.[CleansingType] = 'PK'
                                 ";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
@@ -204,7 +203,7 @@
             </Parameters>
             
             <Packages>
-                <#string sqlPackage = @"SELECT [SourceConnection]
+                <#string sqlPackage = @"SELECT [CleansingSource]
                                             ,[con].[Type]				AS [ConnectionType]
                                             ,[con].[ConnectionString]	AS [ConnectionString]
                                             ,[con].[Options]			AS [ConnectionOptions]
@@ -213,10 +212,9 @@
                                             ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'PK' END AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             Left JOIN [Generator].[Connection] con
-                                            on		  [st].[SourceConnection] = [con].[Name]	
+                                            on		  [st].[CleansingSource] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
-                                            AND		  st.SourceConnection = 'WMS'
-                                            AND		st.[CleansingType] = 'PK'
+                                            AND		  st.[CleansingType] = 'PK'
                                             UNION
                                             SELECT DISTINCT
                                             [TargetConnection] + 'PK' AS TargetConnection
@@ -228,12 +226,11 @@
                                             ,CASE  WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-PK' END AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
-                                            AND		  st.SourceConnection = 'WMS'
-                                            AND		st.[CleansingType] = 'PK'
+                                            AND		  st.[CleansingType] = 'PK'
                                             ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {
-                    string varSourceConnection = SSISPackage["SourceConnection"].ToString();
+                    string varSourceConnection = SSISPackage["CleansingSource"].ToString();
                     string varSourceConnectionType = SSISPackage["ConnectionType"].ToString();
                     string varSourceConnectionString = SSISPackage["ConnectionString"].ToString();
                     string varSourceConnectionOptions = SSISPackage["ConnectionOptions"].ToString();
