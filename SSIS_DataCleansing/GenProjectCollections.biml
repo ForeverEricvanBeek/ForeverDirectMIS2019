@@ -11,7 +11,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Staging','DWH','DWH_Control','PROD','StagingIFS_TEMP','StagingIFS_PK')
+                                            AND          c.[Name] in ('Staging','DWH','DWH_Control','IFS','StagingPK')
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -64,7 +64,6 @@
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
                 <Parameter Name="DaysBack" DataType="Int32" IsRequired="true"><#=DaysBack#></Parameter>
                 <Parameter Name="CleanMonths" DataType="Int32" IsRequired="true"><#=CleanMonths#></Parameter>
-                <Parameter Name="Environment" DataType="String" IsRequired="true"><#=Environment#></Parameter>
                 <Parameter Name="StopTime" DataType="Int32" IsRequired="true"><#=StopTime#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
                     string ConnectionName = Connection["ConnectionName"].ToString();

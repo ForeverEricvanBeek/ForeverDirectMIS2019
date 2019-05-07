@@ -6,7 +6,7 @@
 <#@ include file="ProjectSettings.cs" #>
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <Packages>
-        <#string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Staging].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Staging].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1)SELECT 'Staging' AS [SourceConnection],ST.[TargetSchema] AS [SourceSchema],ST.[TargetTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'DWH' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],ST.[IncrementalSchema],ST.[IncrementalTable],ST.[IncrementalUpdateColumn],ST.[IncrementalKeyColumn],ST.[IsStaging] ,ST.[DeleteStaging],ST.SourceSchema AS AlternativeSchema,CS.PK AS [PrimaryKey],'CL_FIND' AS PackagePrefix, ST.CleansingFrom, ST.CleansingType, ST.CleansingDate, ST.CleansingDateType FROM [Generator].[SourceExtractionTable] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable]  = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1 AND ST.IsStaging = 0 AND ST.CleansingType IN ('PK','PK_F') AND ST.Test = 1";
+        <#string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [StagingPK].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [StagingPK].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1)SELECT 'Staging' AS [SourceConnection],ST.[TargetSchema] AS [SourceSchema],ST.[TargetTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'DWH' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],ST.[IncrementalSchema],ST.[IncrementalTable],ST.[IncrementalUpdateColumn],ST.[IncrementalKeyColumn],ST.[IsStaging] ,ST.[DeleteStaging],ST.SourceSchema AS AlternativeSchema,CS.PK AS [PrimaryKey],'CL_FIND' AS PackagePrefix, ST.CleansingFrom, ST.CleansingType, ST.CleansingDate, ST.CleansingDateType FROM [Generator].[SourceExtractionTable] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable]  = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1 AND ST.IsStaging = 0 AND ST.CleansingType IN ('PK','PK_F') AND ST.Test = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
             string varCleansingType = rowSourceExtractionTable["CleansingType"].ToString();
@@ -22,15 +22,8 @@
             string varTaskName = "Dataflow Load " + varName;
             string varPackageName = rowSourceExtractionTable["PackagePrefix"].ToString() + "-" + varTargetSchema + "-" + varTargetTable;
             
-            string varSourceDatabase = "";
-            string varExtractionAlternativeSchema = "";
-            if (rowSourceExtractionTable["SourceSchema"].ToString() == "IFS") {
-                varSourceDatabase = @"[FDODWHP01\\DWHIFS].StagingIFS_PK";
-                varExtractionAlternativeSchema = rowSourceExtractionTable["AlternativeSchema"].ToString();
-            } else {
-                varSourceDatabase = @"StagingPK";
-                varExtractionAlternativeSchema = rowSourceExtractionTable["TargetSchema"].ToString();
-            }
+            string varSourceDatabase = @"StagingPK";
+
     string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
     string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
     string VarPrimKeyJoin = "";
@@ -69,14 +62,14 @@
         varCleanFromDateTypeMonth = "CAST(DATEADD(MONTH, - ?, GETDATE()) AS DATE)";
     }
 
-    string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+    string MergeDeletedSQlStatement = "\"" + @"WITH CTE_DELETED AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
         	if (varCleansingType == "PK") {
         	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
         	AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
         	}
-        	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
+        	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
 
-    string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (SELECT " + varPrimKeyColumsPKNew + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue FROM " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS ON "+ VarPrimKeyJoin + @" MS.ActInd = 'Y' AND MS.IsDeleted = 'N'";
+    string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (SELECT " + varPrimKeyColumsPKNew + @" MSPK.Issue FROM " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" MSPK LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS ON "+ VarPrimKeyJoin + @" MS.ActInd = 'Y' AND MS.IsDeleted = 'N'";
         	if (varCleansingType == "PK") {
         	    MergeNewSQlStatement = MergeNewSQlStatement + @" AND " + @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @" AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @" WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
         	}
@@ -85,23 +78,23 @@
         	} else {
         	    MergeNewSQlStatement = MergeNewSQlStatement + " WHERE MS.OBJVERSION IS NULL";   
         	}
-        MergeNewSQlStatement = MergeNewSQlStatement + @" AND (MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL)) UPDATE CTE_NEW SET Issue = 1" + "\"";
+        MergeNewSQlStatement = MergeNewSQlStatement + @" AND (MSPK.Issue &lt;> 3)) UPDATE CTE_NEW SET Issue = 1" + "\"";
 
-    string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (SELECT " + varPrimKeyColumsPKChanged + @" MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" AS Issue FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1";
+    string MergeChangedSQlStatement = "\"" + @"WITH CTE_CHANGED AS (SELECT " + varPrimKeyColumsPKChanged + @" MSPK.Issue FROM DWH." + varTargetSchema + @"." + varTargetTable + @" MS LEFT JOIN " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @" 1=1";
         	if (varCleansingType == "PK") {
         	    MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND MS." + varCleansingDate + " &lt;> MSPK." + varCleansingDate;
         	}
-        	MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND (MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" &lt;> 3 OR MSPK.Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @" IS NULL) WHERE MS.ActInd = 'Y' AND MS.IsDeleted = 'N' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+        	MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND (MSPK.Issue &lt;> 3) WHERE MS.ActInd = 'Y' AND MS.IsDeleted = 'N' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
         	if (varCleansingType == "PK") {
         	    MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
         	}
             MergeChangedSQlStatement = MergeChangedSQlStatement + @" AND MSPK.BatchID IS NOT NULL) UPDATE CTE_CHANGED SET Issue = 2" + "\"";
         
-    string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS LEFT JOIN" + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @"  1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
+    string MergeArchiveSQlStatement = "\"" + @"WITH CTE_DELETED_ARC AS (SELECT " + varPrimKeyColumsPKDeleted + @" MS." + varCleansingDate + @"  AS " + varCleansingDate + @"1 FROM DWH." + varTargetSchema + @"_ARC." + varTargetTable + @" MS LEFT JOIN" + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" MSPK ON "+ VarPrimKeyJoin + @"  1=1 WHERE MS.IsDeleted = 'N' AND MS.ActInd = 'Y' AND MS.Eff_Date &lt;= DATEADD(DAY,-?,GETDATE())";
         	if (varCleansingType == "PK") {
         	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
         	}
-        	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varExtractionAlternativeSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue_" + "\"" + " + @[$Project::Environment] + " + "\"" + @", BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
+        	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
     #>
     
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -110,7 +103,6 @@
                 <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"></Variable>
                 <Variable Name="DaysBack" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::DaysBack]</Variable>
                 <Variable Name="CleanMonths" DataType="Int32" Namespace="User" EvaluateAsExpression="true">@[$Project::CleanMonths]</Variable>
-                <Variable Name="Environment" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]</Variable>
                 <Variable Name="MergeDeletedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeDeletedSQlStatement#></Variable>    
                 <Variable Name="MergeNewSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeNewSQlStatement#></Variable>   
                 <Variable Name="MergeChangedSQlStatement" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=MergeChangedSQlStatement#></Variable>    
