@@ -14,14 +14,12 @@ string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 int DaysBack = 3;
 int CleanMonths = 6;
-string Environment = "DEV";
 int StopTime = 22;
 
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
 
 string GeneratorSchemaName = @"generator";
 string conGeneratorConnectionString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
-string conGeneratorConnectionStringIFS = @"Data Source=FDODWHP01\DWHIFS;Initial Catalog=DWI_Control; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
 
 string EffectiveDate = "1900-01-01 00:00:00";
 string ExpiryDate = "9999-12-31 23:59:59";

@@ -127,90 +127,6 @@
     </SSIS:Properties>
   </SSIS:Parameter>
   <SSIS:Parameter
-    SSIS:Name="Environment">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{3db61243-05a4-487a-a805-0bd1821c6c5e}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">DEV</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">18</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="ConPROD">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{c1cf32ea-3c74-4fca-a1ae-da5231df43e9}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">Data Source=PROD;User ID=IFSBI;Password=PAHTwjP4sT!;Provider=OraOLEDB.Oracle.1;Persist Security Info=True;DataTypeCompatibility=80;</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">18</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="ConStagingIFS_TEMP">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{9acccda2-1bf9-4254-94b6-83ec11c714c3}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">Data Source=FDODWHP01.foreverdirect.local\DWHIFS;Initial Catalog=StagingIFS_TEMP;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">18</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="ConStagingIFS_PK">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{66bbe7eb-b199-45d2-b2f4-547482cc8b8a}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">Data Source=FDODWHP01.foreverdirect.local\DWHIFS;Initial Catalog=StagingIFS_PK;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">18</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
     SSIS:Name="StopTime">
     <SSIS:Properties>
       <SSIS:Property
@@ -229,6 +145,27 @@
         SSIS:Name="Value">22</SSIS:Property>
       <SSIS:Property
         SSIS:Name="DataType">9</SSIS:Property>
+    </SSIS:Properties>
+  </SSIS:Parameter>
+  <SSIS:Parameter
+    SSIS:Name="ConStagingPK">
+    <SSIS:Properties>
+      <SSIS:Property
+        SSIS:Name="ID">{aa74c0d6-b74e-4197-80de-1f4e23c7515a}</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="CreationName"></SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Description"></SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Required">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Sensitive">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Value">Data Source=FDODWHD01\DWHDEV;Initial Catalog=Staging_PK;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="DataType">18</SSIS:Property>
     </SSIS:Properties>
   </SSIS:Parameter>
 </SSIS:Parameters>
