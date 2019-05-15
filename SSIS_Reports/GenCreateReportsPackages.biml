@@ -272,6 +272,9 @@
                     <Variable Name="IgnoreEmpty" DataType="Int32" Namespace="User"><#=varExtractionIgnoreEmpty#></Variable>
                     <Variable Name="sqlCountDWH" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>
                     <Variable Name="sqlInsertReport" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@MergeSQlStatement#></Variable>
+                    <Variable Name="varToLine" DataType="String" EvaluateAsExpression="true" Namespace="User">@[$Project::Environment]  == "PRD" ? "<#=varExtractionEmailTo#>" : @[$Project::TestMail]</Variable>
+                    <Variable Name="varCCLine" DataType="String" Namespace="User"><#=varExtractionEmailCC#></Variable>
+                    <Variable Name="varBCCLine" DataType="String" Namespace="User"><#=varExtractionEmailBCC#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -581,7 +584,7 @@ Report is located at: ";
                             </Script>
                             <#}#>
                             <#if (!string.IsNullOrEmpty(varExtractionEmailTo)) {#>
-                            <SendMail Name="Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="<#=varExtractionEmailTo#>" CCLine="<#=varExtractionEmailCC#>" BCCLine="<#=varExtractionEmailBCC#>" Subject="Email report <#=varExtractionFilename#>">
+                            <SendMail Name="Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" Subject="Email report <#=varExtractionFilename#>" ToLine="">
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <Input OutputPathName="Script <#=varExtractionFilename#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
@@ -593,11 +596,14 @@ Report is located at: ";
                                     <Expression PropertyName="FileAttachments">@[User::varFileAttachments]</Expression>
                                 <#}#>
                                     <Expression PropertyName="MessageSourceType">2</Expression>
+                                    <Expression PropertyName="ToLine">@[User::varToLine]</Expression>
+                                    <Expression PropertyName="CCLine">@[User::varCCLine]</Expression>
+                                    <Expression PropertyName="BCCLine">@[User::varBCCLine]</Expression>
                                 </Expressions>
                             </SendMail>
                             <#}#>
                             <#if (!string.IsNullOrEmpty(varExtractionEmailTo)) {#>
-                            <SendMail Name="Empty Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="<#=varExtractionEmailTo#>" CCLine="<#=varExtractionEmailCC#>" BCCLine="<#=varExtractionEmailBCC#>" Subject="Empty Email report <#=varExtractionFilename#>">
+                            <SendMail Name="Empty Send Mail" ConnectionName="reportMail" FromLine="reports@foreverdirect.eu" ToLine="" Subject="Empty Email report <#=varExtractionFilename#>">
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <Input OutputPathName="SQL Update contol record <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="ExpressionAndConstraint" Expression="@[RC::RowCountExtract] == 0 &amp;&amp; @[User::IgnoreEmpty] == 0" />
@@ -606,6 +612,9 @@ Report is located at: ";
                                 <DirectInput>Report is empty, no data found</DirectInput>
                                 <Expressions>
                                     <Expression PropertyName="MessageSourceType">0</Expression>
+                                    <Expression PropertyName="ToLine">@[User::varToLine]</Expression>
+                                    <Expression PropertyName="CCLine">@[User::varCCLine]</Expression>
+                                    <Expression PropertyName="BCCLine">@[User::varBCCLine]</Expression>
                                 </Expressions>
                             </SendMail>
                             <#}#>

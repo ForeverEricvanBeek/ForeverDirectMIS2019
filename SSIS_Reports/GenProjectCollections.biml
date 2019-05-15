@@ -158,6 +158,8 @@
                 <Parameter Name="DirReports" DataType="String" IsRequired="true"><#=ReportsDir#></Parameter>
                 <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
+                <Parameter Name="Environment" DataType="String" IsRequired="true"><#=Environment#></Parameter>
+                <Parameter Name="TestMail" DataType="String" IsRequired="true"><#=TestMail#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
                     string ConnectionName = Connection["ConnectionName"].ToString();
                     string ConnectionString = Connection["ConnectionString"].ToString();
