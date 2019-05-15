@@ -140,7 +140,7 @@
             foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
                 string VarWhereColumnExpression = rowwherecolumns["ViewPredicatesColumn"].ToString();
                 string VarWhereColumnName = rowwherecolumns["ViewPredicatesName"].ToString();
-                WhereClause =  WhereClause + " AND " + VarWhereColumnExpression + "\" + @[$Package::" + VarWhereColumnName + "_PP] + \"";
+                WhereClause =  WhereClause + " AND " + VarWhereColumnExpression + "'\" + @[$Package::" + VarWhereColumnName + "_PP] + \"'";
             }
             
             string sqlsourcecolumns = @"select 
@@ -240,6 +240,10 @@
                 <Parameters>
                     <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                     <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+                    <Parameter Name="parToLine_PP" DataType="String"><#=varExtractionEmailTo#></Parameter>
+                    <Parameter Name="parCCLine_PP" DataType="String"><#=varExtractionEmailCC#></Parameter>
+                    <Parameter Name="parBCCLine_PP" DataType="String"><#=varExtractionEmailBCC#></Parameter>
+                    <Parameter Name="parWhere_PP" DataType="String">Schedule</Parameter>
                     <#  string sqlparam1columns = @"SELECT 
                                       ViewPredicatesName
                                       ,ViewPredicatesValue
@@ -272,9 +276,10 @@
                     <Variable Name="IgnoreEmpty" DataType="Int32" Namespace="User"><#=varExtractionIgnoreEmpty#></Variable>
                     <Variable Name="sqlCountDWH" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>
                     <Variable Name="sqlInsertReport" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@MergeSQlStatement#></Variable>
-                    <Variable Name="varToLine" DataType="String" EvaluateAsExpression="true" Namespace="User">@[$Project::Environment]  == "PRD" ? "<#=varExtractionEmailTo#>" : @[$Project::TestMail]</Variable>
-                    <Variable Name="varCCLine" DataType="String" Namespace="User"><#=varExtractionEmailCC#></Variable>
-                    <Variable Name="varBCCLine" DataType="String" Namespace="User"><#=varExtractionEmailBCC#></Variable>
+                    <Variable Name="varToLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parToLine_PP] : @[$Project::TestMail]</Variable>
+                    <Variable Name="varCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parCCLine_PP] : ""</Variable>
+                    <Variable Name="varBCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parBCCLine_PP] : ""</Variable>
+                    <Variable Name="varWhere" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Package::parWhere_PP]</Variable>
                 </Variables>
     
                 <Tasks>
@@ -593,7 +598,7 @@ Report is located at: ";
                                 <DirectInput>User::varEmailBody</DirectInput>
                                 <Expressions>
                                 <#if (varExtractionEmailAttachment == "Y") {#>
-                                    <Expression PropertyName="FileAttachments">@[User::varFileAttachments]</Expression>
+                                    <Expression PropertyName="FileAttachments">@[User::varWhere]  == "Schedule" ? @[User::varFileAttachments] : ""</Expression>
                                 <#}#>
                                     <Expression PropertyName="MessageSourceType">2</Expression>
                                     <Expression PropertyName="ToLine">@[User::varToLine]</Expression>
