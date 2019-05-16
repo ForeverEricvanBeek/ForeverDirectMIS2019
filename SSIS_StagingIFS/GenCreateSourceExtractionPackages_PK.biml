@@ -57,6 +57,7 @@
                                                 AND		ST.[TargetTable]  = CS.[TABLE_NAME]
                                                 WHERE   ST.[IsActive] = 1
                                                 AND		ST.[ExtractionType] <> 'F'
+                                                AND     ST.getPK = 1
                                                 AND ST.IsLoading = 0
                                             ";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
@@ -537,7 +538,8 @@
                                         ,'CTRL-PK' AS PackagePrefix
                                         ,[IsStaging]
                                         FROM [Generator].[SourceExtractionTable] st
-                                        WHERE st.[IsActive] =  1
+                                        WHERE st.[IsActive] = 1
+                                        AND st.getPK = 1
                                         AND st.IsLoading = 0
                                         ";
         
@@ -610,7 +612,8 @@
                                                             AND       [TargetSchema] = '" + varTargetSchema + @"' 
                                                             AND       [st].[IsActive] = 1 
                                                             AND       [IsStaging] = '" + varTargetIsStaging + @"' 
-                                                            AND st.IsLoading = 0
+                                                            AND       st.IsLoading = 0
+                                                            AND       st.getPK = 1
                                                             ORDER BY  [SourceTable]
                                                             ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);

@@ -160,6 +160,7 @@
                                 ,st.[TargetConnection]
                                 FROM      [Generator].[SourceExtractionTable] st
                                 WHERE     st.IsActive = 1
+                                AND st.getPK = 1
                                 AND st.IsLoading = 0
                                 ";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
@@ -227,6 +228,7 @@
                                             Left JOIN [Generator].[Connection] con
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
+                                            AND       st.getPK = 1
                                             AND st.IsLoading = 0
                                             UNION
                                             SELECT DISTINCT
@@ -236,7 +238,7 @@
                                             ,null
                                             ,[TargetSchema]
                                             ,'Total' AS [SourceTable]
-                                            ,CASE  WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-EXTR' END AS PackagePrefix
+                                            ,CASE WHEN [IsStaging] = '1' THEN 'CTRL-STG' ELSE 'CTRL-EXTR' END AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
                                             AND st.IsLoading = 0
