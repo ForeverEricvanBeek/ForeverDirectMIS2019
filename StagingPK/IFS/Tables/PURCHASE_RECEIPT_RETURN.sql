@@ -1,0 +1,16 @@
+﻿CREATE TABLE [IFS].[PURCHASE_RECEIPT_RETURN] (
+    [ORDER_NO]               NVARCHAR (12)   NOT NULL,
+    [LINE_NO]                NVARCHAR (4)    NOT NULL,
+    [RELEASE_NO]             NVARCHAR (4)    NOT NULL,
+    [RECEIPT_NO]             INT             NOT NULL,
+    [LOT_BATCH_NO]           NVARCHAR (20)   NOT NULL,
+    [SERIAL_NO]              NVARCHAR (50)   NOT NULL,
+    [RETURN_REASON]          NVARCHAR (8)    NOT NULL,
+    [RECEIPT_RETURN_TYPE_DB] NVARCHAR (20)   NOT NULL,
+    [OBJVERSION]             NVARCHAR (2000) NULL,
+    [BatchID]                BIGINT          NULL,
+    [ProcessLogID]           BIGINT          NULL,
+    [Issue]                  TINYINT         NULL,
+    CONSTRAINT [PK_PURCHASE_RECEIPT_RETURN] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [LINE_NO] ASC, [RELEASE_NO] ASC, [RECEIPT_NO] ASC, [LOT_BATCH_NO] ASC, [SERIAL_NO] ASC, [RECEIPT_RETURN_TYPE_DB] ASC, [RETURN_REASON] ASC)
+);
+

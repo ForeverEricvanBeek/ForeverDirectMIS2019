@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[FROZN_INVN_CONFIG] (
+    [FROZN_INVN_CONFIG_ID] INT           NOT NULL,
+    [MOD_DATE_TIME]        DATETIME2 (7) NULL,
+    [BatchID]              BIGINT        NULL,
+    [ProcessLogID]         BIGINT        NULL,
+    [Issue]                TINYINT       NULL,
+    CONSTRAINT [PK_MANH_FROZN_INVN_CONFIG] PRIMARY KEY CLUSTERED ([FROZN_INVN_CONFIG_ID] ASC)
+);
+

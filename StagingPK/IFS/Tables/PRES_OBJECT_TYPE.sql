@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[PRES_OBJECT_TYPE] (
+    [TYPE]         NVARCHAR (50)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_PRES_OBJECT_TYPE] PRIMARY KEY CLUSTERED ([TYPE] ASC)
+);
+

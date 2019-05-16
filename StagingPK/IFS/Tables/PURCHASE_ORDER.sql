@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[PURCHASE_ORDER] (
+    [ORDER_NO]     NVARCHAR (12)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_PURCHASE_ORDER] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC)
+);
+

@@ -1,0 +1,11 @@
+﻿CREATE TABLE [IFS].[EXT_DESADV_LINE] (
+    [MESSAGE_ID]   INT             NOT NULL,
+    [DELNOTE_NO]   NVARCHAR (50)   NOT NULL,
+    [SEQUENCE_NO]  INT             NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_EXT_DESADV_LINE] PRIMARY KEY CLUSTERED ([MESSAGE_ID] ASC, [DELNOTE_NO] ASC, [SEQUENCE_NO] ASC)
+);
+

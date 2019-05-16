@@ -1,0 +1,10 @@
+﻿CREATE TABLE [IFS].[INVOICE] (
+    [COMPANY]      NVARCHAR (20)   NOT NULL,
+    [INVOICE_ID]   INT             NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_INVOICE] PRIMARY KEY CLUSTERED ([INVOICE_ID] ASC, [COMPANY] ASC)
+);
+

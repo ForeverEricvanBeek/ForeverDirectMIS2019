@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[TASK_RULE_PARM] (
+    [TASK_RULE_PARM_ID] INT           NOT NULL,
+    [LAST_UPDATED_DTTM] DATETIME2 (7) NULL,
+    [BatchID]           BIGINT        NULL,
+    [ProcessLogID]      BIGINT        NULL,
+    [Issue]             TINYINT       NULL,
+    CONSTRAINT [PK_MANH_TASK_RULE_PARM] PRIMARY KEY CLUSTERED ([TASK_RULE_PARM_ID] ASC)
+);
+

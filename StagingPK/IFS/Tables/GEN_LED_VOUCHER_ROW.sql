@@ -1,0 +1,13 @@
+﻿CREATE TABLE [IFS].[GEN_LED_VOUCHER_ROW] (
+    [COMPANY]         NVARCHAR (20)   NOT NULL,
+    [VOUCHER_TYPE]    NVARCHAR (3)    NOT NULL,
+    [ACCOUNTING_YEAR] INT             NOT NULL,
+    [VOUCHER_NO]      INT             NOT NULL,
+    [ROW_NO]          INT             NOT NULL,
+    [OBJVERSION]      NVARCHAR (2000) NULL,
+    [BatchID]         BIGINT          NULL,
+    [ProcessLogID]    BIGINT          NULL,
+    [Issue]           TINYINT         NULL,
+    CONSTRAINT [PK_GEN_LED_VOUCHER_ROW] PRIMARY KEY CLUSTERED ([ACCOUNTING_YEAR] ASC, [COMPANY] ASC, [VOUCHER_TYPE] ASC, [VOUCHER_NO] ASC, [ROW_NO] ASC)
+);
+

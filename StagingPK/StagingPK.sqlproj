@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>StagingPK</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{e1e19e7e-0d7a-414e-8c04-620368ddff31}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>StagingPK</RootNamespace>
+    <AssemblyName>StagingPK</AssemblyName>
+    <ModelCollation>1033,CS</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CS_AS</DefaultCollation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="MANH\" />
+    <Folder Include="MANH\Tables\" />
+    <Folder Include="IFS\" />
+    <Folder Include="IFS\Tables\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="MANH\Tables\PURCHASE_ORDERS_LINE_ITEM.sql" />
+    <Build Include="MANH\Tables\PURCHASE_ORDERS.sql" />
+    <Build Include="MANH\Tables\PKT_HDR.sql" />
+    <Build Include="MANH\Tables\PKT_DTL.sql" />
+    <Build Include="MANH\Tables\PKT_CONSOL_LOCN.sql" />
+    <Build Include="MANH\Tables\PKT_CONSOL_ATTR_SUMM.sql" />
+    <Build Include="MANH\Tables\PHYS_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\ORDERS.sql" />
+    <Build Include="MANH\Tables\ORDER_LINE_ITEM.sql" />
+    <Build Include="MANH\Tables\LPN_MOVEMENT.sql" />
+    <Build Include="MANH\Tables\LPN_DETAIL.sql" />
+    <Build Include="MANH\Tables\ITEM_WMS.sql" />
+    <Build Include="MANH\Tables\ITEM_FACILITY_MAPPING_WMS.sql" />
+    <Build Include="MANH\Tables\ITEM_CBO.sql" />
+    <Build Include="MANH\Tables\INVN_VARI_HDR.sql" />
+    <Build Include="MANH\Tables\ILM_YARD_ACTIVITY.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENTS.sql" />
+    <Build Include="MANH\Tables\ILM_APPOINTMENT_OBJECTS.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\FROZN_INVN_CONFIG.sql" />
+    <Build Include="MANH\Tables\CNT_INVN_HDR.sql" />
+    <Build Include="MANH\Tables\CNT_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\BATCH_MASTER.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_WORK_ORD.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_STAT.sql" />
+    <Build Include="MANH\Tables\BATCH_HIST_SHIP.sql" />
+    <Build Include="MANH\Tables\ASN_DETAIL.sql" />
+    <Build Include="MANH\Tables\ASN.sql" />
+    <Build Include="MANH\Tables\ALLOC_INVN_DTL.sql" />
+    <Build Include="MANH\Tables\LPN_OUTBOUND.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_HDR.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_DTL.sql" />
+    <Build Include="MANH\Tables\WORK_ORD_CMNT.sql" />
+    <Build Include="MANH\Tables\WAVE_TASK_CRIT.sql" />
+    <Build Include="MANH\Tables\WAVE_RULE_PARM.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_WORK_ORD.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE_PKT.sql" />
+    <Build Include="MANH\Tables\WAVE_QUEUE.sql" />
+    <Build Include="MANH\Tables\WAVE_PARM.sql" />
+    <Build Include="MANH\Tables\TASK_RULE_PARM.sql" />
+    <Build Include="MANH\Tables\TASK_PRT_SORT_DTL.sql" />
+    <Build Include="MANH\Tables\TASK_PARM.sql" />
+    <Build Include="MANH\Tables\TASK_HDR.sql" />
+    <Build Include="MANH\Tables\TASK_DTL.sql" />
+    <Build Include="MANH\Tables\SHIPMENT.sql" />
+    <Build Include="MANH\Tables\RULE_SORT_DTL.sql" />
+    <Build Include="MANH\Tables\RULE_SEL_DTL.sql" />
+    <Build Include="MANH\Tables\RULE_HDR.sql" />
+    <Build Include="IFS\Tables\CODESTRING_COMBINATION.sql" />
+    <Build Include="IFS\Tables\PRES_OBJECT_TYPE.sql" />
+    <Build Include="IFS\Tables\C_TRANSPORT_TYPE.sql" />
+    <Build Include="IFS\Tables\PRES_OBJECT_SECURITY.sql" />
+    <Build Include="IFS\Tables\C_SHIPMENT_UNIT_ORD_LINE.sql" />
+    <Build Include="IFS\Tables\PRES_OBJECT_GRANT.sql" />
+    <Build Include="IFS\Tables\C_PIX_MSG_STOCK_REC.sql" />
+    <Build Include="IFS\Tables\PRES_OBJECT.sql" />
+    <Build Include="IFS\Tables\C_KFD_CMSCOUNTER_HIST.sql" />
+    <Build Include="IFS\Tables\PART_CATALOG_INVENT_ATTRIB.sql" />
+    <Build Include="IFS\Tables\C_KEWILL_STOCK_RECON.sql" />
+    <Build Include="IFS\Tables\PART_CATALOG.sql" />
+    <Build Include="IFS\Tables\C_FL_CUSTOMS_STATUS.sql" />
+    <Build Include="IFS\Tables\ORDER_DELIVERY_TERM.sql" />
+    <Build Include="IFS\Tables\C_EXT_SHIP_CONFIRM.sql" />
+    <Build Include="IFS\Tables\MPCCOM_ACCOUNTING.sql" />
+    <Build Include="IFS\Tables\C_EXT_SHIP_CONF_LINES.sql" />
+    <Build Include="IFS\Tables\MIXED_PAYMENT.sql" />
+    <Build Include="IFS\Tables\BAD_DEBT_QRY.sql" />
+    <Build Include="IFS\Tables\MATERIAL_HISTORY.sql" />
+    <Build Include="IFS\Tables\ACCOUNTING_PERIOD.sql" />
+    <Build Include="IFS\Tables\MANUFACTURED_PART.sql" />
+    <Build Include="IFS\Tables\ACCOUNTING_GROUP.sql" />
+    <Build Include="IFS\Tables\MANUF_STRUCTURE_HEAD.sql" />
+    <Build Include="IFS\Tables\ACCOUNTING_BALANCE.sql" />
+    <Build Include="IFS\Tables\MANUF_STRUCTURE.sql" />
+    <Build Include="IFS\Tables\ACCOUNT.sql" />
+    <Build Include="IFS\Tables\MANUF_STRUCT_ALTERNATE.sql" />
+    <Build Include="IFS\Tables\LOT_BATCH_MASTER.sql" />
+    <Build Include="IFS\Tables\LEDGER_ITEM.sql" />
+    <Build Include="IFS\Tables\ISO_UNIT_DEF.sql" />
+    <Build Include="IFS\Tables\ISO_UNIT.sql" />
+    <Build Include="IFS\Tables\ISO_COUNTRY.sql" />
+    <Build Include="IFS\Tables\INVOICE_ITEM.sql" />
+    <Build Include="IFS\Tables\INVOICE.sql" />
+    <Build Include="IFS\Tables\INVENTORY_TRANSACTION_HIST.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PRODUCT_FAMILY.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_UNIT_COST_SUM.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_PLANNING.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_IN_STOCK.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_CHAR_ALL.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART.sql" />
+    <Build Include="IFS\Tables\INVENTORY_LOCATION.sql" />
+    <Build Include="IFS\Tables\INV_ACCOUNTING_ROW.sql" />
+    <Build Include="IFS\Tables\INTRASTAT_LINE.sql" />
+    <Build Include="IFS\Tables\WORK_CENTER.sql" />
+    <Build Include="IFS\Tables\INTRASTAT.sql" />
+    <Build Include="IFS\Tables\USER_PROFILE_ENTRY.sql" />
+    <Build Include="IFS\Tables\INTFACE_CONV_LIST_COLS.sql" />
+    <Build Include="IFS\Tables\USER_FINANCE.sql" />
+    <Build Include="IFS\Tables\IDENTITY_INVOICE_INFO.sql" />
+    <Build Include="IFS\Tables\USER_ALLOWED_SITE.sql" />
+    <Build Include="IFS\Tables\IAL_OBJECT.sql" />
+    <Build Include="IFS\Tables\TECHNICAL_SPECIFICATION_BOTH.sql" />
+    <Build Include="IFS\Tables\HISTORY_LOG_ATTRIBUTE.sql" />
+    <Build Include="IFS\Tables\TECHNICAL_OBJECT_REFERENCE.sql" />
+    <Build Include="IFS\Tables\HISTORY_LOG.sql" />
+    <Build Include="IFS\Tables\SYSTEM_PRIVILEGE_GRANT.sql" />
+    <Build Include="IFS\Tables\GEN_LED_VOUCHER_ROW.sql" />
+    <Build Include="IFS\Tables\SYSTEM_PRIVILEGE.sql" />
+    <Build Include="IFS\Tables\GEN_LED_VOUCHER.sql" />
+    <Build Include="IFS\Tables\SUPPLIER_INFO_ADDRESS_TYPE.sql" />
+    <Build Include="IFS\Tables\FORWARDER_INFO.sql" />
+    <Build Include="IFS\Tables\SUPPLIER_INFO_ADDRESS.sql" />
+    <Build Include="IFS\Tables\FND_USER_ROLE.sql" />
+    <Build Include="IFS\Tables\SUPPLIER_INFO.sql" />
+    <Build Include="IFS\Tables\FND_USER.sql" />
+    <Build Include="IFS\Tables\SUPPLIER.sql" />
+    <Build Include="IFS\Tables\FND_ROLE.sql" />
+    <Build Include="IFS\Tables\SITE.sql" />
+    <Build Include="IFS\Tables\EXT_DESADV_PALLET.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_OPERATION.sql" />
+    <Build Include="IFS\Tables\EXT_DESADV_LINE.sql" />
+    <Build Include="IFS\Tables\SHOP_ORD.sql" />
+    <Build Include="IFS\Tables\EXT_DESADV_HEADER.sql" />
+    <Build Include="IFS\Tables\SHOP_MATERIAL_ALLOC.sql" />
+    <Build Include="IFS\Tables\DOCUMENT_TEXT.sql" />
+    <Build Include="IFS\Tables\SHIPMENT_PACKAGE_UNIT.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_PRICELIST.sql" />
+    <Build Include="IFS\Tables\SHIPMENT_ORDER_LINE.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_PARENTS.sql" />
+    <Build Include="IFS\Tables\SHIPMENT_HANDLING_UNIT.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_ORDER_LINE.sql" />
+    <Build Include="IFS\Tables\SHIPMENT.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_ORDER.sql" />
+    <Build Include="IFS\Tables\SALES_PRICE_LIST_SITE.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_INFO.sql" />
+    <Build Include="IFS\Tables\SALES_PRICE_LIST_PART.sql" />
+    <Build Include="IFS\Tables\CUSTOMER_GROUP.sql" />
+    <Build Include="IFS\Tables\SALES_PART_CROSS_REFERENCE.sql" />
+    <Build Include="IFS\Tables\CUST_PRICE_GROUP_DETAIL.sql" />
+    <Build Include="IFS\Tables\SALES_PART.sql" />
+    <Build Include="IFS\Tables\CUST_ORD_INVO_STAT.sql" />
+    <Build Include="IFS\Tables\ROUTING_OPERATION.sql" />
+    <Build Include="IFS\Tables\CUST_ORD_CUSTOMER.sql" />
+    <Build Include="IFS\Tables\RECEIPT_INVENTORY_LOCATION.sql" />
+    <Build Include="IFS\Tables\CURRENCY_TYPE.sql" />
+    <Build Include="IFS\Tables\QUICK_REPORT.sql" />
+    <Build Include="IFS\Tables\CURRENCY_RATE.sql" />
+    <Build Include="IFS\Tables\PURCHASE_RECEIPT_RETURN.sql" />
+    <Build Include="IFS\Tables\CURRENCY_CODE.sql" />
+    <Build Include="IFS\Tables\PURCHASE_RECEIPT.sql" />
+    <Build Include="IFS\Tables\COMPANY_SITE.sql" />
+    <Build Include="IFS\Tables\PURCHASE_QUANTITY_PRICE.sql" />
+    <Build Include="IFS\Tables\COMPANY_INVOICE_INFO.sql" />
+    <Build Include="IFS\Tables\PURCHASE_PART_SUPPLIER.sql" />
+    <Build Include="IFS\Tables\COMPANY_FINANCE_AUTH1.sql" />
+    <Build Include="IFS\Tables\PURCHASE_PART.sql" />
+    <Build Include="IFS\Tables\COMPANY_FINANCE.sql" />
+    <Build Include="IFS\Tables\PURCHASE_ORDER_LINE_PART.sql" />
+    <Build Include="IFS\Tables\COMPANY_DISTRIBUTION_INFO.sql" />
+    <Build Include="IFS\Tables\PURCHASE_ORDER_LINE_ALL.sql" />
+    <Build Include="IFS\Tables\COMPANY.sql" />
+    <Build Include="IFS\Tables\PURCHASE_ORDER_LINE.sql" />
+    <Build Include="IFS\Tables\COMMODITY_GROUP.sql" />
+    <Build Include="IFS\Tables\PURCHASE_ORDER.sql" />
+    <Build Include="IFS\Tables\COMM_METHOD.sql" />
+    <Build Include="IFS\Tables\PURCH_INFO_SERVICES_RPV.sql" />
+    <Build Include="Security\MANH.sql" />
+    <Build Include="Security\IFS.sql" />
+  </ItemGroup>
+</Project>

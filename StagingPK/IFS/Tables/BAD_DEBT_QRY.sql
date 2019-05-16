@@ -1,0 +1,13 @@
+﻿CREATE TABLE [IFS].[BAD_DEBT_QRY] (
+    [COMPANY]             NVARCHAR (20)   NOT NULL,
+    [PARTY_TYPE_DB]       NVARCHAR (20)   NOT NULL,
+    [SERIES_ID]           NVARCHAR (20)   NOT NULL,
+    [INVOICE_NO]          NVARCHAR (50)   NOT NULL,
+    [LEDGER_ITEM_VERSION] INT             NOT NULL,
+    [OBJVERSION]          NVARCHAR (2000) NULL,
+    [BatchID]             BIGINT          NULL,
+    [ProcessLogID]        BIGINT          NULL,
+    [Issue]               TINYINT         NULL,
+    CONSTRAINT [PK_BAD_DEBT_QRY] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [PARTY_TYPE_DB] ASC, [SERIES_ID] ASC, [INVOICE_NO] ASC, [LEDGER_ITEM_VERSION] ASC)
+);
+

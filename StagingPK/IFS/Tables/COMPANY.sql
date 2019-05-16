@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[COMPANY] (
+    [COMPANY]      NVARCHAR (20)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_COMPANY] PRIMARY KEY CLUSTERED ([COMPANY] ASC)
+);
+

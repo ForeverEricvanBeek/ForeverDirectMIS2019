@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[SHIPMENT_HANDLING_UNIT] (
+    [HANDLING_UNIT_ID] INT             NOT NULL,
+    [OBJVERSION]       NVARCHAR (2000) NULL,
+    [BatchID]          BIGINT          NULL,
+    [ProcessLogID]     BIGINT          NULL,
+    [Issue]            TINYINT         NULL,
+    CONSTRAINT [PK_SHIPMENT_HANDLING_UNIT] PRIMARY KEY CLUSTERED ([HANDLING_UNIT_ID] ASC)
+);
+

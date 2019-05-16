@@ -1,0 +1,11 @@
+﻿CREATE TABLE [IFS].[INVENTORY_PART_CHAR_ALL] (
+    [CONTRACT]            NVARCHAR (5)    NOT NULL,
+    [PART_NO]             NVARCHAR (25)   NOT NULL,
+    [CHARACTERISTIC_CODE] NVARCHAR (5)    NOT NULL,
+    [OBJVERSION]          NVARCHAR (2000) NULL,
+    [BatchID]             BIGINT          NULL,
+    [ProcessLogID]        BIGINT          NULL,
+    [Issue]               TINYINT         NULL,
+    CONSTRAINT [PK_INVENTORY_PART_CHAR_ALL] PRIMARY KEY CLUSTERED ([PART_NO] ASC, [CONTRACT] ASC, [CHARACTERISTIC_CODE] ASC)
+);
+

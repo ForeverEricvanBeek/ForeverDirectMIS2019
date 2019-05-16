@@ -1,0 +1,10 @@
+﻿CREATE TABLE [MANH].[PURCHASE_ORDERS_LINE_ITEM] (
+    [PURCHASE_ORDERS_ID]           INT           NOT NULL,
+    [PURCHASE_ORDERS_LINE_ITEM_ID] INT           NOT NULL,
+    [LAST_UPDATED_DTTM]            DATETIME2 (7) NOT NULL,
+    [BatchID]                      BIGINT        NULL,
+    [ProcessLogID]                 BIGINT        NULL,
+    [Issue]                        TINYINT       NULL,
+    CONSTRAINT [PK_MANH_PURCHASE_ORDERS_LINE_ITEM] PRIMARY KEY CLUSTERED ([PURCHASE_ORDERS_ID] ASC, [PURCHASE_ORDERS_LINE_ITEM_ID] ASC)
+);
+

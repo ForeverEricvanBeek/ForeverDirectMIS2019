@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[CUSTOMER_GROUP] (
+    [CUST_GRP]     NVARCHAR (10)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_CUSTOMER_GROUP] PRIMARY KEY CLUSTERED ([CUST_GRP] ASC)
+);
+

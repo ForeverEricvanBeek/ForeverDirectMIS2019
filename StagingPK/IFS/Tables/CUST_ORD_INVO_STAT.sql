@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[CUST_ORD_INVO_STAT] (
+    [STATISTIC_NO] INT             NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_CUST_ORD_INVO_STAT] PRIMARY KEY CLUSTERED ([STATISTIC_NO] ASC)
+);
+

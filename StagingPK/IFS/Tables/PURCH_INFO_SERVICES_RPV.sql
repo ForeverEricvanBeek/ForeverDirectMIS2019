@@ -1,0 +1,11 @@
+﻿CREATE TABLE [IFS].[PURCH_INFO_SERVICES_RPV] (
+    [RESULT_KEY]    INT           NOT NULL,
+    [ROW_NO]        INT           NOT NULL,
+    [PARENT_ROW_NO] INT           NOT NULL,
+    [ROWVERSION]    DATETIME2 (7) NULL,
+    [BatchID]       BIGINT        NULL,
+    [ProcessLogID]  BIGINT        NULL,
+    [Issue]         TINYINT       NULL,
+    CONSTRAINT [PK_PURCH_INFO_SERVICES_RPV] PRIMARY KEY CLUSTERED ([RESULT_KEY] ASC, [ROW_NO] ASC, [PARENT_ROW_NO] ASC)
+);
+

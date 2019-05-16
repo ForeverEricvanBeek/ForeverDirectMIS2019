@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[CODESTRING_COMBINATION] (
+    [POSTING_COMBINATION_ID] INT             NOT NULL,
+    [OBJVERSION]             NVARCHAR (2000) NULL,
+    [BatchID]                BIGINT          NULL,
+    [ProcessLogID]           BIGINT          NULL,
+    [Issue]                  TINYINT         NULL,
+    CONSTRAINT [PK_CODESTRING_COMBINATION] PRIMARY KEY CLUSTERED ([POSTING_COMBINATION_ID] ASC)
+);
+

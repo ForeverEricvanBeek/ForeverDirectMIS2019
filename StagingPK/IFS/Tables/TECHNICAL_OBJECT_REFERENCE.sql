@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[TECHNICAL_OBJECT_REFERENCE] (
+    [TECHNICAL_SPEC_NO] INT             NOT NULL,
+    [OBJVERSION]        NVARCHAR (2000) NULL,
+    [BatchID]           BIGINT          NULL,
+    [ProcessLogID]      BIGINT          NULL,
+    [Issue]             TINYINT         NULL,
+    CONSTRAINT [PK_TECHNICAL_OBJECT_REFERENCE] PRIMARY KEY CLUSTERED ([TECHNICAL_SPEC_NO] ASC)
+);
+

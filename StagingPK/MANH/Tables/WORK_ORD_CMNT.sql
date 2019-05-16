@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[WORK_ORD_CMNT] (
+    [WORK_ORD_CMNT_ID] BIGINT        NOT NULL,
+    [MOD_DATE_TIME]    DATETIME2 (7) NULL,
+    [BatchID]          BIGINT        NULL,
+    [ProcessLogID]     BIGINT        NULL,
+    [Issue]            TINYINT       NULL,
+    CONSTRAINT [PK_MANH_WORK_ORD_CMNT] PRIMARY KEY CLUSTERED ([WORK_ORD_CMNT_ID] ASC)
+);
+

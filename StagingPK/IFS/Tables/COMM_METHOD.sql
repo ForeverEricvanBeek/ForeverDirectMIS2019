@@ -1,0 +1,11 @@
+﻿CREATE TABLE [IFS].[COMM_METHOD] (
+    [IDENTITY]      NVARCHAR (20)   NOT NULL,
+    [COMM_ID]       INT             NOT NULL,
+    [PARTY_TYPE_DB] NVARCHAR (20)   NOT NULL,
+    [OBJVERSION]    NVARCHAR (2000) NULL,
+    [BatchID]       BIGINT          NULL,
+    [ProcessLogID]  BIGINT          NULL,
+    [Issue]         TINYINT         NULL,
+    CONSTRAINT [PK_COMM_METHOD] PRIMARY KEY CLUSTERED ([PARTY_TYPE_DB] ASC, [IDENTITY] ASC, [COMM_ID] ASC)
+);
+

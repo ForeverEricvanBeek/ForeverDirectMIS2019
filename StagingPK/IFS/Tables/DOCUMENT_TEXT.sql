@@ -1,0 +1,10 @@
+﻿CREATE TABLE [IFS].[DOCUMENT_TEXT] (
+    [OUTPUT_TYPE]  NVARCHAR (10)   NOT NULL,
+    [NOTE_ID]      INT             NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_DOCUMENT_TEXT] PRIMARY KEY CLUSTERED ([NOTE_ID] ASC, [OUTPUT_TYPE] ASC)
+);
+

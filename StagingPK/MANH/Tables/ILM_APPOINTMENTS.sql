@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[ILM_APPOINTMENTS] (
+    [APPOINTMENT_ID]    INT           NOT NULL,
+    [LAST_UPDATED_DTTM] DATETIME2 (7) NULL,
+    [BatchID]           BIGINT        NULL,
+    [ProcessLogID]      BIGINT        NULL,
+    [Issue]             TINYINT       NULL,
+    CONSTRAINT [PK_MANH_ILM_APPOINTMENTS] PRIMARY KEY CLUSTERED ([APPOINTMENT_ID] ASC)
+);
+

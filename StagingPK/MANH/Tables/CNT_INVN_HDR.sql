@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[CNT_INVN_HDR] (
+    [CNT_INVN_HDR_ID] INT           NOT NULL,
+    [MOD_DATE_TIME]   DATETIME2 (7) NULL,
+    [BatchID]         BIGINT        NULL,
+    [ProcessLogID]    BIGINT        NULL,
+    [Issue]           TINYINT       NULL,
+    CONSTRAINT [PK_MANH_CNT_INVN_HDR] PRIMARY KEY CLUSTERED ([CNT_INVN_HDR_ID] ASC)
+);
+

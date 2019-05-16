@@ -1,0 +1,10 @@
+﻿CREATE TABLE [IFS].[FND_USER_ROLE] (
+    [IDENTITY]     NVARCHAR (30)   NOT NULL,
+    [ROLE]         NVARCHAR (30)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_FND_USER_ROLE] PRIMARY KEY CLUSTERED ([IDENTITY] ASC, [ROLE] ASC)
+);
+

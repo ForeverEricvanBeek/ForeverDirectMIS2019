@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[INTRASTAT] (
+    [INTRASTAT_ID] INT             NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_INTRASTAT] PRIMARY KEY CLUSTERED ([INTRASTAT_ID] ASC)
+);
+

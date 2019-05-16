@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[C_EXT_SHIP_CONF_LINES] (
+    [SEQ_ID]       INT           NOT NULL,
+    [OBJVERSION]   NVARCHAR (14) NULL,
+    [BatchID]      BIGINT        NULL,
+    [ProcessLogID] BIGINT        NULL,
+    [Issue]        TINYINT       NULL,
+    CONSTRAINT [PK_C_EXT_SHIP_CONF_LINES] PRIMARY KEY CLUSTERED ([SEQ_ID] ASC)
+);
+

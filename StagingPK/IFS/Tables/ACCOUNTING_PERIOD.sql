@@ -1,0 +1,12 @@
+﻿CREATE TABLE [IFS].[ACCOUNTING_PERIOD] (
+    [COMPANY]           NVARCHAR (80)   NOT NULL,
+    [ACCOUNTING_YEAR]   INT             NOT NULL,
+    [ACCOUNTING_PERIOD] INT             NOT NULL,
+    [OBJID]             NVARCHAR (4000) NULL,
+    [OBJVERSION]        NVARCHAR (4000) NULL,
+    [BatchID]           BIGINT          NULL,
+    [ProcessLogID]      BIGINT          NULL,
+    [Issue]             TINYINT         NULL,
+    CONSTRAINT [PK_ACCOUNTING_PERIOD] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [ACCOUNTING_YEAR] ASC, [ACCOUNTING_PERIOD] ASC)
+);
+

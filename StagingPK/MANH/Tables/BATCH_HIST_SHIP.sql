@@ -1,0 +1,9 @@
+﻿CREATE TABLE [MANH].[BATCH_HIST_SHIP] (
+    [BATCH_HIST_SHIP_ID] INT           NOT NULL,
+    [LAST_UPDATED_DTTM]  DATETIME2 (7) NOT NULL,
+    [BatchID]            BIGINT        NULL,
+    [ProcessLogID]       BIGINT        NULL,
+    [Issue]              TINYINT       NULL,
+    CONSTRAINT [PK_MANH_BATCH_HIST_SHIP] PRIMARY KEY CLUSTERED ([BATCH_HIST_SHIP_ID] ASC)
+);
+

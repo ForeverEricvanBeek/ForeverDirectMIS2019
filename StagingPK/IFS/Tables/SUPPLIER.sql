@@ -1,0 +1,9 @@
+﻿CREATE TABLE [IFS].[SUPPLIER] (
+    [VENDOR_NO]    NVARCHAR (20)   NOT NULL,
+    [OBJVERSION]   NVARCHAR (2000) NULL,
+    [BatchID]      BIGINT          NULL,
+    [ProcessLogID] BIGINT          NULL,
+    [Issue]        TINYINT         NULL,
+    CONSTRAINT [PK_SUPPLIER] PRIMARY KEY CLUSTERED ([VENDOR_NO] ASC)
+);
+

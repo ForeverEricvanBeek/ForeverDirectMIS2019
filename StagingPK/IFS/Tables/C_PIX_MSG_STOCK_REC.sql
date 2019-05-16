@@ -1,0 +1,10 @@
+﻿CREATE TABLE [IFS].[C_PIX_MSG_STOCK_REC] (
+    [TRAN_NBR]     INT           NOT NULL,
+    [PIX_SEQ_NBR]  INT           NOT NULL,
+    [OBJVERSION]   NVARCHAR (14) NULL,
+    [BatchID]      BIGINT        NULL,
+    [ProcessLogID] BIGINT        NULL,
+    [Issue]        TINYINT       NULL,
+    CONSTRAINT [PK_C_PIX_MSG_STOCK_REC] PRIMARY KEY CLUSTERED ([TRAN_NBR] ASC, [PIX_SEQ_NBR] ASC)
+);
+
