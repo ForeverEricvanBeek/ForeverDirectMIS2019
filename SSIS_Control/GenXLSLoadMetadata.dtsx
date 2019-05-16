@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="66"
-  DTS:VersionGUID="{15BB8377-9F81-4EBE-9578-EE9077B2FF34}">
+  DTS:VersionBuild="67"
+  DTS:VersionGUID="{8DCE143B-A942-43F0-928E-1CA7004206FB}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -3250,6 +3250,12 @@
                       cachedName="RowsAtOnce"
                       externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[RowsAtOnce]"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[RowsAtOnce]" />
+                    <inputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].Columns[IsActiveCleansing]"
+                      cachedDataType="r8"
+                      cachedName="IsActiveCleansing"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsActiveCleansing]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActiveCleansing]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3383,10 +3389,6 @@
                       length="50"
                       name="CleansingSource" />
                     <externalMetadataColumn
-                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[Test]"
-                      dataType="bool"
-                      name="Test" />
-                    <externalMetadataColumn
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[CleansingWhere]"
                       dataType="wstr"
                       length="1000"
@@ -3395,6 +3397,10 @@
                       refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[RowsAtOnce]"
                       dataType="ui1"
                       name="RowsAtOnce" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable.Inputs[OLE DB Destination Input].ExternalColumns[IsActiveCleansing]"
+                      dataType="bool"
+                      name="IsActiveCleansing" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3752,6 +3758,15 @@
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[RowsAtOnce]"
                       name="RowsAtOnce"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActiveCleansing]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsActiveCleansing]"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].Columns[IsActiveCleansing]"
+                      name="IsActiveCleansing"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3891,6 +3906,10 @@
                       dataType="wstr"
                       length="255"
                       name="RowsAtOnce" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Output].ExternalColumns[IsActiveCleansing]"
+                      dataType="r8"
+                      name="IsActiveCleansing" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -4062,6 +4081,11 @@
                       dataType="r8"
                       lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsActive]"
                       name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsActiveCleansing]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[IsActiveCleansing]"
+                      name="IsActiveCleansing" />
                     <outputColumn
                       refId="Package\Load Generator_SourceExtractionTable\SourceExtractionTable.Outputs[Excel Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
@@ -9774,12 +9798,12 @@
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="237,42"
-          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
-          TopLeft="521,53" />
-        <NodeLayout
-          Size="237,42"
           Id="Package\Load Generator_SourceExtractionTable\Generator_SourceExtractionTable"
           TopLeft="522,139" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Load Generator_SourceExtractionTable\SourceExtractionTable"
+          TopLeft="521,53" />
         <EdgeLayout
           Id="Package\Load Generator_SourceExtractionTable.Paths[Excel Source Output]"
           TopLeft="640,95">
