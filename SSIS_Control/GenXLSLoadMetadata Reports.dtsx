@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="79"
-  DTS:VersionGUID="{B16347DA-EC63-4E11-838D-C49E7BA8975F}">
+  DTS:VersionBuild="80"
+  DTS:VersionGUID="{9DDCFEB0-3BC9-4E8C-BEEE-CA9FEBC71AD2}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -713,6 +713,36 @@
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[IgnoreEmpty]"
                       name="IgnoreEmpty"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[FriendlyName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[FriendlyName]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[FriendlyName]"
+                      name="FriendlyName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Description]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[Description]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Description]"
+                      name="Description"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[InProduction]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[InProduction]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[InProduction]"
+                      name="InProduction"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -814,6 +844,21 @@
                       dataType="wstr"
                       length="255"
                       name="IgnoreEmpty" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[FriendlyName]"
+                      dataType="wstr"
+                      length="255"
+                      name="FriendlyName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="255"
+                      name="Description" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[InProduction]"
+                      dataType="wstr"
+                      length="255"
+                      name="InProduction" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -875,6 +920,18 @@
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Output]"
                       name="Output" />
                     <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[FriendlyName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[FriendlyName]"
+                      name="FriendlyName" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Description]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Description]"
+                      name="Description" />
+                    <outputColumn
                       refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Filename]"
                       dataType="wstr"
                       length="255"
@@ -934,6 +991,12 @@
                       length="255"
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[EmailAttachment]"
                       name="EmailAttachment" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[InProduction]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[InProduction]"
+                      name="InProduction" />
                     <outputColumn
                       refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -1166,6 +1229,27 @@
                       cachedName="IgnoreEmpty"
                       externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IgnoreEmpty]"
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[IgnoreEmpty]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[FriendlyName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="FriendlyName"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[FriendlyName]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Description]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[InProduction]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="InProduction"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[InProduction]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[InProduction]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1270,6 +1354,20 @@
                       refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IgnoreEmpty]"
                       dataType="i4"
                       name="IgnoreEmpty" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
+                      dataType="wstr"
+                      length="500"
+                      name="FriendlyName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
+                      dataType="wstr"
+                      length="4000"
+                      name="Desciption" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[InProduction]"
+                      dataType="bool"
+                      name="InProduction" />
                   </externalMetadataColumns>
                 </input>
               </inputs>

@@ -35,7 +35,7 @@
     string varPrimKeyColumsPK_UNION = "";
 
     string varDeletedInsertColumns = "";
-    string varDeletedINsertColumnsSource = "";
+    string varDeletedInsertColumnsSource = "";
     
     string sqlsourcecolumns = @"select COL.TABLE_NAME, COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2, CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey], CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn, COL.ORDINAL_POSITION, CASE WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')' WHEN COL.DATA_TYPE = 'numeric' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'decimal' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'datetime2' THEN '[' + COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')' ELSE '[' + COL.DATA_TYPE + ']' END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE from DWH.INFORMATION_SCHEMA.COLUMNS COL LEFT JOIN [DWH].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC ON TC.TABLE_NAME = COL.TABLE_NAME AND TC.TABLE_SCHEMA = COL.TABLE_SCHEMA LEFT JOIN [DWH].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU ON TC.CONSTRAINT_CATALOG = CCU.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCU.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCU.CONSTRAINT_NAME AND COL.COLUMN_NAME = CCU.COLUMN_NAME LEFT JOIN DWH_Control.Generator.DWHExtractionColumn DWC ON DWC.DWHSchema = COL.TABLE_SCHEMA AND DWC.DWHTable = COL.TABLE_NAME AND DWC.DWHColumnName = COL.COLUMN_NAME where COL.TABLE_NAME= '" + varTargetTable + @"' and COL.TABLE_SCHEMA = '" + varTargetSchema + @"' order by COL.TABLE_NAME, COL.ORDINAL_POSITION";
     DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
@@ -48,8 +48,8 @@
             varPrimKeyColumsPKNew += " MSPK.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
             varPrimKeyColumsPKChanged += " MS.["+ VarSourceColumnName +"] AS ["+ VarSourceColumnName + "], ";
             varPrimKeyColumsPK_UNION +=  " ["+ VarSourceColumnName +"], ";
-            varDeletedInsertColumns += VarSourceColumnName + ", ";
-            varDeletedINsertColumnsSource += VarSourceColumnName + "1, ";
+            varDeletedInsertColumns += " ["+ VarSourceColumnName +"], ";
+            varDeletedInsertColumnsSource += " ["+ VarSourceColumnName + "1], ";
         }
     }
     string varCleanFromDateTypeDay = "";
@@ -67,16 +67,16 @@
         	    MergeDeletedSQlStatement = MergeDeletedSQlStatement + @"
         	AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
         	}
-        	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
+        	MergeDeletedSQlStatement = MergeDeletedSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedInsertColumnsSource + varCleansingDate + @"1,'3',-1,-1 FROM CTE_DELETED" + "\"";
 
     string MergeNewSQlStatement = "\"" + @"WITH CTE_NEW AS (SELECT " + varPrimKeyColumsPKNew + @" MSPK.Issue FROM " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" MSPK LEFT JOIN	DWH." + varTargetSchema + @"." + varTargetTable + @" MS ON "+ VarPrimKeyJoin + @" MS.ActInd = 'Y' AND MS.IsDeleted = 'N'";
         	if (varCleansingType == "PK") {
         	    MergeNewSQlStatement = MergeNewSQlStatement + @" AND " + @"MS." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay + @" AND MS." + varCleansingDate + " >=  " + varCleanFromDateTypeMonth + @" WHERE MSPK." + varCleansingDate + " &lt;=  " + varCleanFromDateTypeDay;
         	}
         	if (varCleansingType == "PK") {
-        	    MergeNewSQlStatement = MergeNewSQlStatement + " AND MS.OBJVERSION IS NULL";
+        	    MergeNewSQlStatement = MergeNewSQlStatement + " AND MS." + varCleansingDate + " IS NULL";
         	} else {
-        	    MergeNewSQlStatement = MergeNewSQlStatement + " WHERE MS.OBJVERSION IS NULL";   
+        	    MergeNewSQlStatement = MergeNewSQlStatement + " WHERE MS." + varCleansingDate + " IS NULL";   
         	}
         MergeNewSQlStatement = MergeNewSQlStatement + @" AND (MSPK.Issue &lt;> 3)) UPDATE CTE_NEW SET Issue = 1" + "\"";
 
@@ -94,7 +94,7 @@
         	if (varCleansingType == "PK") {
         	    MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND " + @"MS." + varCleansingDate + " >= " + varCleanFromDateTypeMonth;
         	}
-        	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedINsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
+        	MergeArchiveSQlStatement = MergeArchiveSQlStatement + @" AND MSPK.BatchID IS NULL) INSERT INTO " + varSourceDatabase + @"." + varTargetSchema + @"." + varTargetTable + @" (" + varDeletedInsertColumns + varCleansingDate + @", Issue, BatchID, ProcessLogID) SELECT " + varDeletedInsertColumnsSource + varCleansingDate + @"1,'4',-1,-1 FROM CTE_DELETED_ARC" + "\"";
     #>
     
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" ProtectionLevel="<#=ProjectProtectionLevel#>">
