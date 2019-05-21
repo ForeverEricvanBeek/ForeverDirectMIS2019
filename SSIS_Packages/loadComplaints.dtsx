@@ -12,8 +12,8 @@
   DTS:ObjectName="loadComplaints"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="99"
-  DTS:VersionGUID="{E0FD96BA-3A31-4BF8-B79C-1FDB2174BD5B}">
+  DTS:VersionBuild="103"
+  DTS:VersionGUID="{C41C7921-DA85-4322-A843-E2816E4E7670}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -250,7 +250,8 @@
                       <inputColumns>
                         <inputColumn
                           refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[PosNumber]"
-                          cachedDataType="r8"
+                          cachedDataType="wstr"
+                          cachedLength="255"
                           cachedName="PosNumber"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
                         <inputColumn
@@ -344,28 +345,6 @@
                               description="Derived Column Friendly Expression"
                               expressionType="Notify"
                               name="FriendlyExpression">GETDATE()</property>
-                          </properties>
-                        </outputColumn>
-                        <outputColumn
-                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
-                          dataType="r8"
-                          errorOrTruncationOperation="Computation"
-                          errorRowDisposition="FailComponent"
-                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
-                          name="PosNumberOrig"
-                          truncationRowDisposition="IgnoreFailure">
-                          <properties>
-                            <property
-                              containsID="true"
-                              dataType="System.String"
-                              description="Derived Column Expression"
-                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]}</property>
-                            <property
-                              containsID="true"
-                              dataType="System.String"
-                              description="Derived Column Friendly Expression"
-                              expressionType="Notify"
-                              name="FriendlyExpression">PosNumber</property>
                           </properties>
                         </outputColumn>
                         <outputColumn
@@ -507,6 +486,29 @@
                               name="FriendlyExpression">(DT_WSTR,2000)ComplaintDetail</property>
                           </properties>
                         </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="255"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]"
+                          name="PosNumberOrig"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]}</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">PosNumber</property>
+                          </properties>
+                        </outputColumn>
                       </outputColumns>
                       <externalMetadataColumns />
                     </output>
@@ -620,10 +622,11 @@
                           truncationRowDisposition="IgnoreFailure" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
-                          dataType="r8"
+                          dataType="wstr"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
                           externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[PosNumber]"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
                           name="PosNumber"
                           truncationRowDisposition="IgnoreFailure" />
@@ -824,7 +827,8 @@
                           name="DistributorID" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[PosNumber]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           name="PosNumber" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[OrderNr]"
@@ -885,7 +889,8 @@
                           name="CreditNote" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Service order]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           name="Service order" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[SchadenKarton]"
@@ -939,7 +944,8 @@
                           name="DistributorID" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[PosNumber]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[PosNumber]"
                           name="PosNumber" />
                         <outputColumn
@@ -1013,7 +1019,8 @@
                           name="CreditNote" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Service order]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Service order]"
                           name="Service order" />
                         <outputColumn
@@ -1164,7 +1171,8 @@
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Date]" />
                         <inputColumn
                           refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumber]"
-                          cachedDataType="r8"
+                          cachedDataType="wstr"
+                          cachedLength="255"
                           cachedName="PosNumber"
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Pos]"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
@@ -1239,7 +1247,8 @@
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Conterminator]" />
                         <inputColumn
                           refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumberOrig]"
-                          cachedDataType="r8"
+                          cachedDataType="wstr"
+                          cachedLength="255"
                           cachedName="PosNumberOrig"
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_PosOrig]"
                           lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]" />
@@ -1952,7 +1961,7 @@ namespace ST_f1b41172c66a4ffbabb05ccfbc392398.Properties {
               <BinaryItem
                 Name="ST_f1b41172c66a4ffbabb05ccfbc392398.dll">TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAgAAAAA4fug4AtAnNIbgBTM0hVGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4gaW4gRE9TIG1v
-ZGUuDQ0KJAAAAAAAAABQRQAATAEDACGdHFwAAAAAAAAAAOAAIiALATAAABAAAAAIAAAAAAAALi4A
+ZGUuDQ0KJAAAAAAAAABQRQAATAEDALpd3lwAAAAAAAAAAOAAIiALATAAABAAAAAIAAAAAAAALi4A
 AAAgAAAAQAAAAAAAEAAgAAAAAgAABAAAAAAAAAAGAAAAAAAAAACAAAAAAgAAAAAAAAMAYIUAABAA
 ABAAAAAAEAAAEAAAAAAAABAAAAAAAAAAAAAAANwtAABPAAAAAEAAAHgEAAAAAAAAAAAAAAAAAAAA
 AAAAAGAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -1980,7 +1989,7 @@ BgCBAFoEBgCpAFoEFQC5AFoEBgBxAEsFHwDBACwFJADJALYDKQDRANwCLwCJABADMwDZAOIDNwDR
 AOYCPADBAHQFAQBxAFoEBgCJAFoEBgDhAJMAQQDhAIMFSACRAFoETQCxAFoEBgAIABQAZgAIABgA
 awApAHMA0wAuAAsAqwAuABMAtAAuABsA0wAuACMA3AAuACsABQEuADMABQEuADsABQEuAEMA3AAu
 AEsACwEuAFMABQEuAFsAIgFDAGMAawBJAHMA0wBhAHsAawBjAGsAawAbAAMAAQAEAAMAAABKBJwA
-AADyAKEAAABsBaYAAgAEAAMAAgAFAAUAAQAGAAUAAgAHAAcABIAAAAEAAAARGxg/AAAAAAAAAQAA
+AADyAKEAAABsBaYAAgAEAAMAAgAFAAUAAQAGAAUAAgAHAAcABIAAAAEAAACkGy1AAAAAAAAAAQAA
 AAQAAAAAAAAAAAAAAFQAXwAAAAAADQAAAAAAAAAAAAAAXQAeAwAAAAAEAAAAAAAAAAAAAABUAL8D
 AAAAAA0AAAAAAAAAAAAAAF0AOAAAAAAAAAAAAAEAAACrBAAABQACAAAAAAAAU1RfZjFiNDExNzJj
 NjZhNGZmYmFiYjA1Y2NmYmMzOTIzOTgAPE1vZHVsZT4AU3lzdGVtLklPAE1pY3Jvc29mdC5TcWxT
@@ -2011,7 +2020,7 @@ Y3QAZ2V0X0RlZmF1bHQAc2V0X1Rhc2tSZXN1bHQAZ2V0X0Fzc2VtYmx5AAArVQBzAGUAcgA6ADoA
 dwBvAHIAawBpAG4AZwBmAGkAbABlAHQAZQBtAHAAACtVAHMAZQByADoAOgB3AG8AcgBrAGkAbgBn
 AGYAaQBsAGUAbgBhAG0AZQAAcVMAVABfAGYAMQBiADQAMQAxADcAMgBjADYANgBhADQAZgBmAGIA
 YQBiAGIAMAA1AGMAYwBmAGIAYwAzADkAMgAzADkAOAAuAFAAcgBvAHAAZQByAHQAaQBlAHMALgBS
-AGUAcwBvAHUAcgBjAGUAcwAAAO15dIUcmHpFj2AeIpCnTZYABCABAQgDIAABBSABARERBCABAQ4F
+AGUAcwBvAHUAcgBjAGUAcwAAABs1vQDfQXRKs4azoCSYARYABCABAQgDIAABBSABARERBCABAQ4F
 IAEBEVEDBwEOBCAAEmEEIAASZQUgARJpHAMgABwDIAAOBAABDg4EIAEBHAYAARJxEXUEIAASeQYg
 AgEOEnkIt3pcVhk04IkIiYRdzYCAzJEEAAAAAAQBAAAAAwYSSQMGEk0DBhIQAgYIAwYRFAQAABJJ
 BAAAEk0FAAEBEk0EAAASEAMAAAEECAASSQQIABJNBAgAEhAIAQAIAAAAAAAeAQABAFQCFldyYXBO
@@ -2033,14 +2042,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAABABAAAAAYAACAAAAAAAAAAAAAAAAAAAABAAEAAAAwAACAAAAAAAAAAAAAAAAAAAABAAAA
 AABIAAAAWEAAABoEAAAAAAAAAAAAABoENAAAAFYAUwBfAFYARQBSAFMASQBPAE4AXwBJAE4ARgBP
-AAAAAAC9BO/+AAABAAAAAQAYPxEbAAABABg/ERs/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAA
+AAAAAAC9BO/+AAABAAAAAQAtQKQbAAABAC1ApBs/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAA
 RAAAAAEAVgBhAHIARgBpAGwAZQBJAG4AZgBvAAAAAAAkAAQAAABUAHIAYQBuAHMAbABhAHQAaQBv
 AG4AAAAAAAAAsAR6AwAAAQBTAHQAcgBpAG4AZwBGAGkAbABlAEkAbgBmAG8AAABWAwAAAQAwADAA
 MAAwADAANABiADAAAAAaAAEAAQBDAG8AbQBtAGUAbgB0AHMAAAAAAAAAIgABAAEAQwBvAG0AcABh
 AG4AeQBOAGEAbQBlAAAAAAAAAAAAcAAkAAEARgBpAGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4A
 AAAAAFMAVABfAGYAMQBiADQAMQAxADcAMgBjADYANgBhADQAZgBmAGIAYQBiAGIAMAA1AGMAYwBm
 AGIAYwAzADkAMgAzADkAOAAAAD4ADwABAEYAaQBsAGUAVgBlAHIAcwBpAG8AbgAAAAAAMQAuADAA
-LgA2ADkAMgA5AC4AMQA2ADEANQAyAAAAAABwACgAAQBJAG4AdABlAHIAbgBhAGwATgBhAG0AZQAA
+LgA3ADAANwA2AC4AMQA2ADQAMgA5AAAAAABwACgAAQBJAG4AdABlAHIAbgBhAGwATgBhAG0AZQAA
 AFMAVABfAGYAMQBiADQAMQAxADcAMgBjADYANgBhADQAZgBmAGIAYQBiAGIAMAA1AGMAYwBmAGIA
 YwAzADkAMgAzADkAOAAuAGQAbABsAAAASAASAAEATABlAGcAYQBsAEMAbwBwAHkAcgBpAGcAaAB0
 AAAAQwBvAHAAeQByAGkAZwBoAHQAIABAACAAIAAyADAAMQA4AAAAKgABAAEATABlAGcAYQBsAFQA
@@ -2049,8 +2058,8 @@ AGEAbQBlAAAAUwBUAF8AZgAxAGIANAAxADEANwAyAGMANgA2AGEANABmAGYAYgBhAGIAYgAwADUA
 YwBjAGYAYgBjADMAOQAyADMAOQA4AC4AZABsAGwAAABoACQAAQBQAHIAbwBkAHUAYwB0AE4AYQBt
 AGUAAAAAAFMAVABfAGYAMQBiADQAMQAxADcAMgBjADYANgBhADQAZgBmAGIAYQBiAGIAMAA1AGMA
 YwBmAGIAYwAzADkAMgAzADkAOAAAAEIADwABAFAAcgBvAGQAdQBjAHQAVgBlAHIAcwBpAG8AbgAA
-ADEALgAwAC4ANgA5ADIAOQAuADEANgAxADUAMgAAAAAARgAPAAEAQQBzAHMAZQBtAGIAbAB5ACAA
-VgBlAHIAcwBpAG8AbgAAADEALgAwAC4ANgA5ADIAOQAuADEANgAxADUAMgAAAAAAAAAAAAAAAAAA
+ADEALgAwAC4ANwAwADcANgAuADEANgA0ADIAOQAAAAAARgAPAAEAQQBzAHMAZQBtAGIAbAB5ACAA
+VgBlAHIAcwBpAG8AbgAAADEALgAwAC4ANwAwADcANgAuADEANgA0ADIAOQAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -2398,9 +2407,43 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           Id="Package\loop through complaints\extract data\OLE DB Destination"
           TopLeft="186,270" />
         <NodeLayout
-          Size="141,42"
+          Size="144,42"
           Id="Package\loop through complaints\extract data\Excel Source"
           TopLeft="216,49" />
+        <EdgeLayout
+          Id="Package\loop through complaints\extract data.Paths[Excel Source Output]"
+          TopLeft="288,91">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-11,60"
+              Start="0,0"
+              End="-11,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="-4,30" />
+                  <mssgle:LineSegment
+                    End="-7,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-7,30"
+                    Point2="-11,30"
+                    Point3="-11,34" />
+                  <mssgle:LineSegment
+                    End="-11,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
         <EdgeLayout
           Id="Package\loop through complaints\extract data.Paths[Derived Column Output]"
           TopLeft="274.75,193">
@@ -2415,40 +2458,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
                   Capacity="5">
                   <mssgle:LineSegment
                     End="0,69.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\loop through complaints\extract data.Paths[Excel Source Output]"
-          TopLeft="286.5,91">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-9.5,60"
-              Start="0,0"
-              End="-9.5,52.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,26" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,26"
-                    Point2="0,30"
-                    Point3="-4,30" />
-                  <mssgle:LineSegment
-                    End="-5.5,30" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-5.5,30"
-                    Point2="-9.5,30"
-                    Point3="-9.5,34" />
-                  <mssgle:LineSegment
-                    End="-9.5,52.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
