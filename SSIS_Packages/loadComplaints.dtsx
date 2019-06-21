@@ -12,8 +12,8 @@
   DTS:ObjectName="loadComplaints"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="103"
-  DTS:VersionGUID="{C41C7921-DA85-4322-A843-E2816E4E7670}">
+  DTS:VersionBuild="104"
+  DTS:VersionGUID="{2E4B986A-57BD-4F5F-BE3F-180D587B3211}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -188,7 +188,7 @@
           DTS:LocaleID="-1"
           DTS:ObjectName="Archive"
           DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <FileSystemData
@@ -209,7 +209,7 @@
           DTS:LocaleID="-1"
           DTS:ObjectName="Error"
           DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <FileSystemData
@@ -662,10 +662,11 @@
                           truncationRowDisposition="IgnoreFailure" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported]"
-                          dataType="r8"
+                          dataType="wstr"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
                           externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported]"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ItemReported]"
                           name="ItemReported"
                           truncationRowDisposition="IgnoreFailure" />
@@ -847,7 +848,8 @@
                           name="ComplaintDetail" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemReported]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           name="ItemReported" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[ItemOrdered]"
@@ -968,7 +970,8 @@
                           name="ComplaintDetail" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[ItemReported]"
                           name="ItemReported" />
                         <outputColumn
@@ -1554,14 +1557,35 @@
               ReadOnlyVariables="User::filePath,User::workingfiletemp"
               ReadWriteVariables="User::workingfilename">
               <ProjectItem
-                Name="Properties\Settings.settings"
-                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
-</SettingsFile>]]></ProjectItem>
+                Name="Properties\AssemblyInfo.cs"
+                Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyCopyright("Copyright @  2018")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.resx"
                 Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
@@ -1861,35 +1885,14 @@ namespace ST_f1b41172c66a4ffbabb05ccfbc392398.Properties {
     }
 }]]></ProjectItem>
               <ProjectItem
-                Name="Properties\AssemblyInfo.cs"
-                Encoding="UTF8"><![CDATA[using System.Reflection;
-using System.Runtime.CompilerServices;
-
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
-[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyCopyright("Copyright @  2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
-
-[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+                Name="Properties\Settings.settings"
+                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.Designer.cs"
                 Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
@@ -2088,7 +2091,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           DTS:LocaleID="-1"
           DTS:ObjectName="Send error message"
           DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SendMailTask:SendMailTaskData
@@ -2109,7 +2112,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           DTS:LocaleID="-1"
           DTS:ObjectName="Send processed message"
           DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SendMailTask:SendMailTaskData

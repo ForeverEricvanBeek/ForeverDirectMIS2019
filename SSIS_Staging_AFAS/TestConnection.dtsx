@@ -12,23 +12,124 @@
   DTS:ObjectName="TestConnection"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="2"
-  DTS:VersionGUID="{70D9311A-B655-4247-8B51-01D69790C82B}">
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{D597499B-2823-491C-9659-595C08E5A626}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
-  <DTS:Variables />
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[AFAS]"
+      DTS:CreationName="HTTP"
+      DTS:DTSID="{4FF53687-FCC4-4158-8530-6E4FD06396FE}"
+      DTS:ObjectName="AFAS">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="https://81144.soap.afas.online/profitservices/appconnectorget.asmx?wsdl">
+          <DTS:HttpConnection
+            DTS:ServerURL="https://81144.soap.afas.online/profitservices/appconnectorget.asmx?wsdl"
+            DTS:TimeOut="300"
+            DTS:ChunkSize="50">
+            <DTS:Property
+              DTS:Name="ServerPassword"
+              Sensitive="1"></DTS:Property>
+            <DTS:Property
+              DTS:Name="ProxyPassword"
+              Sensitive="1"></DTS:Property>
+          </DTS:HttpConnection>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DWH_Medewerker_verzuimmelding.xml]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{E95E2236-82E1-4166-9758-0BF7B6A61792}"
+      DTS:ObjectName="DWH_Medewerker_verzuimmelding.xml">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:FileUsageType="1"
+          DTS:ConnectionString="D:\DWH_Medewerker_verzuimmelding.xml" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7D3A8D3B-CE40-4542-A902-06624E869029}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="varXMLResult">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
-      DTS:refId="Package\Web Service Task"
+      DTS:refId="Package\AFAS"
       DTS:CreationName="Microsoft.WebServiceTask"
       DTS:Description="Web Service Task"
       DTS:DTSID="{22F96DA1-A9A7-4586-9424-8A70119F45E5}"
       DTS:ExecutableType="Microsoft.WebServiceTask"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Web Service Task"
+      DTS:ObjectName="AFAS"
       DTS:ThreadHint="0">
       <DTS:Variables />
-      <DTS:ObjectData />
+      <DTS:ObjectData>
+        <WSTask:WebServiceTaskData
+          WSTask:ConnectionName="{4FF53687-FCC4-4158-8530-6E4FD06396FE}"
+          WSTask:Service="ConnectorAppGet"
+          WSTask:WSDLFile="\\fdodwhd01\e$\StagingFiles\Input\AFAS\wsdl\appconnectorget.wsdl"
+          WSTask:OverwriteWSDLFile="True"
+          WSTask:OutputLocation="DWH_Medewerker_verzuimmelding.xml" xmlns:WSTask="www.microsoft.com/sqlserver/dts/tasks/webservicetask">
+          <WSTask:MethodInfo
+            WSTask:MethodName="GetDataWithOptions"
+            WSTask:MessageName="">
+            <WSTask:Documentation></WSTask:Documentation>
+            <WSTask:ParamInfo
+              WSTask:Name="token"
+              WSTask:Datatype="string"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="0">
+              <WSTask:PrimitiveValue>&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74&lt;/data&gt;&lt;/token&gt;</WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+            <WSTask:ParamInfo
+              WSTask:Name="connectorId"
+              WSTask:Datatype="string"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="1">
+              <WSTask:PrimitiveValue>DWH_Medewerker_verzuimmelding</WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+            <WSTask:ParamInfo
+              WSTask:Name="filtersXml"
+              WSTask:Datatype="string"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="2">
+              <WSTask:PrimitiveValue></WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+            <WSTask:ParamInfo
+              WSTask:Name="skip"
+              WSTask:Datatype="int"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="3">
+              <WSTask:PrimitiveValue>0</WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+            <WSTask:ParamInfo
+              WSTask:Name="take"
+              WSTask:Datatype="int"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="4">
+              <WSTask:PrimitiveValue>5</WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+            <WSTask:ParamInfo
+              WSTask:Name="options"
+              WSTask:Datatype="string"
+              WSTask:ParamType="Primitive"
+              WSTask:SeqNumber="5">
+              <WSTask:PrimitiveValue>&lt;Options&gt;&lt;Outputmode&gt;1&lt;/Outputmode&gt;&lt;Metadata&gt;true&lt;/Metadata&gt;&lt;Outputoptions&gt;3&lt;/Outputoptions&gt;&lt;/Options&gt;</WSTask:PrimitiveValue>
+            </WSTask:ParamInfo>
+          </WSTask:MethodInfo>
+        </WSTask:WebServiceTaskData>
+      </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
@@ -44,8 +145,8 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="168,42"
-          Id="Package\Web Service Task"
+          Size="108,42"
+          Id="Package\AFAS"
           TopLeft="129,83" />
       </GraphLayout>
     </LayoutInfo>
