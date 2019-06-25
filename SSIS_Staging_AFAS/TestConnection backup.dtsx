@@ -5,22 +5,22 @@
   DTS:CreationName="Microsoft.Package"
   DTS:CreatorComputerName="FDONB044"
   DTS:CreatorName="FOREVERDIRECT\beek"
-  DTS:DTSID="{5A1A951B-9032-4983-AE3E-868E996BB316}"
+  DTS:DTSID="{722ABAEC-132E-459D-AD29-ABB296AF66EE}"
   DTS:ExecutableType="Microsoft.Package"
   DTS:LastModifiedProductVersion="14.0.3002.113"
   DTS:LocaleID="1043"
-  DTS:ObjectName="TestConnection"
+  DTS:ObjectName="TestConnection backup"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="57"
-  DTS:VersionGUID="{3EAC85D5-695F-4D94-9247-EB3D4F5029A7}">
+  DTS:VersionBuild="58"
+  DTS:VersionGUID="{DB8177B1-87C6-4D50-A6E6-C991B21ED7F5}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[AFAS]"
       DTS:CreationName="HTTP"
-      DTS:DTSID="{4FF53687-FCC4-4158-8530-6E4FD06396FE}"
+      DTS:DTSID="{BF1D79BD-6B50-4FA9-A71E-36905C19FBE8}"
       DTS:ObjectName="AFAS">
       <DTS:ObjectData>
         <DTS:ConnectionManager
@@ -42,7 +42,7 @@
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[DWH_Medewerker_verzuimmelding.csv]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{28EE4B74-9BCD-4860-A851-D1AC54BBC413}"
+      DTS:DTSID="{718C256B-2B53-4DC8-8190-F5A72643AA25}"
       DTS:ObjectName="DWH_Medewerker_verzuimmelding.csv">
       <DTS:ObjectData>
         <DTS:ConnectionManager
@@ -53,7 +53,7 @@
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[DWH_Medewerker_verzuimmelding.xml]"
       DTS:CreationName="FILE"
-      DTS:DTSID="{E95E2236-82E1-4166-9758-0BF7B6A61792}"
+      DTS:DTSID="{20E61127-C5CE-411B-81CB-8CAC1386DAA0}"
       DTS:ObjectName="DWH_Medewerker_verzuimmelding.xml">
       <DTS:ObjectData>
         <DTS:ConnectionManager
@@ -64,7 +64,7 @@
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[FDODWHD01\DWHDEV.Staging]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{AA6EB32A-2CF2-46A1-991C-C9A36CAFEBCF}"
+      DTS:DTSID="{6203CED3-0E0D-461D-842D-FF85432032E1}"
       DTS:ObjectName="FDODWHD01\DWHDEV.Staging">
       <DTS:ObjectData>
         <DTS:ConnectionManager
@@ -74,18 +74,18 @@
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Staging]"
       DTS:CreationName="ADO.NET:System.Data.SqlClient.SqlConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
-      DTS:DTSID="{49FE85BC-D811-4F11-9F36-AAB02870BA3C}"
+      DTS:DTSID="{1E813299-A978-4B70-99A7-A11C3C7822B8}"
       DTS:ObjectName="Staging">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=FDODWHD01\DWHDEV;Initial Catalog=Staging;Integrated Security=True;Application Name=SSIS-TestConnection-{49FE85BC-D811-4F11-9F36-AAB02870BA3C}FDODWHD01\DWHDEV.DWH;" />
+          DTS:ConnectionString="Data Source=FDODWHD01\DWHDEV;Initial Catalog=Staging;Integrated Security=True;Application Name=SSIS-TestConnection-{1E813299-A978-4B70-99A7-A11C3C7822B8}FDODWHD01\DWHDEV.DWH;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{0DCA496D-F238-4C60-9684-5455A3F3B1AA}"
+      DTS:DTSID="{7817B9D0-9884-4FBE-A528-82BD543B5A32}"
       DTS:EvaluateAsExpression="True"
       DTS:Expression="&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;utf-16\&quot;?&gt;&quot; + REPLACE(REPLACE(SUBSTRING( @[User::varXMLResult] , 50, LEN( @[User::varXMLResult])-58),&quot;&amp;lt;&quot;,&quot;&lt;&quot;),&quot;&amp;gt;&quot;,&quot;&gt;&quot;)"
       DTS:IncludeInDebugDump="2345"
@@ -96,7 +96,7 @@
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
-      DTS:DTSID="{77A57138-5EFB-4613-B7E8-28FB7A928925}"
+      DTS:DTSID="{4F224E91-45E6-4E43-9CD4-CB806A3B08A1}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
       DTS:ObjectName="varXMLResult">
@@ -109,7 +109,7 @@
       DTS:refId="Package\Data Flow Task"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:DTSID="{439F4171-EC50-4EC3-A45E-86F8FF353CB0}"
+      DTS:DTSID="{1DBDE48D-31D9-41E4-BFB9-C4D71DE51CD2}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
       DTS:ObjectName="Data Flow Task"
@@ -1500,7 +1500,7 @@
       DTS:refId="Package\DWH_Medewerker_verzuimmelding"
       DTS:CreationName="Microsoft.WebServiceTask"
       DTS:Description="DWH_Medewerker_verzuimmelding"
-      DTS:DTSID="{DD1E6C39-8680-4CBC-AA79-DEE6A593DEC7}"
+      DTS:DTSID="{DE66AF4A-28AB-42F8-99F5-21025EDF91E8}"
       DTS:ExecutableType="Microsoft.WebServiceTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="DWH_Medewerker_verzuimmelding"
@@ -1508,7 +1508,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <WSTask:WebServiceTaskData
-          WSTask:ConnectionName="{4FF53687-FCC4-4158-8530-6E4FD06396FE}"
+          WSTask:ConnectionName="{BF1D79BD-6B50-4FA9-A71E-36905C19FBE8}"
           WSTask:Service="ConnectorAppGet"
           WSTask:WSDLFile="\\fdodwhd01\StagingFiles\Input\AFAS\wsdl\appconnectorget.wsdl"
           WSTask:OutputType="Variable"
@@ -1568,7 +1568,7 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint]"
       DTS:CreationName=""
-      DTS:DTSID="{F2D87733-113D-4427-AC5E-6B2482ECC0B5}"
+      DTS:DTSID="{E9D37422-FDC5-4F6D-AC34-997C2F11A864}"
       DTS:From="Package\DWH_Medewerker_verzuimmelding"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
