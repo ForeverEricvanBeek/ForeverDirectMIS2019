@@ -79,8 +79,6 @@
                 varExtractionWhereStatement = "AND "+varExtractionWhereStatement;
             }
             
-            //string ConnectionStringXSD =  @"@[$Project::DirImport]" + @"+"""+ varExtractionOptions.Replace("\\","\\\\") + @"""";
-            //string ConnectionStringXSD2 = @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";
             string ConnectionStringXSD = varExtractionOptions.Replace("\\","\\\\");
             string ConnectionStringXSD2 = @"@[$Project::DirImport]" + @"+"""+  varExtractionOptions.Replace("\\","\\\\")+ @"""";
             
@@ -160,10 +158,9 @@
             
             //Indien XML dan schema en tabelnaam weglaten
             switch (varExtractionSourceType) {
-                case "XML_Enkel": 
                 case "XML":
                 case "XML_Kewill":
-                case "XML_IFS":
+                case "XML_AFAS":
                 case "CSV":
                 case "CSV_L":
                 case "ODBC":
@@ -217,7 +214,7 @@
             
             string varSQLStatementColumns = "";
             foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName             =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
+                string varSourceColumnName =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
                 if (varSourceColumnName == rowSourceExtractionColumn["SourceColumnName"].ToString() && varExtractionSourceType == "SQLServer") {
                     varSourceColumnName = "[" + varSourceColumnName + "]";
                 }
@@ -247,6 +244,8 @@
                     varExtractionDateConversion = "CAST(&apos;&quot; + @[User::LastExtractionDate] + &quot;&apos; AS TIMESTAMP)";
                     break;
             }
+            
+            string varXMLCleanExpression = "1=1";
             
             if (varExtractionType == "MN") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + "\"";
@@ -283,6 +282,8 @@
                     <Variable Name="MaxIncrementalKey" DataType="String" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="LastExtractionID" DataType="String" Namespace="User">0</Variable>
+                    <Variable Name="sXMLResult" DataType="String" Namespace="User">0</Variable>
+                    <Variable Name="sXMLClean" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varXMLCleanExpression#></Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
                     <Variable Name="sSourceFolder" DataType="String" Namespace="User"></Variable>
@@ -335,7 +336,7 @@
                             <#string varTaskName = "Dataflow Extract " + varName;
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName],[ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
     
-                            if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_IFS") {
+                            if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill") {
                                 string ConnectionStringCSV =  @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";
                                 string folder =  ConnectionStringCSV.Substring(0,ConnectionStringCSV.LastIndexOf("\\")+1) + @"""";
                                 string file =  @""""+ConnectionStringCSV.Substring(ConnectionStringCSV.LastIndexOf("\\")+1 );
@@ -350,79 +351,82 @@
                             <#}#>
                             
                             <Dataflow Name="<#=varTaskName#>">
-                                <#if (varExtractionSourceType == "XML_Kewill" ) {#>
+                                <#if (varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_AFAS") {#>
                                     <Expressions><Expression ExternalProperty="[XML Source <#=varName#>].[XMLSchemaDefinition]"><#=ConnectionStringXSD2#></Expression></Expressions>
                                 <#}#>
     
                                 <Transformations>
                                     <#// Create Source
                                     switch (varExtractionSourceType) {
-                                        case "FlatFile":#>
-                                            <FlatFileSource Name="FF Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>">
+                                        case "FlatFile":
+                                            varOutputPathName = "FF Source " + varName;#>
+                                            <FlatFileSource Name="<#=varOutputPathName#>" ConnectionName="<#=varExtractionSourceConnection#>">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                             </FlatFileSource>
-                                            <#varOutputPathName = "FF Source " + varName;	
-                                            break;
+                                            <#break;
                                         case "CSV":
-                                        case "CSV_L":#>
-                                            <FlatFileSource Name="CSV Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" RetainNulls="true">
+                                        case "CSV_L":
+                                            varOutputPathName = "CSV Source " + varName;#>
+                                            <FlatFileSource Name="<#=varOutputPathName#>" ConnectionName="<#=varExtractionSourceConnection#>" RetainNulls="true">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                             </FlatFileSource>
-                                            <#varOutputPathName = "CSV Source " + varName;	
-                                            break;
+                                            <#break;
                                         case "Excel2007":
-                                        case "Excel97":#>
-                                            <ExcelSource Name="Excel Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                        case "Excel97":
+                                            varOutputPathName = "Excel Source " + varName;#>
+                                            <ExcelSource Name="<#=varOutputPathName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                                 <VariableInput VariableName="User.SourceExtractionSQL" />
                                             </ExcelSource>
-                                            <#varOutputPathName = "Excel Source " + varName;	
-                                            break;
-                                        case "ODBC":#>
-                                            <OdbcSource Name="ODBC Source <#=varName#>" Connection="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                            <#break;
+                                        case "ODBC":
+                                            varOutputPathName = "ODBC Source " + varName;#>
+                                            <OdbcSource Name="<#=varOutputPathName#>" Connection="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                                 <DirectInput><#=varExtractionSQLStatement#></DirectInput>
                                             </OdbcSource>
-                                            <#varOutputPathName = "ODBC Source " + varName;	
-                                            break;
-                                        case "ODBCold":#>
-                                            <AdoNetSource Name="ODBC Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
+                                            <#break;
+                                        case "ODBCold":
+                                            varOutputPathName = "ODBC Source " + varName;#>
+                                            <AdoNetSource Name="<#=varOutputPathName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="false">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                                 <DirectInput><#=varExtractionSQLStatement#></DirectInput>
                                             </AdoNetSource>
-                                            <#varOutputPathName = "ODBC Source " + varName;	
-                                            break;
-                                        case "XML_Enkel":
+                                            <#break;
                                         case "XML_Kewill":
-                                        case "XML_IFS":
-                                        case "XML":#>
-                                            <XmlSource Name="XML Source <#=varName#>"> 
+                                        case "XML":
+                                            varOutputPathName = "XML Source " + varName;#>
+                                            <XmlSource Name="<#=varOutputPathName#>"> 
                                                 <XmlSchemaFileInput ConnectionName="<#=varExtractionSourceConnection#>_XSD" /> 
                                                 <FileNameFromVariableInput VariableName="User.sFullFilePath" /> 
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" /> 
                                             </XmlSource>
-                                            <#varOutputPathName = "XML Source " + varName;	
-                                            break;
-                                        default:#>
-                                            <OleDbSource Name="OLEDB Source <#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
+                                            <#break;
+                                        case "XML_AFAS":
+                                            varOutputPathName = "XML1 Source " + varName;	#>
+                                            <XmlSource Name="<#=varOutputPathName#>"> 
+                                                <XmlSchemaFileInput ConnectionName="<#=varExtractionSourceConnection#>_XSD" /> 
+                                                <DataFromVariableInput VariableName="User.sXMLClean" /> 
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" /> 
+                                            </XmlSource>
+                                            <#break;
+                                        default:
+                                            varOutputPathName = "OLEDB Source " + varName;#>
+                                            <OleDbSource Name="<#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                                 <VariableInput VariableName="User.SourceExtractionSQL" />
                                             </OleDbSource>
-                                            <#varOutputPathName = "OLEDB Source " + varName;	
-                                            break;
+                                            <#break;
                                         }#>
     
                                         <DerivedColumns Name="Derived Columns Error <#=varName#>"> 
                                             <#// Indien source is XML dan is outputpathname anders
                                             switch (varExtractionSourceType) {
-                                                case "XML_Enkel":#>
-                                                    <InputPath OutputPathName="<#=varOutputPathName#>.<#=varTargetTable#>Error" />
-                                                    <#break;
-                                                case "XML_Kewill":#>
+                                                case "XML_Kewill":
+                                                case "XML_AFAS":#>
                                                     <InputPath OutputPathName="<#=varOutputPathName#>.rowError" />
                                                     <#break;
-                                                case "XML":
-                                                case "XML_IFS":#>
+                                                case "XML":#>
                                                     <InputPath OutputPathName="<#=varOutputPathName#>.<#=varTargetTable#>Error" /> 
                                                     <#break;
                                                 default:#>
@@ -432,7 +436,7 @@
                                             
                                             // Voeg primary key toe aan error message
                                             string varExtractionTargetTablePKLogging =" + (DT_WSTR,50)" + varExtractionTargetTablePK.Replace(",","+ \"; \" + (DT_WSTR,50)");
-                                            if (varExtractionTargetTablePK.Length > 1 && varExtractionSourceType != "CSV" && varExtractionSourceType != "CSV_L" && varExtractionSourceType != "XML_Kewill") {
+                                            if (varExtractionTargetTablePK.Length > 1 && varExtractionSourceType != "CSV" && varExtractionSourceType != "CSV_L" && varExtractionSourceType != "XML_Kewill" && varExtractionSourceType != "XML_AFAS") {
                                                 varExtractionTargetTablePKLogging = varExtractionTargetTablePKLogging;
                                             } else {
                                                 varExtractionTargetTablePKLogging = " + \"unknown\"";
@@ -447,8 +451,7 @@
                                             <InputPath OutputPathName="Derived Columns Error <#=varName#>.Output" />
                                         </RowCount>
                                         <# switch (varExtractionSourceType) {
-                                            case "XML_Enkel":
-                                            case "XML_IFS":#>
+                                            case "XML_Enkel":#>
                                                 <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
                                                     <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
                                                     <Columns>
@@ -463,7 +466,8 @@
                                                 </OleDbDestination>
                                                 <#varOutputPathName = varOutputPathName + "." + varTargetTable;
                                                 break;
-                                            case "XML_Kewill":#>
+                                            case "XML_Kewill":
+                                            case "XML_AFAS":#>
                                                 <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
                                                     <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
                                                     <Columns>
@@ -613,7 +617,7 @@
                                             </OleDbDestination>
                                         </Transformations>
                                     </Dataflow>
-                                    <#if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_IFS") {#>
+                                    <#if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill") {#>
                                 </Tasks>
                             </ForEachFileLoop>
                             <#}               
@@ -690,7 +694,7 @@
                         </Parameters>
                     </ExecuteSQL>
                 </Tasks>
-                <#if (varExtractionSourceType == "XML_Kewill") {#>
+                <#if (varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_AFAS") {#>
                     <Connections>
                         <Connection ConnectionName="<#=varExtractionSourceConnection#>_XSD">
                             <Expressions><Expression PropertyName="<#=varExtractionSourceConnection#>_XSD.ConnectionString"><#=ConnectionStringXSD2#></Expression></Expressions>
@@ -823,10 +827,9 @@
                                 string varPackageXML = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceConnection + ".dtsx";
                             
                                 switch (varConnectionType) {
-                                    case "XML_Enkel": 
                                     case "XML":
                                     case "XML_Kewill":
-                                    case "XML_IFS":
+                                    case "XML_AFAS":
                                     case "CSV":
                                     case "CSV_L":
                                     case "ODBC":

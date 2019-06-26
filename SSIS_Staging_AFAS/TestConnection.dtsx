@@ -12,8 +12,8 @@
   DTS:ObjectName="TestConnection"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="57"
-  DTS:VersionGUID="{3EAC85D5-695F-4D94-9247-EB3D4F5029A7}">
+  DTS:VersionBuild="58"
+  DTS:VersionGUID="{B1D69ACD-DB4F-4EF0-B997-8210DE82AC7C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -764,275 +764,6 @@
               </outputs>
             </component>
             <component
-              refId="Package\Data Flow Task\Staging Error"
-              componentClassID="Microsoft.OLEDBDestination"
-              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
-              description="OLE DB Destination"
-              name="Staging Error"
-              usesDispositions="true"
-              version="4">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="Specifies the name of the database object used to open a rowset."
-                  name="OpenRowset">[AFAS].[DWH_Medewerker_verzuimmelding1]</property>
-                <property
-                  dataType="System.String"
-                  description="Specifies the variable that contains the name of the database object used to open a rowset."
-                  name="OpenRowsetVariable"></property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">1252</property>
-                <property
-                  dataType="System.Boolean"
-                  description="Forces the use of the DefaultCodePage property value when describing character data."
-                  name="AlwaysUseDefaultCodePage">false</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the mode used to access the database."
-                  name="AccessMode"
-                  typeConverter="AccessMode">3</property>
-                <property
-                  dataType="System.Boolean"
-                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
-                  name="FastLoadKeepIdentity">false</property>
-                <property
-                  dataType="System.Boolean"
-                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
-                  name="FastLoadKeepNulls">false</property>
-                <property
-                  dataType="System.String"
-                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
-                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
-                  name="FastLoadMaxInsertCommitSize">2147483647</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Data Flow Task\Staging Error.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[FDODWHD01\DWHDEV.Staging]"
-                  connectionManagerRefId="Package.ConnectionManagers[FDODWHD01\DWHDEV.Staging]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input]"
-                  errorOrTruncationOperation="Insert"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Destination Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Medewerker]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Medewerker"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Medewerker]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Medewerker]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Begindatum]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Begindatum"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Begindatum]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Begindatum]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of VerwachteEinddatum]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of VerwachteEinddatum"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[VerwachteEinddatum]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of VerwachteEinddatum]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Einddatum]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Einddatum"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Einddatum]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Einddatum]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Omschrijving]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Omschrijving"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Omschrijving]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Omschrijving]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Aanwezigheid]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Aanwezigheid"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Aanwezigheid]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Aanwezigheid]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Vangnetregeling]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Vangnetregeling"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Vangnetregeling]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Vangnetregeling]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Dienstverband]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Dienstverband"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Dienstverband]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Dienstverband]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of VerzuimmeldingID]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of VerzuimmeldingID"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[VerzuimmeldingID]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of VerzuimmeldingID]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Begintijd]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Begintijd"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Begintijd]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Begintijd]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of Eindtijd]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of Eindtijd"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Eindtijd]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Eindtijd]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of MeldingBeginVerzuim]"
-                      cachedDataType="wstr"
-                      cachedLength="1999"
-                      cachedName="Copy of MeldingBeginVerzuim"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[MeldingBeginVerzuim]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of MeldingBeginVerzuim]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of ErrorCode]"
-                      cachedDataType="i4"
-                      cachedName="Copy of ErrorCode"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Error1]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of ErrorCode]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].Columns[Copy of ErrorColumn]"
-                      cachedDataType="i4"
-                      cachedName="Copy of ErrorColumn"
-                      externalMetadataColumnId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Error2]"
-                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of ErrorColumn]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Medewerker]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Medewerker" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Begindatum]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Begindatum" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[VerwachteEinddatum]"
-                      dataType="wstr"
-                      length="1999"
-                      name="VerwachteEinddatum" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Einddatum]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Einddatum" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Omschrijving]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Omschrijving" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Aanwezigheid]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Aanwezigheid" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Vangnetregeling]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Vangnetregeling" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Dienstverband]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Dienstverband" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[VerzuimmeldingID]"
-                      dataType="wstr"
-                      length="1999"
-                      name="VerzuimmeldingID" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Begintijd]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Begintijd" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Eindtijd]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Eindtijd" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[MeldingBeginVerzuim]"
-                      dataType="wstr"
-                      length="1999"
-                      name="MeldingBeginVerzuim" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Error1]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Error1" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input].ExternalColumns[Error2]"
-                      dataType="wstr"
-                      length="1999"
-                      name="Error2" />
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Data Flow Task\Staging Error.Outputs[OLE DB Destination Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Destination Error Output"
-                  synchronousInputId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\Staging Error.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\Staging Error.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\Staging Error.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\Staging Error.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
               refId="Package\Data Flow Task\XML Source"
               componentClassID="Microsoft.ManagedComponentHost"
               contactInfo="Extracts data from an XML file. For example, extract catalog data from an XML file that represents catalogs and catalog items. Before using, specify the schema and generate an output for each XML element.;Microsoft Corporation;Microsoft SQL Server; Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
@@ -1478,11 +1209,6 @@
           </components>
           <paths>
             <path
-              refId="Package\Data Flow Task.Paths[Data Conversion Output]"
-              endId="Package\Data Flow Task\Staging Error.Inputs[OLE DB Destination Input]"
-              name="Data Conversion Output"
-              startId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]" />
-            <path
               refId="Package\Data Flow Task.Paths[DWH_Medewerker_verzuimmelding]"
               endId="Package\Data Flow Task\Staging.Inputs[OLE DB Destination Input]"
               name="DWH_Medewerker_verzuimmelding"
@@ -1636,10 +1362,6 @@
           Size="116,42"
           Id="Package\Data Flow Task\Staging"
           TopLeft="104,191" />
-        <NodeLayout
-          Size="144,42"
-          Id="Package\Data Flow Task\Staging Error"
-          TopLeft="458,182" />
         <EdgeLayout
           Id="Package\Data Flow Task.Paths[DWH_Medewerker_verzuimmelding Error Output]"
           TopLeft="291,58">
@@ -1710,58 +1432,11 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Data Flow Task.Paths[Data Conversion Output]"
-          TopLeft="509.5,117">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="20.5,65"
-              Start="0,0"
-              End="20.5,57.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,28.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,28.5"
-                    Point2="0,32.5"
-                    Point3="4,32.5" />
-                  <mssgle:LineSegment
-                    End="16.5,32.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="16.5,32.5"
-                    Point2="20.5,32.5"
-                    Point3="20.5,36.5" />
-                  <mssgle:LineSegment
-                    End="20.5,57.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
     design-time-name="Package\Data Flow Task\Staging">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\Staging Error">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

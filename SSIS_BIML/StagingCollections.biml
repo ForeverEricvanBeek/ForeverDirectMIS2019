@@ -120,9 +120,8 @@
                         <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
                     </AdoNetConnection>
                     <#break;
-                case "XML_Enkel": 
                 case "XML_Kewill": 
-                case "XML_IFS": 
+                case "XML_AFAS": 
                 case "XML":#>
                     <FileConnection Name="<#=ConnectionName#>" FilePath="<#=ConnectionString#>" RelativePath="true" />
                     <FileConnection Name="<#=ConnectionName#>_XSD" FilePath="<#=ConnectionStringXSD#>" RelativePath="true" />
@@ -142,10 +141,9 @@
             string ConnectionName = Connection["ConnectionName"].ToString();
             
             switch (ConnectionType) {
-                case "XML_Enkel": 
                 case "XML_Kewill": 
+                case "XML_AFAS": 
                 case "XML":
-                case "XML_IFS":
                 case "CSV":
                 case "CSV_L":
                     ConnectionType = ConnectionType;
@@ -190,9 +188,8 @@
                     string ConnectionOptions = Connection["Options"].ToString();
     
                     switch (ConnectionType) {
-                        case "XML_Enkel": 
                         case "XML_Kewill": 
-                        case "XML_IFS":
+                        case "XML_AFAS":
                         case "XML":#>
                             <Parameter Name="Con<#=ConnectionName#>"  DataType="String" IsRequired="true"><#=ConnectionString#></Parameter>
                             <Parameter Name="Con<#=ConnectionName#>_XSD"  DataType="String" IsRequired="true"><#=ConnectionOptions#></Parameter>
@@ -243,9 +240,8 @@
                     string varPackageNameXML = varPackagePrefix + "-" + varSourceSchema + "-" + varSourceConnection ;
                     
                     switch (varSourceConnectionType) {
-                        case "XML_Enkel": 
                         case "XML_Kewill": 
-                        case "XML_IFS": 
+                        case "XML_AFAS": 
                         case "XML":
                         case "CSV":
                         case "CSV_L":
