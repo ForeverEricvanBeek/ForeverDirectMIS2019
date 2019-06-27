@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="68"
-  DTS:VersionGUID="{95A2EA34-2B20-4ADA-867B-C94C47265165}">
+  DTS:VersionBuild="73"
+  DTS:VersionGUID="{2CCF119C-A796-4D1A-A50D-F31F614C65A8}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -176,6 +176,15 @@
                       lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Generate]"
                       name="Generate"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[XMLExample]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="IgnoreFailure"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[XMLExample]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[XMLExample]"
+                      name="XMLExample"
+                      truncationRowDisposition="IgnoreFailure" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -211,6 +220,10 @@
                       refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[Generate]"
                       dataType="r8"
                       name="Generate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].ExternalColumns[XMLExample]"
+                      dataType="nText"
+                      name="XMLExample" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -247,6 +260,11 @@
                       length="255"
                       lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[Options]"
                       name="Options" />
+                    <outputColumn
+                      refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[XMLExample]"
+                      dataType="nText"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[XMLExample]"
+                      name="XMLExample" />
                     <outputColumn
                       refId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -342,7 +360,7 @@
                 <input
                   refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input]"
                   errorOrTruncationOperation="Insert"
-                  errorRowDisposition="FailComponent"
+                  errorRowDisposition="IgnoreFailure"
                   hasSideEffects="true"
                   name="OLE DB Destination Input">
                   <inputColumns>
@@ -392,6 +410,12 @@
                       cachedName="Generate"
                       externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
                       lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[Generate]" />
+                    <inputColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].Columns[XMLExample]"
+                      cachedDataType="nText"
+                      cachedName="XMLExample"
+                      externalMetadataColumnId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[XMLExample]"
+                      lineageId="Package\Load Generator_Connection\Connection.Outputs[Excel Source Output].Columns[XMLExample]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -402,7 +426,7 @@
                     <externalMetadataColumn
                       refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
                       dataType="wstr"
-                      length="30"
+                      length="200"
                       name="Name" />
                     <externalMetadataColumn
                       refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Type]"
@@ -431,6 +455,10 @@
                       refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
                       dataType="bool"
                       name="Generate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_Connection\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[XMLExample]"
+                      dataType="nText"
+                      name="XMLExample" />
                   </externalMetadataColumns>
                 </input>
               </inputs>

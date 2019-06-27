@@ -121,11 +121,16 @@
                     </AdoNetConnection>
                     <#break;
                 case "XML_Kewill": 
-                case "XML_AFAS": 
                 case "XML":#>
                     <FileConnection Name="<#=ConnectionName#>" FilePath="<#=ConnectionString#>" RelativePath="true" />
                     <FileConnection Name="<#=ConnectionName#>_XSD" FilePath="<#=ConnectionStringXSD#>" RelativePath="true" />
                     <#break;
+                case "XML_AFAS":#>
+                    <FileConnection Name="<#=ConnectionName#>_XSD" FilePath="<#=ConnectionStringXSD#>" RelativePath="true" />
+                    <#break;
+                case "http":#>
+                    <HttpConnection Name="<#=ConnectionName#>" ServerUrl="<#=ConnectionString#>"></HttpConnection>
+                <#break;
                 default:#>
                     <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
                         <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
@@ -146,6 +151,7 @@
                 case "XML":
                 case "CSV":
                 case "CSV_L":
+                case "http":
                     ConnectionType = ConnectionType;
                     break;
                 default:#>
@@ -180,6 +186,8 @@
                 <Parameter Name="DirImport" DataType="String" IsRequired="true"><#=ImportDir#></Parameter>
                 <Parameter Name="DirArchive" DataType="String" IsRequired="true"><#=ArchiveDir#></Parameter>
                 <Parameter Name="DirError" DataType="String" IsRequired="true"><#=ErrorDir#></Parameter>
+                <Parameter Name="AfasToken" DataType="String" IsRequired="true"><#=projectAfasToken#></Parameter>
+                <Parameter Name="AfasOptions" DataType="String" IsRequired="true"><#=projectAfasOptions#></Parameter>
                 <#foreach (DataRow Connection in Connections.Rows) {
                     string ConnectionName = Connection["ConnectionName"].ToString();
                     string ConnectionString = Connection["ConnectionString"].ToString();

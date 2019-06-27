@@ -12,7 +12,8 @@ string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't
 string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
-
+string projectAfasToken = "<![CDATA[<token><version>1</version><data>36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74</data></token>]]>"; //<token><version>1</version><data>36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74</data></token>
+string projectAfasOptions = "<![CDATA[<Options><Outputmode>1</Outputmode><Metadata>false</Metadata><Outputoptions>2</Outputoptions></Options>]]>";
 string GeneratorSchemaName = @"generator";
 string conGeneratorConnectionString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
 

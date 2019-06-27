@@ -44,6 +44,7 @@
                                                     ,ST.[IncrementalUpdateColumn]
                                                     ,ST.[IncrementalKeyColumn]
                                                     ,ST.[IsStaging] 
+                                                    ,SC.[XMLExample]
                                                     ,CS.PK						AS [PrimaryKey]
                                                     ,CASE WHEN [IsStaging] = '1' THEN 'STG' ELSE 'EXTR' END AS PackagePrefix
                                                     ,ST.[WhereStatement]
@@ -75,7 +76,8 @@
             string varExtractionIncrementalKey = rowSourceExtractionTable["IncrementalKeyColumn"].ToString();
             string varExtractionTargetTablePK = rowSourceExtractionTable["PrimaryKey"].ToString();
             string varExtractionWhereStatement = rowSourceExtractionTable["WhereStatement"].ToString();
-            if (varExtractionWhereStatement.Length > 0) {
+            string varExtractionXMLExample = rowSourceExtractionTable["XMLExample"].ToString();
+            if (varExtractionWhereStatement.Length > 0 && varExtractionSourceType != "XML_AFAS") {
                 varExtractionWhereStatement = "AND "+varExtractionWhereStatement;
             }
             
@@ -245,8 +247,9 @@
                     break;
             }
             
-            string varXMLCleanExpression = "1=1";
-            
+            string varXMLCleanExpression = "REPLACE(REPLACE(REPLACE(REPLACE(@[User::sXMLResult],\"" + "<![CDATA[\\\\r\\\\n<string>]]>" + "\",\"\"),\"" + "<![CDATA[\\\\n</string>]]>" + "\",\"\"),\"" + "<![CDATA[&lt;]]>" + "\",\"&lt;\"),\"" + "<![CDATA[&gt;]]>" + "\",\"&gt;\")";
+            varXMLCleanExpression = "\"" + "&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-16\\\"?&gt;" + "\"" + " + REPLACE(REPLACE(SUBSTRING( @[User::sXMLResult] , 50, LEN( @[User::sXMLResult])-59),\"" + "<![CDATA[&lt;]]>" + "\",\"&lt;\"),\"" + "<![CDATA[&gt;]]>" + "\",\"&gt;\")";            
+
             if (varExtractionType == "MN") {
                 varExtractionSQLStatement = "\"SELECT " + varSQLStatementColumns + " FROM \\\"" + varExtractionSourceSchema + "\\\".\\\"" + varExtractionSourceTable+ "\\\" WHERE " + varExtractionModifiedDate + " >= " + varExtractionDateConversion + "\"";
                 string varSQLLastRunDate = "(SELECT MAX(" + varExtractionModifiedDate + ") FROM [Staging]." + varTargetSchemaPlus +"."+ varTargetTablePlus +")";
@@ -282,7 +285,7 @@
                     <Variable Name="MaxIncrementalKey" DataType="String" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="LastExtractionID" DataType="String" Namespace="User">0</Variable>
-                    <Variable Name="sXMLResult" DataType="String" Namespace="User">0</Variable>
+                    <Variable Name="sXMLResult" DataType="String" Namespace="User"><![CDATA[<#=varExtractionXMLExample#>]]></Variable>
                     <Variable Name="sXMLClean" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varXMLCleanExpression#></Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
@@ -292,6 +295,15 @@
                     <#} else {#> 
                         <Variable Name="SourceExtractionSQL" DataType="String" Namespace="User"><#=varExtractionSQLStatement#></Variable> 
                     <#}#>
+                    <#if (varExtractionSourceType == "XML_AFAS") {#>              
+                        <Variable Name="AfasToken" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::AfasToken]</Variable> 
+                        <Variable Name="AfasConnector" DataType="String" Namespace="User"><#=varExtractionSourceTable#></Variable> 
+                        <Variable Name="AfasFilter" DataType="String" Namespace="User"><#=varExtractionWhereStatement#></Variable>
+                        <Variable Name="AfasSkip" DataType="Int32" Namespace="User">0</Variable>
+                        <Variable Name="AfasTake" DataType="Int32" Namespace="User">99999999</Variable> 
+                        <Variable Name="AfasOptions" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::AfasOptions]</Variable> 
+                    <#}#>
+                        
                 </Variables>
                 <Tasks>
                     <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
@@ -349,6 +361,26 @@
                                 </Expressions>
                                 <Tasks>
                             <#}#>
+ 
+                            <#if (varExtractionSourceType == "XML_AFAS") {
+                                string ConnectionStringXML=  @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";#>
+                                <WebService Name="WebService <#=varName#>" ServiceName="ConnectorAppGet" OverwriteWsdlFile ="false" ConnectionName="AFAS_WSDL"  WebMethod="GetDataWithOptions">
+                					<ExternalWsdlFile ExternalFilePath="" FileUsageType="ExistingFile" ></ExternalWsdlFile>
+                					<VariableOutput VariableName="User.sXMLResult"></VariableOutput>
+                					<Parameters>
+                						<Parameter Name="token" DataType="String" ParameterType="Variable" VariableName="User.AfasToken"></Parameter>
+                						<Parameter Name="connectorId" DataType="String" ParameterType="Variable" VariableName="User.AfasConnector"></Parameter>
+                						<Parameter Name="filtersXml" DataType="String" ParameterType="Variable" VariableName="User.AfasFilter"></Parameter>
+                						<Parameter Name="skip" DataType="Int32" ParameterType="Variable" VariableName="User.AfasSkip"></Parameter>
+                						<Parameter Name="take" DataType="Int32" ParameterType="Variable" VariableName="User.AfasTake"></Parameter>
+                						<Parameter Name="options" DataType="String" ParameterType="Variable" VariableName="User.AfasOptions"></Parameter>
+                					</Parameters>
+                					<Expressions>
+                					    <Expression PropertyName="WsdlFile"><#=ConnectionStringXML#></Expression>
+                					</Expressions>
+                				</WebService>                        
+                            <#}#>
+ 
                             
                             <Dataflow Name="<#=varTaskName#>">
                                 <#if (varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_AFAS") {#>
@@ -403,11 +435,11 @@
                                             </XmlSource>
                                             <#break;
                                         case "XML_AFAS":
-                                            varOutputPathName = "XML1 Source " + varName;	#>
+                                            varOutputPathName = "XML Source " + varName;	#>
                                             <XmlSource Name="<#=varOutputPathName#>"> 
                                                 <XmlSchemaFileInput ConnectionName="<#=varExtractionSourceConnection#>_XSD" /> 
-                                                <DataFromVariableInput VariableName="User.sXMLClean" /> 
-                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" /> 
+                                                <DataFromVariableInput VariableName="User.sXMLClean" />
+                                                <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                             </XmlSource>
                                             <#break;
                                         default:
@@ -418,15 +450,16 @@
                                             </OleDbSource>
                                             <#break;
                                         }#>
-    
+                                        
+
                                         <DerivedColumns Name="Derived Columns Error <#=varName#>"> 
                                             <#// Indien source is XML dan is outputpathname anders
                                             switch (varExtractionSourceType) {
-                                                case "XML_Kewill":
-                                                case "XML_AFAS":#>
+                                                case "XML_Kewill":#>
                                                     <InputPath OutputPathName="<#=varOutputPathName#>.rowError" />
                                                     <#break;
-                                                case "XML":#>
+                                                case "XML":
+                                                case "XML_AFAS":#>
                                                     <InputPath OutputPathName="<#=varOutputPathName#>.<#=varTargetTable#>Error" /> 
                                                     <#break;
                                                 default:#>
@@ -446,10 +479,11 @@
                                                 <Column Name="ErrorMessage" DataType="String" Length="200" ReplaceExisting="false">(DT_WSTR,6)"Code: " + (DT_WSTR,12)[ErrorCode] + (DT_WSTR,10)"; Column: " + (DT_WSTR,2)" (" + (DT_WSTR,4)[ErrorColumn] + (DT_WSTR,1)")" + " Key: "<#=varExtractionTargetTablePKLogging#></Column>
                                             </Columns>
                                         </DerivedColumns>
-    
+                                        
                                         <RowCount Name="RowCount Error <#=varName#>" VariableName="RC.RowCountError">
                                             <InputPath OutputPathName="Derived Columns Error <#=varName#>.Output" />
                                         </RowCount>
+
                                         <# switch (varExtractionSourceType) {
                                             case "XML_Enkel":#>
                                                 <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
@@ -466,8 +500,7 @@
                                                 </OleDbDestination>
                                                 <#varOutputPathName = varOutputPathName + "." + varTargetTable;
                                                 break;
-                                            case "XML_Kewill":
-                                            case "XML_AFAS":#>
+                                            case "XML_Kewill":#>
                                                 <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
                                                     <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
                                                     <Columns>
@@ -481,6 +514,21 @@
                                                     <ExternalTableOutput Table="[Logging].[XMLFileErrors]" />
                                                 </OleDbDestination>
                                                 <#varOutputPathName = varOutputPathName + ".row" ;
+                                                break;
+                                            case "XML_AFAS":#>
+                                                <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
+                                                    <InputPath OutputPathName="RowCount Error <#=varName#>.Output" />
+                                                    <Columns>
+                                                        <Column Name="PackageName" DataType="String" Length="100"  ReplaceExisting="false">(DT_WSTR,100)@[System::PackageName]</Column>
+                                                        <Column Name="FlatFile" DataType="String" Length="300"  ReplaceExisting="false">(DT_WSTR,300)@[User::PackageName]</Column>
+                                                    </Columns>
+                                                </DerivedColumns>
+                                                
+                                                <OleDbDestination Name="OLEDB Error <#=varName#>" ConnectionName="<#=SystemConnection#>" ValidateExternalMetadata="false" TableLock="false">
+                                                    <InputPath OutputPathName="Derived Columns FlatFile Error <#=varName#>.Output" />
+                                                    <ExternalTableOutput Table="[Logging].[XMLFileErrors]" />
+                                                </OleDbDestination>
+                                                <#varOutputPathName = varOutputPathName + "." + varTargetTable;
                                                 break;
                                             case "XML":#>
                                                 <DerivedColumns Name="Derived Columns FlatFile Error <#=varName#>">
@@ -522,7 +570,7 @@
                                                 <#varOutputPathName = "Union " + varName + ".Output";	
                                                 break;
                                         }#>
-                                        
+ 
                                         <DerivedColumns Name="Derived Column <#=varName#>">
                                             <InputPath OutputPathName="<#=varOutputPathName#>" />
                                             <Columns>
@@ -546,8 +594,8 @@
                                                 <Column Name="ProcessLogID" DataType="Int64" Length="8" ReplaceExisting="false">@[Audit::AuditProcessLogID]</Column>
                                             </Columns>
                                         </DerivedColumns>
-    
-                                        <#DataRow[] DataConversionRows;
+ 
+                                         <#DataRow[] DataConversionRows;
                                         string FilterExpression = "ColumnConversionNecessary = 1";
                                         DataConversionRows = tableSourceExtractionColumn.Select(FilterExpression);
                                         
@@ -615,6 +663,7 @@
                                                     </Columns>
                                                 <#}#>
                                             </OleDbDestination>
+                                        
                                         </Transformations>
                                     </Dataflow>
                                     <#if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill") {#>
