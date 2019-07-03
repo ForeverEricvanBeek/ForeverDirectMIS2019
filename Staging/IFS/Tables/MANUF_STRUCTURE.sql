@@ -9,7 +9,7 @@
     [LINE_SEQUENCE]               INT             NULL,
     [EFF_PHASE_IN_DATE]           DATETIME2 (7)   NULL,
     [EFF_PHASE_OUT_DATE]          DATETIME2 (7)   NULL,
-    [QTY_PER_ASSEMBLY]            INT             NULL,
+    [QTY_PER_ASSEMBLY]            DECIMAL (18, 2) NULL,
     [COMPONENT_SCRAP]             INT             NULL,
     [SHRINKAGE_FACTOR]            INT             NULL,
     [OPERATION_NO]                INT             NULL,
@@ -52,6 +52,8 @@
     [BatchID]                     BIGINT          NULL,
     [ProcessLogID]                BIGINT          NULL
 );
+
+
 
 
 

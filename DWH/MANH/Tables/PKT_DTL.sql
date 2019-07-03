@@ -163,6 +163,9 @@
     [IsDeleted]              CHAR (1)        NULL,
     [BatchID]                BIGINT          NULL,
     [ProcessLogID]           BIGINT          NULL,
-    CONSTRAINT [PK_MANH_PKT_DTL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PKT_DTL_ID] ASC)
-);
+    [TC_ORDER_LINE_ID]       NVARCHAR (30)   NULL,
+    CONSTRAINT [PK_MANH_PKT_DTL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PKT_DTL_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

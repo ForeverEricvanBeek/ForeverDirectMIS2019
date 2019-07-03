@@ -46,6 +46,12 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
-    CONSTRAINT [PK_MANH_LOCN_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LOCN_HDR_ID] ASC)
-);
+    [CREATED_DTTM]             DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]        DATETIME2 (7)   NULL,
+    [LOCN_DYN_ASSGN_SEQ]       NVARCHAR (24)   NULL,
+    [LOCN_PUTWY_SEQ]           NVARCHAR (24)   NULL,
+    CONSTRAINT [PK_MANH_LOCN_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LOCN_HDR_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

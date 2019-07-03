@@ -84,8 +84,11 @@
     [IsDeleted]             CHAR (1)        NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL,
+    [TOTE_NBR]              NVARCHAR (50)   NULL,
     CONSTRAINT [PK_MANH_TASK_DTL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TASK_DTL_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

@@ -32,6 +32,7 @@ SELECT DISTINCT
 FROM		WEB.Complaint				AS CO
 WHERE		CO.ActInd = 'Y'
 AND			(CO.Complaint_Checked = 'Y' OR CO.Complaint_CreatedDate <= '20160901')
+AND			CO.Complaint_CreatedDate >= DATEADD(YEAR,-2,GETDATE())
 -- Above is because old fs are not checked but need to be included in the datamart.
 -- Try to find batch and picker ID trhough activity tracking
 UNION ALL

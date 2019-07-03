@@ -1,14 +1,20 @@
 ﻿
 
+
+
+
+
+
  CREATE VIEW [FDV].[VW_F_Obsolescense] as
  select
- LBM.INITIAL_CONTRACT as Contract,
+ --LBM.INITIAL_CONTRACT as Contract,
+ case when WI.TC_COMPANY_ID='3001' then 'FD01' else LBM.INITIAL_CONTRACT end as Contract,
   IC.ITEM_NAME as SKU_Name,
  IC.ITEM_ID as SKU_Code,
  WI.BATCH_NBR as Lot_Code,
  SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY) as Inventory_Netto_QTY,
- MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(11,2))) as Inventory_Cost_Price,
- (SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY))*MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(11,2))) as Inventory_Netto_Value,
+ MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(22,5))) as Inventory_Cost_Price,
+ cast((SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY))*MAX(cast(IPUC.INVENTORY_VALUE AS DECIMAL(22,5))) as decimal (22,2)) as Inventory_Netto_Value,
  LBM.EXPIRATION_DATE as Expiration_Date,
  ISNULL(DATEDIFF(dd,getdate(),LBM.EXPIRATION_DATE),0) as Days_to_Expire
  from MANH.WM_INVENTORY WI
@@ -51,11 +57,11 @@
   WI.ActInd='Y'
   and
   IC.ActInd='Y'
-  and
-  LBM.INITIAL_CONTRACT='FD01'
-  and 
-  LL.INVENTORY_LOCK_CODE is null
- group by  IC.ITEM_NAME,LBM.EXPIRATION_DATE,WI.BATCH_NBR,IC.ITEM_ID,LBM.INITIAL_CONTRACT
+ -- and
+ ---LBM.INITIAL_CONTRACT='FD01'
+  and LL.INVENTORY_LOCK_CODE is null
+ -- and IC.ITEM_NAME='715IN'
+ group by  IC.ITEM_NAME,LBM.EXPIRATION_DATE,WI.BATCH_NBR,IC.ITEM_ID,case when WI.TC_COMPANY_ID='3001' then 'FD01' else LBM.INITIAL_CONTRACT end--,LBM.INITIAL_CONTRACT
  having  SUM(WI.ON_HAND_QTY)-SUM(WI.WM_ALLOCATED_QTY)>0
 -- order by 7 asc
 /*union

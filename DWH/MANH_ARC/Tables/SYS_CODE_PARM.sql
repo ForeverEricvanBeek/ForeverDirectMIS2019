@@ -26,8 +26,12 @@
     [IsDeleted]               CHAR (1)      NULL,
     [BatchID]                 BIGINT        NULL,
     [ProcessLogID]            BIGINT        NULL,
+    [CREATED_DTTM]            DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]       DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_SYS_CODE_PARM] PRIMARY KEY CLUSTERED ([CODE_TYPE] ASC, [Eff_Date] ASC, [FROM_POSN] ASC, [REC_TYPE] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

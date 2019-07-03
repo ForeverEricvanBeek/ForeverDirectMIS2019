@@ -84,6 +84,9 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_MANH_ITEM_FACILITY_MAPPING_WMS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ITEM_FACILITY_MAPPING_ID] ASC)
-);
+    [AVERAGE_MOVEMENT]               NUMERIC (9, 2)  NULL,
+    CONSTRAINT [PK_MANH_ITEM_FACILITY_MAPPING_WMS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ITEM_FACILITY_MAPPING_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

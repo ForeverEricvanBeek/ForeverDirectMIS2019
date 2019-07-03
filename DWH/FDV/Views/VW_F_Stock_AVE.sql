@@ -1,0 +1,71 @@
+﻿
+
+
+
+
+
+Create view [FDV].[VW_F_Stock_AVE]
+as 
+select cast(getdate()-1 as date)							as DateKey
+,PS.CONTRACT												as Contract
+,PS.PART_NO													as Part_NO
+,PS.[LOT_BATCH_NO]											as Lot_Code
+,INVP1.DESCRIPTION											as Description
+,Case when PS.AVAILABILITY_CONTROL_ID='ALOIN_0-1' then 1
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_1-2' then 2
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_2-3' then 3
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_3-4' then 4
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_4-5' then 5
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_5-6' then 6
+      when PS.AVAILABILITY_CONTROL_ID='ALOIN_6-7' then 7
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_7-8' then 8
+      when PS.AVAILABILITY_CONTROL_ID='ALOIN_8-9' then 9
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_9-10' then 10
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_10-11' then 11
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_11-12' then 12
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_12-13' then 13
+	  when PS.AVAILABILITY_CONTROL_ID='ALOIN_13-14' then 14 end as Aloine_Level
+,PS.[LOCATION_NO]											as Location_NO
+,PS.[WAREHOUSE]												as Warehouse
+,PS.LOCATION_TYPE_DB										as Location_Type
+,PS.QTY_ONHAND												as Qty_On_Hand
+,PS.QTY_IN_TRANSIT											as Qty_In_Transit
+,PS.SOURCE													as Transport_Task
+,cast(INVP.[INVENTORY_VALUE] as decimal (22,5))				as Cost_Price
+,PS.QTY_ONHAND*INVP.[INVENTORY_VALUE]						as Inventory_Value
+,PS.QTY_IN_TRANSIT*INVP.[INVENTORY_VALUE]					as Value_On_Transit
+,PS.EXPIRATION_DATE											as Expire_Date
+,INVP1.[PART_PRODUCT_FAMILY]								AS FAM_Prod_ID
+,CASE WHEN INVP1.ACCOUNTING_GROUP =10 THEN 'Finished Goods'
+	       WHEN INVP1.ACCOUNTING_GROUP =20 THEN 'Literature L4L'
+		   WHEN INVP1.ACCOUNTING_GROUP =40 THEN 'Consumable(FD)'
+		   WHEN INVP1.ACCOUNTING_GROUP =50 THEN 'Raw Materials'
+		   WHEN INVP1.ACCOUNTING_GROUP =55 THEN 'Raw Materials WIP'
+		   WHEN INVP1.ACCOUNTING_GROUP =30 THEN 'Labels'
+		   WHEN INVP1.ACCOUNTING_GROUP =21 THEN 'AVA Literature'
+		   WHEN INVP1.ACCOUNTING_GROUP =22 THEN 'Global Marketing LT - non-EU'
+		   WHEN INVP1.ACCOUNTING_GROUP =23 THEN 'FD - LT + CTN'
+		   WHEN INVP1.ACCOUNTING_GROUP =45 THEN 'Product Cartons'
+		   WHEN INVP1.ACCOUNTING_GROUP =24 THEN 'Global Marketing LT - EU'
+		   WHEN INVP1.ACCOUNTING_GROUP =60 THEN 'Components AVE' END as Accounting_Group_Desc
+from [DWH].[IFS].[INVENTORY_PART_IN_STOCK] PS
+join [DWH].[IFS].[INVENTORY_PART] INVP1
+on
+PS.PART_NO=INVP1.PART_NO
+and
+PS.CONTRACT=INVP1.CONTRACT
+and PS.ActInd='Y'
+and INVP1.ActInd='Y'
+and INVP1.CONTRACT like 'AVE%'
+and PS.CONTRACT like 'AVE%'
+and PS.QTY_ONHAND>0
+join [DWH].[IFS].[INVENTORY_PART_UNIT_COST_SUM] INVP
+on
+PS.PART_NO=INVP.PART_NO
+and
+PS.CONTRACT=INVP.CONTRACT
+and PS.ActInd='Y'
+and INVP.ActInd='Y'
+and INVP.CONTRACT like 'AVE%'
+and PS.CONTRACT like 'AVE%'
+and PS.QTY_ONHAND>0

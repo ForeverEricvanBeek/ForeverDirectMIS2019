@@ -29,6 +29,10 @@
     [IsDeleted]                CHAR (1)       NULL,
     [BatchID]                  BIGINT         NULL,
     [ProcessLogID]             BIGINT         NULL,
-    CONSTRAINT [PK_MANH_DOCK_DOOR] PRIMARY KEY CLUSTERED ([DOCK_DOOR_ID] ASC, [Eff_Date] ASC)
-);
+    [DOCK_DOOR_LOCN_ID]        NVARCHAR (10)  NULL,
+    [OUTBD_STAGING_LOCN_ID]    NVARCHAR (10)  NULL,
+    CONSTRAINT [PK_MANH_DOCK_DOOR] PRIMARY KEY CLUSTERED ([DOCK_DOOR_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

@@ -136,6 +136,13 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
-    CONSTRAINT [PK_MANH_ITEM_WMS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ITEM_ID] ASC)
-);
+    [CC_DLR_TOLER_VALUE]             NUMERIC (13, 4) NULL,
+    [CC_PCNT_TOLER_VALUE]            NUMERIC (13, 4) NULL,
+    [CC_UNIT_TOLER_VALUE]            INT             NULL,
+    [CC_WGT_TOLER_VALUE]             NUMERIC (13, 4) NULL,
+    [DISPOSITION_TYPE]               NVARCHAR (3)    NULL,
+    CONSTRAINT [PK_MANH_ITEM_WMS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ITEM_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

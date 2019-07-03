@@ -1,4 +1,4 @@
-CREATE TABLE [MANH].[PROD_TRKG_TRAN] (
+﻿CREATE TABLE [MANH].[PROD_TRKG_TRAN] (
     [TRAN_TYPE]         NVARCHAR (3)    NOT NULL,
     [TRAN_CODE]         NVARCHAR (3)    NOT NULL,
     [TRAN_NBR]          INT             NOT NULL,
@@ -50,8 +50,11 @@ CREATE TABLE [MANH].[PROD_TRKG_TRAN] (
     [LINE_ITEM_ID]      BIGINT          NULL,
     [BatchID]           BIGINT          NULL,
     [ProcessLogID]      BIGINT          NULL,
+    [FROM_LPN]          NVARCHAR (50)   NULL,
     CONSTRAINT [PK_MANH_PROD_TRKG_TRAN] PRIMARY KEY CLUSTERED ([PROD_TRKG_TRAN_ID] ASC) ON [DWH_MANH]
 ) ON [DWH_MANH];
+
+
 
 
 

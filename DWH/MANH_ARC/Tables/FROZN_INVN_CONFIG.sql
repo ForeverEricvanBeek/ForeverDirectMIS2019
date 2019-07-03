@@ -30,8 +30,12 @@
     [IsDeleted]            CHAR (1)      NULL,
     [BatchID]              BIGINT        NULL,
     [ProcessLogID]         BIGINT        NULL,
+    [CREATED_DTTM]         DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]    DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_FROZN_INVN_CONFIG] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [FROZN_INVN_CONFIG_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

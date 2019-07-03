@@ -80,8 +80,33 @@
     [IsDeleted]                    CHAR (1)        NULL,
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL,
+    [ACTUAL_WEIGHT_RECEIVED]       NUMERIC (16, 4) NULL,
+    [ASN_RECV_RULES]               NVARCHAR (200)  NULL,
+    [CHECKSUM]                     NVARCHAR (32)   NULL,
+    [DISPOSITION_TYPE]             NVARCHAR (3)    NULL,
+    [EXT_PLAN_ID]                  NVARCHAR (50)   NULL,
+    [INV_DISPOSITION]              NVARCHAR (15)   NULL,
+    [PRE_RECEIPT_STATUS]           NVARCHAR (3)    NULL,
+    [PURCHASE_ORDERS_LINE_ITEM_ID] INT             NULL,
+    [REF_FIELD_1]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_10]                 NVARCHAR (25)   NULL,
+    [REF_FIELD_2]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_3]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_4]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_5]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_6]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_7]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_8]                  NVARCHAR (25)   NULL,
+    [REF_FIELD_9]                  NVARCHAR (25)   NULL,
+    [REF_NUM1]                     NUMERIC (13, 5) NULL,
+    [REF_NUM2]                     NUMERIC (13, 5) NULL,
+    [REF_NUM3]                     NUMERIC (13, 5) NULL,
+    [REF_NUM4]                     NUMERIC (13, 5) NULL,
+    [REF_NUM5]                     NUMERIC (13, 5) NULL,
     CONSTRAINT [PK_MANH_ASN_DETAIL] PRIMARY KEY CLUSTERED ([ASN_DETAIL_ID] ASC, [ASN_ID] ASC, [Eff_Date] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

@@ -1,6 +1,10 @@
 ﻿
 
 
+
+
+
+
 CREATE VIEW [FDV].[VW_D_Order]
 AS
 
@@ -22,11 +26,13 @@ SELECT
 		ELSE 'Created'
 	END								AS Order_Status
 	, OD.CREATED_DTTM				AS Order_Create_Date
+	, SD.Order_Cuttoff_Time			AS Cuttoff
+	, SD.Order_Wave_Date			AS Order_Wave_Date
 	, SD.Order_Planned_Ship_Date	AS Order_Planned_Ship_Date
 	, CASE WHEN SD.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
 		SELECT 
 			COUNT(cal3.DateKey)
-		FROM [$(ForeverData01)].DM.D_Calendar cal3
+		FROM ForeverData01.DM.D_Calendar cal3
 		WHERE cal3.FullDate > SD.Order_Planned_Ship_Date
 		AND cal3.FullDate <= ISNULL(OD.ACTUAL_SHIPPED_DTTM,CAST(GETDATE() as date))
 	) END							AS Order_Days_Too_Late
@@ -185,4 +191,4 @@ AND         YEAR(OD.CREATED_DTTM) >  YEAR(GETDATE())-3
 
 UNION ALL
 
-SELECT        '-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+SELECT        '-1', NULL, NULL,NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL

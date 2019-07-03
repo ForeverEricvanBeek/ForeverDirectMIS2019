@@ -14,8 +14,8 @@ SELECT
 	, ISNULL(OD.Order_Customer_ID,'-1')			AS Customer_ID
 	, COUNT(*)									AS Number_Of_Errors
 	, NULL										AS Number_Of_Picks
-FROM		[$(Datamart)].DM.D_OF_Issues AS QI
-LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
+FROM		Datamart.DM.D_OF_Issues AS QI
+LEFT JOIN	Datamart.DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Issues_Order_ID
 AND			OD.IsActual = 1
 AND			OD.IsDeleted = 0
@@ -46,8 +46,8 @@ SELECT
 	, ISNULL(OD.Order_Customer_ID,'-1')			AS Customer_ID
 	, COUNT(*)									AS Number_Of_Errors
 	, NULL										AS Number_Of_Picks
-FROM		[$(Datamart)].DM.D_OF_Complaints AS QI
-LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
+FROM		Datamart.DM.D_OF_Complaints AS QI
+LEFT JOIN	Datamart.DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Complaints_Order_ID
 AND			OD.IsActual = 1
 AND			OD.IsDeleted = 0
@@ -82,10 +82,11 @@ SELECT
 	, NULL										AS Number_Of_Errors
 	, 1											AS Number_Of_Picks
 FROM		MANH.PROD_TRKG_TRAN AS PT
-LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
+LEFT JOIN	Datamart.DM.D_Order AS OD
 ON			OD.Order_ID = PT.TC_ORDER_ID
 LEFT JOIN	WEB.Picker AS PS
 ON			'0' + PS.Picker_ID = PT.REF_FIELD_1
 AND			PS.ActInd = 'Y'
 AND			PS.IsDeleted = 'N'
 WHERE		PT.MENU_OPTN_NAME IN ('PackCD', 'RF QA incomplete','Pack Cubed Directed')
+AND			PT.CREATE_DATE_TIME >= DATEADD(YEAR,-2,GETDATE())

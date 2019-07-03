@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [MFV_ARC]
+    AUTHORIZATION [dbo];
+

@@ -1,10 +1,5 @@
 ﻿
 
-
-
-
-
-
 CREATE VIEW [FDV].[VW_F_Outbound]
 AS
 --	1 Orders Shipped
@@ -16,6 +11,7 @@ SELECT
 	, '-1'											AS OLPN_ID
 	, '-1'											AS SKU_Code1
 	, '-1'											AS SKU_Code2
+	, '-1'											AS Contract
 	, '-1'											AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, '-1'											AS FAM_Prod_ID
@@ -34,7 +30,7 @@ ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID
 AND				FA.ActInd = 'Y'
 WHERE			OD.DO_STATUS = '190'
 AND				OD.ActInd = 'Y'
-AND				OD.ACTUAL_SHIPPED_DTTM >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 1, 0)
+AND				OD.ACTUAL_SHIPPED_DTTM >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 2, 0)
 
 
 
@@ -49,6 +45,7 @@ SELECT
 	, ISNULL(LP.TC_LPN_ID,'-1')						AS OLPN_ID
 	, '-1'											AS SKU_Code1
 	, '-1'											AS SKU_Code2
+	, '-1'											AS Contract
 	, '-1'											AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, '-1'											AS FAM_Prod_ID
@@ -68,7 +65,7 @@ ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID
 AND				FA.ActInd = 'Y'
 WHERE			OD.DO_STATUS = '190' 
 AND				LP.ActInd = 'Y'
-AND				OD.ACTUAL_SHIPPED_DTTM >=  DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 1, 0)
+AND				OD.ACTUAL_SHIPPED_DTTM >=  DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 2, 0)
 
 
 UNION ALL
@@ -82,6 +79,7 @@ SELECT
 	, ISNULL(LP.TC_LPN_ID,'-1')						AS OLPN_ID
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code1
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code2
+	, ISNULL(INVP.CONTRACT,'-1')					AS Contract
 	, ISNULL(LD.BATCH_NBR,'-1')						AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, ISNULL(INVP.PART_PRODUCT_FAMILY,'-1')			AS FAM_Prod_ID
@@ -110,7 +108,7 @@ LEFT JOIN		(SELECT
 				 WHERE 		OL.ActInd = 'Y' 
 				 AND		OL.IS_CANCELLED = 0
 				 GROUP BY
-					OL.ORDER_ID
+					  OL.ORDER_ID
 					, OL.ITEM_NAME
 ) OL ON			OL.ORDER_ID = OD.ORDER_ID
 AND				OL.ITEM_NAME = IC.ITEM_NAME
@@ -124,4 +122,4 @@ ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID
 AND				FA.ActInd = 'Y'
 WHERE			OD.DO_STATUS = '190' 
 AND				LD.ActInd = 'Y'
-AND				OD.ACTUAL_SHIPPED_DTTM >=  DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 1, 0)
+AND				OD.ACTUAL_SHIPPED_DTTM >=  DATEADD(yy, DATEDIFF(yy, 0, GETDATE()) - 2, 0)

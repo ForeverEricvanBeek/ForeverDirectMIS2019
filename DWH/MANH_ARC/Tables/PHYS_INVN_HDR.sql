@@ -24,8 +24,12 @@
     [IsDeleted]          CHAR (1)      NULL,
     [BatchID]            BIGINT        NULL,
     [ProcessLogID]       BIGINT        NULL,
+    [CREATED_DTTM]       DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]  DATETIME2 (7) NULL,
     CONSTRAINT [PK_MANH_PHYS_INVN_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PHYS_INVN_HDR_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

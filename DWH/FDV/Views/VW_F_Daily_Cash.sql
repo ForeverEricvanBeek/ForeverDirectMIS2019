@@ -1,0 +1,605 @@
+﻿
+
+
+
+CREATE VIEW [FDV].[VW_F_Daily_Cash]
+AS
+WITH CTE_BANK
+AS
+	--Som van de Bankrekeningen
+	(
+	SELECT COMPANY AS COMPANY
+		,1 AS KY
+		,cast(ACCOUNT AS NVARCHAR(15)) AS ACCOUNT
+		,'Bank' AS ACCOUNT_GROUP
+		,CASE 
+			WHEN ACCOUNT IN ('1200')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.16.16.738'
+			WHEN ACCOUNT IN ('1211')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA USD 81.19.46.118'
+			WHEN ACCOUNT IN ('1221')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.19.46.143'
+			WHEN ACCOUNT IN ('1230')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.19.46.096 catering'
+			WHEN ACCOUNT IN ('1100')
+				AND COMPANY IN ('3129')
+				THEN 'ABN EUR NL12ABNA0600346730'
+			WHEN ACCOUNT IN ('1121')
+				AND COMPANY IN ('3129')
+				THEN 'ABN CUST NL17ABNA0828479291'
+			END AS [DESCRIPTION]
+		,cast(sum(AMOUNT_BALANCE) AS NUMERIC(14, 2)) BOOK_BALANCE_EUR
+	FROM [IFS].[ACCOUNTING_BALANCE]
+	WHERE ACCOUNTING_YEAR = Year(getdate())
+		AND COMPANY IN (
+			'3001'
+			,'3129'
+			)
+		AND ACCOUNT IN (
+			'1200'
+			,'1221'
+			,'1211'
+			,'1230'
+			,'1100'
+			,'1121'
+			) --'1211'
+		AND ActInd = 'Y'
+	GROUP BY COMPANY
+		,cast(ACCOUNT AS NVARCHAR(15))
+		,CASE 
+			WHEN ACCOUNT IN ('1200')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.16.16.738'
+			WHEN ACCOUNT IN ('1211')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA USD 81.19.46.118'
+			WHEN ACCOUNT IN ('1221')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.19.46.143'
+			WHEN ACCOUNT IN ('1230')
+				AND COMPANY IN ('3001')
+				THEN 'ABNA EU 81.19.46.096 catering'
+			WHEN ACCOUNT IN ('1100')
+				AND COMPANY IN ('3129')
+				THEN 'ABN EUR NL12ABNA0600346730'
+			WHEN ACCOUNT IN ('1121')
+				AND COMPANY IN ('3129')
+				THEN 'ABN CUST NL17ABNA0828479291'
+			END
+	)
+	,CTE_KOERS
+AS (
+	SELECT DISTINCT ([CURRENCY_RATE]) AS KOERS
+	FROM [IFS].[CURRENCY_RATE]
+	WHERE CURRENCY_CODE = 'USD'
+		AND CURRENCY_TYPE = 1
+		AND [VALID_FROM] IN (
+			SELECT max(VALID_FROM)
+			FROM [IFS].[CURRENCY_RATE]
+			WHERE CURRENCY_CODE = 'USD'
+				AND CURRENCY_TYPE = 1
+			)
+	)
+	-- USA BANK Omdat ABNA USD 81.19.46.118 fout staat in de accounting Balance wordt onderstaand de juiste stand opgehaald in dollars vanuit MIXED_PAYMENT 
+	,CTE_USA_BANK
+AS (
+	SELECT CLOSING_BALANCE AS AMOUNT_BALANCE
+	FROM [IFS].[MIXED_PAYMENT]
+	WHERE [MIXED_PAYMENT_DATE] = (
+			SELECT MAX([MIXED_PAYMENT_DATE])
+			FROM [IFS].[MIXED_PAYMENT]
+			WHERE SHORT_NAME LIKE '%ABNA USD%'
+			)
+		AND SHORT_NAME LIKE '%ABNA USD%'
+	)
+	--Som van INVENTORIES 
+	,CTE_INVENTORY
+AS (
+	SELECT COMPANY AS COMPANY
+		,2 AS KY
+		,cast(ACCOUNT AS NVARCHAR(15)) AS ACCOUNT
+		,'Inventory' AS ACCOUNT_GROUP
+		,CASE 
+			WHEN ACCOUNT IN ('3010')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory FG'
+			WHEN ACCOUNT IN ('3020')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Literature'
+			WHEN ACCOUNT IN ('3030')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Labels'
+			WHEN ACCOUNT IN ('3040')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Consumables'
+			WHEN ACCOUNT IN ('3050')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Ingredients'
+			WHEN ACCOUNT IN ('3998')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory GON/SIP'
+			WHEN ACCOUNT IN ('3010')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory FG Contract'
+			WHEN ACCOUNT IN ('3060')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Raw Gel'
+			WHEN ACCOUNT IN ('3061')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Ingredients'
+			WHEN ACCOUNT IN ('3062')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Packaging Materials'
+			WHEN ACCOUNT IN ('3610')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory FG Tolling'
+			WHEN ACCOUNT IN ('3961')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory TransferAVE'
+			END AS [DESCRIPTION]
+		,cast(sum(AMOUNT_BALANCE) AS NUMERIC(14, 2)) BOOK_BALANCE_EUR
+	FROM [IFS].[ACCOUNTING_BALANCE]
+	WHERE ACCOUNTING_YEAR = Year(getdate())
+		AND COMPANY IN (
+			'3001'
+			,'3129'
+			)
+		AND ACCOUNT IN (
+			'3010'
+			,'3020'
+			,'3030'
+			,'3040'
+			,'3050'
+			,'3998'
+			,'3060'
+			,'3061'
+			,'3062'
+			,'3610'
+			,'3961'
+			)
+		AND ActInd = 'Y'
+	GROUP BY COMPANY
+		,cast(ACCOUNT AS NVARCHAR(15))
+		,CASE 
+			WHEN ACCOUNT IN ('3010')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory FG'
+			WHEN ACCOUNT IN ('3020')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Literature'
+			WHEN ACCOUNT IN ('3030')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Labels'
+			WHEN ACCOUNT IN ('3040')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Consumables'
+			WHEN ACCOUNT IN ('3050')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory Ingredients'
+			WHEN ACCOUNT IN ('3998')
+				AND COMPANY IN ('3001')
+				THEN 'Inventory GON/SIP'
+			WHEN ACCOUNT IN ('3010')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory FG Contract'
+			WHEN ACCOUNT IN ('3060')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Raw Gel'
+			WHEN ACCOUNT IN ('3061')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Ingredients'
+			WHEN ACCOUNT IN ('3062')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory Packaging Materials'
+			WHEN ACCOUNT IN ('3610')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory FG Tolling'
+			WHEN ACCOUNT IN ('3961')
+				AND COMPANY IN ('3129')
+				THEN 'Inventory TransferAVE'
+			END
+	)
+	--Som van RECEIVEABLES, PAYABLES en RECEIVED NOT VOUCHERED
+	,CTE_RCNVD_PAY_REC
+AS (
+	SELECT COMPANY AS COMPANY
+		,3 AS KY
+		,cast(CASE 
+				WHEN ACCOUNT IN (
+						'1400'
+						,'1920'
+						)
+					AND COMPANY IN ('3129')
+					THEN '1400-1920'
+				WHEN ACCOUNT IN (
+						'1304'
+						,'1306'
+						)
+					AND COMPANY IN ('3129')
+					THEN '1304-1306'
+				WHEN ACCOUNT IN (
+						'1400'
+						,'1920'
+						,'1404'
+						)
+					AND COMPANY IN ('3001')
+					THEN '1400-1404-1920'
+				WHEN ACCOUNT IN (
+						'1300'
+						,'1304'
+						,'1910'
+						)
+					AND COMPANY IN ('3001')
+					THEN '1300-1304-1910'          
+				ELSE ACCOUNT
+				END AS NVARCHAR(15)) AS ACCOUNT
+		,'RCNVD Payables Receiveables' AS ACCOUNT_GROUP
+		,CASE 
+			WHEN ACCOUNT IN ('1401')
+				AND COMPANY IN ('3001')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1402')
+				AND COMPANY IN ('3001')
+				THEN 'Todays NTR payables'
+			WHEN ACCOUNT IN ('1403')
+				AND COMPANY IN ('3001')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1406')
+				AND COMPANY IN ('3001')
+				THEN 'Todays AVE payables'
+			WHEN ACCOUNT IN ('1400','1404','1920')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Supplier payables'
+			WHEN ACCOUNT IN ('1410')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Supplier Received not vouchered'
+			WHEN ACCOUNT IN ('1300','1304','1910')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables FDEs'
+			WHEN ACCOUNT IN ('1301')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables AVA'
+			WHEN ACCOUNT IN ('1305')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables AVE'
+			WHEN ACCOUNT IN ('1305')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD Receivables'
+			WHEN ACCOUNT IN ('3001')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD Receivables'
+			WHEN ACCOUNT IN (
+					'1304'
+					,'1306'
+					)
+				AND COMPANY IN ('3129')
+				THEN 'Todays Third Party Receivables'
+			WHEN ACCOUNT IN ('1401')
+				AND COMPANY IN ('3129')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1001')
+				AND COMPANY IN ('3129')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1403')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1003')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1406')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD payables'
+			WHEN ACCOUNT IN ('3129')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD payables'
+			WHEN ACCOUNT IN (
+					'1400'
+					,'1920'
+					)
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier payables'
+					--when ACCOUNT in('1920') and COMPANY in ('3129') then 'Todays Supplier payables'
+			WHEN ACCOUNT IN ('1410')
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier Received not vouchered'
+			WHEN ACCOUNT IN ('1411')
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier Received not vouchered'
+			END AS [DESCRIPTION]
+		,CASE 
+			WHEN cast(sum(AMOUNT_BALANCE) AS NUMERIC(14, 2)) < 0
+				THEN cast(sum(AMOUNT_BALANCE) AS NUMERIC(14, 2)) * - 1
+			ELSE cast(sum(AMOUNT_BALANCE) AS NUMERIC(14, 2))
+			END AS BOOK_BALANCE_EUR
+	FROM [IFS].[ACCOUNTING_BALANCE]
+	WHERE ACCOUNTING_YEAR = Year(getdate())
+		AND COMPANY IN (
+			'3129'
+			,'3001'
+			)
+		AND ACCOUNT IN (
+			'1401'
+			,'1402'
+			,'1403'
+			,'1406'
+			,'1400'
+			,'1404'
+			,'1920'
+			,'1410'
+			,'1300'
+			,'1304'
+			,'1306'
+			,'1910'
+			,'1301'
+			,'1305'
+			,'3001'
+			,'1001'
+			,'1003'
+			,'3129'
+			,'1411'
+			)
+		AND ActInd = 'Y'
+	GROUP BY COMPANY
+		,cast(CASE 
+				WHEN ACCOUNT IN (
+						'1400'
+						,'1920'
+						)
+					AND COMPANY IN ('3129')
+					THEN '1400-1920'
+				WHEN ACCOUNT IN (
+						'1304'
+						,'1306'
+						)
+					AND COMPANY IN ('3129')
+					THEN '1304-1306'
+				WHEN ACCOUNT IN (
+						'1400'
+						,'1920'
+						,'1404'
+						)
+					AND COMPANY IN ('3001')
+					THEN '1400-1404-1920'
+				WHEN ACCOUNT IN (
+						'1300'
+						,'1304'
+						,'1910'
+						)
+					AND COMPANY IN ('3001')
+					THEN '1300-1304-1910'          
+				ELSE ACCOUNT
+				END AS NVARCHAR(15)) 
+		--,'RCNVD Payables Receiveables' AS ACCOUNT_GROUP
+		,CASE 
+			WHEN ACCOUNT IN ('1401')
+				AND COMPANY IN ('3001')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1402')
+				AND COMPANY IN ('3001')
+				THEN 'Todays NTR payables'
+			WHEN ACCOUNT IN ('1403')
+				AND COMPANY IN ('3001')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1406')
+				AND COMPANY IN ('3001')
+				THEN 'Todays AVE payables'
+			WHEN ACCOUNT IN ('1400','1404','1920')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Supplier payables'
+			WHEN ACCOUNT IN ('1410')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Supplier Received not vouchered'
+			WHEN ACCOUNT IN ('1300','1304','1910')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables FDEs'
+			WHEN ACCOUNT IN ('1301')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables AVA'
+			WHEN ACCOUNT IN ('1305')
+				AND COMPANY IN ('3001')
+				THEN 'Todays Receivables AVE'
+			WHEN ACCOUNT IN ('1305')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD Receivables'
+			WHEN ACCOUNT IN ('3001')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD Receivables'
+			WHEN ACCOUNT IN (
+					'1304'
+					,'1306'
+					)
+				AND COMPANY IN ('3129')
+				THEN 'Todays Third Party Receivables'
+			WHEN ACCOUNT IN ('1401')
+				AND COMPANY IN ('3129')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1001')
+				AND COMPANY IN ('3129')
+				THEN 'Todays AVA payables'
+			WHEN ACCOUNT IN ('1403')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1003')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FLPI payables'
+			WHEN ACCOUNT IN ('1406')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD payables'
+			WHEN ACCOUNT IN ('3129')
+				AND COMPANY IN ('3129')
+				THEN 'Todays FD payables'
+			WHEN ACCOUNT IN (
+					'1400'
+					,'1920'
+					)
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier payables'
+					--when ACCOUNT in('1920') and COMPANY in ('3129') then 'Todays Supplier payables'
+			WHEN ACCOUNT IN ('1410')
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier Received not vouchered'
+			WHEN ACCOUNT IN ('1411')
+				AND COMPANY IN ('3129')
+				THEN 'Todays Supplier Received not vouchered'
+			END
+	)
+SELECT 3001 AS COMPANY
+	,0 AS KY
+	,NULL AS ACCOUNT
+	,NULL AS ACCOUNT_GROUP
+	,'MONTHLY CURRENCY_RATE' AS [DESCRIPTION]
+	,NULL AS BOOK_BALANCE_EUR
+	,cast(CK.KOERS AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_BANK CB
+	,CTE_KOERS CK
+
+UNION
+
+SELECT 3001 AS COMPANY
+	,0 AS KY
+	,NULL AS ACCOUNT
+	,NULL AS ACCOUNT_GROUP
+	,'MONTHLY CURRENCY_RATE' AS [DESCRIPTION]
+	,NULL AS BOOK_BALANCE_EUR
+	,cast(CK.KOERS AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_BANK CB
+	,CTE_KOERS CK
+
+UNION
+
+SELECT 3129 AS COMPANY
+	,0 AS KY
+	,NULL AS ACCOUNT
+	,NULL AS ACCOUNT_GROUP
+	,'MONTHLY CURRENCY_RATE' AS [DESCRIPTION]
+	,NULL AS BOOK_BALANCE_EUR
+	,cast(CK.KOERS AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_BANK CB
+	,CTE_KOERS CK
+
+UNION
+
+SELECT CB.COMPANY
+	,CB.KY
+	,CB.ACCOUNT
+	,CB.ACCOUNT_GROUP
+	,CB.[DESCRIPTION]
+	,cast(CASE 
+			WHEN CB.[DESCRIPTION] = 'ABNA USD 81.19.46.118'
+				THEN CUSA.AMOUNT_BALANCE / CK.KOERS
+			ELSE CB.BOOK_BALANCE_EUR
+			END AS NUMERIC(14, 2)) AS BOOK_BALANCE_EUR
+	,cast(CASE 
+			WHEN CB.[DESCRIPTION] = 'ABNA USD 81.19.46.118'
+				THEN CUSA.AMOUNT_BALANCE
+			ELSE CB.BOOK_BALANCE_EUR * CK.KOERS
+			END AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_BANK CB
+	,CTE_KOERS CK
+	,CTE_USA_BANK CUSA
+
+UNION
+
+SELECT CB.COMPANY
+	,CB.KY
+	,'9999'
+	,CB.ACCOUNT_GROUP
+	,CASE 
+		WHEN ACCOUNT_GROUP = 'Inventory'
+			THEN 'TOTALS Inventory'
+		WHEN ACCOUNT_GROUP = 'Bank'
+			THEN 'TOTALS Bank'
+		WHEN ACCOUNT_GROUP = 'RCNVD Payables Receiveables'
+			THEN 'TOTALS Payables Receiveables'
+		END AS DESCRIPTION
+	,cast(sum(CASE 
+				WHEN CB.[DESCRIPTION] = 'ABNA USD 81.19.46.118'
+					THEN CUSA.AMOUNT_BALANCE / CK.KOERS
+				ELSE CB.BOOK_BALANCE_EUR
+				END) AS NUMERIC(14, 2))
+	,cast(cast(sum(CASE 
+					WHEN CB.[DESCRIPTION] = 'ABNA USD 81.19.46.118'
+						THEN CUSA.AMOUNT_BALANCE / CK.KOERS
+					ELSE CB.BOOK_BALANCE_EUR
+					END) AS NUMERIC(14, 2)) * CK.KOERS AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_BANK CB
+	,CTE_KOERS CK
+	,CTE_USA_BANK CUSA
+GROUP BY CB.COMPANY
+	,CB.KY
+	,CB.ACCOUNT_GROUP
+	,CK.KOERS
+
+UNION
+
+SELECT CIN.COMPANY
+	,CIN.KY
+	,CIN.ACCOUNT
+	,CIN.ACCOUNT_GROUP
+	,CIN.[DESCRIPTION]
+	,CIN.BOOK_BALANCE_EUR
+	,cast((CK.KOERS * CIN.BOOK_BALANCE_EUR) AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_INVENTORY CIN
+	,CTE_KOERS CK
+
+UNION
+
+SELECT CIN.COMPANY
+	,CIN.KY
+	,'9999'
+	,CIN.ACCOUNT_GROUP
+	,CASE 
+		WHEN ACCOUNT_GROUP = 'Inventory'
+			THEN 'TOTALS Inventory'
+		WHEN ACCOUNT_GROUP = 'Bank'
+			THEN 'TOTALS Bank'
+		WHEN ACCOUNT_GROUP = 'RCNVD Payables Receiveables'
+			THEN 'TOTALS Payables Receiveables'
+		END AS DESCRIPTION
+	,sum(CIN.BOOK_BALANCE_EUR)
+	,cast((CK.KOERS * sum(CIN.BOOK_BALANCE_EUR)) AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_INVENTORY CIN
+	,CTE_KOERS CK
+GROUP BY CIN.COMPANY
+	,CIN.KY
+	,CIN.ACCOUNT_GROUP
+	,CK.KOERS
+
+UNION
+
+SELECT CRP.COMPANY
+	,CRP.KY
+	,CRP.ACCOUNT
+	,CRP.ACCOUNT_GROUP
+	,CRP.[DESCRIPTION]
+	,CRP.BOOK_BALANCE_EUR
+	,cast((CK.KOERS * CRP.BOOK_BALANCE_EUR) AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_RCNVD_PAY_REC CRP
+	,CTE_KOERS CK
+
+UNION
+
+SELECT CRP.COMPANY
+	,CRP.KY
+	,'9999'
+	,CRP.ACCOUNT_GROUP
+	,CASE 
+		WHEN ACCOUNT_GROUP = 'Inventory'
+			THEN 'TOTALS Inventory'
+		WHEN ACCOUNT_GROUP = 'Bank'
+			THEN 'TOTALS Bank'
+		WHEN ACCOUNT_GROUP = 'RCNVD Payables Receiveables'
+			THEN 'TOTALS Payables Receiveables'
+		END AS DESCRIPTION
+	,sum(CRP.BOOK_BALANCE_EUR)
+	,cast((CK.KOERS * sum(CRP.BOOK_BALANCE_EUR)) AS NUMERIC(14, 2)) AS BOOK_BALANCE_US
+FROM CTE_RCNVD_PAY_REC CRP
+	,CTE_KOERS CK
+GROUP BY CRP.COMPANY
+	,CRP.KY
+	,CRP.ACCOUNT_GROUP
+	,CK.KOERS

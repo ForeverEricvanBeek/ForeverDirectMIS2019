@@ -36,6 +36,8 @@ SELECT
 	, CAST(OD.D_COUNTRY_CODE AS NVARCHAR(10))			AS Customer_Country_Code
 	, CAST(OD.D_POSTAL_CODE	AS NVARCHAR(10))			AS Customer_Postal_Code
 	, CAST(OD.D_STATE_PROV AS NVARCHAR(10))				AS Customer_State
+	, CAST(OD.D_PHONE_NUMBER AS NVARCHAR(100))			AS Customer_Phone
+	, CAST(OD.D_EMAIL AS NVARCHAR(256))					AS Customer_Email
 	, CAST(CC.Customer_First_Order_Date AS DATETIME2(7))AS Customer_First_Order_Date
 	, CAST(OD.CREATED_DTTM AS DATETIME2(7))				AS Customer_Last_Order_Date
 	, CAST(CC.Customer_NumOf_Orders	AS INT)				AS Customer_NumOf_Orders

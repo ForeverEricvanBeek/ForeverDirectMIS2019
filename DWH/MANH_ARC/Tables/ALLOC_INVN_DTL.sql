@@ -70,8 +70,13 @@
     [IsDeleted]             CHAR (1)        NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL,
+    [CARTON_BREAK_ATTR]     NVARCHAR (3)    NULL,
+    [CARTON_TYPE]           NVARCHAR (3)    NULL,
+    [TOTE_NBR]              NVARCHAR (50)   NULL,
     CONSTRAINT [PK_MANH_ALLOC_INVN_DTL] PRIMARY KEY CLUSTERED ([ALLOC_INVN_DTL_ID] ASC, [Eff_Date] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

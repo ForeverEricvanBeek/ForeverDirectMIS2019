@@ -41,6 +41,7 @@ ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID
 AND				FA.ActInd = 'Y'
 WHERE			OD.DO_STATUS = '190'
 AND				OD.ActInd = 'Y'
+AND				OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 
 UNION ALL
 
@@ -77,12 +78,13 @@ SELECT
 FROM			MANH.LPN_OUTBOUND AS LP
 INNER JOIN		MANH.ORDERS	AS OD 
 ON				OD.ORDER_ID = LP.ORDER_ID 
+AND				OD.DO_STATUS = '190' 
 AND				OD.ActInd = 'Y' 
+AND				OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 LEFT JOIN		MANH.FACILITY_ALIAS AS FA 
 ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 
 AND				FA.ActInd = 'Y'
-WHERE			OD.DO_STATUS = '190' 
-AND				LP.ActInd = 'Y'
+WHERE			LP.ActInd = 'Y'
 
 UNION ALL
 
@@ -123,7 +125,9 @@ AND				LP.LPN_FACILITY_STATUS <> 99
 AND				LP.ActInd = 'Y'
 INNER JOIN		MANH.ORDERS AS OD 
 ON				OD.ORDER_ID = LP.ORDER_ID 
+AND				OD.DO_STATUS = '190' 
 AND				OD.ActInd = 'Y'
+AND				OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 INNER JOIN		MANH.ITEM_CBO IC
 ON				IC.ITEM_ID = LD.ITEM_ID
 AND				IC.ActInd = 'Y'
@@ -142,8 +146,7 @@ AND				OL.ITEM_NAME = IC.ITEM_NAME
 LEFT JOIN		MANH.FACILITY_ALIAS	AS FA 
 ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 
 AND				FA.ActInd = 'Y'
-WHERE			OD.DO_STATUS = '190' 
-AND				LD.ActInd = 'Y'
+WHERE			LD.ActInd = 'Y'
 
 UNION ALL
 
@@ -181,7 +184,7 @@ FROM			MANH.ORDERS AS OD
 INNER JOIN		EXTRA.ORDERS_INFO CO
 ON				CO.TC_Order_ID = OD.TC_ORDER_ID
 AND				CO.ActInd = 'Y'
-INNER JOIN		[$(Datamart)].DM.D_Order AS VWO
+INNER JOIN		Datamart.DM.D_Order AS VWO
 ON				OD.TC_ORDER_ID	= VWO.Order_ID
 AND				VWO.Order_Days_To_Late > 0
 AND				VWO.Order_Planned_Ship_Date IS NOT NULL
@@ -189,6 +192,7 @@ LEFT JOIN		MANH.FACILITY_ALIAS	AS FA
 ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 
 AND				FA.ActInd = 'Y'
 WHERE			OD.ActInd = 'Y'
+AND				OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 
 UNION ALL
 
@@ -222,8 +226,8 @@ SELECT
 	, 0												AS Number_Of_Picks
 	, 0												AS Number_Of_Complaints
 	, 1												AS Number_Of_Issues
-FROM		[$(Datamart)].DM.D_OF_Issues AS QI
-LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
+FROM		Datamart.DM.D_OF_Issues AS QI
+LEFT JOIN	Datamart.DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Issues_Order_ID
 LEFT JOIN	MANH.LPN_OUTBOUND AS LP
 ON			LP.TC_LPN_ID = QI.OF_Issues_OLPN_ID
@@ -240,6 +244,7 @@ AND			L1.ActInd = 'Y'
 LEFT JOIN	MANH.LOCN_HDR L2
 ON			L2.DSP_LOCN = QI.OF_Issues_Location_Allocated
 AND			L2.ActInd = 'Y'
+
 UNION ALL
 
 -- 6 Number of OF Complaints
@@ -272,8 +277,8 @@ SELECT
 	, 0												AS Number_Of_Picks
 	, 1												AS Number_Of_Complaints
 	, 0												AS Number_Of_Issues
-FROM		[$(Datamart)].DM.D_OF_Complaints AS QI
-LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
+FROM		Datamart.DM.D_OF_Complaints AS QI
+LEFT JOIN	Datamart.DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Complaints_Order_ID
 LEFT JOIN	MANH.LPN_OUTBOUND AS LP
 ON			LP.TC_LPN_ID = QI.OF_Complaints_OLPN_ID
@@ -287,13 +292,14 @@ AND			I2.ActInd = 'Y'
 
 UNION ALL
 
+
 -- 7 Measure Number of Pick Lines
 SELECT			  
 	CONVERT(CHAR, PT.CREATE_DATE_TIME, 112)			AS DateKey
 	, ISNULL(OD.Order_Facility_Code,'-1')			AS Facility_ID
 	, ISNULL(OD.Order_Country_Code,'-1')			AS Country_Code
 	, ISNULL(OD.Order_Ship_Via_Code,'-1')			AS Transporter_Ship_Via_Code
-	, ISNULL(LP.TC_SHIPMENT_ID,'-1')				AS Shipment_ID
+	, ISNULL(OD.Order_Shipment_ID,'-1')				AS Shipment_ID
 	, ISNULL(OD.Order_ID,'-1')						AS Order_ID
 	, ISNULL(PT.CNTR_NBR,'-1')						AS OLPN_ID
 	, ISNULL(IC.ITEM_ID,'-1')						AS SKU_Code1
@@ -320,16 +326,13 @@ SELECT
 	, 1												AS Number_Of_Picks
 	, 0												AS Number_Of_Complaints
 	, 0												AS Number_Of_Issues
-FROM		MANH.PROD_TRKG_TRAN AS PT
-INNER JOIN	MANH.LPN_OUTBOUND LP
-ON			LP.TC_LPN_ID = PT.CNTR_NBR
-AND			LP.ActInd = 'Y'
-INNER JOIN	[$(Datamart)].DM.D_Order AS OD
-ON			OD.Order_ID = PT.TC_ORDER_ID
+FROM		Datamart.DM.D_Order AS OD
+INNER JOIN	MANH.PROD_TRKG_TRAN AS PT
+ON			PT.TC_ORDER_ID = OD.Order_ID
+AND			PT.MENU_OPTN_NAME IN ('PackCD', 'RF QA incomplete','Pack Cubed Directed','RF Zone  Picking RTN')
 LEFT JOIN	MANH.ITEM_CBO IC
 ON			IC.ITEM_ID = PT.ITEM_ID
 AND			IC.ActInd = 'Y'
-WHERE		PT.MENU_OPTN_NAME IN ('PackCD', 'RF QA incomplete','Pack Cubed Directed','RF Zone  Picking RTN')
 
 
 /* 20180416

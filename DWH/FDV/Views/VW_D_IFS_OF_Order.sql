@@ -5,6 +5,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_IFS_OF_Order]
 AS
 
@@ -24,10 +26,11 @@ cast(O.DATE_ENTERED as date)	AS DateKey
 	
 FROM [IFS].[CUSTOMER_ORDER] O
 	
-left join [$(ForeverData01)].[DM].[D_Country] C
+left join [ForeverData01].[DM].[D_Country] C
 	on O.COUNTRY_CODE=C.Country_Code
 where O.ORDER_ID = 'OF'
 	and O.ActInd='Y'
+	and O.IsDeleted='N'
 
 --filters to remove samples and scrap
 	and O.CUSTOMER_NO not like '%SAMPLE%'

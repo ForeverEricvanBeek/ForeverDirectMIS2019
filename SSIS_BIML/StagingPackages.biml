@@ -298,7 +298,7 @@
                     <#if (varExtractionSourceType == "XML_AFAS") {#>              
                         <Variable Name="AfasToken" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::AfasToken]</Variable> 
                         <Variable Name="AfasConnector" DataType="String" Namespace="User"><#=varExtractionSourceTable#></Variable> 
-                        <Variable Name="AfasFilter" DataType="String" Namespace="User"><#=varExtractionWhereStatement#></Variable>
+                        <Variable Name="AfasFilter" DataType="String" Namespace="User" EvaluateAsExpression="true">"<#=varExtractionWhereStatement#>"</Variable>
                         <Variable Name="AfasSkip" DataType="Int32" Namespace="User">0</Variable>
                         <Variable Name="AfasTake" DataType="Int32" Namespace="User">99999999</Variable> 
                         <Variable Name="AfasOptions" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::AfasOptions]</Variable> 

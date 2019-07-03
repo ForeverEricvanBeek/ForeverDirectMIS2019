@@ -17,6 +17,10 @@
     [IsDeleted]             CHAR (1)      NULL,
     [BatchID]               BIGINT        NULL,
     [ProcessLogID]          BIGINT        NULL,
-    CONSTRAINT [PK_MANH_PIX_TRAN_CODE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PIX_TRAN_CODE_ID] ASC)
-);
+    [CREATED_DTTM]          DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]     DATETIME2 (7) NULL,
+    CONSTRAINT [PK_MANH_PIX_TRAN_CODE] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PIX_TRAN_CODE_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

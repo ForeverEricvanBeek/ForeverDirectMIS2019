@@ -73,8 +73,28 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
+    [HAZMAT_QTY]                 NUMERIC (13, 4) NULL,
+    [HAZMAT_UOM]                 INT             NULL,
+    [REF_FIELD_1]                NVARCHAR (25)   NULL,
+    [REF_FIELD_10]               NVARCHAR (25)   NULL,
+    [REF_FIELD_2]                NVARCHAR (25)   NULL,
+    [REF_FIELD_3]                NVARCHAR (25)   NULL,
+    [REF_FIELD_4]                NVARCHAR (25)   NULL,
+    [REF_FIELD_5]                NVARCHAR (25)   NULL,
+    [REF_FIELD_6]                NVARCHAR (25)   NULL,
+    [REF_FIELD_7]                NVARCHAR (25)   NULL,
+    [REF_FIELD_8]                NVARCHAR (25)   NULL,
+    [REF_FIELD_9]                NVARCHAR (25)   NULL,
+    [REF_NUM1]                   NUMERIC (13, 5) NULL,
+    [REF_NUM2]                   NUMERIC (13, 5) NULL,
+    [REF_NUM3]                   NUMERIC (13, 5) NULL,
+    [REF_NUM4]                   NUMERIC (13, 5) NULL,
+    [REF_NUM5]                   NUMERIC (13, 5) NULL,
+    [TC_ORDER_LINE_ID]           NVARCHAR (30)   NULL,
     CONSTRAINT [PK_MANH_LPN_DETAIL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [LPN_DETAIL_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

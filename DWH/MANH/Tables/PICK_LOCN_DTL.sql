@@ -43,6 +43,16 @@
     [IsDeleted]                  CHAR (1)        NULL,
     [BatchID]                    BIGINT          NULL,
     [ProcessLogID]               BIGINT          NULL,
-    CONSTRAINT [PK_MANH_PICK_LOCN_DTL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PICK_LOCN_DTL_ID] ASC)
-);
+    [CREATED_DTTM]               DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]          DATETIME2 (7)   NULL,
+    [PICK_TO_ZERO_ACTION]        NVARCHAR (1)    NULL,
+    [PRE_ALLOCATED_QTY]          NUMERIC (13, 4) NULL,
+    [REPLEN_CONTROL]             NVARCHAR (1)    NULL,
+    [STOP_DTTM]                  DATETIME2 (7)   NULL,
+    [STOP_QTY]                   NUMERIC (13, 4) NULL,
+    [UTIL_PERCENT]               NUMERIC (3, 2)  NULL,
+    CONSTRAINT [PK_MANH_PICK_LOCN_DTL] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PICK_LOCN_DTL_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

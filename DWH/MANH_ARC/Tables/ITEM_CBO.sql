@@ -75,8 +75,42 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [BRAND]                          NVARCHAR (15)   NULL,
+    [COLOR_SEQ]                      INT             NULL,
+    [COMMERCE_ATTRIBUTE1]            NVARCHAR (50)   NULL,
+    [COMMERCE_ATTRIBUTE2]            NVARCHAR (50)   NULL,
+    [COMMERCE_DATE_ATTRIBUTE1]       DATETIME2 (7)   NULL,
+    [COMMERCE_NUM_ATTRIBUTE1]        NUMERIC (13, 4) NULL,
+    [COMMERCE_NUM_ATTRIBUTE2]        NUMERIC (13, 4) NULL,
+    [CREATED_DTTM]                   DATETIME2 (7)   NULL,
+    [CUBISCAN_LAST_UPDATED_DTTM]     DATETIME2 (7)   NULL,
+    [IS_EXCHANGEABLE]                INT             NULL,
+    [ITEM_DISPOSITION]               NVARCHAR (15)   NULL,
+    [LAST_UPDATED_DTTM]              DATETIME2 (7)   NULL,
+    [LONG_DESCRIPTION]               NVARCHAR (500)  NULL,
+    [MIN_SHIP_INNER_UOM_ID]          NVARCHAR (3)    NULL,
+    [PRICE_STATUS]                   NVARCHAR (15)   NULL,
+    [REF_FIELD1]                     NVARCHAR (25)   NULL,
+    [REF_FIELD10]                    NVARCHAR (25)   NULL,
+    [REF_FIELD2]                     NVARCHAR (25)   NULL,
+    [REF_FIELD3]                     NVARCHAR (25)   NULL,
+    [REF_FIELD4]                     NVARCHAR (25)   NULL,
+    [REF_FIELD5]                     NVARCHAR (25)   NULL,
+    [REF_FIELD6]                     NVARCHAR (25)   NULL,
+    [REF_FIELD7]                     NVARCHAR (25)   NULL,
+    [REF_FIELD8]                     NVARCHAR (25)   NULL,
+    [REF_FIELD9]                     NVARCHAR (25)   NULL,
+    [REF_NUM1]                       NUMERIC (13, 5) NULL,
+    [REF_NUM2]                       NUMERIC (13, 5) NULL,
+    [REF_NUM3]                       NUMERIC (13, 5) NULL,
+    [REF_NUM4]                       NUMERIC (13, 5) NULL,
+    [REF_NUM5]                       NUMERIC (13, 5) NULL,
+    [SELL_THROUGH]                   NUMERIC (13, 4) NULL,
+    [SIZE_SEQ]                       INT             NULL,
     CONSTRAINT [PK_MANH_ITEM_CBO] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ITEM_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

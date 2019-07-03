@@ -9,7 +9,7 @@
     [LINE_SEQUENCE]               INT             NULL,
     [EFF_PHASE_IN_DATE]           DATETIME2 (7)   NULL,
     [EFF_PHASE_OUT_DATE]          DATETIME2 (7)   NULL,
-    [QTY_PER_ASSEMBLY]            INT             NULL,
+    [QTY_PER_ASSEMBLY]            DECIMAL (18, 2) NULL,
     [COMPONENT_SCRAP]             INT             NULL,
     [SHRINKAGE_FACTOR]            INT             NULL,
     [OPERATION_NO]                INT             NULL,
@@ -57,6 +57,8 @@
     [ProcessLogID]                BIGINT          NULL,
     CONSTRAINT [PK_MANUF_STRUCTURE] PRIMARY KEY CLUSTERED ([CONTRACT] ASC, [PART_NO] ASC, [ENG_CHG_LEVEL] ASC, [BOM_TYPE_DB] ASC, [ALTERNATIVE_NO] ASC, [LINE_ITEM_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

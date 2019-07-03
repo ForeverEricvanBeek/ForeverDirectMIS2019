@@ -86,6 +86,8 @@
     <Folder Include="dbo\Views\" />
     <Folder Include="Security\" />
     <Folder Include="dbo\Functions\" />
+    <Folder Include="MFV\" />
+    <Folder Include="MFV\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TRANS\Tables\DPD_META_DATA.sql" />
@@ -359,7 +361,6 @@
     <Build Include="ATIMO\Tables\hourtypes.sql" />
     <Build Include="ATIMO\Tables\costcenters.sql" />
     <Build Include="ATIMO\Tables\emplstam.sql" />
-    <Build Include="AFAS\Tables\Afas.sql" />
     <Build Include="dbo\Views\CUSTOMER.sql" />
     <Build Include="dbo\Views\CL_MESSAGE_PLUS.sql" />
     <Build Include="dbo\Functions\fn_StripCharacters.sql" />
@@ -511,6 +512,41 @@
     <Build Include="IFS\Tables\LEDGER_ITEM.sql" />
     <Build Include="IFS\Tables\BAD_DEBT_QRY.sql" />
     <Build Include="IFS\Tables\ACCOUNTING_GROUP.sql" />
+    <Build Include="WEB\Tables\SystemCodeParent.sql" />
+    <Build Include="WEB\Tables\SystemCode.sql" />
+    <Build Include="IFS\Tables\SEPA_PAYMENT_TRANS.sql" />
+    <Build Include="IFS\Tables\SEPA_HEADER.sql" />
+    <Build Include="IFS\Tables\PURCH_INFO_SERVICES_RPV.sql" />
+    <Build Include="IFS\Tables\PAYMENT_TRANSACTION.sql" />
+    <Build Include="IFS\Tables\PAYMENT.sql" />
+    <Build Include="IFS\Tables\MIXED_PAYMENT_LUMP_SUM.sql" />
+    <Build Include="IFS\Tables\MIXED_PAYMENT.sql" />
+    <Build Include="IFS\Tables\LEDGER_ITEM_AUTH.sql" />
+    <Build Include="IFS\Tables\INVOICE_UTILITY_INV_HEAD_PUB.sql" />
+    <Build Include="IFS\Tables\CURRENCY_RATE.sql" />
+    <Build Include="IFS\Tables\ACCOUNTING_BALANCE.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_verzuimverloop.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_verzuimmelding.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_Salarissen_Stamgegevens.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_Roosters.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_Orgeenheid_functie.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_journaalpost.sql" />
+    <Build Include="AFAS\Tables\DWH_Medewerker_Contracten.sql" />
+    <Build Include="MFV\Tables\Calendar.sql" />
+    <Build Include="MFV\Tables\Articles.sql" />
+    <Build Include="MFV\Tables\Waste.sql" />
+    <Build Include="MFV\Tables\Users.sql" />
+    <Build Include="MFV\Tables\Shifts.sql" />
+    <Build Include="MFV\Tables\Shift_Data.sql" />
+    <Build Include="MFV\Tables\QualityCheck_Reasons.sql" />
+    <Build Include="MFV\Tables\QualityCheck.sql" />
+    <Build Include="MFV\Tables\Production.sql" />
+    <Build Include="MFV\Tables\Orders.sql" />
+    <Build Include="MFV\Tables\Order_Data.sql" />
+    <Build Include="MFV\Tables\OperatorHours.sql" />
+    <Build Include="MFV\Tables\Machine.sql" />
+    <Build Include="MFV\Tables\Downtimes.sql" />
+    <Build Include="Security\MFV.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DWH\DWH.sqlproj">

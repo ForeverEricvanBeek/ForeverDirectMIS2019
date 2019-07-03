@@ -6,7 +6,7 @@
     [COUNTRY_OF_ORIGIN]             NVARCHAR (2)    NULL,
     [HAZARD_CODE]                   NVARCHAR (6)    NULL,
     [NOTE_ID]                       INT             NULL,
-    [ESTIMATED_MATERIAL_COST]       DECIMAL (18, 2) NULL,
+    [ESTIMATED_MATERIAL_COST]       DECIMAL (18, 5) NULL,
     [PART_PRODUCT_CODE]             NVARCHAR (5)    NULL,
     [PART_PRODUCT_FAMILY]           NVARCHAR (5)    NULL,
     [PART_STATUS]                   NVARCHAR (1)    NULL,
@@ -109,6 +109,8 @@
     [ProcessLogID]                  BIGINT          NULL,
     CONSTRAINT [PK_INVENTORY_PART] PRIMARY KEY CLUSTERED ([CONTRACT] ASC, [PART_NO] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 95) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

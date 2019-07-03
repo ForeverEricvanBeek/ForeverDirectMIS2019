@@ -5,6 +5,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_IFS_Bulk_Orderline_Events]
 AS
 with CTE_1 as
@@ -59,6 +61,6 @@ with CTE_1 as
   
   from CTE_1 C1
  
-UNION ALL
+UNION
 
 SELECT        '-1', '-1', '-1', '-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL,'-1'

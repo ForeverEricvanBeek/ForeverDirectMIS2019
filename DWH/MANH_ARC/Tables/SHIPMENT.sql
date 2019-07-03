@@ -358,8 +358,30 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [CURRENCY_DTTM]                  DATETIME2 (7)   NULL,
+    [DSG_VOYAGE_FLIGHT]              NVARCHAR (50)   NULL,
+    [FEASIBLE_VOYAGE_FLIGHT]         NVARCHAR (50)   NULL,
+    [FRT_REV_ACCESSORIAL_CHARGE]     NUMERIC (13, 4) NULL,
+    [FRT_REV_LINEHAUL_CHARGE]        NUMERIC (13, 4) NULL,
+    [FRT_REV_RATING_LANE_DETAIL_ID]  INT             NULL,
+    [FRT_REV_RATING_LANE_ID]         INT             NULL,
+    [FRT_REV_SPOT_CHARGE]            NUMERIC (13, 4) NULL,
+    [FRT_REV_SPOT_CHARGE_CURR_CODE]  NVARCHAR (3)    NULL,
+    [FRT_REV_STOP_CHARGE]            NUMERIC (13, 4) NULL,
+    [HAZMAT_CERT_CONTACT]            NVARCHAR (150)  NULL,
+    [HAZMAT_CERT_DECLARATION]        NVARCHAR (500)  NULL,
+    [LOADING_SEQ_ORD]                NVARCHAR (15)   NULL,
+    [NORMALIZED_TOTAL_REVENUE]       NUMERIC (13, 4) NULL,
+    [ORDER_QTY]                      NUMERIC (13, 4) NULL,
+    [QTY_UOM_ID]                     INT             NULL,
+    [REF_SHIPMENT_NBR]               NVARCHAR (50)   NULL,
+    [STAGING_LOCN_ID]                NVARCHAR (10)   NULL,
+    [TOTAL_REVENUE]                  NUMERIC (13, 4) NULL,
+    [TOTAL_REVENUE_CURRENCY_CODE]    NVARCHAR (3)    NULL,
     CONSTRAINT [PK_MANH_SHIPMENT] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SHIPMENT_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

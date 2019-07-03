@@ -29,8 +29,11 @@
     [OBJEVENTS]              NVARCHAR (4000) NULL,
     [STATE]                  NVARCHAR (4000) NULL,
     [BatchID]                BIGINT          NULL,
-    [ProcessLogID]           BIGINT          NULL
+    [ProcessLogID]           BIGINT          NULL,
+    CONSTRAINT [PK_C_EXT_SHIP_CONF_LINES] PRIMARY KEY CLUSTERED ([SEQ_ID] ASC)
 );
+
+
 
 
 

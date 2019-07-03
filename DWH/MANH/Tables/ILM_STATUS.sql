@@ -8,6 +8,10 @@
     [IsDeleted]            CHAR (1)      NULL,
     [BatchID]              BIGINT        NULL,
     [ProcessLogID]         BIGINT        NULL,
-    CONSTRAINT [PK_MANH_ILM_STATUS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ILM_STATUS] ASC)
-);
+    [CREATED_DTTM]         DATETIME2 (7) NULL,
+    [LAST_UPDATED_DTTM]    DATETIME2 (7) NULL,
+    CONSTRAINT [PK_MANH_ILM_STATUS] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [ILM_STATUS] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

@@ -2,6 +2,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_Work_Orders]
 AS
 
@@ -31,7 +33,7 @@ WITH CTE_1 AS
 )
 
 --PLEASE NOTE THATE THE WM_VERSION IS USED TO FILTER OUT DOUBLE VALUES. IF NOT CHECKED YOU MIGHT REPORT TO HIGH VALUES FOR REQUESTED VALUES
-Select A.WORK_ORD_NBR As Wo_Number,
+Select distinct(A.WORK_ORD_NBR) As Wo_Number,
 	   B.SEQ_NBR AS Line_No,
 	   B.WORK_ORD_DTL_ID as Work_Ord_Detail_Id,
        Case
@@ -112,3 +114,5 @@ Select A.WORK_ORD_NBR As Wo_Number,
           A.WAVE_NBR,
           A.STAT_CODE,
 		  B.WORK_ORD_DTL_ID
+	--union
+	--select 'Unknown','-1','-1',null,null,null,null,'-1','-1','-1',null,null,null,null,null,null,null,null,null,null,null,'Unknown'

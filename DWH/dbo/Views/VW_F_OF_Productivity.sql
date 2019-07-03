@@ -1,6 +1,5 @@
 ﻿
-
-CREATE VIEW [dbo].[VW_F_OF_Productivity]
+CREATE VIEW VW_F_OF_Productivity
 AS
 
 SELECT 
@@ -21,6 +20,7 @@ ON           PT.FROM_LOCN = LH.LOCN_ID
 AND			 LH.ActInd = 'Y'
 WHERE        PT.MODULE_NAME = 'Packing'
 AND          PT.MENU_OPTN_NAME IN ('PackCD', 'RF QA incomplete','RF Zone  Picking RTN','Pack Cubed Directed')
+AND			 PT.CREATE_DATE_TIME >= DATEADD(YEAR,-2,GETDATE())
 
 UNION ALL
 
@@ -44,7 +44,8 @@ FROM SCHAEFER.Repack RP
 INNER JOIN	WEB.Picker PI
 ON			PI.Picker_ID = SUBSTRING(RP.[User],2,5)
 AND			PI.ActInd = 'Y'
-WHERE RP.ActInd = 'Y'
+WHERE		RP.ActInd = 'Y'
+AND			RP.Eff_Date >= DATEADD(YEAR,-2,GETDATE())
 
 UNION ALL
 SELECT '-1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL

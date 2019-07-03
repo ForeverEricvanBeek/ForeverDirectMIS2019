@@ -2,10 +2,8 @@
 
 
 
-
-
 CREATE VIEW [FDV].[VW_D_Pack_QC]
-AS
+as
 WITH CTE_INIT as
 (SELECT
   LP.TC_LPN_ID										AS OLPN_ID
@@ -28,6 +26,8 @@ WITH CTE_INIT as
   , X.Item											AS ItemIssue
   , X.Weight										AS WeightIssue
   , X.Special_Instr									AS Special_Instr
+  , cast(CASE when OD.REF_FIELD_10 ='001' then '1'
+  		else '0' end as nvarchar (25))				AS Cold_Protection
   , X.OLPNWeightMin									AS MinWeight
   , X.OLPNWeightMax									AS MaxWeight
   , X.OLPNWeight									AS Weight
@@ -112,14 +112,12 @@ select *
 		when Diff_Weight between 0.0100 and 0.02000		then		'B +'
 		when Diff_Weight between 0.0200 and 0.03000		then		'C +'
 		when Diff_Weight between 0.0300 and 0.04000		then		'D +'
+		when Diff_Weight < -0.04000 or Diff_Weight >  0.04000 then  'Extreme'
+		when Special_Instr  like 'T%'				    then        'X'
+		When Cold_Protection='001'						then	    'Y'
 		When Diff_Weight = 0.000						then		'Z'
-		--When Diff_Weight is null						then		null
-		else														'Extreme'
-		end																								AS Categorie
+		else														'Unknown'
+		end															AS Categorie
 From CTE_INIT
---where CTE_INIT.TimeIn is not null
-
---order BY Date desc
-
 UNION ALL
-SELECT '-1','-1',NULL, NULL, NULL, NULL, NULL, '2999-01-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL,NULL, NULL,NULL,NULL,NULL,NULL
+SELECT '-1','-1',NULL, NULL, NULL, NULL, NULL, '2999-01-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL,NULL, NULL,NULL, NULL,NULL,NULL,NULL,NULL

@@ -4,14 +4,22 @@
 
 
 
+
+
+
+
+
+
 CREATE VIEW [FDV].[VW_F_Invoiced_Sales]
 AS
 SELECT  
 	    convert(char, I.INVOICE_DATE, 112) AS DateKey,
+		cast(CO.DATE_ENTERED as Date) as Order_Date,
 		YEAR(I.INVOICE_DATE) AS   Accounting_Year,
 		MONTH(I.INVOICE_DATE) AS   Accounting_Month, --- CUSTOMER INVOICES FROM ORDERS
        I.CONTRACT as Company_Site ,
 	   left(I.CUSTOMER_NO, 4) AS OP_Country,
+	   I.CUSTOMER_NO as Customer_ID,
 	   --I.CUSTOMER_NO as Home_Country,
 	   I.COUNTRY_CODE as Country_Code,
        convert(int, I.CATALOG_GROUP) as FAM_Prod_ID ,
@@ -30,18 +38,28 @@ SELECT
 	   SUM(I.NET_CURR_AMOUNT) -  SUM(I.COST) AS Contribution_Margin,
 	   coalesce(SUM(I.NET_CURR_AMOUNT) -  SUM(I.COST) /   NULLIF(SUM(I.NET_CURR_AMOUNT), 0) ,0)  as Sales_Margin,
 	      I.INVOICE_NO as Invoice_Number,
+		  I.ORDER_NO as Order_Number,
+		  CO.ORDER_ID as Order_Type,
 		  'Regular_Invoice' as Invoice_Type
 	   
 
   FROM IFS.CUST_ORD_INVO_STAT I
-   JOIN IFS.CUSTOMER_INFO CI
-	ON I.CUSTOMER_NO = CI.CUSTOMER_ID
+ --  JOIN IFS.CUSTOMER_INFO CI
+	-- ON I.CUSTOMER_NO = CI.CUSTOMER_ID
+	left JOIN [IFS].[CUSTOMER_ORDER] CO
+	on
+	I.ORDER_NO=CO.ORDER_NO
+	and
+	CO.ActInd='Y'
+	and
+	CO.IsDeleted='N'
  WHERE 1=1 
       AND YEAR(INVOICE_DATE) >= YEAR(GETDATE())-3
-	
+	  AND I.IsDeleted='N'
 	  AND I.ActInd = 'Y'
 
  GROUP BY I.INVOICE_DATE,
+ CO.DATE_ENTERED,
        I.CONTRACT ,
 	   I.COMPANY,
 	   I.ITEM_ID,
@@ -54,16 +72,20 @@ SELECT
        I.CUSTOMER_NAME,
        I.PRICE_LIST_NO,
        I.INVOICE_NO    ,
-	   I.COUNTRY_CODE
+	   I.COUNTRY_CODE,
+	    I.ORDER_NO,
+		 CO.ORDER_ID
 
 union    all
 --INSTANT INVOICES
 SELECT	 
 		convert(char, II.INVOICE_DATE, 112) AS Invoice_date,
+		NULL as Order_Date,
 		YEAR(II.INVOICE_DATE) AS   Accounting_Year,
 		MONTH(II.INVOICE_DATE) AS     Accounting_Month,
 		II.COMPANY AS Company_Site,
 		left(II."IDENTITY", 4) AS OP_Country,
+		II."IDENTITY" as Customer_ID,
 	    --II."IDENTITY" as Home_Country,
 		CO.COUNTRY_DB AS Country_Code,
 		''  as FAM_Prod_ID,
@@ -84,15 +106,20 @@ SELECT
 	   coalesce(SUM(III.NET_CURR_AMOUNT)  /   NULLIF(SUM(III.NET_CURR_AMOUNT), 0) ,0)  as Sales_Margin,
 	   --SUM(II.NET_CURR_AMOUNT) / SUM(II.NET_CURR_AMOUNT) as Sales_Margin,
 	   II.INVOICE_NO AS Invoice_Number,
-	   'Instant Invoice'as Invoice_Type
+	   NULL as Order_Number,
+	   NULL as Order_Type,
+	   'Instant Invoice' as Invoice_Type
 	  
 
   FROM IFS.INVOICE II
  INNER JOIN IFS.INVOICE_ITEM III
     ON II.COMPANY = III.COMPANY AND II.PARTY_TYPE_DB = III.PARTY_TYPE_DB
        AND II.INVOICE_ID = III.INVOICE_ID
- INNER JOIN IFS.CUSTOMER_INFO CO
+  JOIN IFS.CUSTOMER_INFO CO
     ON II."IDENTITY" = CO.CUSTOMER_ID
+ --INNER join [IFS].[CUSTOMER_ORDER] COR
+ --on
+
  WHERE  II.PARTY_TYPE_DB = 'CUSTOMER' AND SERIES_ID = 'II'
 
 	  AND YEAR(II.INVOICE_DATE)  >= year(getdate())-3

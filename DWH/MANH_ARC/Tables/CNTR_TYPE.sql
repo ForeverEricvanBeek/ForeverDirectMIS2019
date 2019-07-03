@@ -42,8 +42,15 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
+    [HAZ_DRY_ICE_QTY]          NUMERIC (13, 4) NULL,
+    [HAZ_DRY_ICE_UOM]          INT             NULL,
+    [HAZ_PKGTRANMODE]          NVARCHAR (2)    NULL,
+    [HAZ_PKGTYPE]              NVARCHAR (2)    NULL,
+    [HAZ_PKG_PER_TYPE]         INT             NULL,
     CONSTRAINT [PK_MANH_CNTR_TYPE] PRIMARY KEY CLUSTERED ([CNTR_TYPE_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

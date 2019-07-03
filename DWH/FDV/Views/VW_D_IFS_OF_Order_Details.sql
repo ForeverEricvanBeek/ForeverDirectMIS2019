@@ -1,13 +1,6 @@
 ﻿
 
 
-
-
-
-
-
-
-
 CREATE VIEW [FDV].[VW_D_IFS_OF_Order_Details]
 AS 
 
@@ -32,8 +25,10 @@ join IFS.CUSTOMER_ORDER O
 on
 ODL.ORDER_NO=O.ORDER_NO
 and O.ActInd='Y'
+and O.IsDeleted='N'
 
 where ODL.ActInd='Y'
+and ODL.IsDeleted='N'
 and year(ODL.DATE_ENTERED) >= year(GETDATE())-1 -- date filter toegevoegd
 --and ODL.ORDER_NO not like 'F%'
 and O.ORDER_ID ='OF'
@@ -56,10 +51,12 @@ left join IFS.SHIPMENT SH
 on 
 SOL.SHIPMENT_ID=SH.SHIPMENT_ID
 and SH.ActInd='Y'
+and SH.IsDeleted='N'
 left JOIN (select distinct(cast(TC_ORDER_ID as nvarchar(25))) as TC_ORDER_ID, DSG_SHIP_VIA from MANH.ORDERS
 			where ActInd='Y') Z
             on cast(Z.TC_ORDER_ID as nvarchar(25))=cast(SOL.SHIPMENT_ID as nvarchar(25))
 where SOL.ActInd='Y'
+and SOL.IsDeleted='N'
 and year(SH.SHIP_DATE) >= year(GETDATE())-1) -- date filter toegevoegd
 
 Select C1.DateKey
@@ -90,3 +87,5 @@ and
 C2.RN=1
 and 
 C1.Order_Type='OF'
+union
+select null,null,'-1','-1','-1','-1','-1','-1',null,null,null,null,null

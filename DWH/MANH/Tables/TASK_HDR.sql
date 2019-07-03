@@ -65,6 +65,9 @@
     [IsDeleted]              CHAR (1)       NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
-    CONSTRAINT [PK_MANH_TASK_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TASK_HDR_ID] ASC)
-);
+    [PICK_CART_TYPE]         NVARCHAR (1)   NULL,
+    CONSTRAINT [PK_MANH_TASK_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [TASK_HDR_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

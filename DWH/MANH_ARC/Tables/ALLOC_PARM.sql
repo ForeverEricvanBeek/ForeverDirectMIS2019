@@ -21,8 +21,12 @@
     [IsDeleted]                  CHAR (1)       NULL,
     [BatchID]                    BIGINT         NULL,
     [ProcessLogID]               BIGINT         NULL,
+    [CREATED_DTTM]               DATETIME2 (7)  NULL,
+    [LAST_UPDATED_DTTM]          DATETIME2 (7)  NULL,
     CONSTRAINT [PK_MANH_ALLOC_PARM] PRIMARY KEY CLUSTERED ([ALLOC_PARM_ID] ASC, [Eff_Date] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

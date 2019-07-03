@@ -1,4 +1,8 @@
-﻿CREATE VIEW FDV.VW_D_Customer
+﻿
+
+
+
+CREATE VIEW [FDV].[VW_D_Customer]
 AS
 
 SELECT
@@ -10,11 +14,14 @@ SELECT
    , CU.Customer_Country_Code
    , CU.Customer_Postal_Code
    , CU.Customer_State
+   , ISNULL(CU.Customer_Phone,'NA') as Customer_Phone
+   , ISNULL(CU.Customer_Email,'NA') as Customer_Email
    , MIN(CU.Customer_First_Order_Date) as Customer_First_Order_Date
    , MAX(CU.Customer_Last_Order_Date) as Customer_Last_Order_Date
    , SUM(CU.Customer_NumOf_Orders) as Customer_NumOf_Orders
 FROM EXTRA.CUSTOMER AS CU
 WHERE CU.ActInd = 'Y'
+--and (Customer_Email like '%@%.%' or Customer_Email is null)
 group by 
 Customer_ID
    , CU.Customer_Name
@@ -24,7 +31,10 @@ Customer_ID
    , CU.Customer_Country_Code
    , CU.Customer_Postal_Code
    , CU.Customer_State
-UNION ALL
+    , CU.Customer_Phone
+   , CU.Customer_Email
+ 
+UNION 
 SELECT		'-1'
 			,'Unknown'
 			, null
@@ -36,3 +46,5 @@ SELECT		'-1'
 			, null
 			, null
 			, null
+			,null
+			,null

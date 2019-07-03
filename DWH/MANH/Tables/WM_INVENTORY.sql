@@ -42,6 +42,9 @@
     [IsDeleted]                   CHAR (1)        NULL,
     [BatchID]                     BIGINT          NULL,
     [ProcessLogID]                BIGINT          NULL,
-    CONSTRAINT [PK_MANH_WM_INVENTORY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [WM_INVENTORY_ID] ASC)
-);
+    [CUMULATIVE_QTY]              NUMERIC (13, 4) NULL,
+    CONSTRAINT [PK_MANH_WM_INVENTORY] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [WM_INVENTORY_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

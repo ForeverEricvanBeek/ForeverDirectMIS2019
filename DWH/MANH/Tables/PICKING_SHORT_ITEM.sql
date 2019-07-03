@@ -24,12 +24,10 @@
     [REQD_SKU_ATTR_4]       NVARCHAR (10)   NULL,
     [REQD_SKU_ATTR_5]       NVARCHAR (10)   NULL,
     [REQD_CNTRY_OF_ORGN]    NVARCHAR (4)    NULL,
-    [Eff_Date]              DATE            NOT NULL,
-    [End_Date]              DATE            NULL,
-    [ActInd]                CHAR (1)        NULL,
-    [IsDeleted]             CHAR (1)        NULL,
     [BatchID]               BIGINT          NULL,
     [ProcessLogID]          BIGINT          NULL,
-    CONSTRAINT [PK_MANH_PICKING_SHORT_ITEM] PRIMARY KEY CLUSTERED ([PICKING_SHORT_ITEM_ID] ASC, [Eff_Date] ASC) ON [DWH_MANH]
+    CONSTRAINT [PK_PICKING_SHORT_ITEM] PRIMARY KEY CLUSTERED ([PICKING_SHORT_ITEM_ID] ASC) ON [DWH_MANH]
 ) ON [DWH_MANH];
+
+
 

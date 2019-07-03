@@ -27,8 +27,12 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [CREATED_DTTM]                   DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]              DATETIME2 (7)   NULL,
     CONSTRAINT [PK_MANH_SIZE_UOM] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SIZE_UOM_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

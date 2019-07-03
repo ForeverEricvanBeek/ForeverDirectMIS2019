@@ -1,10 +1,4 @@
 ﻿
-
-
-
-
-
-
 CREATE VIEW [FDV].[VW_F_Item_Usage]
 AS
 -- 4 Items Used
@@ -17,6 +11,7 @@ SELECT
 	, ISNULL(LP.TC_LPN_ID,'-1')						AS OLPN_ID
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code1
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code2
+	, ISNULL(INVP.CONTRACT,'-1')					AS Contract
 	, ISNULL(LD.BATCH_NBR,'-1')						AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, ISNULL(BOM.BOM_ID,'-1')				        AS BOM_ID
@@ -38,6 +33,7 @@ AND				IC.ActInd = 'Y'
 INNER JOIN		IFS.INVENTORY_PART INVP
 ON				INVP.PART_NO=IC.ITEM_NAME
 AND				INVP.ActInd='Y'
+AND				INVP.CONTRACT='FD01'
 AND				IC.ActInd='Y'
 LEFT JOIN		(SELECT
 					OL.ORDER_ID
@@ -51,7 +47,7 @@ LEFT JOIN		(SELECT
 					, OL.ITEM_NAME
 ) OL ON			OL.ORDER_ID = OD.ORDER_ID
 AND				OL.ITEM_NAME = IC.ITEM_NAME
-INNER JOIN			[$(ForeverData01)].[DM].[D_BOM_Explosie] BOM
+INNER JOIN			[ForeverData01].[DM].[D_BOM_Explosie] BOM
 ON
 IC.ITEM_NAME=BOM.Sales_Part_Level_0
 and BOM.IsDeleted='0'
@@ -77,6 +73,7 @@ SELECT
 	, ISNULL(LP.TC_LPN_ID,'-1')						AS OLPN_ID
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code1
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code2
+	, ISNULL(INVP.CONTRACT,'-1')					AS Contract
 	, ISNULL(LD.BATCH_NBR,'-1')						AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, '-1'											AS BOM_ID
@@ -111,6 +108,7 @@ INNER JOIN		IFS.INVENTORY_PART INVP
 ON				INVP.PART_NO=IC.ITEM_NAME
 AND				INVP.TYPE_CODE='Purchased (raw)'
 AND				INVP.ActInd='Y'
+AND				INVP.CONTRACT='FD01'
 AND				IC.ActInd='Y'
 LEFT JOIN		MANH.FACILITY_ALIAS	AS FA 
 ON				FA.FACILITY_ALIAS_ID = OD.BILL_FACILITY_ALIAS_ID 

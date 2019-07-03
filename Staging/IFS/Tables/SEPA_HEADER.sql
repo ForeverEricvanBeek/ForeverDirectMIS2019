@@ -1,0 +1,27 @@
+﻿CREATE TABLE [IFS].[SEPA_HEADER] (
+    [COMPANY]           NVARCHAR (20)   NOT NULL,
+    [ORDER_ID]          NVARCHAR (20)   NOT NULL,
+    [FILE_TEMPLATE]     NVARCHAR (10)   NULL,
+    [CREATION_DATE]     DATETIME2 (7)   NULL,
+    [TIME_STAMP]        NVARCHAR (25)   NULL,
+    [MESSAGE_ID]        NVARCHAR (35)   NULL,
+    [COMPANY_NAME]      NVARCHAR (70)   NULL,
+    [SENDING_PARTY]     NVARCHAR (70)   NULL,
+    [GROUPING]          NVARCHAR (4)    NULL,
+    [NO_OF_TRANS]       INT             NULL,
+    [CONTROL_SUM]       DECIMAL (18, 2) NULL,
+    [COMPANY_TAX_ID_NO] NVARCHAR (35)   NULL,
+    [BANK_PARTY_ID]     NVARCHAR (35)   NULL,
+    [PARTY_TYPE]        NVARCHAR (20)   NULL,
+    [IDENTITY]          NVARCHAR (20)   NULL,
+    [ISSUER]            NVARCHAR (20)   NULL,
+    [SCHEME_CODE]       NVARCHAR (4)    NULL,
+    [PROPRIETARY]       NVARCHAR (35)   NULL,
+    [BATCH_BOOKING]     NVARCHAR (5)    NULL,
+    [OBJID]             NVARCHAR (4000) NULL,
+    [OBJVERSION]        NVARCHAR (14)   NULL,
+    [BatchID]           BIGINT          NULL,
+    [ProcessLogID]      BIGINT          NULL,
+    CONSTRAINT [PK_SEPA_HEADER] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [ORDER_ID] ASC)
+);
+

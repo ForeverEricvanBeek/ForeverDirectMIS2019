@@ -54,8 +54,13 @@
     [IsDeleted]               CHAR (1)        NULL,
     [BatchID]                 BIGINT          NULL,
     [ProcessLogID]            BIGINT          NULL,
+    [CREATED_DTTM]            DATETIME2 (7)   NULL,
+    [LAST_UPDATED_DTTM]       DATETIME2 (7)   NULL,
+    [PKT_CONSOL_FLAG]         NVARCHAR (1)    NULL,
     CONSTRAINT [PK_MANH_PKT_CONSOL_LOCN] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PKT_CONSOL_LOCN_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

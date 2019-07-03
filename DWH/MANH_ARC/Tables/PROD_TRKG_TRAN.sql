@@ -50,8 +50,11 @@
     [LINE_ITEM_ID]      BIGINT          NULL,
     [BatchID]           BIGINT          NULL,
     [ProcessLogID]      BIGINT          NULL,
+    [FROM_LPN]          NVARCHAR (50)   NULL,
     CONSTRAINT [PK_MANH_PROD_TRKG_TRAN] PRIMARY KEY CLUSTERED ([PROD_TRKG_TRAN_ID] ASC) ON [DWH_MANH_ARC]
 ) ON [DWH_MANH_ARC];
+
+
 
 
 

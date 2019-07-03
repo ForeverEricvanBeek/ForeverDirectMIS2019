@@ -24,8 +24,13 @@
     [IsDeleted]                 CHAR (1)        NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
-    CONSTRAINT [PK_MANH_SHIP_VIA] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SHIP_VIA_ID] ASC)
-);
+    [CREATED_DTTM]              DATETIME2 (7)   NULL,
+    [CUSTOM_SHIPVIA_ATTRIB]     NVARCHAR (10)   NULL,
+    [LAST_UPDATED_DTTM]         DATETIME2 (7)   NULL,
+    CONSTRAINT [PK_MANH_SHIP_VIA] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [SHIP_VIA_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 
 
 

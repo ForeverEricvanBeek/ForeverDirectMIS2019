@@ -24,6 +24,7 @@ INNER JOIN	WEB.Picker PI
 ON			PI.Picker_ID = SUBSTRING(US.PickerID,2,5)
 AND			PI.ActInd = 'Y'
 WHERE		US.ActInd = 'Y'
+AND			US.Eff_Date >= DATEADD(YEAR,-2,GETDATE())
 ) REP
 GROUP BY
   REP.DATUMIN

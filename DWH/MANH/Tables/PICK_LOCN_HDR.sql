@@ -31,6 +31,12 @@
     [IsDeleted]                 CHAR (1)        NULL,
     [BatchID]                   BIGINT          NULL,
     [ProcessLogID]              BIGINT          NULL,
-    CONSTRAINT [PK_MANH_PICK_LOCN_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PICK_LOCN_HDR_ID] ASC)
-);
+    [CREATED_DTTM]              DATETIME2 (7)   NULL,
+    [INVN_LOCK_CODE]            NVARCHAR (2)    NULL,
+    [LAST_UPDATED_DTTM]         DATETIME2 (7)   NULL,
+    [LOCN_PUTAWAY_LOCK]         NVARCHAR (2)    NULL,
+    CONSTRAINT [PK_MANH_PICK_LOCN_HDR] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [PICK_LOCN_HDR_ID] ASC) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

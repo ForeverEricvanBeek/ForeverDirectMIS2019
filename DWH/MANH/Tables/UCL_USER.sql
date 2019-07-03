@@ -51,6 +51,11 @@
     [IsDeleted]                   CHAR (1)       NULL,
     [BatchID]                     BIGINT         NULL,
     [ProcessLogID]                BIGINT         NULL,
-    CONSTRAINT [PK_MANH_UCL_USER] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [UCL_USER_ID] ASC)
-);
+    [ISPASSWORDMANAGEDINTERNALLY] INT            NULL,
+    [PASSWORD_RESET_DATE_TIME]    DATETIME2 (7)  NULL,
+    [PASSWORD_TOKEN]              NVARCHAR (255) NULL,
+    CONSTRAINT [PK_MANH_UCL_USER] PRIMARY KEY CLUSTERED ([Eff_Date] ASC, [UCL_USER_ID] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 

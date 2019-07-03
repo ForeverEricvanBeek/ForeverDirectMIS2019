@@ -34,6 +34,9 @@
     [IsDeleted]              CHAR (1)       NULL,
     [BatchID]                BIGINT         NULL,
     [ProcessLogID]           BIGINT         NULL,
-    CONSTRAINT [PK_MANH_BATCH_MASTER] PRIMARY KEY CLUSTERED ([BATCH_MASTER_ID] ASC, [Eff_Date] ASC)
-);
+    [GLOBAL_RECALL_SUCCESS]  INT            NULL,
+    CONSTRAINT [PK_MANH_BATCH_MASTER] PRIMARY KEY CLUSTERED ([BATCH_MASTER_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_MANH]
+) ON [DWH_MANH];
+
+
 
