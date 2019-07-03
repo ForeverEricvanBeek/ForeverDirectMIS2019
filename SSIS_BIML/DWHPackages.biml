@@ -268,8 +268,10 @@
     
                             <#string MergeTempTable = "DECLARE @" + varTargetTable + "_TEMP TABLE (";
                             string MergeSQlStatement = "";
+                            string MergeSQlStatement2 = "";
                             if (varExtractionType == "MN" || varExtractionType == "MI") {
-                                MergeSQlStatement = "INSERT INTO DWH."+ varTargetSchema + "."+ varTargetTable + " SELECT ";
+                                MergeSQlStatement = "INSERT INTO DWH."+ varTargetSchema + "."+ varTargetTable + " (";
+                                MergeSQlStatement2 = ") SELECT ";
                             } else {
                                 MergeSQlStatement = "INSERT INTO @" + varTargetTable + "_TEMP SELECT ";
                             }
@@ -324,10 +326,12 @@
                                 string VarColumnExpression = rowsourcecolumns["ExpressionColumn"].ToString();
                                 if (VarSourceColumnName == "ProcessLogID") {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"] ";
+                                    MergeSQlStatement2 = MergeSQlStatement2 + "["+ VarSourceColumnName +"] ";
                                     MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ");";
                                     varColumns = varColumns + "["+ VarSourceColumnName +"] "; 
                                 } else {
                                     MergeSQlStatement = MergeSQlStatement + "["+ VarSourceColumnName +"], ";
+                                    MergeSQlStatement2 = MergeSQlStatement2 + "["+ VarSourceColumnName +"], ";
                                     MergeTempTable = MergeTempTable + "[" + VarSourceColumnName + "]" + VarTempColumnName + ",";
                                     varColumns = varColumns + "["+ VarSourceColumnName +"], "; 
                                 }
@@ -353,7 +357,7 @@
                             SQLHashStringTarget = "(SELECT SUBSTRING(HashBytes('MD5'," +  SQLHashStringTarget + "''), 3, 32))  ";
                             string quote = "<>";
                             if(varExtractionType == "MN" ) {
-                                MergeTempTable = MergeTempTable + MergeSQlStatement; 
+                                MergeTempTable = MergeTempTable + MergeSQlStatement + MergeSQlStatement2; 
                                 MergeSQlStatement = MergeTempTable + @"FROM (MERGE MERGE_CTE T 
                                                                         	USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
                                                                         	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
@@ -363,7 +367,7 @@
                                                                         	" OUTPUT $action   AS action, "+
                                                                         	VarFuncColumnSource + "  ? AS BatchID, ? as ProcessLogID ) AS MERGE_OUT WHERE MERGE_OUT.action = 'DELETE'; ";
                             } else if (varExtractionType == "MI" ) {
-                                MergeSQlStatement = MergeSQlStatement + "FROM (MERGE DWH."+varTargetSchema + "."+ varTargetTable + " T " +
+                                MergeSQlStatement = MergeSQlStatement + MergeSQlStatement2 + "FROM (MERGE DWH."+varTargetSchema + "."+ varTargetTable + " T " +
                                                                         	"USING Staging."+varTargetSchema + "."+ varTargetTable + " S " +
                                                                         	" ON "+ VarPrimKeyJoin + " 1=1 "+ 
                                                                         	" WHEN NOT MATCHED BY TARGET THEN INSERT VALUES ( "+
