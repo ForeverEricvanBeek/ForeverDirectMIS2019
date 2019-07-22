@@ -74,7 +74,7 @@
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
 
-            string varInsertLogSQL = "\"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertLogSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
             string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_Status, Request_Email, Request_User, Request_Date) VALUES ('" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
             string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
             
@@ -604,7 +604,7 @@ Report is located at: ";
                     <ExecuteSQL Name="SQL Update Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                         <VariableInput VariableName="User.sqlUpdateRequest" />
                         <Parameters>
-                            <Parameter Name="0" VariableName="User.varRequestID" DataType="Int64" />
+                            <Parameter Name="0" VariableName="User.varRequestID" DataType="String" />
                         </Parameters>
                     </ExecuteSQL>
                     
@@ -636,6 +636,18 @@ Report is located at: ";
                                     <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
                                 </Parameters>
                             </ExecuteSQL>
+                                
+                            <ExecuteSQL Name="SQL Update Error Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <DirectInput>UPDATE RC.Request SET Request_Status = 99, Request_Log = 'System', Request_Rows = 0, Request_File = '' WHERE Request_ID = ?; INSERT INTO RC.Log(Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_CreatedDate,Log_ExecutionID,Log_Log) VALUES ('Package','Error',?,99,?,GETDATE(),?,?);</DirectInput>
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="User.varRequestID" Direction="Input" DataType="String"/>
+                                    <Parameter Name="1" VariableName="User.varRequestID" Direction="Input" DataType="String"/>
+                                    <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
+                                    <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
+                                    <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                                </Parameters>
+                            </ExecuteSQL>
+
                         </Tasks>
                     </Event>
                 </Events>
