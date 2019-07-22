@@ -74,8 +74,8 @@
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
 
-            string varInsertLogSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
-            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_Status, Request_Email, Request_User, Request_Date) VALUES ('" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
+            string varInsertLogSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_Status, Request_Email, Request_User, Request_Date) VALUES ('" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
             string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
             
             string sqlparamXcolumns = @"SELECT ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
@@ -85,7 +85,7 @@
                     }
             varInsertParamsSQL = varInsertParamsSQL + "\" : \"SELECT 1;\"";    
             
-            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = 'System', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
 
             string MergeSQlStatementColumnsInsert = "";
             string MergeSQlStatementColumnsInto = "";
@@ -177,6 +177,7 @@
                     <Parameter Name="parBCCLine_PP" DataType="String"></Parameter>
                     <Parameter Name="parRequestID_PP" DataType="String">0</Parameter>
                     <Parameter Name="parWhere_PP" DataType="String">Schedule</Parameter>
+                    <Parameter Name="parLogExecutionID_PP" DataType="String">0</Parameter>
                     <#  string sqlparam1columns = @"SELECT ViewPredicatesName ,ViewPredicatesValue FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
                     DataTable tableparam1columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam1columns);
                     foreach (DataRow rowparam1columns in tableparam1columns.Rows) {
@@ -213,6 +214,7 @@
                     <Variable Name="varCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parCCLine_PP] : ""</Variable>
                     <Variable Name="varBCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parBCCLine_PP] : ""</Variable>
                     <Variable Name="varWhere" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Package::parWhere_PP]</Variable>
+                    <Variable Name="varLogExecutionID" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Package::parLogExecutionID_PP]</Variable>
                     <Variable Name="varRequestID" DataType="String" Namespace="User">0</Variable>
                     <Variable Name="currentDate" DataType="String" Namespace="User" EvaluateAsExpression="true">(DT_WSTR,50) GETDATE()</Variable>
                     <Variable Name="varLogParameters" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@LogParameters#></Variable>
@@ -389,7 +391,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
             string vYear = DateTime.Now.ToString("yyyy");
             string vMonth = DateTime.Now.ToString("MM");
             string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + ".csv";
+            string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID + ".csv";
             string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
             string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
             int row_index = 2;
@@ -494,7 +496,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
                 string vYear = DateTime.Now.ToString("yyyy");
                 string vMonth = DateTime.Now.ToString("MM");
                 string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + ".xlsx";
+                string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID  + ".xlsx";
                 string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
                 string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
@@ -605,6 +607,7 @@ Report is located at: ";
                         <VariableInput VariableName="User.sqlUpdateRequest" />
                         <Parameters>
                             <Parameter Name="0" VariableName="User.varRequestID" DataType="String" />
+                            <Parameter Name="1" VariableName="User.varLogExecutionID" DataType="String" />
                         </Parameters>
                     </ExecuteSQL>
                     
