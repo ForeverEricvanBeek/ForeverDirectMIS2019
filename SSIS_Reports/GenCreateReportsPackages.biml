@@ -8,57 +8,12 @@
     <Packages>
         <#
         string allSourceTables = "";
-        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (
-                                                    select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS
-                                                    from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                                    JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL
-                                                    ON	TC.CONSTRAINT_CATALOG	= CCL.CONSTRAINT_CATALOG
-                                                    AND	TC.CONSTRAINT_SCHEMA	= CCL.CONSTRAINT_SCHEMA
-                                                    AND TC.CONSTRAINT_NAME		= CCL.CONSTRAINT_NAME
-                                                    )
-                                                    ,CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (
-                                                    select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS,
-                                                    STUFF((SELECT  ',' + T2.COLUMN_NAME
-                                                    from COLUMN_CONSTRAINTS T2
-                                                    where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME
-                                                    FOR XML PATH('')),1 ,1, '') PK
-                                                    from COLUMN_CONSTRAINTS T1
-                                                    )
-                                                    SELECT 'Reports' AS [SourceConnection]
-                                                    ,ST.[SourceSchema] AS [SourceSchema]
-                                                    ,ST.[TargetTable] AS [SourceTable]
-                                                    ,SC.[Type] AS [SourceType]
-                                                    ,SC.[Options]
-                                                    ,SC.[ConnectionString]
-                                                    ,ST.[ExtractionType]
-                                                    ,'Reports' AS [TargetConnection]
-                                                    ,ST.[TargetSchema]
-                                                    ,ST.[TargetTable]
-                                                    ,CS.PK AS [PrimaryKey]
-                                                    ,ST.RunSchedule
-													,ST.RunParam1
-													,ST.RunParam2
-													,ST.RunParam3
-													,ST.Output
-													,ST.Filename
-													,ST.EmailTo
-													,ST.EmailCC
-													,ST.EmailBCC
-													,ST.EmailAttachment
-													,ST.IgnoreEmpty
-                                                    ,'Reports' AS PackagePrefix
-                                                    FROM      [Generator].[LoadReportTables] ST
-                                                    LEFT JOIN [Generator].[Connection] SC
-                                                    ON        ST.[SourceConnection] = SC.[Name]
-                                                    LEFT JOIN CONSTRAINTS CS
-                                                    ON		ST.[TargetSchema] = CS.[TABLE_SCHEMA]
-                                                    AND		ST.[TargetTable]  = CS.[TABLE_NAME]
-                                                    WHERE     ST.[IsActive] = 1
-                                                    ";
+        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON	TC.CONSTRAINT_CATALOG	= CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA	= CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME		= CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT 'Reports' AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[TargetTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
             allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["SourceTable"].ToString() + "',";
             string varExtractionSourceConnection  = rowSourceExtractionTable["SourceConnection"].ToString();
+            string varExtractionFriendlyName  = rowSourceExtractionTable["FriendlyName"].ToString();
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
             string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
@@ -101,7 +56,7 @@
 
             string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable   + varSQLServTableCloseCharacter;
             string varTargetSchemaTablePlus = varTargetSchemaPlus    + "." + varTargetTablePlus;
-            string varSQLRowCountTargetTable = "SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus;
+            string varSQLRowCountTargetTable = "\"SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus + " WHERE Request_ID = '\" + (DT_WSTR, 100)@[User::varRequestID] + \"'\"";
             string varSQLRowCountSourceTable = "\"SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
             string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
@@ -119,6 +74,19 @@
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
 
+            string varInsertLogSQL = "\"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_Status, Request_Email, Request_User, Request_Date) VALUES ('" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
+            string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
+            
+            string sqlparamXcolumns = @"SELECT ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
+                    DataTable tableparamXcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparamXcolumns);
+                    foreach (DataRow rowparamXcolumns in tableparamXcolumns.Rows) {
+                        varInsertParamsSQL = varInsertParamsSQL + "INSERT INTO RC.Param (Param_RequestID, Param_Name, Param_Value) VALUES (\" + (DT_WSTR, 100)@[User::varRequestID] + \",'" + rowparamXcolumns["ViewPredicatesName"].ToString() + "','\" + @[$Package::" + rowparamXcolumns["ViewPredicatesName"].ToString() + "_PP] + \"');";
+                    }
+            varInsertParamsSQL = varInsertParamsSQL + "\" : \"SELECT 1;\"";    
+            
+            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = 'System', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+
             string MergeSQlStatementColumnsInsert = "";
             string MergeSQlStatementColumnsInto = "";
             
@@ -129,56 +97,20 @@
             string CSVRowsValue = "";
             string ExcelScale = "0";
             string WhereClause = "WHERE 1=1";
-
-            string sqlwherecolumns = @"SELECT 
-                                          ViewPredicatesColumn
-                                          , ViewPredicatesName
-                                      FROM DWH_Control.Generator.LoadReportTablePredicates
-                                      WHERE SourceTable = '" + varTargetTable + @"'
-                                      AND IsActive = 1";
+            string WhereRequestClause = " AND Request_ID = \" + (DT_WSTR, 100)@[User::varRequestID] + \"";
+            string LogParameters = "";
+            
+            string sqlwherecolumns = @"SELECT ViewPredicatesColumn, ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
             DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
             foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
                 string VarWhereColumnExpression = rowwherecolumns["ViewPredicatesColumn"].ToString();
                 string VarWhereColumnName = rowwherecolumns["ViewPredicatesName"].ToString();
                 WhereClause =  WhereClause + " AND " + VarWhereColumnExpression + "'\" + @[$Package::" + VarWhereColumnName + "_PP] + \"'";
+                LogParameters = LogParameters + "@[$Package::" + VarWhereColumnName + "_PP] + \" | \" + ";
             }
+                LogParameters = LogParameters + "\"\"";
             
-            string sqlsourcecolumns = @"select 
-                                            COL.TABLE_NAME
-                                            , COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME
-                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME
-                                            , CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2
-                                            , CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey]
-                                            , CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn
-                                            , COL.ORDINAL_POSITION
-                                            , CASE
-                                            WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'
-                                            WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                            WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')'
-                                            WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')'
-                                            ELSE '[' + COL.DATA_TYPE + ']'
-                                            END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE
-                                            , COL.DATA_TYPE AS DATA_TYPE
-                                            , COL.NUMERIC_SCALE AS NUMERIC_SCALE
-                                        from		Reports.INFORMATION_SCHEMA.COLUMNS COL
-                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC
-                                        ON			TC.TABLE_NAME = COL.TABLE_NAME
-                                        AND			TC.TABLE_SCHEMA = COL.TABLE_SCHEMA
-                                        LEFT JOIN	[Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU
-                                        ON			TC.CONSTRAINT_CATALOG	= CCU.CONSTRAINT_CATALOG
-                                        AND			TC.CONSTRAINT_SCHEMA	= CCU.CONSTRAINT_SCHEMA
-                                        AND			TC.CONSTRAINT_NAME		= CCU.CONSTRAINT_NAME 
-                                        AND			COL.COLUMN_NAME			= CCU.COLUMN_NAME
-                                        LEFT JOIN	DWH_Control.Generator.DWHExtractionColumn DWC
-                                        ON			DWC.DWHSchema			= COL.TABLE_SCHEMA
-                                        AND			DWC.DWHTable			= COL.TABLE_NAME
-                                        AND			DWC.DWHColumnName		= COL.COLUMN_NAME
-                                        where		COL.TABLE_NAME= '" + varTargetTable + @"'
-                                        and			COL.TABLE_SCHEMA = '" + varTargetSchema + @"'
-                                        order by 
-                                        COL.TABLE_NAME
-                                        , COL.ORDINAL_POSITION
-                                        ";
+            string sqlsourcecolumns = @"select COL.TABLE_NAME, COL.COLUMN_NAME	AS SOURCE_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN DWC.DWHColumnExpression1 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME, CASE WHEN DWC.DWHColumnExpression2 IS NOT NULL THEN DWC.DWHColumnExpression2 ELSE COL.COLUMN_NAME END	AS TARGET_COLUMN_NAME2, CASE WHEN CCU.CONSTRAINT_NAME IS NOT NULL THEN 1 else 0 end AS [PrimaryKey], CASE WHEN DWC.DWHColumnExpression1 IS NOT NULL THEN 1 ELSE 0 END AS ExpressionColumn, COL.ORDINAL_POSITION, CASE WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')'WHEN COL.DATA_TYPE IN ('nvarchar','varchar','char') THEN '[' + COL.DATA_TYPE + '] (' + CASE WHEN COL.CHARACTER_MAXIMUM_LENGTH = -1 THEN 'MAX' ELSE CAST(COL.CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(10)) END + ')' WHEN COL.DATA_TYPE = 'numeric' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'decimal' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.NUMERIC_PRECISION AS NVARCHAR(10)) + ',' + CAST(COL.NUMERIC_SCALE AS NVARCHAR(10)) +  ')' WHEN COL.DATA_TYPE = 'datetime2' THEN '[' +  COL.DATA_TYPE + '] (' + CAST(COL.DATETIME_PRECISION AS NVARCHAR(10)) + ')' ELSE '[' + COL.DATA_TYPE + ']' END + CASE WHEN COL.IS_NULLABLE = 'YES' THEN ' NULL' ELSE ' NOT NULL' END AS DATATYPE , COL.DATA_TYPE AS DATA_TYPE , COL.NUMERIC_SCALE AS NUMERIC_SCALE from Reports.INFORMATION_SCHEMA.COLUMNS COL LEFT JOIN [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC ON TC.TABLE_NAME = COL.TABLE_NAME AND TC.TABLE_SCHEMA = COL.TABLE_SCHEMA LEFT JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCU ON TC.CONSTRAINT_CATALOG = CCU.CONSTRAINT_CATALOG AND TC.CONSTRAINT_SCHEMA = CCU.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCU.CONSTRAINT_NAME AND COL.COLUMN_NAME = CCU.COLUMN_NAME LEFT JOIN DWH_Control.Generator.DWHExtractionColumn DWC ON DWC.DWHSchema = COL.TABLE_SCHEMA AND DWC.DWHTable = COL.TABLE_NAME AND DWC.DWHColumnName = COL.COLUMN_NAME where COL.TABLE_NAME= '" + varTargetTable + @"' and COL.TABLE_SCHEMA = '" + varTargetSchema + @"' order by COL.TABLE_NAME, COL.ORDINAL_POSITION";
             DataTable tablesourcecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlsourcecolumns);
             foreach (DataRow rowsourcecolumns in tablesourcecolumns.Rows) {
                 string VarSourceColumnName = rowsourcecolumns["SOURCE_COLUMN_NAME"].ToString();
@@ -196,7 +128,7 @@
                     MergeSQlStatementColumnsInsert = MergeSQlStatementColumnsInsert + "["+ VarSourceColumnName +"], ";
                 }
             
-                if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID") {
+                if (VarSourceColumnName != "ProcessLogID" && VarSourceColumnName != "BatchID" && VarSourceColumnName != "Request_ID") {
                     MergeSQlStatementColumnsInto = MergeSQlStatementColumnsInto + "["+ VarSourceColumnName +"], ";
                     ExcelHeaderRow = ExcelHeaderRow + "worksheet.Cells[1, " + varTargetColumnPosition + "].Value = \"" + VarTargetColumnName + "\";" + "\n";
                     CSVHeaderRow = CSVHeaderRow + "\"" + VarTargetColumnName + "\" + \",\" + ";
@@ -226,11 +158,11 @@
             CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
             CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
 
-            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable;
+            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable + " WHERE Request_ID = ";
             string MergeSQlStatement = "\"INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
             MergeSQlStatement = MergeSQlStatement + ") SELECT ";
-            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS BatchID, ? as ProcessLogID";
+            MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInto + "? AS Request_ID, ? AS BatchID, ? as ProcessLogID";
             MergeSQlStatement = MergeSQlStatement + " FROM Reports." + varSourceSchema + "." + varSourceTable + " " + WhereClause + "\"";
             
             varSQLRowCountSourceTable = varSQLRowCountSourceTable + " " + WhereClause + "\"";
@@ -240,16 +172,12 @@
                 <Parameters>
                     <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                     <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-                    <Parameter Name="parToLine_PP" DataType="String"><#=varExtractionEmailTo#></Parameter>
-                    <Parameter Name="parCCLine_PP" DataType="String"><#=varExtractionEmailCC#></Parameter>
-                    <Parameter Name="parBCCLine_PP" DataType="String"><#=varExtractionEmailBCC#></Parameter>
+                    <Parameter Name="parToLine_PP" DataType="String"></Parameter>
+                    <Parameter Name="parCCLine_PP" DataType="String"></Parameter>
+                    <Parameter Name="parBCCLine_PP" DataType="String"></Parameter>
+                    <Parameter Name="parRequestID_PP" DataType="String">0</Parameter>
                     <Parameter Name="parWhere_PP" DataType="String">Schedule</Parameter>
-                    <#  string sqlparam1columns = @"SELECT 
-                                      ViewPredicatesName
-                                      ,ViewPredicatesValue
-                                  FROM DWH_Control.Generator.LoadReportTablePredicates
-                                  WHERE SourceTable = '" + varTargetTable + @"'
-                                  AND IsActive = 1";
+                    <#  string sqlparam1columns = @"SELECT ViewPredicatesName ,ViewPredicatesValue FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
                     DataTable tableparam1columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam1columns);
                     foreach (DataRow rowparam1columns in tableparam1columns.Rows) {
                         #><Parameter Name="<#=rowparam1columns["ViewPredicatesName"].ToString()#>_PP" DataType="String"><#=rowparam1columns["ViewPredicatesName"].ToString()#></Parameter><#
@@ -275,11 +203,19 @@
                     <Variable Name="varEmailBody" DataType="String" Namespace="User">Something went wrong!</Variable>
                     <Variable Name="IgnoreEmpty" DataType="Int32" Namespace="User"><#=varExtractionIgnoreEmpty#></Variable>
                     <Variable Name="sqlCountDWH" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountSourceTable#></Variable>
+                    <Variable Name="sqlCountResult" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varSQLRowCountTargetTable#></Variable>
                     <Variable Name="sqlInsertReport" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@MergeSQlStatement#></Variable>
+                    <Variable Name="sqlInsertRequest" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertRequestSQL#></Variable>
+                    <Variable Name="sqlInsertParams" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertParamsSQL#></Variable>
+                    <Variable Name="sqlUpdateRequest" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varUpdateRequestSQL#></Variable>
+                    <Variable Name="sqlInsertLog" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogSQL#></Variable>
                     <Variable Name="varToLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parToLine_PP] : @[$Project::TestMail]</Variable>
                     <Variable Name="varCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parCCLine_PP] : ""</Variable>
                     <Variable Name="varBCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parBCCLine_PP] : ""</Variable>
                     <Variable Name="varWhere" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Package::parWhere_PP]</Variable>
+                    <Variable Name="varRequestID" DataType="String" Namespace="User">0</Variable>
+                    <Variable Name="currentDate" DataType="String" Namespace="User" EvaluateAsExpression="true">(DT_WSTR,50) GETDATE()</Variable>
+                    <Variable Name="varLogParameters" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@LogParameters#></Variable>
                 </Variables>
     
                 <Tasks>
@@ -314,7 +250,7 @@
                                 <DirectInput><#=varSQLSelectSourceExtractionControl#></DirectInput>
                                 <Results><Result Name="0" VariableName="User.LastExtractionDate" /></Results>
                             </ExecuteSQL>
-                            <#if (varExtractionType == "F") {#>
+                            <#if (varExtractionType == "FQ") {#>
                                 <ExecuteSQL Name="SQL Truncate target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
@@ -325,30 +261,65 @@
                                 </ExecuteSQL>
                             <#}#>
 
-                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <ExecuteSQL Name="SQL Insert Log <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
-                                        <#if (varExtractionType == "F") {#>
+                                        <#if (varExtractionType == "FQ") {#>
                                             <Input OutputPathName="SQL Truncate target <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                         <#} else {#>
                                             <Input OutputPathName="SQL Get last extraction date <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />   
-                                        <#}#>    
+                                        <#}#>
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <VariableInput VariableName="User.sqlInsertLog" />
+                            </ExecuteSQL>
+
+                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert Log <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                     </Inputs>
                                 </PrecedenceConstraints>
                                 <VariableInput VariableName="User.sqlCountDWH" />
                                 <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                             </ExecuteSQL>
-                            
-                            <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+   
+                            <ExecuteSQL Name="SQL Insert Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                     </Inputs>
                                 </PrecedenceConstraints>
+                                <VariableInput VariableName="User.sqlInsertRequest" />
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="User.currentDate" DataType="String" />
+                                </Parameters>
+                                <Results><Result Name="0" VariableName="User.varRequestID" /></Results>                         
+                            </ExecuteSQL>
+                            
+                            <ExecuteSQL Name="SQL Insert Param <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert Request <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <VariableInput VariableName="User.sqlInsertParams" />
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="User.varRequestID" DataType="Int64" />
+                                </Parameters>
+                            </ExecuteSQL>
+                            
+                            <ExecuteSQL Name="SQL Insert <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert Param <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <VariableInput VariableName="User.sqlInsertReport" />
                                 <Parameters>
-                                    <Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
-                                    <Parameter Name="1" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
+                                    <Parameter Name="0" VariableName="User.varRequestID" DataType="Int64" />
+                                    <Parameter Name="1" VariableName="Audit.AuditBatchID" DataType="Int64" />
+                                    <Parameter Name="2" VariableName="Audit.AuditProcessLogID" DataType="Int64" />
                                 </Parameters>
                             </ExecuteSQL>
     
@@ -358,7 +329,7 @@
                                         <Input OutputPathName="SQL Insert <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                     </Inputs>
                                 </PrecedenceConstraints>
-                                <DirectInput><#=varSQLRowCountTargetTable#></DirectInput>
+                                <VariableInput VariableName="User.sqlCountResult" />
                                 <Results><Result Name="0" VariableName="RC.RowCountTarget" /></Results>
                             </ExecuteSQL>
     
@@ -377,7 +348,7 @@
                                     <Parameter Name="4" VariableName="System.StartTime" DataType="DateTime" />
                                 </Parameters>
                             </ExecuteSQL>
-                                
+                            
                             <#if (varExtractionOutput == "CSV") {#>
                             <Script ProjectCoreName="<#=varScriptCoreName#>" Name="Script <#=varExtractionFilename#>">
                                 <PrecedenceConstraints LogicalType="And">
@@ -414,12 +385,13 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase {
 		public void Main() {                
 		    string vOutputPath = (string)Dts.Variables["DirReports"].Value;
+		    string vRequestID = (string)Dts.Variables["varRequestID"].Value;
             string vYear = DateTime.Now.ToString("yyyy");
             string vMonth = DateTime.Now.ToString("MM");
             string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + ".csv";
             string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
-            string mySqlStatement = "<#=sqlStatementScript#>";
+            string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
             int row_index = 2;
             System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
             myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
@@ -469,6 +441,7 @@ Report is located at: ";
                                         </Files>
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
+                                            <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
                                         </ReadOnlyVariables>
                                         <ReadWriteVariables>
                                             <Variable Namespace="User" DataType="String" VariableName="varFileAttachments" />
@@ -517,13 +490,14 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 		public void Main() {
             using (var package = new ExcelPackage()) {
                 string vOutputPath = (string)Dts.Variables["DirReports"].Value;
+                string vRequestID = (string)Dts.Variables["varRequestID"].Value;
                 string vYear = DateTime.Now.ToString("yyyy");
                 string vMonth = DateTime.Now.ToString("MM");
                 string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                 string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + ".xlsx";
                 string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
-                string mySqlStatement = "<#=sqlStatementScript#>";
+                string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
                 int row_index = 2;
                 System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
                 myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
@@ -579,6 +553,7 @@ Report is located at: ";
                                         </Files>
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
+                                            <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
                                         </ReadOnlyVariables>
                                         <ReadWriteVariables>
                                             <Variable Namespace="User" DataType="String" VariableName="varFileAttachments" />
@@ -623,8 +598,16 @@ Report is located at: ";
                                 </Expressions>
                             </SendMail>
                             <#}#>
+                            
                         </Tasks>
                     </Container>
+                    <ExecuteSQL Name="SQL Update Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                        <VariableInput VariableName="User.sqlUpdateRequest" />
+                        <Parameters>
+                            <Parameter Name="0" VariableName="User.varRequestID" DataType="Int64" />
+                        </Parameters>
+                    </ExecuteSQL>
+                    
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
                         <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?</DirectInput>
                         <Parameters>

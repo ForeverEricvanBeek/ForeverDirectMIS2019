@@ -36,8 +36,8 @@
           <SSIS:Package SSIS:Name="Reports-RT-STOCK_REPORT_OBS.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Reports-RT-SKU_Expire_Next_15M.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Reports-RT-SLOT_ALLOC.dtsx" SSIS:EntryPoint="1" />
-          <SSIS:Package SSIS:Name="201920.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Reports-RT-OLPN_Shipments.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="201930.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="DWH_Control.conmgr" />
@@ -483,37 +483,23 @@
             </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="Reports-RT-SENSOR.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{0CEA1C6C-00EB-4C1B-9DE3-B5C80850ACA2}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{9CBD7648-DF65-4460-A9DA-4B35A501D409}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">Reports-RT-SENSOR</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">3</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{EF0F68C6-7E68-4DE1-9615-D68E4292F859}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{D1FA6D00-35A7-404A-967D-242CE5D5F247}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
                 <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
               </SSIS:Properties>
               <SSIS:Parameters>
-                <SSIS:Parameter SSIS:Name="ActInd_PP">
-                  <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{EACD0D55-3C89-45AC-8DE6-60E40A7130DC}</SSIS:Property>
-                    <SSIS:Property SSIS:Name="CreationName">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="Description">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">'A'</SSIS:Property>
-                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
-                  </SSIS:Properties>
-                </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{7A6B6D46-4A20-4F33-9275-76B76A7D91B3}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{D70E5BD4-ECB4-41B4-BBC9-79A027ED1D6D}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -525,9 +511,82 @@
                     <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parBCCLine_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{0E125581-A90E-46E0-8E41-C4B9D02C8F49}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parCCLine_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{35E63B63-9AAC-4B7B-B96B-0E50F332E9C4}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parRequestID_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{9FDD8A19-2815-407B-BF3D-1269D13E3309}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parToLine_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{9E037666-784C-4B02-B10A-330742B3F2B9}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parWhere_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{E27DC502-861F-4DCE-8863-CD4A2B42B308}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">Schedule</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{B7B07826-FC51-42FF-B62A-8D254EC2F43C}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{49296944-EFB3-47C4-A686-C1102F50EB67}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -539,9 +598,9 @@
                     <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
-                <SSIS:Parameter SSIS:Name="StringDate_PP">
+                <SSIS:Parameter SSIS:Name="varActInd_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{B3A24FBB-B708-4A93-BBD5-8B14836B3458}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{8CA74FD9-5193-4C2C-AE04-019A89DE5439}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -549,7 +608,21 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">'20190420'</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">Y</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="varSensor_Date_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{C9C8FB83-C76C-490A-A05D-E9C21AEB5A42}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">20190721</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -1007,33 +1080,16 @@
                 </SSIS:Parameter>
               </SSIS:Parameters>
             </SSIS:PackageMetaData>
-            <SSIS:PackageMetaData SSIS:Name="201920.dtsx">
-              <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{06B97E5B-B6EA-4F24-99FA-D50851335DF4}</SSIS:Property>
-                <SSIS:Property SSIS:Name="Name">201920</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">9</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionComments">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{BCAA8CB1-8873-4F5E-B6D5-7857ABB3ED6F}</SSIS:Property>
-                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
-                <SSIS:Property SSIS:Name="Description">
-                </SSIS:Property>
-                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
-              </SSIS:Properties>
-              <SSIS:Parameters />
-            </SSIS:PackageMetaData>
             <SSIS:PackageMetaData SSIS:Name="Reports-RT-OLPN_Shipments.dtsx">
               <SSIS:Properties>
-                <SSIS:Property SSIS:Name="ID">{FF91A613-1A72-4982-AB01-753A6DF8215E}</SSIS:Property>
+                <SSIS:Property SSIS:Name="ID">{53AECFC3-C5F5-4317-9FB2-3D5DE38BC9B0}</SSIS:Property>
                 <SSIS:Property SSIS:Name="Name">Reports-RT-OLPN_Shipments</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">7</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{AAB43CFE-53CC-42EB-B4CD-97075984E796}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{8BAFAAED-6C9B-401B-8BEA-2DDF04C3C406}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -1042,7 +1098,7 @@
               <SSIS:Parameters>
                 <SSIS:Parameter SSIS:Name="BatchID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{0BF899AA-0C10-4ACA-B3C4-FC40467DA3CE}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{36035645-C6B1-4556-8946-41589E793F82}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1056,7 +1112,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="parBCCLine_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{E1898039-D4B9-412C-AEA4-2A7233AC147A}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{DBA8FBF7-067F-4CFE-A8AE-223E226CD741}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1064,14 +1120,12 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">
-                    </SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="parCCLine_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{886B6676-E5CE-473A-85D7-BEBB9BD6E3C1}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{1068C09F-3150-41EE-842A-2652F3C2BD1B}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1079,14 +1133,26 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">
+                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="parRequestID_PP">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{AC3FCD79-D387-489A-AC9F-2E6F8ED65693}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="parToLine_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{86BF4197-7165-4FA4-8020-272A66657FA2}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{0EB72693-5526-433C-A9F2-31699C792153}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1094,13 +1160,12 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">ericvanbeek@foreverdirect.eu</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="parWhere_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{4AF2DD9D-B63A-4C44-9628-FE0A3EE34359}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{3BC10F16-283C-426F-9AFC-EF779BB9AE9A}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1114,7 +1179,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{8EDFF2E1-9122-4A20-9832-CB5CEC28DD1B}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{0D72AAEA-1611-42F5-A493-3EE270CCEDD6}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1128,7 +1193,7 @@
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="varOrder_Country_Code_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{392CE788-FB34-4ACA-920A-9B6F1215A2BC}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{706656AA-2DF7-45A2-92A9-17A2F1E34086}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1136,13 +1201,13 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">DE</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">varOrder_Country_Code</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
                 <SSIS:Parameter SSIS:Name="varShipped_Date_PP">
                   <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">{67CC7822-7BF5-4BB7-9965-0622ADC70A0A}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="ID">{EF5B6BAD-A96C-4080-A196-89DF7022688E}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
@@ -1150,7 +1215,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">20190517</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">varShipped_Date</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -1230,6 +1295,23 @@
                   </SSIS:Properties>
                 </SSIS:Parameter>
               </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="201930.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{17CEC2EE-1D3F-4467-96CC-0BCE34AEBD4B}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">201930</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">11</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{F20D5583-DDD3-4D43-B996-63C5E1D2C53E}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters />
             </SSIS:PackageMetaData>
           </SSIS:PackageInfo>
         </SSIS:DeploymentInfo>
