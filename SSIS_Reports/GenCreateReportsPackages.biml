@@ -74,8 +74,8 @@
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
 
-            string varInsertLogStartSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
-            string varInsertLogEndSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertLogStartSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertLogEndSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
             string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_FriendlyName, Request_Status, Request_Email, Request_User, Request_DateStart) VALUES ('" + varExtractionSourceTable + "','" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
             string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
             
@@ -250,10 +250,34 @@
     
                     <Container Name="SC Load <#=varName#>">
                         <Tasks>
+
+                            <ExecuteSQL Name="SQL Insert Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <VariableInput VariableName="User.sqlInsertRequest" />
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="User.currentDate" DataType="String" />
+                                </Parameters>
+                                <Results><Result Name="0" VariableName="User.varRequestID" /></Results>                         
+                            </ExecuteSQL>
+
+                            <ExecuteSQL Name="SQL Insert Log Start <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert Request <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
+                                <VariableInput VariableName="User.sqlInsertLogStart" />
+                            </ExecuteSQL>                            
+                            
                             <ExecuteSQL Name="SQL Get last extraction date <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow" Disabled="false" >
+                                <PrecedenceConstraints LogicalType="And">
+                                    <Inputs>
+                                        <Input OutputPathName="SQL Insert Log Start <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                    </Inputs>
+                                </PrecedenceConstraints>
                                 <DirectInput><#=varSQLSelectSourceExtractionControl#></DirectInput>
                                 <Results><Result Name="0" VariableName="User.LastExtractionDate" /></Results>
                             </ExecuteSQL>
+                            
                             <#if (varExtractionType == "FQ") {#>
                                 <ExecuteSQL Name="SQL Truncate target <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                     <PrecedenceConstraints LogicalType="And">
@@ -265,7 +289,7 @@
                                 </ExecuteSQL>
                             <#}#>
 
-                            <ExecuteSQL Name="SQL Insert Log Start <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <#if (varExtractionType == "FQ") {#>
@@ -275,36 +299,14 @@
                                         <#}#>
                                     </Inputs>
                                 </PrecedenceConstraints>
-                                <VariableInput VariableName="User.sqlInsertLogStart" />
-                            </ExecuteSQL>
-
-                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                <PrecedenceConstraints LogicalType="And">
-                                    <Inputs>
-                                        <Input OutputPathName="SQL Insert Log Start <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
-                                    </Inputs>
-                                </PrecedenceConstraints>
                                 <VariableInput VariableName="User.sqlCountDWH" />
                                 <Results><Result Name="0" VariableName="RC.RowCountExtract" /></Results>
                             </ExecuteSQL>
    
-                            <ExecuteSQL Name="SQL Insert Request <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
-                                <PrecedenceConstraints LogicalType="And">
-                                    <Inputs>
-                                        <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
-                                    </Inputs>
-                                </PrecedenceConstraints>
-                                <VariableInput VariableName="User.sqlInsertRequest" />
-                                <Parameters>
-                                    <Parameter Name="0" VariableName="User.currentDate" DataType="String" />
-                                </Parameters>
-                                <Results><Result Name="0" VariableName="User.varRequestID" /></Results>                         
-                            </ExecuteSQL>
-                            
                             <ExecuteSQL Name="SQL Insert Param <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
-                                        <Input OutputPathName="SQL Insert Request <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <Input OutputPathName="SQL Source row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                     </Inputs>
                                 </PrecedenceConstraints>
                                 <VariableInput VariableName="User.sqlInsertParams" />
