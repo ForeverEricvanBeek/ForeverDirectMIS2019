@@ -8,7 +8,7 @@
     <Packages>
         <#
         string allSourceTables = "";
-        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON	TC.CONSTRAINT_CATALOG	= CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA	= CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME		= CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT 'Reports' AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[TargetTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
+        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT ST.SourceConnection AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[SourceTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
             allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["SourceTable"].ToString() + "',";
@@ -38,6 +38,7 @@
             int varExtractionIgnoreEmpty = (int)rowSourceExtractionTable["IgnoreEmpty"];
             string varDestinationConnection = varExtractionTargetTable;
             string varTargetConnection = varExtractionTargetConnection;
+            string varSourceConnection = varExtractionSourceConnection;
             string varTargetSchema = varExtractionTargetSchema;
             string varSourceSchema = varExtractionSourceSchema;
             string varTargetTable = varExtractionTargetTable;
@@ -49,6 +50,12 @@
             string varColumnBeginCharacter = varSQLServColumnBeginCharacter;
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
             string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
+            string varDirectIndirect = "";
+            if (varExtractionTargetTable == "") {
+                varDirectIndirect = "Direct";
+            } else {
+                varDirectIndirect = "Indirect";
+            }
     
             string varExtractionTargetSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionTargetSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionTargetTable + varSQLServTableCloseCharacter;
             string varExtractionSourceSchemaTablePlus = varSQLServTableBeginCharacter + varExtractionSourceSchema + varSQLServTableCloseCharacter + "." + varSQLServTableBeginCharacter + varExtractionSourceTable + varSQLServTableCloseCharacter;
@@ -57,7 +64,7 @@
             string varTargetTablePlus = varSQLServTableBeginCharacter + varTargetTable   + varSQLServTableCloseCharacter;
             string varTargetSchemaTablePlus = varTargetSchemaPlus    + "." + varTargetTablePlus;
             string varSQLRowCountTargetTable = "\"SELECT count(*) FROM " + varExtractionTargetSchemaTablePlus + " WHERE Request_ID = '\" + (DT_WSTR, 100)@[User::varRequestID] + \"'\"";
-            string varSQLRowCountSourceTable = "\"SELECT count(*) FROM [Reports]." + varExtractionSourceSchemaTablePlus;
+            string varSQLRowCountSourceTable = "\"SELECT count(*) FROM " + varExtractionSourceSchemaTablePlus;
             string varSQLTruncateTargetTable = "TRUNCATE TABLE " + varTargetSchemaTablePlus;
             string varSQLSelectSourceExtractionControl = "SELECT CONVERT(VARCHAR, MAX([LastLoadDate]), 120) \nFROM [Control].[DWHControl] \nWHERE [SourceConnection] = '"+varExtractionSourceConnection+"' \nAND [SourceSchema] = '"+varExtractionTargetSchema+"' \nAND [SourceTable] = '"+varExtractionTargetTable+"'";
             string varSQLUpdateDWHControl = "MERGE [Control].[DWHControl] T   \n USING (Select '"+varExtractionSourceConnection+"' as [SourceConnection] \n , '"+varExtractionTargetSchema+"' as [SourceSchema] \n , '"+varExtractionTargetTable+"' as [SourceTable] \n , '"+varExtractionType+"' as [ExtractionType] \n , ? as [BatchID]  \n , ? as [RowCountExtract]  \n , ? as [RowCountTarget]  \n , ? as [RowCountError]  \n , ? as [LastLoadDate]  \n ) S  \n ON  T.[SourceConnection] = S.[SourceConnection] AND  T.[SourceSchema] = S.[SourceSchema]  AND T.[SourceTable] = S.[SourceTable]  \n WHEN NOT MATCHED BY TARGET THEN INSERT ([SourceConnection], [SourceSchema], [SourceTable], [ExtractionType], [BatchID], [RowCountExtract],[RowCountTarget],[RowCountError],[LastLoadDate])VALUES ( S.[SourceConnection] \n , S.[SourceSchema] \n , S.[SourceTable] \n , S.[ExtractionType] \n , S.[BatchID] \n , S.[RowCountExtract] \n , S.[RowCountTarget] \n , S.[RowCountError] \n , S.[LastLoadDate]   )   \n WHEN MATCHED  THEN \n UPDATE \n SET \n  [ExtractionType] = S.[ExtractionType] \n , [BatchID] = S.[BatchID] \n , [RowCountExtract] = S.[RowCountExtract] \n , [RowCountTarget] = S.[RowCountTarget] \n , [RowCountError] = S.[RowCountError] \n , [LastLoadDate] = S.[LastLoadDate] ;";
@@ -68,7 +75,7 @@
             }
             string varExtractionSourceTablePlus = varTableBeginCharacter + varExtractionSourceTable  + varTableCloseCharacter;
             string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
-            string varPackageName = varExtractionPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;
+            string varPackageName = varExtractionPackagePrefix + "-" + varSourceSchema + "-" + varSourceTable;
     
             string varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
             
@@ -289,7 +296,7 @@
                                 </ExecuteSQL>
                             <#}#>
 
-                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varSourceConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <#if (varExtractionType == "FQ") {#>
@@ -329,6 +336,7 @@
                                 </Parameters>
                             </ExecuteSQL>
     
+                            <#if (varDirectIndirect == "Indirect") {#>
                             <ExecuteSQL Name="SQL Target row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
@@ -338,11 +346,16 @@
                                 <VariableInput VariableName="User.sqlCountResult" />
                                 <Results><Result Name="0" VariableName="RC.RowCountTarget" /></Results>
                             </ExecuteSQL>
+                            <#}#>
     
                             <ExecuteSQL Name="SQL Update contol record <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
-                                        <Input OutputPathName="SQL Target row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <#if (varDirectIndirect == "Indirect") {#>
+                                            <Input OutputPathName="SQL Target row count <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <#} else {#>
+                                            <Input OutputPathName="SQL Insert <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <#}#>
                                     </Inputs>
                                 </PrecedenceConstraints>
                                 <DirectInput><#=varSQLUpdateDWHControl#></DirectInput>
@@ -746,8 +759,8 @@ Report is located at: ";
                         <Tasks>
                             <#string sqlSourcePackages  = @"SELECT    [SourceConnection]
                              ,[Type] AS ConnectionType
-                             ,[TargetSchema] AS[SourceSchema]
-                             ,[TargetTable] AS [SourceTable]
+                             ,[SourceSchema] AS[SourceSchema]
+                             ,[SourceTable] AS [SourceTable]
                              ,'Reports' AS PackagePrefix
                              , st.RunParam1
 							 , st.RunParam2
@@ -877,9 +890,9 @@ Report is located at: ";
                 <Container Name="SC Extract Sources" ConstraintMode="Parallel">
                     <Tasks>
                         <#string sqlSTGControlPack = @"SELECT DISTINCT
-                                                          [TargetConnection]
-                                                         ,[TargetSchema]
-                                                         ,'Total' AS [TargetTable]
+                                                          [SourceConnection]
+                                                         ,[SourceSchema]
+                                                         ,'Total' AS [SourceTable]
                                                          ,'CTRL_Reports' AS PackagePrefix
                                                         FROM      [Generator].[LoadReportTables] st
                                                         WHERE     st.[IsActive] = 1
@@ -887,9 +900,9 @@ Report is located at: ";
 
                         DataTable tableSTGControlPack = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSTGControlPack);
                         foreach (DataRow rowSTGControlPack in tableSTGControlPack.Rows) {
-                            string varTargetConnection = rowSTGControlPack["TargetConnection"].ToString();
-                            string varTargetSchema = rowSTGControlPack["TargetSchema"].ToString();
-                            string varTargetTable = rowSTGControlPack["TargetTable"].ToString();
+                            string varTargetConnection = rowSTGControlPack["SourceConnection"].ToString();
+                            string varTargetSchema = rowSTGControlPack["SourceSchema"].ToString();
+                            string varTargetTable = rowSTGControlPack["SourceTable"].ToString();
                             string varPackagePrefix = rowSTGControlPack["PackagePrefix"].ToString();
                             string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
                             string varPackageName = varPackagePrefix + "-" +  varTargetSchema + "-" + varTargetTable;#>

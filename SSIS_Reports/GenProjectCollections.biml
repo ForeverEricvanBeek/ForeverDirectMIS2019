@@ -12,7 +12,7 @@
                                             ,c.[Type]
                                             FROM         [Generator].[Connection] c 
                                             WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Reports','ReportsADO','DWH_Control')
+                                            AND          c.[Name] in ('Reports','ReportsADO','DWH_Control','WMS')
                                             ";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
@@ -29,15 +29,15 @@
             switch (ConnectionType) {
                     case "SQLServerADO":#>
                 <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
-                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
-                    </Connection>
+                    <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                </Connection>
                 <#break;
-                case "SQLServer":#>
+                case "SQLServer":
+                default:#>
                 <Connection Name="<#=ConnectionName#>" ConnectionString="<#=ConnectionString#>" <#=ConnectionSSISOptions#> >
-                        <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
-                    </Connection>
+                    <Expressions><Expression PropertyName="<#=ConnectionName#>.ConnectionString"><#=ConnectionExpression#></Expression></Expressions>
+                </Connection>
                 <#break;
-                default:
                 break;
             }
         }#>
@@ -97,10 +97,10 @@
             </Parameters>
             
             <Packages>
-                <#string sqlPackage = @"SELECT 'Reports' AS [SourceConnection]
-                                        ,'SQLServer' AS [ConnectionType]
-                                        ,[TargetSchema] AS [SourceSchema]
-                                        ,[TargetTable] AS [SourceTable]
+                <#string sqlPackage = @"SELECT [SourceConnection] AS [SourceConnection]
+                                        ,[con].[Type] AS [ConnectionType]
+                                        ,[SourceSchema] AS [SourceSchema]
+                                        ,[SourceTable] AS [SourceTable]
                                         ,[ExtractionType]
                                         ,'Reports' AS PackagePrefix
                                         FROM [Generator].[LoadReportTables] st
@@ -109,7 +109,7 @@
                                         WHERE st.[IsActive] =  1
                                         UNION
                                         SELECT DISTINCT
-                                        [TargetConnection]
+                                        [SourceConnection]
                                         ,null
                                         ,[TargetSchema]
                                         ,'Total' AS [SourceTable]
