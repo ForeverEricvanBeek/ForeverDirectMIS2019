@@ -74,18 +74,19 @@
             
             string varExtractionSQLStatement = "SELECT * FROM Reports.RT." + varExtractionSourceTable;
 
-            string varInsertLogSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
-            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_Status, Request_Email, Request_User, Request_Date) VALUES ('" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
+            string varInsertLogStartSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertLogEndSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
+            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_FriendlyName, Request_Status, Request_Email, Request_User, Request_DateStart) VALUES ('" + varExtractionSourceTable + "','" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
             string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
             
-            string sqlparamXcolumns = @"SELECT ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
+            string sqlparamXcolumns = @"SELECT ViewPredicatesName, ViewPredicatesFriendlyName, ViewPredicatesType FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
                     DataTable tableparamXcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparamXcolumns);
                     foreach (DataRow rowparamXcolumns in tableparamXcolumns.Rows) {
-                        varInsertParamsSQL = varInsertParamsSQL + "INSERT INTO RC.Param (Param_RequestID, Param_Name, Param_Value) VALUES (\" + (DT_WSTR, 100)@[User::varRequestID] + \",'" + rowparamXcolumns["ViewPredicatesName"].ToString() + "','\" + @[$Package::" + rowparamXcolumns["ViewPredicatesName"].ToString() + "_PP] + \"');";
+                        varInsertParamsSQL = varInsertParamsSQL + "INSERT INTO RC.Param (Param_RequestID, Param_Name, Param_Value, Param_FriendlyName, Param_Type) VALUES (\" + (DT_WSTR, 100)@[User::varRequestID] + \",'" + rowparamXcolumns["ViewPredicatesName"].ToString() + "','\" + @[$Package::" + rowparamXcolumns["ViewPredicatesName"].ToString() + "_PP] + \"','" + rowparamXcolumns["ViewPredicatesFriendlyName"].ToString() + "','" + rowparamXcolumns["ViewPredicatesType"].ToString() + "');";
                     }
             varInsertParamsSQL = varInsertParamsSQL + "\" : \"SELECT 1;\"";    
             
-            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"', Request_DateEnd = '\" + @[User::currentDate] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
 
             string MergeSQlStatementColumnsInsert = "";
             string MergeSQlStatementColumnsInto = "";
@@ -209,7 +210,8 @@
                     <Variable Name="sqlInsertRequest" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertRequestSQL#></Variable>
                     <Variable Name="sqlInsertParams" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertParamsSQL#></Variable>
                     <Variable Name="sqlUpdateRequest" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varUpdateRequestSQL#></Variable>
-                    <Variable Name="sqlInsertLog" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogSQL#></Variable>
+                    <Variable Name="sqlInsertLogStart" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogStartSQL#></Variable>
+                    <Variable Name="sqlInsertLogEnd" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogEndSQL#></Variable>
                     <Variable Name="varToLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parToLine_PP] : @[$Project::TestMail]</Variable>
                     <Variable Name="varCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parCCLine_PP] : ""</Variable>
                     <Variable Name="varBCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parBCCLine_PP] : ""</Variable>
@@ -263,7 +265,7 @@
                                 </ExecuteSQL>
                             <#}#>
 
-                            <ExecuteSQL Name="SQL Insert Log <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                            <ExecuteSQL Name="SQL Insert Log Start <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
                                         <#if (varExtractionType == "FQ") {#>
@@ -273,13 +275,13 @@
                                         <#}#>
                                     </Inputs>
                                 </PrecedenceConstraints>
-                                <VariableInput VariableName="User.sqlInsertLog" />
+                                <VariableInput VariableName="User.sqlInsertLogStart" />
                             </ExecuteSQL>
 
                             <ExecuteSQL Name="SQL Source row count <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="SingleRow" Disabled="false" >
                                 <PrecedenceConstraints LogicalType="And">
                                     <Inputs>
-                                        <Input OutputPathName="SQL Insert Log <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
+                                        <Input OutputPathName="SQL Insert Log Start <#=varName#>.Output" EvaluationValue="Success" EvaluationOperation="Constraint" />
                                     </Inputs>
                                 </PrecedenceConstraints>
                                 <VariableInput VariableName="User.sqlCountDWH" />
@@ -610,6 +612,10 @@ Report is located at: ";
                             <Parameter Name="1" VariableName="User.varLogExecutionID" DataType="String" />
                         </Parameters>
                     </ExecuteSQL>
+                    
+                 <ExecuteSQL Name="SQL Insert Log End <#=varName#>" ConnectionName ="<#=varTargetConnection#>" ResultSet="None" Disabled="false" >
+                    <VariableInput VariableName="User.sqlInsertLogEnd" />
+                </ExecuteSQL>                   
                     
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
                         <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@LastExtractionDate = ?,@RowCountExtract = ?,@RowCountTarget = ?,@RowCountError = ?</DirectInput>
