@@ -51,7 +51,7 @@
             string varColumnCloseCharacter = varSQLServColumnCloseCharacter;
             string varScriptCoreName = "ST_232feca_" + varSourceTable + "_script_1";
             string varDirectIndirect = "";
-            if (varExtractionTargetTable == "") {
+            if (varExtractionType == "D") {
                 varDirectIndirect = "Direct";
             } else {
                 varDirectIndirect = "Indirect";
@@ -104,7 +104,7 @@
             string CSVHeaderRow = "";
             string CSVRowsValue = "";
             string ExcelScale = "0";
-            string WhereClause = "WHERE 1=1";
+            string WhereClause = " WHERE 1=1";
             string WhereRequestClause = " AND Request_ID = \" + (DT_WSTR, 100)@[User::varRequestID] + \"";
             string LogParameters = "";
             
@@ -165,8 +165,12 @@
             }
             CSVHeaderRow = "sb.AppendLine(" + CSVHeaderRow.Substring(0, CSVHeaderRow.Length - 9) + ");";
             CSVRowsValue = "sb.AppendLine(" + CSVRowsValue.Substring(0, CSVRowsValue.Length - 9) + ");";
-
-            string sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable + " WHERE Request_ID = ";
+            string sqlStatementScript = "";
+            if (varDirectIndirect == "Direct") {
+                        sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varSourceSchema + "." + varSourceTable;
+            } else {
+                        sqlStatementScript = "SELECT " + MergeSQlStatementColumnsInto + "'-' AS PH FROM " + varTargetSchema + "." + varTargetTable + " WHERE Request_ID = ";
+            }
             string MergeSQlStatement = "\"INSERT INTO Reports." + varTargetSchema + "."+ varTargetTable + "(";
             MergeSQlStatement = MergeSQlStatement + MergeSQlStatementColumnsInsert;
             MergeSQlStatement = MergeSQlStatement + ") SELECT ";
@@ -219,6 +223,9 @@
                     <Variable Name="sqlUpdateRequest" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varUpdateRequestSQL#></Variable>
                     <Variable Name="sqlInsertLogStart" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogStartSQL#></Variable>
                     <Variable Name="sqlInsertLogEnd" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=@varInsertLogEndSQL#></Variable>
+                     <#if (varDirectIndirect == "Direct") {#>
+                    <Variable Name="sqlWhereClause" DataType="String" Namespace="User" EvaluateAsExpression="true">"<#=WhereClause#>"</Variable>
+                    <#}#>
                     <Variable Name="varToLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parToLine_PP] : @[$Project::TestMail]</Variable>
                     <Variable Name="varCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parCCLine_PP] : ""</Variable>
                     <Variable Name="varBCCLine" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::Environment]  == "PRD" ? @[$Package::parBCCLine_PP] : ""</Variable>
@@ -405,12 +412,20 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 		public void Main() {                
 		    string vOutputPath = (string)Dts.Variables["DirReports"].Value;
 		    string vRequestID = (string)Dts.Variables["varRequestID"].Value;
+		    <#if (varDirectIndirect == "Direct") {#>
+		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
+		    <#}#>
             string vYear = DateTime.Now.ToString("yyyy");
             string vMonth = DateTime.Now.ToString("MM");
             string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID + ".csv";
             string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
-            string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
+            string mySqlStatement = "<#=sqlStatementScript#>";
+            <#if (varDirectIndirect == "Direct") {#>
+            mySqlStatement += vWhereClause;
+            <#} else {#>
+            mySqlStatement += vRequestID;
+            <#}#>
             int row_index = 2;
             System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
             myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
@@ -461,6 +476,9 @@ Report is located at: ";
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
                                             <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
+                                            <#if (varDirectIndirect == "Direct") {#>
+                                            <Variable Namespace="User" DataType="String" VariableName="sqlWhereClause" />
+                                            <#}#>
                                         </ReadOnlyVariables>
                                         <ReadWriteVariables>
                                             <Variable Namespace="User" DataType="String" VariableName="varFileAttachments" />
@@ -510,13 +528,21 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
             using (var package = new ExcelPackage()) {
                 string vOutputPath = (string)Dts.Variables["DirReports"].Value;
                 string vRequestID = (string)Dts.Variables["varRequestID"].Value;
+                <#if (varDirectIndirect == "Direct") {#>
+    		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
+    		    <#}#>
                 string vYear = DateTime.Now.ToString("yyyy");
                 string vMonth = DateTime.Now.ToString("MM");
                 string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                 string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID  + ".xlsx";
                 string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
-                string mySqlStatement = "<#=sqlStatementScript#>" + vRequestID;
+                string mySqlStatement = "<#=sqlStatementScript#>";
+                <#if (varDirectIndirect == "Direct") {#>
+                mySqlStatement += vWhereClause;
+                <#} else {#>
+                mySqlStatement += vRequestID;
+                <#}#>
                 int row_index = 2;
                 System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
                 myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
@@ -573,6 +599,9 @@ Report is located at: ";
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
                                             <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
+                                            <#if (varDirectIndirect == "Direct") {#>
+                                            <Variable Namespace="User" DataType="String" VariableName="sqlWhereClause" />
+                                            <#}#>
                                         </ReadOnlyVariables>
                                         <ReadWriteVariables>
                                             <Variable Namespace="User" DataType="String" VariableName="varFileAttachments" />
