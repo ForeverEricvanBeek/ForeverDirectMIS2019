@@ -216,7 +216,7 @@
             
             string varSQLStatementColumns = "";
             foreach (DataRow rowSourceExtractionColumn in tableSourceExtractionColumn.Rows) {
-                string varSourceColumnName =  rowSourceExtractionColumn["SourceColumnExpression"].ToString();
+                string varSourceColumnName = rowSourceExtractionColumn["SourceColumnExpression"].ToString();
                 if (varSourceColumnName == rowSourceExtractionColumn["SourceColumnName"].ToString() && varExtractionSourceType == "SQLServer") {
                     varSourceColumnName = "[" + varSourceColumnName + "]";
                 }
@@ -383,7 +383,7 @@
  
                             
                             <Dataflow Name="<#=varTaskName#>">
-                                <#if (varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_AFAS") {#>
+                                <#if (varExtractionSourceType == "XML_Kewill" || varExtractionSourceType == "XML_AFAS") {#>
                                     <Expressions><Expression ExternalProperty="[XML Source <#=varName#>].[XMLSchemaDefinition]"><#=ConnectionStringXSD2#></Expression></Expressions>
                                 <#}#>
     
@@ -444,7 +444,7 @@
                                             <#break;
                                         default:
                                             varOutputPathName = "OLEDB Source " + varName;#>
-                                            <OleDbSource Name="<#=varName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
+                                            <OleDbSource Name="<#=varOutputPathName#>" ConnectionName="<#=varExtractionSourceConnection#>" ValidateExternalMetadata="true">
                                                 <ErrorHandling ErrorRowDisposition="RedirectRow" TruncationRowDisposition="RedirectRow" />
                                                 <VariableInput VariableName="User.SourceExtractionSQL" />
                                             </OleDbSource>
