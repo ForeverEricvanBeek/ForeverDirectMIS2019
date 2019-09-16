@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [DM].[F_Obsolete_Report] (
     [DateKey]                            DATE            NOT NULL,
+    [Contract]                           NVARCHAR (5)    NULL,
     [RN]                                 BIGINT          NOT NULL,
     [SKU_Name]                           NVARCHAR (25)   NOT NULL,
     [Lot_Code]                           NVARCHAR (20)   NULL,
@@ -7,7 +8,7 @@
     [Inventory_Netto_QTY]                FLOAT (53)      NULL,
     [Percentage]                         FLOAT (53)      NULL,
     [Sum_Netto_Qty]                      FLOAT (53)      NULL,
-    [Inventory_Cost_Price]               DECIMAL (18, 2) NULL,
+    [Inventory_Cost_Price]               DECIMAL (22, 5) NULL,
     [Inventory_Netto_Value]              DECIMAL (29, 2) NULL,
     [Order_Type]                         VARCHAR (2)     NULL,
     [Criteria]                           INT             NULL,
@@ -32,4 +33,6 @@
     [BatchID]                            BIGINT          NOT NULL,
     [ProcessLogID]                       BIGINT          NULL
 );
+
+
 

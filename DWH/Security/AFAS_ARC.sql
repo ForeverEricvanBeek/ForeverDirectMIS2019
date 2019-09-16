@@ -1,3 +1,5 @@
 ﻿CREATE SCHEMA [AFAS_ARC]
     AUTHORIZATION [dbo];
 
+
+

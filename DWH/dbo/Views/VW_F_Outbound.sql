@@ -184,7 +184,7 @@ FROM			MANH.ORDERS AS OD
 INNER JOIN		EXTRA.ORDERS_INFO CO
 ON				CO.TC_Order_ID = OD.TC_ORDER_ID
 AND				CO.ActInd = 'Y'
-INNER JOIN		Datamart.DM.D_Order AS VWO
+INNER JOIN		[$(Datamart)].DM.D_Order AS VWO
 ON				OD.TC_ORDER_ID	= VWO.Order_ID
 AND				VWO.Order_Days_To_Late > 0
 AND				VWO.Order_Planned_Ship_Date IS NOT NULL
@@ -226,8 +226,8 @@ SELECT
 	, 0												AS Number_Of_Picks
 	, 0												AS Number_Of_Complaints
 	, 1												AS Number_Of_Issues
-FROM		Datamart.DM.D_OF_Issues AS QI
-LEFT JOIN	Datamart.DM.D_Order AS OD
+FROM		[$(Datamart)].DM.D_OF_Issues AS QI
+LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Issues_Order_ID
 LEFT JOIN	MANH.LPN_OUTBOUND AS LP
 ON			LP.TC_LPN_ID = QI.OF_Issues_OLPN_ID
@@ -277,8 +277,8 @@ SELECT
 	, 0												AS Number_Of_Picks
 	, 1												AS Number_Of_Complaints
 	, 0												AS Number_Of_Issues
-FROM		Datamart.DM.D_OF_Complaints AS QI
-LEFT JOIN	Datamart.DM.D_Order AS OD
+FROM		[$(Datamart)].DM.D_OF_Complaints AS QI
+LEFT JOIN	[$(Datamart)].DM.D_Order AS OD
 ON			OD.Order_ID = QI.OF_Complaints_Order_ID
 LEFT JOIN	MANH.LPN_OUTBOUND AS LP
 ON			LP.TC_LPN_ID = QI.OF_Complaints_OLPN_ID
@@ -326,7 +326,7 @@ SELECT
 	, 1												AS Number_Of_Picks
 	, 0												AS Number_Of_Complaints
 	, 0												AS Number_Of_Issues
-FROM		Datamart.DM.D_Order AS OD
+FROM		[$(Datamart)].DM.D_Order AS OD
 INNER JOIN	MANH.PROD_TRKG_TRAN AS PT
 ON			PT.TC_ORDER_ID = OD.Order_ID
 AND			PT.MENU_OPTN_NAME IN ('PackCD', 'RF QA incomplete','Pack Cubed Directed','RF Zone  Picking RTN')

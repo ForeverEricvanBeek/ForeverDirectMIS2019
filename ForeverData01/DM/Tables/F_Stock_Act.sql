@@ -6,6 +6,7 @@
     [D_Aging_Category_Skey] BIGINT          NOT NULL,
     [D_ILPN_Skey]           BIGINT          NULL,
     [D_WHS_Location_Skey]   BIGINT          NULL,
+    [Contract]              NVARCHAR (5)    NULL,
     [Number_Of_Units]       INT             NULL,
     [Value_Of_Units]        NUMERIC (15, 7) NULL,
     [InsertDateTime]        DATETIME2 (7)   NULL,
@@ -13,6 +14,8 @@
     [BatchID]               BIGINT          NOT NULL,
     [ProcessLogID]          BIGINT          NULL
 );
+
+
 
 
 

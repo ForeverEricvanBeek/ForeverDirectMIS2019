@@ -13,7 +13,7 @@
     [Generic_SKU_Description] NVARCHAR (65)   NULL,
     [Second_Commodity]        NVARCHAR (5)    NULL,
     [Commodity_Desc]          NVARCHAR (35)   NULL,
-    [Site]                    NVARCHAR (5)    NULL,
+    [Contract]                NVARCHAR (5)    NULL,
     [Purchase_LeadTime]       INT             NULL,
     [Manufactured_LeadTime]   INT             NULL,
     [Unit_Measered]           NVARCHAR (10)   NULL,
@@ -47,6 +47,8 @@
     [ProcessLogID]            BIGINT          NULL,
     CONSTRAINT [PK_D_SKU] PRIMARY KEY CLUSTERED ([D_SKU_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
 
 

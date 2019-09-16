@@ -4,7 +4,7 @@
     [SKU_Name]        NVARCHAR (25)   NULL,
     [SKU_Code]        INT             NOT NULL,
     [Lot_Code]        NVARCHAR (20)   NOT NULL,
-    [Inventory_Price] DECIMAL (18, 2) NULL,
+    [Inventory_Price] DECIMAL (22, 5) NULL,
     [Expiration_Date] DATETIME2 (7)   NULL,
     [CheckSum]        NVARCHAR (32)   NULL,
     [CheckSumSCD1]    NVARCHAR (32)   NULL,
@@ -20,4 +20,6 @@
     [ProcessLogID]    BIGINT          NULL,
     CONSTRAINT [PK_D_Lot_IFS] PRIMARY KEY CLUSTERED ([D_Lot_IFS_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

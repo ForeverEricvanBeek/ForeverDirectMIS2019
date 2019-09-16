@@ -1,0 +1,25 @@
+﻿CREATE TABLE [DM].[F_Stock_AVE] (
+    [DateKey]               DATE            NOT NULL,
+    [Contract]              NVARCHAR (5)    NOT NULL,
+    [Part_NO]               NVARCHAR (25)   NOT NULL,
+    [Lot_Code]              NVARCHAR (20)   NOT NULL,
+    [Description]           NVARCHAR (200)  NOT NULL,
+    [Aloine_Level]          INT             NULL,
+    [Location_NO]           NVARCHAR (35)   NOT NULL,
+    [Warehouse]             NVARCHAR (15)   NULL,
+    [Location_Type]         NVARCHAR (20)   NULL,
+    [Qty_On_Hand]           INT             NULL,
+    [Cost_Price]            DECIMAL (22, 5) NULL,
+    [Inventory_Value]       DECIMAL (29, 2) NULL,
+    [Value_On_Transit]      DECIMAL (29, 2) NULL,
+    [Expire_Date]           DATETIME2 (7)   NULL,
+    [D_Product_Family_Skey] BIGINT          NULL,
+    [Accounting_Group_Desc] VARCHAR (28)    NULL,
+    [Qty_In_Transit]        INT             NULL,
+    [Transport_Task]        NVARCHAR (25)   NULL,
+    [InsertDateTime]        DATETIME2 (7)   NULL,
+    [UpdateDateTime]        DATETIME2 (7)   NULL,
+    [BatchID]               BIGINT          NOT NULL,
+    [ProcessLogID]          BIGINT          NULL
+);
+

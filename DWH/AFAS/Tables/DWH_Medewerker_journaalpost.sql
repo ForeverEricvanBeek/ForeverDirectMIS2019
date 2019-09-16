@@ -17,6 +17,7 @@
     [OrganisatorischeEenheid]             NVARCHAR (50)   NOT NULL,
     [OrganisatorischeEenheidOmschrijving] NVARCHAR (2000) NULL,
     [VolgnummerCorrectie]                 INT             NULL,
+    [Periode_Betaald]                     INT             NULL,
     [Eff_Date]                            DATE            NOT NULL,
     [End_Date]                            DATE            NULL,
     [ActInd]                              CHAR (1)        NULL,
@@ -25,4 +26,6 @@
     [ProcessLogID]                        BIGINT          NULL,
     CONSTRAINT [PK_DWH_Medewerker_journaalpost] PRIMARY KEY CLUSTERED ([Medewerker] ASC, [Looncomponent] ASC, [Salarisverwerkingsplan] ASC, [Volgnummer] ASC, [Jaar] ASC, [Periode] ASC, [OrganisatorischeEenheid] ASC, [Eff_Date] ASC) ON [DWH_AFAS]
 ) ON [DWH_AFAS];
+
+
 

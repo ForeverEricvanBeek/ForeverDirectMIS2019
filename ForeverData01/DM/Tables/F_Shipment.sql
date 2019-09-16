@@ -15,10 +15,13 @@
     [TPX_Delivered]          INT           NOT NULL,
     [TPX_iNTRANSIT]          INT           NOT NULL,
     [TPX_Dossier_Number]     NVARCHAR (50) NOT NULL,
+    [Signature_Delivery]     VARCHAR (50)  NULL,
+    [Incoterm]               VARCHAR (20)  NULL,
     [Expected_Deliver_Date]  DATETIME2 (7) NULL,
     [First_Attempt_Date]     DATETIME2 (7) NULL,
     [First_Customer_Contact] DATETIME2 (7) NULL,
     [Actual_Deliver_Date]    DATETIME2 (7) NULL,
+    [Actual_Send_Date]       DATETIME2 (7) NULL,
     [Requested_Deliver_Date] DATETIME2 (7) NULL,
     [Manh_Order_Create_Date] DATETIME2 (7) NULL,
     [Manh_Planned_Ship_Date] DATE          NULL,
@@ -30,4 +33,6 @@
     [BatchID]                BIGINT        NOT NULL,
     [ProcessLogID]           BIGINT        NULL
 );
+
+
 

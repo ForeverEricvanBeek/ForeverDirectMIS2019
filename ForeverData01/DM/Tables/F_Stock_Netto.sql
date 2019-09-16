@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [DM].[F_Stock_Netto] (
     [DateKey]                   BIGINT          NULL,
     [D_SKU_Skey]                BIGINT          NOT NULL,
+    [Contract]                  NVARCHAR (5)    NULL,
     [D_Lot_Skey]                BIGINT          NULL,
     [D_Lot_IFS_Skey]            BIGINT          NULL,
     [D_Aging_Category_Skey]     BIGINT          NULL,
@@ -14,4 +15,6 @@
     [BatchID]                   BIGINT          NOT NULL,
     [ProcessLogID]              BIGINT          NULL
 );
+
+
 

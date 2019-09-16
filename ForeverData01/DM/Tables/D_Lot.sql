@@ -7,7 +7,7 @@
     [Received_Date]      DATETIME2 (7)   NULL,
     [Expire_Date]        DATETIME2 (7)   NULL,
     [Expire_Flag]        NVARCHAR (1)    NULL,
-    [Cost_Price]         NUMERIC (15, 7) NULL,
+    [Cost_Price]         DECIMAL (22, 5) NULL,
     [CheckSum]           NVARCHAR (32)   NULL,
     [CheckSumSCD1]       NVARCHAR (32)   NULL,
     [CheckSumSCD2]       NVARCHAR (32)   NULL,
@@ -22,4 +22,6 @@
     [ProcessLogID]       BIGINT          NULL,
     CONSTRAINT [PK_D_Lot] PRIMARY KEY CLUSTERED ([D_Lot_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

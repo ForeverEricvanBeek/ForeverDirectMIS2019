@@ -26,7 +26,7 @@ cast(O.DATE_ENTERED as date)	AS DateKey
 	
 FROM [IFS].[CUSTOMER_ORDER] O
 	
-left join [ForeverData01].[DM].[D_Country] C
+left join [$(ForeverData01)].[DM].[D_Country] C
 	on O.COUNTRY_CODE=C.Country_Code
 where O.ORDER_ID = 'OF'
 	and O.ActInd='Y'

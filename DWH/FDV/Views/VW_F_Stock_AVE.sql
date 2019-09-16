@@ -4,6 +4,7 @@
 
 
 
+
 Create view [FDV].[VW_F_Stock_AVE]
 as 
 select cast(getdate()-1 as date)							as DateKey
@@ -48,8 +49,8 @@ select cast(getdate()-1 as date)							as DateKey
 		   WHEN INVP1.ACCOUNTING_GROUP =45 THEN 'Product Cartons'
 		   WHEN INVP1.ACCOUNTING_GROUP =24 THEN 'Global Marketing LT - EU'
 		   WHEN INVP1.ACCOUNTING_GROUP =60 THEN 'Components AVE' END as Accounting_Group_Desc
-from [DWH].[IFS].[INVENTORY_PART_IN_STOCK] PS
-join [DWH].[IFS].[INVENTORY_PART] INVP1
+from [IFS].[INVENTORY_PART_IN_STOCK] PS
+join [IFS].[INVENTORY_PART] INVP1
 on
 PS.PART_NO=INVP1.PART_NO
 and
@@ -58,8 +59,8 @@ and PS.ActInd='Y'
 and INVP1.ActInd='Y'
 and INVP1.CONTRACT like 'AVE%'
 and PS.CONTRACT like 'AVE%'
-and PS.QTY_ONHAND>0
-join [DWH].[IFS].[INVENTORY_PART_UNIT_COST_SUM] INVP
+and (PS.QTY_ONHAND>0 or PS.QTY_IN_TRANSIT>0)
+join [IFS].[INVENTORY_PART_UNIT_COST_SUM] INVP
 on
 PS.PART_NO=INVP.PART_NO
 and
@@ -68,4 +69,4 @@ and PS.ActInd='Y'
 and INVP.ActInd='Y'
 and INVP.CONTRACT like 'AVE%'
 and PS.CONTRACT like 'AVE%'
-and PS.QTY_ONHAND>0
+and (PS.QTY_ONHAND>0 or PS.QTY_IN_TRANSIT>0)

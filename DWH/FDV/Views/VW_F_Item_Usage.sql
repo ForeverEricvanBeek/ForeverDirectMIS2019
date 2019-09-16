@@ -47,7 +47,7 @@ LEFT JOIN		(SELECT
 					, OL.ITEM_NAME
 ) OL ON			OL.ORDER_ID = OD.ORDER_ID
 AND				OL.ITEM_NAME = IC.ITEM_NAME
-INNER JOIN			[ForeverData01].[DM].[D_BOM_Explosie] BOM
+INNER JOIN			[$(ForeverData01)].[DM].[D_BOM_Explosie] BOM
 ON
 IC.ITEM_NAME=BOM.Sales_Part_Level_0
 and BOM.IsDeleted='0'

@@ -32,7 +32,7 @@ SELECT
 	, CASE WHEN SD.Order_Planned_Ship_Date IS NULL THEN NULL ELSE (
 		SELECT 
 			COUNT(cal3.DateKey)
-		FROM ForeverData01.DM.D_Calendar cal3
+		FROM [$(ForeverData01)].DM.D_Calendar cal3
 		WHERE cal3.FullDate > SD.Order_Planned_Ship_Date
 		AND cal3.FullDate <= ISNULL(OD.ACTUAL_SHIPPED_DTTM,CAST(GETDATE() as date))
 	) END							AS Order_Days_Too_Late

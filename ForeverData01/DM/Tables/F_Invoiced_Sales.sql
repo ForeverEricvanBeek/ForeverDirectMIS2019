@@ -1,9 +1,11 @@
 ﻿CREATE TABLE [DM].[F_Invoiced_Sales] (
     [DateKey]                 BIGINT          NULL,
+    [Order_Date]              DATE            NULL,
     [Accounting_Year]         INT             NULL,
     [Accounting_Month]        INT             NULL,
     [Company_Site]            NVARCHAR (20)   NULL,
     [OP_Country]              NVARCHAR (4)    NOT NULL,
+    [Customer_ID]             NVARCHAR (20)   NOT NULL,
     [Country_Code]            NVARCHAR (2)    NULL,
     [FAM_Prod_ID]             INT             NULL,
     [Prod_Family_Desc]        NVARCHAR (35)   NULL,
@@ -21,12 +23,16 @@
     [Contribution_Margin]     DECIMAL (38, 2) NULL,
     [Sales_Margin]            DECIMAL (38, 2) NULL,
     [Invoice_Number]          NVARCHAR (50)   NULL,
+    [Order_Number]            NVARCHAR (12)   NULL,
+    [Order_Type]              NVARCHAR (3)    NULL,
     [Invoice_Type]            NVARCHAR (15)   NULL,
     [InsertDateTime]          DATETIME2 (7)   NOT NULL,
     [UpdateDateTime]          DATETIME2 (7)   NOT NULL,
     [BatchID]                 BIGINT          NOT NULL,
     [ProcessLogID]            BIGINT          NOT NULL
 );
+
+
 
 
 

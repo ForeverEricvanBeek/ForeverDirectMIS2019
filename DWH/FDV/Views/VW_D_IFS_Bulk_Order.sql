@@ -29,7 +29,7 @@ cast(O.DATE_ENTERED as date)	AS DateKey
  else 'Other' end				AS Sub_Order_Type
       
 FROM [IFS].[CUSTOMER_ORDER] O
-left join [ForeverData01].[DM].[D_Country] C
+left join [$(ForeverData01)].[DM].[D_Country] C
 
 on O.COUNTRY_CODE=C.Country_Code
 where O.ORDER_ID = 'BK'

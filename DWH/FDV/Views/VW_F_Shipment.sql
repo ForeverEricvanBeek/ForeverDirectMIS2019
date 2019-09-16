@@ -11,14 +11,15 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_Shipment]
 AS
--- Get first try to deliver date, if not delivered in one try.
+-- Get first try to deliver date, if not delivered in one try.*/
 with cte_FA as
 (
 SELECT EVE.SHIPMENT_ID, MIN(EVE.SHIPMENT_EVENT_TS_UTC) as First_Attempt_Date
   FROM 
-		 [DWH].[TPX7].[VW_SHIPMENT_EVENT] EVE          
+		 [TPX7].[VW_SHIPMENT_EVENT] EVE          
                        WHERE EVE.ActInd = 'Y'
                  
               AND SHIPMENT_EVENT_CODE IN ( '728', '730' , '771' , '772' ) 
@@ -51,6 +52,7 @@ SELECT
 		--If delivery took more then one try, we pick the first attempt date.
 		, case when FA.First_Attempt_Date IS NULL then  TS.ACTUAL_DY_TS else FA.First_Attempt_Date END AS First_Customer_Contact
 		, TS.ACTUAL_DY_TS							as Actual_Deliver_Date
+		, TS.ACTUAL_PU_TS							as Actual_Send_Date	
 		, TS.REQUESTED_DY_TS						as Requested_Deliver_Date
 		, EOI.Order_Create_Date 					as Manh_Order_Create_Date
 		, EOI.Order_Planned_Ship_Date				as Manh_Planned_Ship_Date	
@@ -58,7 +60,7 @@ SELECT
 		, ISNULL(EOI.Order_Num_Of_Parcels , -1)			AS Manh_Num_Of_Parcels
 		, ISNULL(EOI.Order_IFS_Order_Lines , -1 )			AS IFS_Order_Lines
 FROM	
-	[DWH].[EXTRA].[ORDERS_INFO] EOI
+	[EXTRA].[ORDERS_INFO] EOI
  INNER JOIN	TPX7.VW_SHIPMENT TS 
 ON  EOI.TC_Order_ID = LTRIM(RTRIM(TS.CONSIGNEE_REFERENCE))
 	LEFT JOIN cte_FA FA

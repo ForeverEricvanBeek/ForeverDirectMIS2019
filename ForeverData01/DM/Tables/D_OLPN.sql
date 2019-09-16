@@ -11,6 +11,8 @@
     [OLPN_Quantity]                      NUMERIC (13, 4) NULL,
     [OLPN_Dangerous_Goods]               INT             NULL,
     [OLPN_Box_Size]                      NVARCHAR (100)  NULL,
+    [OLPN_Container_Description]         NVARCHAR (35)   NULL,
+    [OLPN_X_Y]                           VARCHAR (25)    NULL,
     [OLPN_Order_Create_Date]             DATETIME2 (7)   NULL,
     [OLPN_Handled_Date]                  DATETIME2 (7)   NULL,
     [OLPN_Shipped_Date]                  DATETIME2 (7)   NULL,
@@ -39,4 +41,6 @@
     [ProcessLogID]                       BIGINT          NULL,
     CONSTRAINT [PK_D_OLPN] PRIMARY KEY CLUSTERED ([D_OLPN_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

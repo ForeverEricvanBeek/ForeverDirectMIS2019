@@ -28,8 +28,8 @@ SELECT [COMPANY] as Company
 	  ,OPEN_AMOUNT as Balance
       ,[OBJSTATE] as OBJ_State
       
-  FROM [DWH].[IFS].[BAD_DEBT_QRY] BD
-	    JOIN [DWH].[IFS].[CUSTOMER_INFO] CI
+  FROM [IFS].[BAD_DEBT_QRY] BD
+	    JOIN [IFS].[CUSTOMER_INFO] CI
 		on BD.[IDENTITY] = CI.CUSTOMER_ID
 		
   where  1=1
@@ -61,7 +61,7 @@ SELECT [COMPANY] as Company
 	   case when dateadd(day,90,LI.Eff_Date) < getdate() then  (LI.FULL_CURR_AMOUNT-LI.CLEARED_CURR_AMOUNT) else '0' end as Total_Over_Due
 	  ,LI.FULL_CURR_AMOUNT-LI.CLEARED_CURR_AMOUNT as Balance
 	  ,LI.[OBJSTATE] as OBJ_State
-  FROM [DWH].[IFS].[LEDGER_ITEM] LI
+  FROM [IFS].[LEDGER_ITEM] LI
   where FULL_CURR_AMOUNT <> CLEARED_CURR_AMOUNT
   and LI.ActInd='Y'
   and LI.IsDeleted='N'
