@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0"?>
 <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
-  DTS:ObjectName="PROD.ifsbi"
-  DTS:DTSID="{6994502F-24C2-4C93-9BEA-9E3C1DAEDCD6}"
+  DTS:ObjectName="MHNT5"
+  DTS:DTSID="{A8F62D25-7579-49EE-9C64-4296E29BED49}"
   DTS:CreationName="OLEDB">
   <DTS:PropertyExpression
-    DTS:Name="ConnectionString">@[$Project::conPROD]</DTS:PropertyExpression>
+    DTS:Name="ConnectionString">@[$Project::ConWMS]</DTS:PropertyExpression>
   <DTS:ObjectData>
     <DTS:ConnectionManager
-      DTS:ConnectionString="Data Source=PROD;User ID=IFSBI;Provider=OraOLEDB.Oracle.1;Persist Security Info=True;DataTypeCompatibility=80;">
+      DTS:ConnectionString="Data Source=MHNT5;User ID=WMS15TSTRW;Provider=OraOLEDB.Oracle.1;Persist Security Info=True;">
       <DTS:Password
         DTS:Name="Password"
         Sensitive="1"></DTS:Password>
