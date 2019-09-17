@@ -285,8 +285,6 @@
                     <Variable Name="MaxIncrementalKey" DataType="String" Namespace="RC">0</Variable>
                     <Variable Name="LastExtractionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
                     <Variable Name="LastExtractionID" DataType="String" Namespace="User">0</Variable>
-                    <Variable Name="sXMLResult" DataType="String" Namespace="User"><![CDATA[<#=varExtractionXMLExample#>]]></Variable>
-                    <Variable Name="sXMLClean" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varXMLCleanExpression#></Variable>
                     <Variable Name="ExtractionType" DataType="String" Namespace="User"><#=varExtractionType#></Variable>
                     <Variable Name="sFullFilePath" DataType="String" Namespace="User">E:\DWHWork\Input\test.csv</Variable>
                     <Variable Name="sSourceFolder" DataType="String" Namespace="User"></Variable>
@@ -302,6 +300,8 @@
                         <Variable Name="AfasSkip" DataType="Int32" Namespace="User">0</Variable>
                         <Variable Name="AfasTake" DataType="Int32" Namespace="User">99999999</Variable> 
                         <Variable Name="AfasOptions" DataType="String" Namespace="User" EvaluateAsExpression="true">@[$Project::AfasOptions]</Variable> 
+                        <Variable Name="sXMLResult" DataType="String" Namespace="User"><![CDATA[<#=varExtractionXMLExample#>]]></Variable>
+                        <Variable Name="sXMLClean" DataType="String" Namespace="User" EvaluateAsExpression="true"><#=varXMLCleanExpression#></Variable>
                     <#}#>
                         
                 </Variables>
