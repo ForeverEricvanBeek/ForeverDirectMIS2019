@@ -100,7 +100,7 @@
                 <#string sqlPackage = @"SELECT [SourceConnection] AS [SourceConnection]
                                         ,[con].[Type] AS [ConnectionType]
                                         ,[SourceSchema] AS [SourceSchema]
-                                        ,[SourceTable] AS [SourceTable]
+                                        ,[ReportID] AS [ReportID]
                                         ,[ExtractionType]
                                         ,'Reports' AS PackagePrefix
                                         FROM [Generator].[LoadReportTables] st
@@ -112,7 +112,7 @@
                                         [SourceConnection]
                                         ,null
                                         ,[TargetSchema]
-                                        ,'Total' AS [SourceTable]
+                                        ,'Total' AS [ReportID]
                                         ,null
                                         ,'CTRL_Reports' AS PackagePrefix
                                         FROM [Generator].[LoadReportTables] st
@@ -129,10 +129,10 @@
                     string varSourceConnection = SSISPackage["SourceConnection"].ToString();
                     string varSourceConnectionType = SSISPackage["ConnectionType"].ToString();
                     string varSourceSchema = SSISPackage["SourceSchema"].ToString();
-                    string varSourceTable = SSISPackage["SourceTable"].ToString();
                     string varExtractionType = SSISPackage["ExtractionType"].ToString();
                     string varPackagePrefix = SSISPackage["PackagePrefix"].ToString();
-                    string varPackageName = varPackagePrefix + "-" + varSourceSchema + "-" + varSourceTable;#>
+                    string varReportID = SSISPackage["ReportID"].ToString();
+                    string varPackageName = varPackagePrefix + "_" + varSourceSchema + "_" + varReportID;#>
                     <Package PackageName="<#=varPackageName#>"/>
                 <#}#>               
             </Packages>

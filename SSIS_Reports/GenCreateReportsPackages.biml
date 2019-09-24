@@ -8,12 +8,13 @@
     <Packages>
         <#
         string allSourceTables = "";
-        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT ST.SourceConnection AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[SourceTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
+        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT ST.SourceConnection AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[SourceTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.ReportID,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
-            allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["SourceTable"].ToString() + "',";
+            allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["ReportID"].ToString() + "',";
             string varExtractionSourceConnection  = rowSourceExtractionTable["SourceConnection"].ToString();
             string varExtractionFriendlyName  = rowSourceExtractionTable["FriendlyName"].ToString();
+            string varReportID  = rowSourceExtractionTable["ReportID"].ToString();
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
             string varExtractionSourceType = rowSourceExtractionTable["SourceType"].ToString();
@@ -74,8 +75,8 @@
                 varExtractionSourceSchemaPlus = "";
             }
             string varExtractionSourceTablePlus = varTableBeginCharacter + varExtractionSourceTable  + varTableCloseCharacter;
-            string varName = varExtractionTargetConnection + "-" + varExtractionSourceSchema + "-" + varExtractionSourceTable;
-            string varPackageName = varExtractionPackagePrefix + "-" + varSourceSchema + "-" + varSourceTable;
+            string varName = varExtractionTargetConnection + "_" + varExtractionSourceSchema + "_" + varReportID;
+            string varPackageName = varExtractionPackagePrefix + "_" + varSourceSchema + "_" + varReportID;
     
             string varExtractionDateConversion = "CONVERT(DATETIME2(7), &apos;&quot; + @[User::LastExtractionDate] + &quot;&apos;, 120)";
             
@@ -83,17 +84,22 @@
 
             string varInsertLogStartSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',60,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Started','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',70,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
             string varInsertLogEndSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[User::varRequestID] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\" : \"INSERT INTO RC.Log (Log_Page,Log_Func,Log_RequestID,Log_ExecutionID,Log_Status,Log_Package,Log_Log,Log_CreatedDate) VALUES ('Package','Ended','\" + (DT_WSTR, 100)@[$Package::parRequestID_PP] + \"','\" + (DT_WSTR, 100)@[$Package::parLogExecutionID_PP] + \"',90,'\" + @[System::PackageName] + \"','\" + (DT_WSTR, 100)@[User::varLogParameters] + \"',GETDATE())\"";
-            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_Report, Request_FriendlyName, Request_Status, Request_Email, Request_User, Request_DateStart) VALUES ('" + varExtractionSourceTable + "','" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
+            string varInsertRequestSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"INSERT INTO RC.Request (Request_ReportID, Request_FriendlyName, Request_Status, Request_Email, Request_User, Request_DateStart) VALUES ('" + varReportID + "','" + varExtractionFriendlyName + "', 60, '', 'System', '\" + @[User::currentDate] + \"');SELECT SCOPE_IDENTITY() AS newID;\":\"UPDATE RC.Request SET Request_Status = 70, Request_Log = \" +  (DT_WSTR, 100)@[User::varLogExecutionID] + \" WHERE Request_ID = \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \"; SELECT \" +  (DT_WSTR, 10) @[$Package::parRequestID_PP] + \" AS newID\"";
             string varInsertParamsSQL = "@[$Package::parRequestID_PP] == \"0\" ? \"";
             
-            string sqlparamXcolumns = @"SELECT ViewPredicatesName, ViewPredicatesFriendlyName, ViewPredicatesType FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
+            string sqlparamXcolumns = @"SELECT ViewPredicatesName, ViewPredicatesFriendlyName, ViewPredicatesType FROM DWH_Control.Generator.LoadReportTablePredicates WHERE ReportID = '" + varReportID + @"' AND IsActive = 1";
                     DataTable tableparamXcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparamXcolumns);
                     foreach (DataRow rowparamXcolumns in tableparamXcolumns.Rows) {
                         varInsertParamsSQL = varInsertParamsSQL + "INSERT INTO RC.Param (Param_RequestID, Param_Name, Param_Value, Param_FriendlyName, Param_Type) VALUES (\" + (DT_WSTR, 100)@[User::varRequestID] + \",'" + rowparamXcolumns["ViewPredicatesName"].ToString() + "','\" + @[$Package::" + rowparamXcolumns["ViewPredicatesName"].ToString() + "_PP] + \"','" + rowparamXcolumns["ViewPredicatesFriendlyName"].ToString() + "','" + rowparamXcolumns["ViewPredicatesType"].ToString() + "');";
                     }
             varInsertParamsSQL = varInsertParamsSQL + "\" : \"SELECT 1;\"";    
             
-            string varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"', Request_DateEnd = '\" + @[User::currentDate] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+            string varUpdateRequestSQL = "";
+            if (varExtractionType == "D") {
+                varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountExtract] + \", Request_File = '\" + @[User::varFileAttachments] + \"', Request_DateEnd = '\" + @[User::currentDate] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+            } else {
+                varUpdateRequestSQL = "\"UPDATE RC.Request SET Request_Status = 90, Request_Log = '\" + (DT_WSTR, 100)@[User::varLogExecutionID] + \"', Request_Rows = \" + (DT_WSTR, 100)@[RC::RowCountTarget] + \", Request_File = '\" + @[User::varFileAttachments] + \"', Request_DateEnd = '\" + @[User::currentDate] + \"' WHERE Request_ID = '\" +  (DT_WSTR, 100) @[User::varRequestID] + \"'\"";
+            }
 
             string MergeSQlStatementColumnsInsert = "";
             string MergeSQlStatementColumnsInto = "";
@@ -108,7 +114,7 @@
             string WhereRequestClause = " AND Request_ID = \" + (DT_WSTR, 100)@[User::varRequestID] + \"";
             string LogParameters = "";
             
-            string sqlwherecolumns = @"SELECT ViewPredicatesColumn, ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
+            string sqlwherecolumns = @"SELECT ViewPredicatesColumn, ViewPredicatesName FROM DWH_Control.Generator.LoadReportTablePredicates WHERE ReportID = '" + varReportID + @"' AND IsActive = 1";
             DataTable tablewherecolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlwherecolumns);
             foreach (DataRow rowwherecolumns in tablewherecolumns.Rows) {
                 string VarWhereColumnExpression = rowwherecolumns["ViewPredicatesColumn"].ToString();
@@ -190,7 +196,7 @@
                     <Parameter Name="parRequestID_PP" DataType="String">0</Parameter>
                     <Parameter Name="parWhere_PP" DataType="String">Schedule</Parameter>
                     <Parameter Name="parLogExecutionID_PP" DataType="String">0</Parameter>
-                    <#  string sqlparam1columns = @"SELECT ViewPredicatesName ,ViewPredicatesValue FROM DWH_Control.Generator.LoadReportTablePredicates WHERE SourceTable = '" + varTargetTable + @"' AND IsActive = 1";
+                    <#  string sqlparam1columns = @"SELECT ViewPredicatesName ,ViewPredicatesValue FROM DWH_Control.Generator.LoadReportTablePredicates WHERE ReportID = '" + varReportID + @"' AND IsActive = 1";
                     DataTable tableparam1columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam1columns);
                     foreach (DataRow rowparam1columns in tableparam1columns.Rows) {
                         #><Parameter Name="<#=rowparam1columns["ViewPredicatesName"].ToString()#>_PP" DataType="String"><#=rowparam1columns["ViewPredicatesName"].ToString()#></Parameter><#
@@ -722,8 +728,8 @@ Report is located at: ";
             string varTargetSchema = rowTargetSchemas["TargetSchema"].ToString();
             string varTargetTable = rowTargetSchemas["TargetTable"].ToString();
             string varPackagePrefix = rowTargetSchemas["PackagePrefix"].ToString();
-            string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-            string varPackageName = varPackagePrefix + "-" + varTargetSchema + "-" + varTargetTable;#>
+            string varName = varTargetConnection + "_" + varTargetSchema + "_" + varTargetTable;
+            string varPackageName = varPackagePrefix + "_" + varTargetSchema + "_" + varTargetTable;#>
     
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
                 <Parameters>
@@ -743,11 +749,11 @@ Report is located at: ";
                     <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
                     <#  string sqlvarcolumns = @"SELECT 
-                                      ViewPredicatesName
+                                      ReportID + '_' + ViewPredicatesName AS ViewPredicatesName
                                       ,ViewPredicatesValue
                                       ,ViewPredicatesExpression
                                   FROM DWH_Control.Generator.LoadReportTablePredicates
-                                  WHERE SourceTable IN (" + allSourceTables + @")
+                                  WHERE ReportID IN (" + allSourceTables + @")
                                   AND IsActive = 1";
                     DataTable tablevarcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlvarcolumns);
                     foreach (DataRow rowvarcolumns in tablevarcolumns.Rows) {
@@ -795,6 +801,7 @@ Report is located at: ";
 							 , st.RunParam2
 							 , st.RunParam3
 							 , st.RunSchedule
+							 , st.ReportID
                             FROM      [Generator].[LoadReportTables] st 
                             JOIN	  [Generator].[Connection] con 	
                             ON		  [st].[SourceConnection] = [con].[Name]
@@ -805,11 +812,12 @@ Report is located at: ";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
                             foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
                                 string varSourceConnection = rowSourcePackages["SourceConnection"].ToString();
+                                string varReportID = rowSourcePackages["ReportID"].ToString();
                                 string varConnectionType = rowSourcePackages["ConnectionType"].ToString();
                                 string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
                                 string varSourceTable = rowSourcePackages["SourceTable"].ToString();
                                 string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
-                                string varPackage = varPackagePrfx + "-" + varSourceSchema + "-" + varSourceTable+ ".dtsx";
+                                string varPackage = varPackagePrfx + "_" + varSourceSchema + "_" + varReportID + ".dtsx";
                                 
                                 string varRunParam1 = rowSourcePackages["RunParam1"].ToString();
                                 string varRunParam2 = rowSourcePackages["RunParam2"].ToString();
@@ -825,13 +833,14 @@ Report is located at: ";
                                         <ParameterBinding VariableName="Audit.AuditProcessLogID"  Name="ProcessLogParentID" />
                                         <#  string sqlparam2columns = @"SELECT 
                                                           ViewPredicatesName
+                                                          , ReportID + '_' + ViewPredicatesName AS ViewPredicatesName2
                                                           ,ViewPredicatesValue
                                                       FROM DWH_Control.Generator.LoadReportTablePredicates
-                                                      WHERE SourceTable = '" + varSourceTable + @"'
+                                                      WHERE ReportID = '" + varReportID + @"'
                                                       AND IsActive = 1";
                                             DataTable tableparam2columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam2columns);
                                             foreach (DataRow rowparam2columns in tableparam2columns.Rows) {
-                                                #><ParameterBinding VariableName="User.<#=rowparam2columns["ViewPredicatesName"].ToString()#>_CV" Name="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" /><#
+                                                #><ParameterBinding VariableName="User.<#=rowparam2columns["ViewPredicatesName2"].ToString()#>_CV" Name="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" /><#
                                             }#>
                                     </ParameterBindings>
                                     <Expressions>
@@ -873,7 +882,7 @@ Report is located at: ";
   
       <#}#>
 
-        <Package Name = "CTRL-Reports-Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+        <Package Name = "CTRL_Reports_Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
             <Parameters>
                 <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
                 <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
@@ -933,8 +942,8 @@ Report is located at: ";
                             string varTargetSchema = rowSTGControlPack["SourceSchema"].ToString();
                             string varTargetTable = rowSTGControlPack["SourceTable"].ToString();
                             string varPackagePrefix = rowSTGControlPack["PackagePrefix"].ToString();
-                            string varName = varTargetConnection + "-" + varTargetSchema + "-" + varTargetTable;
-                            string varPackageName = varPackagePrefix + "-" +  varTargetSchema + "-" + varTargetTable;#>
+                            string varName = varTargetConnection + "_" + varTargetSchema + "_" + varTargetTable;
+                            string varPackageName = varPackagePrefix + "_" +  varTargetSchema + "_" + varTargetTable;#>
                             
                             <ExecutePackage Name="<#=varPackageName#>">
                                 <ExternalProjectPackage Package="<#=varPackageName#>.dtsx"/>

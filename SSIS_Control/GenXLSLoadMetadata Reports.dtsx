@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="96"
-  DTS:VersionGUID="{78642DE4-2BCA-47BD-AE4A-961FDBC18910}">
+  DTS:VersionBuild="98"
+  DTS:VersionGUID="{AE3346F3-E8DB-4206-91E5-C6D238146265}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -129,16 +129,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[PredicateName]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -197,6 +187,16 @@
                       lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[PredicateType]"
                       name="PredicateType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -204,11 +204,6 @@
                       refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
                       dataType="r8"
                       name="IsActive" />
-                    <externalMetadataColumn
-                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
                     <externalMetadataColumn
                       refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[PredicateName]"
                       dataType="wstr"
@@ -238,6 +233,11 @@
                       dataType="wstr"
                       length="255"
                       name="PredicateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -246,11 +246,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Predicates\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Predicates\Connection.Outputs[Excel Source Error Output].Columns[PredicateName]"
                       dataType="wstr"
@@ -387,13 +387,6 @@
                       externalMetadataColumnId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[IsActive]" />
                     <inputColumn
-                      refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceTable]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="SourceTable"
-                      externalMetadataColumnId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
-                    <inputColumn
                       refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].Columns[PredicateName]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -434,6 +427,13 @@
                       cachedName="PredicateType"
                       externalMetadataColumnId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ViewPredicatesType]"
                       lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[PredicateType]" />
+                    <inputColumn
+                      refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].Columns[ReportID]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ReportID"
+                      externalMetadataColumnId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      lineageId="Package\Load Predicates\Connection.Outputs[Excel Source Output].Columns[ReportID]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -441,11 +441,6 @@
                       refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       dataType="bool"
                       name="IsActive" />
-                    <externalMetadataColumn
-                      refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="128"
-                      name="SourceTable" />
                     <externalMetadataColumn
                       refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ViewPredicatesName]"
                       dataType="wstr"
@@ -475,6 +470,11 @@
                       dataType="wstr"
                       length="500"
                       name="ViewPredicatesType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Predicates\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="500"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -518,6 +518,7 @@
       DTS:refId="Package\Load Predicates 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{375f33d7-4801-4a4d-a0a2-2d4b77e1ab24}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -591,16 +592,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[PredicateName]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -659,6 +650,16 @@
                       lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[PredicateType]"
                       name="PredicateType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -666,11 +667,6 @@
                       refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
                       dataType="r8"
                       name="IsActive" />
-                    <externalMetadataColumn
-                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
                     <externalMetadataColumn
                       refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[PredicateName]"
                       dataType="wstr"
@@ -700,6 +696,11 @@
                       dataType="wstr"
                       length="255"
                       name="PredicateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -708,11 +709,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Predicates 1\Connection.Outputs[Excel Source Error Output].Columns[PredicateName]"
                       dataType="wstr"
@@ -854,7 +855,7 @@
                       cachedLength="255"
                       cachedName="SourceTable"
                       externalMetadataColumnId="Package\Load Predicates 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Predicates 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                      lineageId="Package\Load Predicates 1\13:invalid" />
                     <inputColumn
                       refId="Package\Load Predicates 1\Generator_Connection.Inputs[OLE DB Destination Input].Columns[PredicateName]"
                       cachedDataType="wstr"
@@ -980,6 +981,7 @@
       DTS:refId="Package\Load Predicates 2"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{424ada6d-ec2f-4f62-acbc-b72cbc89b9fa}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -1053,16 +1055,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[PredicateName]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -1121,6 +1113,16 @@
                       lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[PredicateType]"
                       name="PredicateType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1128,11 +1130,6 @@
                       refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
                       dataType="r8"
                       name="IsActive" />
-                    <externalMetadataColumn
-                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
                     <externalMetadataColumn
                       refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[PredicateName]"
                       dataType="wstr"
@@ -1162,6 +1159,11 @@
                       dataType="wstr"
                       length="255"
                       name="PredicateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -1170,11 +1172,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Predicates 2\Connection.Outputs[Excel Source Error Output].Columns[PredicateName]"
                       dataType="wstr"
@@ -1316,7 +1318,7 @@
                       cachedLength="255"
                       cachedName="SourceTable"
                       externalMetadataColumnId="Package\Load Predicates 2\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Predicates 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                      lineageId="Package\Load Predicates 2\13:invalid" />
                     <inputColumn
                       refId="Package\Load Predicates 2\Generator_Connection.Inputs[OLE DB Destination Input].Columns[PredicateName]"
                       cachedDataType="wstr"
@@ -1442,6 +1444,7 @@
       DTS:refId="Package\Load Predicates 2 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{d9c9975e-ffb3-4108-892b-1e145b8ba60e}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -1515,16 +1518,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[PredicateName]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -1583,6 +1576,16 @@
                       lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[PredicateType]"
                       name="PredicateType"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1590,11 +1593,6 @@
                       refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[IsActive]"
                       dataType="r8"
                       name="IsActive" />
-                    <externalMetadataColumn
-                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
                     <externalMetadataColumn
                       refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[PredicateName]"
                       dataType="wstr"
@@ -1624,6 +1622,11 @@
                       dataType="wstr"
                       length="255"
                       name="PredicateType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -1632,11 +1635,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Error Output].Columns[PredicateName]"
                       dataType="wstr"
@@ -1778,7 +1781,7 @@
                       cachedLength="255"
                       cachedName="SourceTable"
                       externalMetadataColumnId="Package\Load Predicates 2 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Predicates 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                      lineageId="Package\Load Predicates 2 1\13:invalid" />
                     <inputColumn
                       refId="Package\Load Predicates 2 1\Generator_Connection.Inputs[OLE DB Destination Input].Columns[PredicateName]"
                       cachedDataType="wstr"
@@ -2215,6 +2218,16 @@
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Folder]"
                       name="Folder"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -2341,6 +2354,11 @@
                       dataType="wstr"
                       length="255"
                       name="Folder" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -2401,6 +2419,12 @@
                       length="255"
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[Output]"
                       name="Output" />
+                    <outputColumn
+                      refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Reports table\Connection.Outputs[Excel Source Error Output].Columns[FriendlyName]"
                       dataType="wstr"
@@ -2758,6 +2782,13 @@
                       cachedName="Folder"
                       externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Folder]"
                       lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[Folder]" />
+                    <inputColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].Columns[ReportID]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ReportID"
+                      externalMetadataColumnId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      lineageId="Package\Load Reports table\Connection.Outputs[Excel Source Output].Columns[ReportID]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -2886,6 +2917,11 @@
                       dataType="wstr"
                       length="500"
                       name="Folder" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports table\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="500"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -2929,6 +2965,7 @@
       DTS:refId="Package\Load Reports table 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{37c5441f-4751-4672-bfc2-d652eed8b572}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -3954,6 +3991,7 @@
       DTS:refId="Package\Load Reports table 2"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{8cd1ad9d-25c8-4f16-8da4-4fc020b3868b}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -4979,6 +5017,7 @@
       DTS:refId="Package\Load Reports table 2 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{fa1d5f18-d2c7-4fe3-8411-481dc000cf81}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -6077,16 +6116,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Rights\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[Group]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -6096,6 +6125,16 @@
                       lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[Group]"
                       name="Group"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Rights\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6104,15 +6143,15 @@
                       dataType="r8"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights\Connection.Outputs[Excel Source Output].ExternalColumns[Group]"
                       dataType="wstr"
                       length="255"
                       name="Group" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -6121,11 +6160,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Rights\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Rights\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Rights\Connection.Outputs[Excel Source Error Output].Columns[Group]"
                       dataType="wstr"
@@ -6233,19 +6272,19 @@
                       externalMetadataColumnId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[IsActive]" />
                     <inputColumn
-                      refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceTable]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="SourceTable"
-                      externalMetadataColumnId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
-                    <inputColumn
                       refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Group]"
                       cachedDataType="wstr"
                       cachedLength="255"
                       cachedName="Group"
                       externalMetadataColumnId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ADGroup]"
                       lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[Group]" />
+                    <inputColumn
+                      refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].Columns[ReportID]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ReportID"
+                      externalMetadataColumnId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      lineageId="Package\Load Rights\Connection.Outputs[Excel Source Output].Columns[ReportID]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6254,15 +6293,15 @@
                       dataType="bool"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="128"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ADGroup]"
                       dataType="wstr"
                       length="500"
                       name="ADGroup" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="500"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -6306,6 +6345,7 @@
       DTS:refId="Package\Load Rights 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{2930bf8d-a5e7-43b3-85da-e49739a3f4e0}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -6379,16 +6419,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[Group]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -6398,6 +6428,16 @@
                       lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[Group]"
                       name="Group"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6406,15 +6446,15 @@
                       dataType="r8"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].ExternalColumns[Group]"
                       dataType="wstr"
                       length="255"
                       name="Group" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -6423,11 +6463,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Rights 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Rights 1\Connection.Outputs[Excel Source Error Output].Columns[Group]"
                       dataType="wstr"
@@ -6535,13 +6575,6 @@
                       externalMetadataColumnId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[IsActive]" />
                     <inputColumn
-                      refId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].Columns[SourceTable]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="SourceTable"
-                      externalMetadataColumnId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Rights 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
-                    <inputColumn
                       refId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Group]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -6556,15 +6589,15 @@
                       dataType="bool"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="128"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ADGroup]"
                       dataType="wstr"
                       length="500"
                       name="ADGroup" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="500"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -6608,6 +6641,7 @@
       DTS:refId="Package\Load Rights 2"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{d1ed562b-e7a3-4dc5-87dd-db81c537925c}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -6681,16 +6715,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[Group]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -6700,6 +6724,16 @@
                       lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[Group]"
                       name="Group"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6708,15 +6742,15 @@
                       dataType="r8"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].ExternalColumns[Group]"
                       dataType="wstr"
                       length="255"
                       name="Group" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -6725,11 +6759,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Rights 2\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Rights 2\Connection.Outputs[Excel Source Error Output].Columns[Group]"
                       dataType="wstr"
@@ -6842,7 +6876,7 @@
                       cachedLength="255"
                       cachedName="SourceTable"
                       externalMetadataColumnId="Package\Load Rights 2\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Rights 2\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                      lineageId="Package\Load Rights 2\13:invalid" />
                     <inputColumn
                       refId="Package\Load Rights 2\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Group]"
                       cachedDataType="wstr"
@@ -6910,6 +6944,7 @@
       DTS:refId="Package\Load Rights 2 1"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{b643b39c-756c-4309-9051-18cecad42f24}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -6983,16 +7018,6 @@
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      length="255"
-                      lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]"
-                      name="SourceTable"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[Group]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -7002,6 +7027,16 @@
                       lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[Group]"
                       name="Group"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      length="255"
+                      lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[ReportID]"
+                      name="ReportID"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -7010,15 +7045,15 @@
                       dataType="r8"
                       name="IsActive" />
                     <externalMetadataColumn
-                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[SourceTable]"
-                      dataType="wstr"
-                      length="255"
-                      name="SourceTable" />
-                    <externalMetadataColumn
                       refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[Group]"
                       dataType="wstr"
                       length="255"
                       name="Group" />
+                    <externalMetadataColumn
+                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].ExternalColumns[ReportID]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportID" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -7027,11 +7062,11 @@
                   name="Excel Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
+                      refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Error Output].Columns[SourceTable]"
-                      name="SourceTable" />
+                      lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Error Output].Columns[ReportID]"
+                      name="ReportID" />
                     <outputColumn
                       refId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Error Output].Columns[Group]"
                       dataType="wstr"
@@ -7144,7 +7179,7 @@
                       cachedLength="255"
                       cachedName="SourceTable"
                       externalMetadataColumnId="Package\Load Rights 2 1\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[SourceTable]"
-                      lineageId="Package\Load Rights 2 1\Connection.Outputs[Excel Source Output].Columns[SourceTable]" />
+                      lineageId="Package\Load Rights 2 1\13:invalid" />
                     <inputColumn
                       refId="Package\Load Rights 2 1\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Group]"
                       cachedDataType="wstr"
@@ -7217,7 +7252,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata Tables"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7229,12 +7264,13 @@
       DTS:refId="Package\Truncate Metadata Tables 1"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{7a38f61a-7afd-4c6c-88f4-edd7f44eff59}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata Tables 1"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7246,12 +7282,13 @@
       DTS:refId="Package\Truncate Metadata Tables 2"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{709e35cd-5c57-4a7c-9421-f334e27cfe93}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata Tables 2"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="3">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7263,12 +7300,13 @@
       DTS:refId="Package\Truncate Metadata Tables 2 1"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{ede4ac63-dc72-46ea-b5c9-a8f4f009d9e8}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata Tables 2 1"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="3">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7798,7 +7836,7 @@
     design-time-name="Package\Load Predicates">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="184,42"
           Id="Package\Load Predicates\Generator_Connection"
@@ -7826,9 +7864,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -7849,138 +7885,6 @@
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load Predicates\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Reports table">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table\Generator_Connection"
-          TopLeft="522,139" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table\Connection"
-          TopLeft="522,53" />
-        <EdgeLayout
-          Id="Package\Load Reports table.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Reports table\Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Reports table\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Rights">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights\Generator_Connection"
-          TopLeft="522,139" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights\Connection"
-          TopLeft="522,53" />
-        <EdgeLayout
-          Id="Package\Load Rights.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Rights\Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Rights\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8044,108 +7948,6 @@
     </Properties>
   </PipelineComponentMetadata>
   <TaskHost
-    design-time-name="Package\Load Reports table 1">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table 1\Connection"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table 1\Generator_Connection"
-          TopLeft="522,139" />
-        <EdgeLayout
-          Id="Package\Load Reports table 1.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Reports table 1\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Rights 1">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights 1\Connection"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights 1\Generator_Connection"
-          TopLeft="522,139" />
-        <EdgeLayout
-          Id="Package\Load Rights 1.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Rights 1\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
     design-time-name="Package\Load Predicates 2">
     <LayoutInfo>
       <GraphLayout
@@ -8185,108 +7987,6 @@
   </TaskHost>
   <PipelineComponentMetadata
     design-time-name="Package\Load Predicates 2\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Reports table 2">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table 2\Connection"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports table 2\Generator_Connection"
-          TopLeft="522,139" />
-        <EdgeLayout
-          Id="Package\Load Reports table 2.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Reports table 2\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Rights 2">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights 2\Connection"
-          TopLeft="522,53" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights 2\Generator_Connection"
-          TopLeft="522,139" />
-        <EdgeLayout
-          Id="Package\Load Rights 2.Paths[Excel Source Output]"
-          TopLeft="614,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Rights 2\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8350,6 +8050,172 @@
     </Properties>
   </PipelineComponentMetadata>
   <TaskHost
+    design-time-name="Package\Load Reports table">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table\Generator_Connection"
+          TopLeft="522,139" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table\Connection"
+          TopLeft="522,53" />
+        <EdgeLayout
+          Id="Package\Load Reports table.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Reports table 1">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table 1\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table 1\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Reports table 1.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table 1\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Reports table 2">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table 2\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Reports table 2\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Reports table 2.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reports table 2\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
     design-time-name="Package\Load Reports table 2 1">
     <LayoutInfo>
       <GraphLayout
@@ -8389,6 +8255,172 @@
   </TaskHost>
   <PipelineComponentMetadata
     design-time-name="Package\Load Reports table 2 1\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Rights">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights\Generator_Connection"
+          TopLeft="522,139" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights\Connection"
+          TopLeft="522,53" />
+        <EdgeLayout
+          Id="Package\Load Rights.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Rights\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Rights\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Rights 1">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights 1\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights 1\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Rights 1.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Rights 1\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Rights 2">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights 2\Connection"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Rights 2\Generator_Connection"
+          TopLeft="522,139" />
+        <EdgeLayout
+          Id="Package\Load Rights 2.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Rights 2\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
