@@ -13,6 +13,7 @@ string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't
 string SystemConnection = "DWH_Control";
 string Environment = "DEV";
 string TestMail = "technicalit@foreverdirect.eu";
+string ReportConnection = "Reports";
 
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
 
