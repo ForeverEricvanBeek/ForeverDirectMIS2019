@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="102"
-  DTS:VersionGUID="{D54FCD14-87F7-4422-98AF-28A749594339}">
+  DTS:VersionBuild="103"
+  DTS:VersionGUID="{F877E04C-34EF-4142-A84A-8367D6D3C95E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -2884,13 +2884,6 @@
                       externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
                       lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[FriendlyName]" />
                     <inputColumn
-                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="Description"
-                      externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[Description]" />
-                    <inputColumn
                       refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Available]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -2918,6 +2911,13 @@
                       cachedName="Html"
                       externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Html]"
                       lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[Html]" />
+                    <inputColumn
+                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[Description]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3028,11 +3028,6 @@
                       length="500"
                       name="FriendlyName" />
                     <externalMetadataColumn
-                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Desciption" />
-                    <externalMetadataColumn
                       refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Available]"
                       dataType="wstr"
                       length="50"
@@ -3052,6 +3047,11 @@
                       dataType="wstr"
                       length="4000"
                       name="Html" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="4000"
+                      name="Description" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3943,13 +3943,6 @@
                       externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
                       lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[FriendlyName]" />
                     <inputColumn
-                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="Description"
-                      externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[Description]" />
-                    <inputColumn
                       refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Available]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -3977,6 +3970,13 @@
                       cachedName="Html"
                       externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Html]"
                       lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[Html]" />
+                    <inputColumn
+                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[Description]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -4087,11 +4087,6 @@
                       length="500"
                       name="FriendlyName" />
                     <externalMetadataColumn
-                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Desciption" />
-                    <externalMetadataColumn
                       refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Available]"
                       dataType="wstr"
                       length="500"
@@ -4111,6 +4106,11 @@
                       dataType="wstr"
                       length="4000"
                       name="Html" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="4000"
+                      name="Description" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -5002,13 +5002,6 @@
                       externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
                       lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[FriendlyName]" />
                     <inputColumn
-                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="Description"
-                      externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[Description]" />
-                    <inputColumn
                       refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Available]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -5036,6 +5029,13 @@
                       cachedName="Html"
                       externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Html]"
                       lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[Html]" />
+                    <inputColumn
+                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[Description]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -5146,11 +5146,6 @@
                       length="500"
                       name="FriendlyName" />
                     <externalMetadataColumn
-                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Desciption" />
-                    <externalMetadataColumn
                       refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Available]"
                       dataType="wstr"
                       length="50"
@@ -5170,6 +5165,11 @@
                       dataType="wstr"
                       length="4000"
                       name="Html" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="4000"
+                      name="Description" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -6061,13 +6061,6 @@
                       externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[FriendlyName]"
                       lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[FriendlyName]" />
                     <inputColumn
-                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="Description"
-                      externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[Description]" />
-                    <inputColumn
                       refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Available]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -6095,6 +6088,13 @@
                       cachedName="Html"
                       externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Html]"
                       lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[Html]" />
+                    <inputColumn
+                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[Description]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6205,11 +6205,6 @@
                       length="500"
                       name="FriendlyName" />
                     <externalMetadataColumn
-                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Desciption]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Desciption" />
-                    <externalMetadataColumn
                       refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Available]"
                       dataType="wstr"
                       length="50"
@@ -6229,6 +6224,11 @@
                       dataType="wstr"
                       length="4000"
                       name="Html" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="4000"
+                      name="Description" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -8063,6 +8063,70 @@
     </LayoutInfo>
   </Package>
   <TaskHost
+    design-time-name="Package\Load Predicates ACC">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Predicates ACC\Generator_Connection"
+          TopLeft="522,139" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\Load Predicates ACC\Connection"
+          TopLeft="522,53" />
+        <EdgeLayout
+          Id="Package\Load Predicates ACC.Paths[Excel Source Output]"
+          TopLeft="614,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Predicates ACC\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Predicates ACC\Generator_Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
     design-time-name="Package\Load Predicates DEV">
     <LayoutInfo>
       <GraphLayout
@@ -8255,20 +8319,20 @@
     </Properties>
   </PipelineComponentMetadata>
   <TaskHost
-    design-time-name="Package\Load Predicates ACC">
+    design-time-name="Package\Load Reports ACC">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="184,42"
-          Id="Package\Load Predicates ACC\Generator_Connection"
+          Id="Package\Load Reports ACC\Generator_Connection"
           TopLeft="522,139" />
         <NodeLayout
           Size="184,42"
-          Id="Package\Load Predicates ACC\Connection"
+          Id="Package\Load Reports ACC\Connection"
           TopLeft="522,53" />
         <EdgeLayout
-          Id="Package\Load Predicates ACC.Paths[Excel Source Output]"
+          Id="Package\Load Reports ACC.Paths[Excel Source Output]"
           TopLeft="614,95">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -8293,7 +8357,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Predicates ACC\Connection">
+    design-time-name="Package\Load Reports ACC\Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8306,7 +8370,7 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Predicates ACC\Generator_Connection">
+    design-time-name="Package\Load Reports ACC\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8511,21 +8575,21 @@
     </Properties>
   </PipelineComponentMetadata>
   <TaskHost
-    design-time-name="Package\Load Reports ACC">
+    design-time-name="Package\Load Rights ACC">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="184,42"
-          Id="Package\Load Reports ACC\Generator_Connection"
+          Size="190,42"
+          Id="Package\Load Rights ACC\Generator_Connection"
           TopLeft="522,139" />
         <NodeLayout
           Size="184,42"
-          Id="Package\Load Reports ACC\Connection"
+          Id="Package\Load Rights ACC\Connection"
           TopLeft="522,53" />
         <EdgeLayout
-          Id="Package\Load Reports ACC.Paths[Excel Source Output]"
-          TopLeft="614,95">
+          Id="Package\Load Rights ACC.Paths[Excel Source Output]"
+          TopLeft="615.5,95">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -8549,20 +8613,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Reports ACC\Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Reports ACC\Generator_Connection">
+    design-time-name="Package\Load Rights ACC\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8729,57 +8780,6 @@
   </TaskHost>
   <PipelineComponentMetadata
     design-time-name="Package\Load Rights TST\Generator_Connection">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Load Rights ACC">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="190,42"
-          Id="Package\Load Rights ACC\Generator_Connection"
-          TopLeft="522,139" />
-        <NodeLayout
-          Size="184,42"
-          Id="Package\Load Rights ACC\Connection"
-          TopLeft="522,53" />
-        <EdgeLayout
-          Id="Package\Load Rights ACC.Paths[Excel Source Output]"
-          TopLeft="615.5,95">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44"
-              Start="0,0"
-              End="0,36.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Rights ACC\Generator_Connection">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
