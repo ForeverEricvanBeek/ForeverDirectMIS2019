@@ -4,16 +4,7 @@
 <Biml xmlns="http://schemas.varigence.com/biml.xsd">
     <#@include file="ProjectSettings.cs"#>
      <Connections>
-        <# string ProjectConnections = @"SELECT 
-                                            c.[Name] AS ConnectionName
-                                            ,c.[ConnectionString]
-                                            ,c.[Options]
-                                            ,c.[IsProjectConnection]
-                                            ,c.[Type]
-                                            FROM         [Generator].[Connection] c 
-                                            WHERE        c.[IsActive] = 1
-                                            AND          c.[Name] in ('Reports','ReportsADO','DWH_Control','WMS')
-                                            ";
+        <# string ProjectConnections = @"SELECT c.Name AS ConnectionName, c.ConnectionString, c.Options, c.IsProjectConnection, c.Type FROM Generator.Connection c WHERE c.IsActive = 1 AND c.Name in ('Reports','ReportsADO','DWH_Control','WMS')";
         DataTable Connections=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,ProjectConnections);
         foreach (DataRow Connection in Connections.Rows) {
             string ConnectionName = Connection["ConnectionName"].ToString();
@@ -60,12 +51,7 @@
     </Databases>
     
     <Schemas>
-        <#string SQLDBSchemas = @"SELECT DISTINCT 
-        st.[TargetSchema]
-        ,st.[TargetConnection]
-        FROM      [Generator].[LoadReportTables] st
-        WHERE     st.IsActive = 1
-        ";
+        <#string SQLDBSchemas = @"SELECT DISTINCT st.TargetSchema, st.TargetConnection FROM Generator.LoadReportTables st WHERE st.IsActive = 1";
         DataTable DBSchemas=ExternalDataAccess.GetDataTable(conGeneratorConnectionString,SQLDBSchemas);
         foreach (DataRow DBSchema in DBSchemas.Rows) {
             string TargetSchema = DBSchema["TargetSchema"].ToString();
@@ -95,35 +81,8 @@
                     <Parameter Name="Con<#=ConnectionName#>"  DataType="String" IsRequired="true"><#=ConnectionString#></Parameter>
                 <#}#>
             </Parameters>
-            
             <Packages>
-                <#string sqlPackage = @"SELECT [SourceConnection] AS [SourceConnection]
-                                        ,[con].[Type] AS [ConnectionType]
-                                        ,[SourceSchema] AS [SourceSchema]
-                                        ,[ReportID] AS [ReportID]
-                                        ,[ExtractionType]
-                                        ,'Reports' AS PackagePrefix
-                                        FROM [Generator].[LoadReportTables] st
-                                        Left JOIN [Generator].[Connection] con
-                                        on [st].[SourceConnection] = [con].[Name]	
-                                        WHERE st.[IsActive] =  1
-                                        UNION
-                                        SELECT DISTINCT
-                                        [SourceConnection]
-                                        ,null
-                                        ,[TargetSchema]
-                                        ,'Total' AS [ReportID]
-                                        ,null
-                                        ,'CTRL_Reports' AS PackagePrefix
-                                        FROM [Generator].[LoadReportTables] st
-                                        UNION
-                                        SELECT    'EXTR'
-                                        ,null
-                                        ,'Reports'
-                                        ,'Total'
-                                        ,null
-                                        ,'CTRL'
-                                        ";
+                <#string sqlPackage = @"SELECT SourceConnection AS SourceConnection, con.Type AS ConnectionType, SourceSchema AS SourceSchema, ReportID AS ReportID, ExtractionType, 'Reports' AS PackagePrefix FROM Generator.LoadReportTables st Left JOIN Generator.Connection con on st.SourceConnection = con.Name WHERE st.IsActive =  1 UNION SELECT DISTINCT SourceConnection, null, TargetSchema, 'Total' AS ReportID, null, 'CTRL_Reports' AS PackagePrefix FROM Generator.LoadReportTables st";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {
                     string varSourceConnection = SSISPackage["SourceConnection"].ToString();

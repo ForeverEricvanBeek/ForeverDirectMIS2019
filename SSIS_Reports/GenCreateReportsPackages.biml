@@ -875,14 +875,7 @@ Report is located at: ";
         <#}
 
         allSourceTables = allSourceTables.Substring(0, allSourceTables.Length - 1);
-        string sqlTargetSchemas = @"SELECT DISTINCT
-                                    [TargetConnection]
-                                    ,[TargetSchema]
-                                    ,'Total' AS [TargetTable]
-                                    ,'CTRL_Reports' AS PackagePrefix
-                                    FROM [Generator].[LoadReportTables] st
-                                    WHERE st.[IsActive] = 1
-                                    ";
+        string sqlTargetSchemas = @"SELECT DISTINCT TargetConnection, TargetSchema, 'Total' AS TargetTable, 'CTRL_Reports' AS PackagePrefix FROM Generator.LoadReportTables st WHERE st.IsActive = 1";
         DataTable tableTargetSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlTargetSchemas);
         foreach (DataRow rowTargetSchemas in tableTargetSchemas.Rows) {
             string varTargetConnection = rowTargetSchemas["TargetConnection"].ToString();
@@ -909,13 +902,7 @@ Report is located at: ";
                     <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
                     <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
-                    <#  string sqlvarcolumns = @"SELECT 
-                                      ReportID + '_' + ViewPredicatesName AS ViewPredicatesName
-                                      ,ViewPredicatesValue
-                                      ,ViewPredicatesExpression
-                                  FROM DWH_Control.Generator.LoadReportTablePredicates
-                                  WHERE ReportID IN (" + allSourceTables + @")
-                                  AND IsActive = 1";
+                    <#  string sqlvarcolumns = @"SELECT ReportID + '_' + ViewPredicatesName AS ViewPredicatesName, ViewPredicatesValue, ViewPredicatesExpression FROM DWH_Control.Generator.LoadReportTablePredicates WHERE ReportID IN (" + allSourceTables + @") AND IsActive = 1";
                     DataTable tablevarcolumns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlvarcolumns);
                     foreach (DataRow rowvarcolumns in tablevarcolumns.Rows) {
                         if((bool)rowvarcolumns["ViewPredicatesExpression"]) {  
@@ -953,23 +940,7 @@ Report is located at: ";
                     
                     <Container Name="SC Extract <#=varName#>" ConstraintMode="Parallel">
                         <Tasks>
-                            <#string sqlSourcePackages  = @"SELECT    [SourceConnection]
-                             ,[Type] AS ConnectionType
-                             ,[SourceSchema] AS[SourceSchema]
-                             ,[SourceTable] AS [SourceTable]
-                             ,'Reports' AS PackagePrefix
-                             , st.RunParam1
-							 , st.RunParam2
-							 , st.RunParam3
-							 , st.RunSchedule
-							 , st.ReportID
-                            FROM      [Generator].[LoadReportTables] st 
-                            JOIN	  [Generator].[Connection] con 	
-                            ON		  [st].[SourceConnection] = [con].[Name]
-                            WHERE     [TargetSchema] = '" + varTargetSchema + @"' 
-                            AND       [st].[IsActive] = 1
-                            ORDER BY  [SourceTable]
-                            ";
+                            <#string sqlSourcePackages  = @"SELECT SourceConnection, Type AS ConnectionType, SourceSchema AS SourceSchema, SourceTable AS SourceTable,'Reports' AS PackagePrefix, st.RunParam1, st.RunParam2, st.RunParam3, st.RunSchedule, st.Available, st.ReportID FROM Generator.LoadReportTables st INNER JOIN Generator.Connection con ON st.SourceConnection = con.Name WHERE TargetSchema = '" + varTargetSchema + @"' AND st.IsActive = 1 AND st.RunSchedule <> 'H' ORDER BY SourceTable";
                             DataTable tableSourcePackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourcePackages);
                             foreach (DataRow rowSourcePackages in tableSourcePackages.Rows) { 
                                 string varSourceConnection = rowSourcePackages["SourceConnection"].ToString();
@@ -977,6 +948,7 @@ Report is located at: ";
                                 string varConnectionType = rowSourcePackages["ConnectionType"].ToString();
                                 string varSourceSchema = rowSourcePackages["SourceSchema"].ToString();
                                 string varSourceTable = rowSourcePackages["SourceTable"].ToString();
+                                string varAvailable = rowSourcePackages["Available"].ToString();
                                 string varPackagePrfx = rowSourcePackages["PackagePrefix"].ToString();
                                 string varPackage = varPackagePrfx + "_" + varSourceSchema + "_" + varReportID + ".dtsx";
                                 
@@ -992,13 +964,7 @@ Report is located at: ";
                                     <ParameterBindings>
                                         <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
                                         <ParameterBinding VariableName="Audit.AuditProcessLogID"  Name="ProcessLogParentID" />
-                                        <#  string sqlparam2columns = @"SELECT 
-                                                          ViewPredicatesName
-                                                          , ReportID + '_' + ViewPredicatesName AS ViewPredicatesName2
-                                                          ,ViewPredicatesValue
-                                                      FROM DWH_Control.Generator.LoadReportTablePredicates
-                                                      WHERE ReportID = '" + varReportID + @"'
-                                                      AND IsActive = 1";
+                                        <#  string sqlparam2columns = @"SELECT ViewPredicatesName, ReportID + '_' + ViewPredicatesName AS ViewPredicatesName2,ViewPredicatesValue FROM DWH_Control.Generator.LoadReportTablePredicates WHERE ReportID = '" + varReportID + @"' AND IsActive = 1";
                                             DataTable tableparam2columns = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlparam2columns);
                                             foreach (DataRow rowparam2columns in tableparam2columns.Rows) {
                                                 #><ParameterBinding VariableName="User.<#=rowparam2columns["ViewPredicatesName2"].ToString()#>_CV" Name="<#=rowparam2columns["ViewPredicatesName"].ToString()#>_PP" /><#
@@ -1040,110 +1006,6 @@ Report is located at: ";
                     </Event>
                 </Events>
             </Package>
-  
       <#}#>
-
-        <Package Name = "CTRL_Reports_Total" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
-            <Parameters>
-                <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
-                <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
-            </Parameters>
-
-            <Variables>
-                <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
-                <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
-                <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
-                <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
-                <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
-                <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
-                <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
-                <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
-            </Variables>
-            
-            <Tasks>
-                <ExecuteSQL Name="SQL Start Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
-                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
-                    <Parameters>
-                        <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
-                        <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                        <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="5" VariableName="System.PackageName" Direction="Input" DataType="String" />
-                        <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
-                        <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
-                        <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
-                        <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
-                        <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
-                        <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
-                        <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
-                        <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
-                    </Parameters>
-                    <Results>
-                        <Result Name="0" VariableName="Audit.AuditBatchID" />
-                        <Result Name="1" VariableName="Audit.AuditProcessLogID" />
-                    </Results>
-                </ExecuteSQL>
-                
-                <Container Name="SC Extract Sources" ConstraintMode="Parallel">
-                    <Tasks>
-                        <#string sqlSTGControlPack = @"SELECT DISTINCT
-                                                          [SourceConnection]
-                                                         ,[SourceSchema]
-                                                         ,'Total' AS [SourceTable]
-                                                         ,'CTRL_Reports' AS PackagePrefix
-                                                        FROM      [Generator].[LoadReportTables] st
-                                                        WHERE     st.[IsActive] = 1
-                                                        ";
-
-                        DataTable tableSTGControlPack = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSTGControlPack);
-                        foreach (DataRow rowSTGControlPack in tableSTGControlPack.Rows) {
-                            string varTargetConnection = rowSTGControlPack["SourceConnection"].ToString();
-                            string varTargetSchema = rowSTGControlPack["SourceSchema"].ToString();
-                            string varTargetTable = rowSTGControlPack["SourceTable"].ToString();
-                            string varPackagePrefix = rowSTGControlPack["PackagePrefix"].ToString();
-                            string varName = varTargetConnection + "_" + varTargetSchema + "_" + varTargetTable;
-                            string varPackageName = varPackagePrefix + "_" +  varTargetSchema + "_" + varTargetTable;#>
-                            
-                            <ExecutePackage Name="<#=varPackageName#>">
-                                <ExternalProjectPackage Package="<#=varPackageName#>.dtsx"/>
-                                <ParameterBindings>
-                                    <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
-                                    <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
-                                </ParameterBindings>
-                            </ExecutePackage>
-                        <#}#>
-                    </Tasks>
-                </Container>
-
-                <ExecuteSQL Name="SQL Finish Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
-                    <Parameters>
-                        <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                        <Parameter Name="1" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
-                        <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                        <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                    </Parameters>
-                </ExecuteSQL>
-            </Tasks>
-
-            <Events>
-                <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
-                    <Tasks>
-                        <ExecuteSQL Name="SQL Error Audit Package CTRL-Reports-Total" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                            <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
-                            <Parameters>
-                                <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
-                                <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
-                                <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
-                                <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
-                            </Parameters>
-                        </ExecuteSQL>
-                    </Tasks>
-                </Event>
-            </Events>
-        </Package>            
     </Packages>
 </Biml>
