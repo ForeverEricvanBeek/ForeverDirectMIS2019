@@ -14,6 +14,7 @@ string SystemConnection = "DWH_Control";
 string Environment = "DEV";
 string TestMail = "technicalit@foreverdirect.eu";
 string ReportConnection = "Reports";
+string ReportLink = @"https://portal.foreverdirect.local/Reports";
 
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
 

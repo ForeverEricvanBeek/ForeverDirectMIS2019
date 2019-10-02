@@ -580,6 +580,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase {
 		public void Main() {                
 		    string vOutputPath = (string)Dts.Variables["DirReports"].Value;
+		    string vReportLink = (string)Dts.Variables["ReportLink"].Value;
 		    string vRequestID = (string)Dts.Variables["varRequestID"].Value;
 		    <#if (varDirectIndirect == "Direct") {#>
 		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
@@ -588,6 +589,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
             string vMonth = DateTime.Now.ToString("MM");
             string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID + ".csv";
+            string vReportLinkFull = vReportLink + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID + ".csv";
             string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
             string mySqlStatement = "<#=sqlStatementScript#>";
             <#if (varDirectIndirect == "Direct") {#>
@@ -624,7 +626,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
             #region MailData
             string emailBody = @"This is an automated email containing an Data warehouse report.
 Report is located at: ";
-            Dts.Variables["varEmailBody"].Value = emailBody + vOutputPathFull;
+            Dts.Variables["varEmailBody"].Value = emailBody + vReportLinkFull;
             #endregion
             
             Directory.CreateDirectory(vOutPutPathCheck);
@@ -644,6 +646,7 @@ Report is located at: ";
                                         </Files>
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
+                                            <Variable Namespace="$Project" DataType="String" VariableName="ReportLink" />
                                             <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
                                             <#if (varDirectIndirect == "Direct") {#>
                                             <Variable Namespace="User" DataType="String" VariableName="sqlWhereClause" />
@@ -696,6 +699,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 		public void Main() {
             using (var package = new ExcelPackage()) {
                 string vOutputPath = (string)Dts.Variables["DirReports"].Value;
+                string vReportLink = (string)Dts.Variables["ReportLink"].Value;
                 string vRequestID = (string)Dts.Variables["varRequestID"].Value;
                 <#if (varDirectIndirect == "Direct") {#>
     		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
@@ -704,6 +708,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
                 string vMonth = DateTime.Now.ToString("MM");
                 string vTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                 string vOutputPathFull = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth + @"\<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID  + ".xlsx";
+                string vReportLinkFull = vReportLink + @"/<#=varExtractionFilename#>/" + vYear + @"/" + vMonth + @"/<#=varExtractionFilename#>_" + vTimeStamp  + "_" + vRequestID + ".xlsx";
                 string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
                 string mySqlStatement = "<#=sqlStatementScript#>";
@@ -746,7 +751,7 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
                 #region MailData
                 string emailBody = @"This is an automated email containing an Data warehouse report.
 Report is located at: ";
-                Dts.Variables["varEmailBody"].Value = emailBody + vOutputPathFull;
+                Dts.Variables["varEmailBody"].Value = emailBody + vReportLinkFull;
                 #endregion
 
                 Directory.CreateDirectory(vOutPutPathCheck);
@@ -767,6 +772,7 @@ Report is located at: ";
                                         </Files>
                                         <ReadOnlyVariables>
                                             <Variable Namespace="$Project" DataType="String" VariableName="DirReports" />
+                                            <Variable Namespace="$Project" DataType="String" VariableName="ReportLink" />
                                             <Variable Namespace="User" DataType="String" VariableName="varRequestID" />
                                             <#if (varDirectIndirect == "Direct") {#>
                                             <Variable Namespace="User" DataType="String" VariableName="sqlWhereClause" />
