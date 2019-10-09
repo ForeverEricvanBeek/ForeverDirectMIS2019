@@ -10,9 +10,12 @@
     [Number_Of_Units]     INT           NULL,
     [Number_Of_Picks]     INT           NULL,
     [Number_Of_Packs]     INT           NULL,
+    [Contract]            VARCHAR (4)   NULL,
     [InsertDateTime]      DATETIME2 (7) NULL,
     [UpdateDateTime]      DATETIME2 (7) NULL,
     [BatchID]             BIGINT        NOT NULL,
     [ProcessLogID]        BIGINT        NULL
 );
+
+
 

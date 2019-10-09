@@ -6,6 +6,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Complaint]
 AS
 

@@ -29,9 +29,12 @@
     [SALE_UNIT_PRICE]         INT             NULL,
     [INVOICED_AMOUNT]         INT             NULL,
     [COUNTRY_CODE]            NVARCHAR (4000) NULL,
+    [Request_ID]              BIGINT          NULL,
     [BatchID]                 BIGINT          NULL,
     [ProcessLogID]            BIGINT          NULL
 );
+
+
 
 
 

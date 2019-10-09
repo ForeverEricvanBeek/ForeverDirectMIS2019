@@ -6,6 +6,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_FLP_Customers] as
 SELECT CI.[CUSTOMER_ID] Customer_ID
       ,CI.[COUNTRY_DB] Country_Code

@@ -1,4 +1,0 @@
-﻿CREATE TABLE [DM].[D_Retail] (
-    [POS_NUM] NVARCHAR (255) NULL
-);
-

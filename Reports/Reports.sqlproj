@@ -65,6 +65,9 @@
     <Folder Include="Security\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="RC\" />
+    <Folder Include="RC\Tables\" />
+    <Folder Include="RC\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="RT\Tables\INTRASTAT.sql" />
@@ -75,7 +78,24 @@
     <Build Include="RV\Views\SENSOR.sql" />
     <Build Include="RT\Tables\STOCK_REPORT_OBS.sql" />
     <Build Include="RV\Views\STOCK_REPORT_OBS.sql" />
-    <Build Include="dbo\Stored Procedures\runReports.sql" />
+    <Build Include="RT\Tables\SLOT_ALLOC.sql" />
+    <Build Include="RT\Tables\SKU_Expire_Next_15M.sql" />
+    <Build Include="RT\Tables\PACKINGSLIP_LPN.sql" />
+    <Build Include="RT\Tables\OrderAvailability.sql" />
+    <Build Include="RT\Tables\OLPN_Shipments.sql" />
+    <Build Include="RC\Tables\Param.sql" />
+    <Build Include="RC\Tables\Request.sql" />
+    <Build Include="RC\Tables\Status.sql" />
+    <Build Include="RC\Tables\Log.sql" />
+    <Build Include="RV\Views\SLOT_ALLOC.sql" />
+    <Build Include="RV\Views\SKU_Expire_Next_15M.sql" />
+    <Build Include="RV\Views\SHIPCONFIRM.sql" />
+    <Build Include="RV\Views\SENSORTEST.sql" />
+    <Build Include="RV\Views\OrderAvailability.sql" />
+    <Build Include="RV\Views\OLPN_Shipments.sql" />
+    <Build Include="RC\Stored Procedures\runReports.sql" />
+    <Build Include="RC\Stored Procedures\ControlReports.sql" />
+    <Build Include="Security\RC.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DWH\DWH.sqlproj">

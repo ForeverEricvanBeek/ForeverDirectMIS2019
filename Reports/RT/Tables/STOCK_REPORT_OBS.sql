@@ -8,6 +8,11 @@
     [AVAILABLE]       DECIMAL (38, 2) NULL,
     [ON_PURCH_ORDER]  INT             NOT NULL,
     [ON_SHOP_ORDER]   INT             NULL,
-    [COMP_ON_SO]      DECIMAL (38, 4) NOT NULL
+    [COMP_ON_SO]      DECIMAL (38, 4) NOT NULL,
+    [Request_ID]      BIGINT          NULL,
+    [BatchID]         BIGINT          NULL,
+    [ProcessLogID]    BIGINT          NULL
 );
+
+
 

@@ -15,6 +15,7 @@ WITH ITEM_BY_DEP_CTE (Item, OF_QTY, BK_QTY) AS (
 	INNER JOIN MANH.ITEM_CBO AS IC ON IC.ITEM_ID = LD.ITEM_ID AND IC.ActInd = 'Y'
 	WHERE OD.ActInd = 'Y'
 	AND OD.ORDER_TYPE <> 'DS'
+	AND OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
  ), 
   
 OFBULKPER (Item, Department) AS (
@@ -42,10 +43,10 @@ SELECT --TOP (100) PERCENT
 	, SUM(T1.VAS_KIT)									AS Number_of_Units_Vas_KIT
 	, SUM(T1.VAS_LABELLING)								AS Number_of_VAS_Labelling
 	, SUM(T1.VAS_OMPAKKEN)								AS Number_of_VAS_Repack
-	, SUM(T1.WORK_TIME_VAR)									AS Number_of_Work_Minutes_Var
-	, SUM(T1.WORK_TIME_FIX)									AS Number_of_Work_Minutes_Fix
+	, SUM(T1.WORK_TIME_VAR)								AS Number_of_Work_Minutes_Var
+	, SUM(T1.WORK_TIME_FIX)								AS Number_of_Work_Minutes_Fix
 FROM (
-		-- Number of OLP's Shipped for OF
+		-- 1 Number of OLP's Shipped for OF
 		SELECT
 			CONVERT(CHAR, OD.ACTUAL_SHIPPED_DTTM, 112)	AS DateKey
 			, OD.ORDER_TYPE								AS ORDER_TYPE
@@ -62,13 +63,14 @@ FROM (
 		INNER JOIN dbo.VW_T_LPN AS LP ON LP.TC_ORDER_ID = OD.TC_ORDER_ID AND LP.ActInd = 'Y' 
 		WHERE OD.ORDER_TYPE = 'OF' 
 		AND OD.ActInd = 'Y'
+		AND OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
         GROUP BY 
 			CONVERT(CHAR, OD.ACTUAL_SHIPPED_DTTM, 112)
 			, OD.ORDER_TYPE
         
 		UNION ALL
 
-		-- Number of Pallets shipped for Bulk
+		-- 2 Number of Pallets shipped for Bulk
 		SELECT
 			CONVERT(CHAR, OD.ACTUAL_SHIPPED_DTTM, 112)	AS DateKey
 			, OD.ORDER_TYPE								AS ORDER_TYPE
@@ -85,25 +87,26 @@ FROM (
 		INNER JOIN dbo.VW_T_LPN AS LP ON LP.TC_ORDER_ID = OD.TC_ORDER_ID AND LP.ActInd = 'Y' 
 		WHERE OD.ORDER_TYPE = 'BK' 
 		AND OD.ActInd = 'Y'
+		AND OD.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY 
 			CONVERT(CHAR, OD.ACTUAL_SHIPPED_DTTM, 112)
 			, OD.ORDER_TYPE
 
 		UNION ALL
 
-		-- Number of inbound Containers / Pallets
+		-- 3 Number of inbound Containers / Pallets
 		SELECT        
-					CONVERT(CHAR, AN.VERIFIED_DTTM, 112) 		AS DateKey
-					, ISNULL(OB.Department,'OF')				AS ORDER_TYPE
-					, 0 										AS OF_OLPN_SHIPPED
-					, 0 										AS BULK_PALLET_SHIPPED
-					, COUNT(DISTINCT AN.TC_ASN_ID)				AS INBOUND_CONTAINERS
-					, COUNT(DISTINCT LP.TC_LPN_ID)				AS INBOUND_PALLETS
-					, 0 										AS VAS_KIT
-					, 0 										AS VAS_LABELLING
-					, 0 										AS VAS_OMPAKKEN
-					, 0											AS WORK_TIME_VAR
-					, 0											AS WORK_TIME_FIX
+			CONVERT(CHAR, AN.VERIFIED_DTTM, 112) 		AS DateKey
+			, ISNULL(OB.Department,'OF')				AS ORDER_TYPE
+			, 0 										AS OF_OLPN_SHIPPED
+			, 0 										AS BULK_PALLET_SHIPPED
+			, COUNT(DISTINCT AN.TC_ASN_ID)				AS INBOUND_CONTAINERS
+			, COUNT(DISTINCT LP.TC_LPN_ID)				AS INBOUND_PALLETS
+			, 0 										AS VAS_KIT
+			, 0 										AS VAS_LABELLING
+			, 0 										AS VAS_OMPAKKEN
+			, 0											AS WORK_TIME_VAR
+			, 0											AS WORK_TIME_FIX
 		FROM MANH.ASN AS AN 
 		LEFT JOIN dbo.VW_T_LPN AS LP ON LP.TC_ASN_ID = AN.TC_ASN_ID AND LP.ActInd = 'Y'
 		LEFT JOIN MANH.ITEM_CBO IC ON IC.ITEM_ID = LP.ITEM_ID AND IC.ActInd = 'Y' 
@@ -112,12 +115,13 @@ FROM (
 		AND (AN.ActInd = 'Y')
 		AND LP.TC_PURCHASE_ORDERS_ID LIKE 'PO%'
 		AND AN.IS_CANCELLED = 0
+		AND AN.CREATED_DTTM >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY 
 		CONVERT(CHAR, AN.VERIFIED_DTTM, 112), OB.Department
 
 		UNION ALL
 
-		-- VAS 
+		-- 4 VAS 
 		SELECT
 			X.DateKey									AS DateKey
 			, X.DEPARTMENT								AS ORDER_TYPE
@@ -147,6 +151,7 @@ FROM (
 			ON OB.Item = IC.ITEM_NAME
 			WHERE WD.BACK_FLUSH_FLAG = 'Y'
 			AND WH.STAT_CODE = 90
+			AND WH.CREATE_DATE_TIME >= DATEADD(YEAR,-2,GETDATE())
 		) X
 		GROUP BY 
 			X.DateKey
@@ -155,7 +160,7 @@ FROM (
 
 		UNION ALL
 
-		-- Work Time OF - Gewerkt
+		-- 5 Work Time OF - Gewerkt
 		SELECT        
 			CONVERT(CHAR, tw.bkdate, 112)				AS DateKey
 			, 'OF'										AS ORDER_TYPE
@@ -192,12 +197,13 @@ FROM (
 			WHERE (tw.ActInd = 'Y')
 			AND (tw.department_id = '13') 
 			AND (tw.bktype_id IN ('100', '99'))
+			AND tw.bkdate >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY
 			tw.bkdate
 
 		UNION ALL
 
-		-- Worktime Bulk - Gewerkt
+		-- 6 Worktime Bulk - Gewerkt
 		SELECT        
 			CONVERT(CHAR, tw.bkdate, 112)				AS DateKey
 			, 'BK'										AS ORDER_TYPE
@@ -234,12 +240,13 @@ FROM (
 			WHERE (tw.ActInd = 'Y')
 			AND (tw.department_id = '14') 
 			AND (tw.bktype_id IN ('100', '99'))
+			AND tw.bkdate >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY
 			tw.bkdate
                          
 		UNION ALL
 
-		-- Work time OF - VAS (50% OF / 50% Bulk)
+		-- 7 Work time OF - VAS (50% OF / 50% Bulk)
 		SELECT        
 			CONVERT(CHAR, tw.bkdate, 112)				AS DateKey
 			, 'OF' 										AS ORDER_TYPE
@@ -276,12 +283,13 @@ FROM (
 			WHERE (tw.ActInd = 'Y')
 			AND (tw.department_id IN ('3')) 
 			AND (tw.bktype_id IN ('100', '99'))
+			AND tw.bkdate >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY
 			tw.bkdate
 
 		UNION ALL
 
-		-- Work time Bulk - VAS (50% OF / 50% Bulk)
+		-- 8 Work time Bulk - VAS (50% OF / 50% Bulk)
 		SELECT        
 			CONVERT(CHAR, tw.bkdate, 112)				AS DateKey
 			, 'BK' 										AS ORDER_TYPE
@@ -318,6 +326,7 @@ FROM (
 			WHERE (tw.ActInd = 'Y')
 			AND (tw.department_id IN ('3')) 
 			AND (tw.bktype_id IN ('100', '99'))
+			AND tw.bkdate >= DATEADD(YEAR,-2,GETDATE())
 		GROUP BY
 			tw.bkdate
 ) AS T1

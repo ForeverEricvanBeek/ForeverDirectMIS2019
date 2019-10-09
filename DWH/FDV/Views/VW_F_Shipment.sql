@@ -12,6 +12,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_Shipment]
 AS
 -- Get first try to deliver date, if not delivered in one try.*/

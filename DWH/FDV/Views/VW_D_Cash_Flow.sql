@@ -1,6 +1,7 @@
 ﻿
 
 
+
 CREATE VIEW [FDV].[VW_D_Cash_Flow]
 AS
 --1150 en 1250 grootboek sepa wordt in de mixed payments uitgefilterd d.m.v. filter 1150 1250

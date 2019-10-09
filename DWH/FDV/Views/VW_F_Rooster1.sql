@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FDV].[VW_F_Rooster1]
 AS
 With CTE_1 as(

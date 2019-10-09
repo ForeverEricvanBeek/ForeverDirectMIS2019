@@ -4,7 +4,10 @@
     [Sensor_Temp]     NUMERIC (18, 2) NULL,
     [Sensor_Humidity] NUMERIC (18, 2) NULL,
     [Sensor_Dew]      NUMERIC (18, 2) NULL,
+    [Request_ID]      BIGINT          NULL,
     [BatchID]         BIGINT          NULL,
     [ProcessLogID]    BIGINT          NULL
 );
+
+
 

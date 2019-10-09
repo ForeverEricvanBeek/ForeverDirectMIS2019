@@ -20,7 +20,6 @@
     [ABC_Class]               NVARCHAR (1)    NULL,
     [IFS_Status]              NVARCHAR (1)    NULL,
     [Frequency_Class]         NVARCHAR (200)  NULL,
-    [Vendor_Name]             NVARCHAR (20)   NULL,
     [SKU_Size_Desc]           NVARCHAR (50)   NULL,
     [SKU_Barcode]             NVARCHAR (50)   NULL,
     [Unit_Weight]             NUMERIC (16, 4) NULL,
@@ -47,6 +46,8 @@
     [ProcessLogID]            BIGINT          NULL,
     CONSTRAINT [PK_D_SKU] PRIMARY KEY CLUSTERED ([D_SKU_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
 
 

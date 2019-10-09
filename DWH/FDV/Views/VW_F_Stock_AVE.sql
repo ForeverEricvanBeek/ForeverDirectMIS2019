@@ -5,6 +5,7 @@
 
 
 
+
 Create view [FDV].[VW_F_Stock_AVE]
 as 
 select cast(getdate()-1 as date)							as DateKey

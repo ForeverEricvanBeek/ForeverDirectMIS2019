@@ -1,0 +1,12 @@
+﻿
+CREATE VIEW [FD2].[VW_D_Contract]
+AS
+SELECT  ([CONTRACT]) AS Contract
+	,COMPANY AS Company
+	,DESCRIPTION AS Description
+FROM [IFS].[SITE] S
+where S.ActInd='Y'
+
+UNION ALL
+
+SELECT '-1',NULL,NULL

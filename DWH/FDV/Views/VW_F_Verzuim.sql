@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_Verzuim]
 AS
 WITH CTE_INT

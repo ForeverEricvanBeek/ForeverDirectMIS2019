@@ -35,7 +35,8 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED COLUMNSTORE INDEX [CCI_F_Outbound]
-    ON [DM].[F_Outbound];
+
 

@@ -2,6 +2,7 @@
 
 
 
+
 /****** Script for SelectTopNRows command from SSMS  ******/
 
 CREATE VIEW [FDV].[VW_F_Open_Payments]
