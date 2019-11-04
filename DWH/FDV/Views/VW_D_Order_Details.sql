@@ -4,6 +4,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Order_Details]
 AS
 select

@@ -9,6 +9,7 @@
     [Order_Manh_Order_Lines]  INT           NULL,
     [Order_IFS_Order_Lines]   INT           NULL,
     [Order_Shipment_ID]       NVARCHAR (50) NULL,
+    [Order_Contract]          NVARCHAR (50) NULL,
     [Eff_Date]                DATE          NOT NULL,
     [End_Date]                DATE          NULL,
     [ActInd]                  CHAR (1)      NULL,
@@ -17,6 +18,8 @@
     [ProcessLogID]            BIGINT        NULL,
     CONSTRAINT [PK_ORDERS_INFO] PRIMARY KEY CLUSTERED ([TC_Order_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_EXTRA_ARC]
 ) ON [DWH_EXTRA_ARC];
+
+
 
 
 

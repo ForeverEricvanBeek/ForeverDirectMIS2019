@@ -1,6 +1,8 @@
 ﻿
 
 
+
+
 CREATE VIEW [FDV].[VW_D_Order_Line_Bulk_His]
 AS
 with CTE_1 as

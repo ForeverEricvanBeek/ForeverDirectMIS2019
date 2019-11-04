@@ -1,6 +1,7 @@
 ﻿
 
 
+
 CREATE VIEW [FD2].[VW_D_Transporter]
 AS
 
@@ -38,25 +39,25 @@ SELECT
 	, CC.ADDRESS				AS Transporter_Address
 	, CC.CITY					AS Transporter_City
 	, CC.POSTAL_CODE			AS Transporter_Postal_Code
-	, cast(left(SC.MISC_FLAGS,2)+':'+ SUBSTRING(SC.MISC_FLAGS,3,2)+':00' as time) AS Transporter_CutOff_Time 
-	, TS.TransporterStatus_LeadTime				AS Transporter_LT_Delivered
+	, CAST(LEFT(SC.MISC_FLAGS,2) + ':' + SUBSTRING(SC.MISC_FLAGS,3,2) + ':00' AS TIME) AS Transporter_CutOff_Time 
+	, TS.TransporterStatus_LeadTime AS Transporter_LT_Delivered
 	, AC.TVALUE					AS Transporter_AVG_Parcels
 	, AC.PVALUE					AS Transporter_AVG_Lines
 FROM			MANH.CARRIER_CODE AS CC 
 INNER JOIN		MANH.SHIP_VIA AS SV 
-ON				CC.CARRIER_ID = SV.CARRIER_ID 
+ON				SV.CARRIER_ID = CC.CARRIER_ID
 AND				SV.MOT_ID = 61 
 AND				SV.ActInd = 'Y' 
-LEFT OUTER JOIN MANH.SYS_CODE AS SC							
-ON 				SV.SHIP_VIA=SC.CODE_ID					
-AND 				SC.CODE_TYPE = 'CBC'					
-AND     			SC.REC_TYPE = 'C' 					
+LEFT JOIN		MANH.SYS_CODE AS SC							
+ON 				SC.CODE_ID = SV.SHIP_VIA				
+AND 			SC.CODE_TYPE = 'CBC'					
+AND     		SC.REC_TYPE = 'C' 					
 AND				SC.ActInd = 'Y'						
-LEFT OUTER JOIN WEB.TransporterStatus AS TS 
-ON				SV.SHIP_VIA = TS.TransporterStatus_ShipVia 
+LEFT JOIN		WEB.TransporterStatus AS TS 
+ON				TS.TransporterStatus_ShipVia = SV.SHIP_VIA
 AND				TS.TransporterStatus_Status = 'DELIVERED' 
 AND				TS.ActInd = 'Y' 
-LEFT OUTER JOIN WEB.TransporterManual AS TM 
+LEFT JOIN		WEB.TransporterManual AS TM 
 ON				TM.TransporterManual_ShipViaCode = SV.SHIP_VIA 
 AND				TM.ActInd = 'Y'
 LEFT JOIN		AVGT_CTE AC

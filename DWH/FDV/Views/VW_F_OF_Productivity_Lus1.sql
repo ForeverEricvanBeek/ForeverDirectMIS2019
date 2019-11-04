@@ -4,6 +4,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_OF_Productivity_Lus1]
 AS
 --Toelichting:

@@ -2,6 +2,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_Product_Family] AS
 
 SELECT [PART_PRODUCT_FAMILY]				AS FAM_Prod_ID

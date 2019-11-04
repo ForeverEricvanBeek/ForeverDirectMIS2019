@@ -2,6 +2,7 @@
 
 
 
+
 create view [FDV].[VW_F_Bulk_Productivity] as 
 --CASEPICKING
 WITH CTE_INIT2 as

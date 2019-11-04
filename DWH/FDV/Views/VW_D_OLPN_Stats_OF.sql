@@ -2,6 +2,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_OLPN_Stats_OF]
 AS
 select PT.CNTR_NBR as OLPN_ID

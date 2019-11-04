@@ -1,4 +1,5 @@
-﻿/****** Script for SelectTopNRows command from SSMS  ******/
+﻿
+/****** Script for SelectTopNRows command from SSMS  ******/
 create view [FDV].[VW_D_Sales_part_cross_ref] as
 
 WITH CTE_1 as 

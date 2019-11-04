@@ -1,5 +1,6 @@
 ﻿
-CREATE VIEW FDV.VW_D_Aging_Category
+
+CREATE VIEW [FDV].[VW_D_Aging_Category]
 AS
 
 SELECT        

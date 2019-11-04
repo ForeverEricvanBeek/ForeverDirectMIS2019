@@ -11,7 +11,7 @@
     [Order_Customer_ID]                   NVARCHAR (300) NULL,
     [Order_Status]                        NVARCHAR (50)  NULL,
     [Order_Create_Date]                   DATETIME2 (7)  NULL,
-    [Cuttoff]                             TIME (7)       NULL,
+    [Order_Cuttoff]                       TIME (7)       NULL,
     [Order_Wave_Date]                     DATETIME2 (7)  NULL,
     [Order_Planned_Ship_Date]             DATETIME2 (7)  NULL,
     [Order_Shipped_Date]                  DATETIME2 (7)  NULL,
@@ -40,4 +40,6 @@
     [ProcessLogID]                        BIGINT         NULL,
     CONSTRAINT [PK_D_Order] PRIMARY KEY CLUSTERED ([D_Order_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

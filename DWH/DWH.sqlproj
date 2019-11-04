@@ -447,7 +447,6 @@
     <Build Include="dbo\Views\VW_C_Parcel.sql" />
     <Build Include="dbo\Views\VW_C_Order.sql" />
     <Build Include="dbo\Views\VW_C_Item.sql" />
-    <Build Include="dbo\Functions\fn_StripCharacters.sql" />
     <Build Include="dbo\Functions\Fun_F_Order_Tracking.sql" />
     <Build Include="dbo\Functions\Fun_D_Calendar.sql" />
     <Build Include="dbo\Functions\Fun_D_Aging_Category.sql" />
@@ -466,21 +465,6 @@
     <Build Include="EXTRA\Tables\ORDERS_SHIP_DATE.sql" />
     <Build Include="DOC\Tables\PlanetPress.sql" />
     <Build Include="dbo\Views\VW_ODS_Facility.sql" />
-    <Build Include="FDV\Views\VW_D_Country.sql" />
-    <Build Include="FDV\Views\VW_D_Calendar.sql" />
-    <Build Include="FDV\Views\VW_F_OF_Activity.sql" />
-    <Build Include="FDV\Views\VW_D_Pickers.sql" />
-    <Build Include="FDV\Views\VW_D_Lane.sql" />
-    <Build Include="FDV\Views\VW_D_OLPN.sql" />
-    <Build Include="FDV\Views\VW_D_Customer.sql" />
-    <Build Include="FDV\Views\VW_D_Lot.sql" />
-    <Build Include="FDV\Views\VW_D_ILPN.sql" />
-    <Build Include="FDV\Views\VW_D_Aging_Category.sql" />
-    <Build Include="FDV\Views\VW_F_Stock_Act.sql" />
-    <Build Include="FDV\Views\VW_D_SKU.sql" />
-    <Build Include="FDV\Views\VW_D_WHS_Location.sql" />
-    <Build Include="FDV\Views\VW_D_Order.sql" />
-    <Build Include="FDV\Views\VW_D_Transporter.sql" />
     <Build Include="Security\FDV.sql" />
     <Build Include="EXTRA\Tables\ORDERS_INFO.sql" />
     <Build Include="IFS\Tables\SALES_PART.sql" />
@@ -573,23 +557,10 @@
     <Build Include="IFS\Tables\C_EXT_SHIP_CONF_LINES.sql" />
     <Build Include="IFS\Tables\ACCOUNTING_PERIOD.sql" />
     <Build Include="IFS\Tables\ACCOUNT.sql" />
-    <Build Include="FDV\Views\VW_F_Outbound.sql" />
-    <Build Include="FDV\Views\VW_F_OF_Productivity_QC_Repack.sql" />
-    <Build Include="FDV\Views\VW_F_OF_Productivity_Lus1.sql" />
-    <Build Include="FDV\Views\VW_F_Bulk_Productivity.sql" />
-    <Build Include="FDV\Views\VW_D_Test.sql" />
-    <Build Include="FDV\Views\VW_D_Product_Family.sql" />
-    <Build Include="FDV\Views\VW_D_Pack_QC.sql" />
-    <Build Include="FDV\Views\VW_D_Order_Details.sql" />
-    <Build Include="FDV\Views\VW_D_OLPN_Details.sql" />
-    <Build Include="FDV\Views\VW_D_OF_Complaints.sql" />
     <Build Include="IFS\Tables\INTRASTAT.sql" />
-    <Build Include="FDV\Views\VW_D_OLPN_Stats_OF.sql" />
     <Build Include="IFS\Tables\MPCCOM_ACCOUNTING.sql" />
     <Build Include="IFS\Tables\GEN_LED_VOUCHER.sql" />
     <Build Include="IFS\Tables\CODESTRING_COMBINATION.sql" />
-    <Build Include="FDV\Views\VW_D_Kewill_Dossiers.sql" />
-    <Build Include="FDV\Views\GEN_LED_VOUCHER_ROW_UNION.sql" />
     <Build Include="KEWILL\Tables\tstrac.sql" />
     <Build Include="IFS\Tables\EXT_DESADV_PALLET.sql" />
     <Build Include="IFS\Tables\EXT_DESADV_LINE.sql" />
@@ -969,10 +940,6 @@
     <Build Include="ATIMO_ARC\Tables\hourtypes.sql" />
     <Build Include="ATIMO_ARC\Tables\emplstam.sql" />
     <Build Include="ATIMO_ARC\Tables\costcenters.sql" />
-    <Build Include="FDV\Views\VW_F_Shipped.sql" />
-    <Build Include="FDV\Views\VW_D_Shipment.sql" />
-    <Build Include="FDV\Views\VW_D_Facility.sql" />
-    <Build Include="FDV\Views\VW_D_BOM_Explosie.sql" />
     <Build Include="Storage\DWH_WEB_ARC.sql" />
     <Build Include="Storage\DWH_WEB.sql" />
     <Build Include="Storage\DWH_TRANS_ARC.sql" />
@@ -1025,26 +992,9 @@
     <Build Include="IFS_ARC\Tables\EXT_DESADV_LINE.sql" />
     <Build Include="IFS_ARC\Tables\EXT_DESADV_HEADER.sql" />
     <Build Include="IFS\Tables\WORK_CENTER.sql" />
-    <Build Include="FDV\Views\VW_F_Stock_Netto.sql" />
-    <Build Include="FDV\Views\VW_F_Kewill_Dossiers.sql" />
-    <Build Include="FDV\Views\VW_F_Item_Usage.sql" />
-    <Build Include="FDV\Views\VW_F_Invoiced_Sales.sql" />
-    <Build Include="FDV\Views\VW_D_Work_Orders.sql" />
-    <Build Include="FDV\Views\VW_D_Sales_part_cross_ref.sql" />
-    <Build Include="FDV\Views\VW_D_Packed_Date_Insp_Countries.sql" />
-    <Build Include="FDV\Views\VW_D_Order_Line_Bulk_His.sql" />
-    <Build Include="FDV\Views\VW_D_Lot_IFS.sql" />
-    <Build Include="FDV\Views\VW_D_IFS_OF_Order_Details.sql" />
-    <Build Include="FDV\Views\VW_D_IFS_OF_Order.sql" />
-    <Build Include="FDV\Views\VW_D_IFS_Bulk_Orderline_Events.sql" />
-    <Build Include="FDV\Views\VW_D_IFS_Bulk_Order_Details.sql" />
-    <Build Include="FDV\Views\VW_D_IFS_Bulk_Order.sql" />
     <Build Include="dbo\Views\VW_ODS_ParcelDetail.sql" />
     <Build Include="MANH_ARC\Tables\PICKING_SHORT_ITEM.sql" />
     <Build Include="MANH\Tables\PICKING_SHORT_ITEM.sql" />
-    <Build Include="FDV\Views\VW_F_Shipment.sql" />
-    <Build Include="FDV\Views\VW_F_Sales_Facilities.sql" />
-    <Build Include="FDV\Views\VW_F_Obsolescense.sql" />
     <Build Include="dbo\Functions\Fun_F_Order_Tracking_1.sql" />
     <Build Include="IFS\Tables\PURCHASE_ORDER_LINE_ALL.sql" />
     <Build Include="IFS\Tables\PURCHASE_RECEIPT_RETURN.sql" />
@@ -1148,51 +1098,18 @@
     <Build Include="AFAS\Tables\DWH_Medewerker_Orgeenheid_functie.sql" />
     <Build Include="AFAS\Tables\DWH_Medewerker_journaalpost.sql" />
     <Build Include="AFAS\Tables\DWH_Medewerker_Contracten.sql" />
-    <Build Include="FDV\Views\VW_F_Stock_AVE.sql" />
-    <Build Include="FDV\Views\VW_F_Open_Payments.sql" />
-    <Build Include="FDV\Views\VW_F_Daily_Cash.sql" />
-    <Build Include="FDV\Views\VW_F_Accounting_Row.sql" />
-    <Build Include="FDV\Views\VW_D_Price_List_SKU.sql" />
-    <Build Include="FDV\Views\VW_D_Price_List_His.sql" />
-    <Build Include="FDV\Views\VW_D_Price_List.sql" />
-    <Build Include="FDV\Views\VW_D_Invoice.sql" />
-    <Build Include="FDV\Views\VW_D_FLP_Customers.sql" />
-    <Build Include="FDV\Views\VW_D_Complaint.sql" />
-    <Build Include="FDV\Views\VW_D_Cash_Flows.sql" />
-    <Build Include="FDV\Views\VW_D_Cash_Flow.sql" />
-    <Build Include="FDV\Views\VW_D_BOM_AVE_Explosie.sql" />
-    <Build Include="FDV\Views\VW_D_Account.sql" />
     <Build Include="Storage\DWH_MFV_ARC.sql" />
     <Build Include="Storage\DWH_MFV.sql" />
     <Build Include="Storage\DWH_AFAS_ARC.sql" />
     <Build Include="Storage\DWH_AFAS.sql" />
-    <Build Include="dbo\Stored Procedures\IndexOptimize.sql" />
-    <Build Include="dbo\Stored Procedures\CommandExecute.sql" />
     <Build Include="Security\MFV_ARC.sql" />
     <Build Include="Security\MFV.sql" />
     <Build Include="Security\AFAS_ARC.sql" />
     <Build Include="Security\AFAS.sql" />
     <Build Include="WEB\Tables\OrderAvailability.sql" />
-    <Build Include="FDV\Views\VW_F_Verzuim.sql" />
-    <Build Include="FDV\Views\VW_F_Time_Registration.sql" />
-    <Build Include="FDV\Views\VW_F_Rooster1.sql" />
-    <Build Include="FDV\Views\VW_F_Rooster.sql" />
-    <Build Include="FDV\Views\VW_D_HourType.sql" />
-    <Build Include="FDV\Views\VW_D_Employee.sql" />
-    <Build Include="FDV\Views\VW_D_Department.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Organisatie_eenheid.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Medewerker_Soort.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Medewerker.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Kostenplaats.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Functies.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Dienstbetrekking.sql" />
-    <Build Include="FDV\Views\VW_D_Afas_Contract_Soort.sql" />
     <Build Include="Storage\DWH.sql" />
     <Build Include="Security\DM.sql" />
     <Build Include="WEB_ARC\Tables\OrderAvailability.sql" />
-    <Build Include="FDV\Views\VW_F_OF_Productivity.sql" />
-    <Build Include="FDV\Views\VW_F_Obsolete_Report.sql" />
-    <Build Include="FDV\Views\VW_D_Container.sql" />
     <Build Include="FD2\Views\VW_D_Transporter.sql" />
     <Build Include="FD2\Views\VW_D_Customer.sql" />
     <Build Include="FD2\Views\VW_D_Facility.sql" />
@@ -1208,15 +1125,99 @@
     <Build Include="FD2\Views\VW_D_Contract.sql" />
     <Build Include="FD2\Views\VW_D_Lot.sql" />
     <Build Include="Security\FD2.sql" />
+    <Build Include="FD2\Views\VW_D_Complaint.sql" />
+    <Build Include="EXTRA_ARC\Tables\ORDER_INFO.sql" />
+    <Build Include="EXTRA_ARC\Tables\CANCELLED_LINES.sql" />
+    <Build Include="EXTRA\Tables\ORDER_INFO.sql" />
+    <Build Include="EXTRA\Tables\CANCELLED_LINES.sql" />
+    <Build Include="FDV\Views\VW_F_Verzuim.sql" />
+    <Build Include="FDV\Views\VW_F_Vas_Productivity.sql" />
+    <Build Include="FDV\Views\VW_F_Time_Registration_1.sql" />
+    <Build Include="FDV\Views\VW_F_Time_Registration.sql" />
+    <Build Include="FDV\Views\VW_F_Stock_Netto.sql" />
+    <Build Include="FDV\Views\VW_F_Stock_AVE.sql" />
+    <Build Include="FDV\Views\VW_F_Stock_Act.sql" />
+    <Build Include="FDV\Views\VW_F_Shipped.sql" />
+    <Build Include="FDV\Views\VW_F_Shipment.sql" />
+    <Build Include="FDV\Views\VW_F_Sales_Facilities.sql" />
+    <Build Include="FDV\Views\VW_F_Rooster1.sql" />
+    <Build Include="FDV\Views\VW_F_Rooster.sql" />
+    <Build Include="FDV\Views\VW_F_Outbound_02.sql" />
+    <Build Include="FDV\Views\VW_F_Outbound.sql" />
+    <Build Include="FDV\Views\VW_F_Open_Payments.sql" />
+    <Build Include="FDV\Views\VW_F_OF_Productivity_QC_Repack.sql" />
+    <Build Include="FDV\Views\VW_F_OF_Productivity_Lus1.sql" />
+    <Build Include="FDV\Views\VW_F_OF_Productivity.sql" />
+    <Build Include="FDV\Views\VW_F_OF_Activity.sql" />
+    <Build Include="FDV\Views\VW_F_Obsolete_Report.sql" />
+    <Build Include="FDV\Views\VW_F_Obsolescense.sql" />
+    <Build Include="FDV\Views\VW_F_Kewill_Dossiers.sql" />
+    <Build Include="FDV\Views\VW_F_Item_Usage.sql" />
+    <Build Include="FDV\Views\VW_F_Invoiced_Sales.sql" />
+    <Build Include="FDV\Views\VW_F_Daily_Cash.sql" />
+    <Build Include="FDV\Views\VW_F_Bulk_Productivity.sql" />
+    <Build Include="FDV\Views\VW_F_Accounting_Row.sql" />
+    <Build Include="FDV\Views\VW_D_Work_Orders.sql" />
+    <Build Include="FDV\Views\VW_D_WHS_Location.sql" />
+    <Build Include="FDV\Views\VW_D_Vas_Lane.sql" />
+    <Build Include="FDV\Views\VW_D_Vas.sql" />
+    <Build Include="FDV\Views\VW_D_Transporter.sql" />
+    <Build Include="FDV\Views\VW_D_Test.sql" />
+    <Build Include="FDV\Views\VW_D_SKU.sql" />
+    <Build Include="FDV\Views\VW_D_Shipment.sql" />
+    <Build Include="FDV\Views\VW_D_Sales_part_cross_ref.sql" />
+    <Build Include="FDV\Views\VW_D_Product_Family.sql" />
+    <Build Include="FDV\Views\VW_D_Price_List_SKU.sql" />
+    <Build Include="FDV\Views\VW_D_Price_List_His.sql" />
+    <Build Include="FDV\Views\VW_D_Price_List.sql" />
+    <Build Include="FDV\Views\VW_D_Pickers.sql" />
+    <Build Include="FDV\Views\VW_D_Packed_Date_Insp_Countries.sql" />
+    <Build Include="FDV\Views\VW_D_Pack_QC.sql" />
+    <Build Include="FDV\Views\VW_D_Order_Line_Bulk_His.sql" />
+    <Build Include="FDV\Views\VW_D_Order_Details.sql" />
+    <Build Include="FDV\Views\VW_D_Order.sql" />
+    <Build Include="FDV\Views\VW_D_OLPN_Stats_OF.sql" />
+    <Build Include="FDV\Views\VW_D_OLPN_Details.sql" />
+    <Build Include="FDV\Views\VW_D_OLPN.sql" />
+    <Build Include="FDV\Views\VW_D_Lot_IFS.sql" />
+    <Build Include="FDV\Views\VW_D_Lot.sql" />
+    <Build Include="FDV\Views\VW_D_Lane.sql" />
+    <Build Include="FDV\Views\VW_D_Kewill_Dossiers.sql" />
+    <Build Include="FDV\Views\VW_D_Invoice.sql" />
+    <Build Include="FDV\Views\VW_D_ILPN.sql" />
+    <Build Include="FDV\Views\VW_D_IFS_OF_Order_Details.sql" />
+    <Build Include="FDV\Views\VW_D_IFS_OF_Order.sql" />
+    <Build Include="FDV\Views\VW_D_IFS_Bulk_Orderline_Events.sql" />
+    <Build Include="FDV\Views\VW_D_IFS_Bulk_Order_Details.sql" />
+    <Build Include="FDV\Views\VW_D_IFS_Bulk_Order.sql" />
+    <Build Include="FDV\Views\VW_D_HourType.sql" />
+    <Build Include="FDV\Views\VW_D_FLP_Customers.sql" />
+    <Build Include="FDV\Views\VW_D_Facility.sql" />
+    <Build Include="FDV\Views\VW_D_Employee.sql" />
+    <Build Include="FDV\Views\VW_D_Department.sql" />
+    <Build Include="FDV\Views\VW_D_Customer.sql" />
+    <Build Include="FDV\Views\VW_D_Country.sql" />
+    <Build Include="FDV\Views\VW_D_Container.sql" />
+    <Build Include="FDV\Views\VW_D_Complaint_1.sql" />
+    <Build Include="FDV\Views\VW_D_Complaint.sql" />
+    <Build Include="FDV\Views\VW_D_Cash_Flows.sql" />
+    <Build Include="FDV\Views\VW_D_Cash_Flow.sql" />
+    <Build Include="FDV\Views\VW_D_Calendar.sql" />
+    <Build Include="FDV\Views\VW_D_BOM_Explosie.sql" />
+    <Build Include="FDV\Views\VW_D_BOM_AVE_Explosie.sql" />
+    <Build Include="FDV\Views\VW_D_Aging_Category.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Organisatie_eenheid.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Medewerker_Soort.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Medewerker.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Kostenplaats.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Functies.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Dienstbetrekking.sql" />
+    <Build Include="FDV\Views\VW_D_Afas_Contract_Soort.sql" />
+    <Build Include="FDV\Views\VW_D_Account.sql" />
+    <Build Include="FDV\Views\GEN_LED_VOUCHER_ROW_UNION.sql" />
+    <Build Include="FD2\Views\VW_D_Calendar.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Datamart\Datamart.sqlproj">
-      <Name>Datamart</Name>
-      <Project>{a270e3e8-da54-4894-a59c-50e5a75ab672}</Project>
-      <Private>True</Private>
-      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
-      <DatabaseSqlCmdVariable>Datamart</DatabaseSqlCmdVariable>
-    </ProjectReference>
     <ProjectReference Include="..\ForeverData01\ForeverData01.sqlproj">
       <Name>ForeverData01</Name>
       <Project>{af4170b1-f978-4d58-b021-be216f7f85a9}</Project>
@@ -1231,11 +1232,18 @@
       <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>ForeverData02</DatabaseSqlCmdVariable>
     </ProjectReference>
+    <ProjectReference Include="..\Datamart\Datamart.sqlproj">
+      <Name>Datamart</Name>
+      <Project>{a270e3e8-da54-4894-a59c-50e5a75ab672}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>Datamart</DatabaseSqlCmdVariable>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="Datamart">
       <DefaultValue>Datamart</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
+      <Value>$(SqlCmdVar__4)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="ForeverData01">
       <DefaultValue>ForeverData01</DefaultValue>
@@ -1245,8 +1253,5 @@
       <DefaultValue>ForeverData02</DefaultValue>
       <Value>$(SqlCmdVar__3)</Value>
     </SqlCmdVariable>
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="DWH.refactorlog" />
   </ItemGroup>
 </Project>

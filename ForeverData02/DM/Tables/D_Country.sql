@@ -4,7 +4,7 @@
     [Country_Name]     NVARCHAR (40) NOT NULL,
     [Country_A3_Code]  NVARCHAR (7)  NULL,
     [Country_Iso_Code] NVARCHAR (7)  NULL,
-    [Geo_Region_Code]  NVARCHAR (7)  NULL,
+    [Country_Geo_Code] NVARCHAR (7)  NULL,
     [CheckSum]         NVARCHAR (32) NULL,
     [CheckSumSCD1]     NVARCHAR (32) NULL,
     [CheckSumSCD2]     NVARCHAR (32) NULL,
@@ -19,4 +19,6 @@
     [ProcessLogID]     BIGINT        NULL,
     CONSTRAINT [PK_D_Country] PRIMARY KEY CLUSTERED ([D_Country_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 

@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Kewill_Dossiers]
 as
 with CTE_1 as

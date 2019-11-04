@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FDV].[VW_D_Facility]
 AS
 SELECT		  FCA.FACILITY_ALIAS_ID		AS Facility_ID

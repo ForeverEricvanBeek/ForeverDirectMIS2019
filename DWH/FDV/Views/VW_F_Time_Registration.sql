@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FDV].[VW_F_Time_Registration]
 AS
 
@@ -21,6 +22,7 @@ SELECT
 	,SUM(TijdvoorTijd) AS Number_of_Minutes_TijdvoorTijd
 	,SUM(Feestdag) AS Number_of_Minutes_Feestdag
 	,SUM(Vakantie) AS Number_of_Minutes_Vakantie
+	,SUM(Verzuim) AS Number_of_Minutes_Verzuim
 FROM (
 	/* Vulling for measure 'Minutes'*/ 
 	SELECT CONVERT(CHAR, tw.bkdate, 112) AS DateKey
@@ -40,6 +42,7 @@ FROM (
 		,NULL AS TijdvoorTijd
 		,NULL AS Feestdag
 		,NULL AS Vakantie
+		,NULL AS Verzuim
 	FROM ATIMO.timewize AS tw
 	INNER JOIN (
 		SELECT MAX(tw.track_id) AS track_id
@@ -75,6 +78,7 @@ FROM (
 		,[70] + [34] AS TijdvoorTijd
 		,[35] AS Feestdag
 		,[32] AS Vakantie
+		,[31] AS Verzuim
 	FROM (
 		SELECT tw.bkdate
 			,tw.pers_key
@@ -111,6 +115,7 @@ FROM (
 				,[34]
 				,[35]
 				,[32]
+				,[31]
 				)) AS PivotTable
 	) A
 GROUP BY DateKey

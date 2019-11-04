@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FDV].[VW_D_Shipment]
 AS
 

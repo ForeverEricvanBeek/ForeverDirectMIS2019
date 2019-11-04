@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FDV].[VW_F_Kewill_Dossiers]
 as
 select distinct(ISNULL(TS.dosvlg,-1)) as Dossier_ID 

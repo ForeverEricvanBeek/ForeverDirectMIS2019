@@ -1,10 +1,14 @@
 ﻿
 
+
 CREATE VIEW [FD2].[VW_D_Product_Family] AS
 
-SELECT [PART_PRODUCT_FAMILY]				AS FAM_Prod_ID
-      ,[DESCRIPTION]						AS Description
-  FROM [IFS].[INVENTORY_PRODUCT_FAMILY]
- where ActInd='Y'
-  UNION all
-  SELECT '-1','UNKNOWN'
+SELECT 
+	PF.PART_PRODUCT_FAMILY					AS Product_Family_ID
+	,PF. DESCRIPTION						AS Product_Family_Description
+FROM		IFS.INVENTORY_PRODUCT_FAMILY PF
+WHERE		PF.ActInd='Y'
+
+UNION ALL
+
+SELECT '-1','UNKNOWN'

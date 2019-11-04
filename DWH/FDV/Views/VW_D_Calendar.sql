@@ -1,4 +1,5 @@
-﻿CREATE VIEW [FDV].[VW_D_Calendar]
+﻿
+CREATE VIEW [FDV].[VW_D_Calendar]
 AS
 
 SELECT DateKey

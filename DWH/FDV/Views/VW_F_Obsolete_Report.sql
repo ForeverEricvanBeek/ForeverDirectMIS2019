@@ -1,10 +1,4 @@
-﻿
-
-
-
-
-/*
-
+﻿/*
 CREATE VIEW [FDV].[VW_F_Obsolete_Report]
 AS
 --CTE_1 haalt de voorraad en costprice info op uit de F_Obsolescense
@@ -48,8 +42,8 @@ select
                 SK.SKU_Name
 				,OB.Contract
                 , ISNULL(OB.Number_Of_Units_Shipped,0) Number_Of_Units
-              from       [$(ForeverData01)].DM.F_Outbound OB
-              right join    [$(ForeverData01)].DM.D_SKU SK
+              from       ForeverData01.DM.F_Outbound OB
+              right join    ForeverData01.DM.D_SKU SK
 			  on                   SK.D_SKU_Skey=OB.D_SKU1_Skey
 			  and				   SK.Contract=OB.Contract
 			  and				   SK.IsDeleted=0
@@ -243,5 +237,4 @@ when C7.Last_batch_vs_lock_date_next_batch*C7.Number_Of_Units_PD < C7.Inventory_
           C7.Inventory_Netto_QTY-(C7.Last_batch_vs_lock_date_next_batch*C7.Number_Of_Units_PD) end*C7.Inventory_Cost_Price,0),2) as Value_Obsolete_Stock
  from CTE_7 C7
  --where SKU_Name='715A'
-
  */

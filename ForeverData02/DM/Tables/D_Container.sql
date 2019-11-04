@@ -3,8 +3,8 @@
     [Container_ID]           NVARCHAR (8)  NULL,
     [Container_Size]         NVARCHAR (3)  NULL,
     [Container_Description]  NVARCHAR (35) NULL,
-    [Max_Container_Volume]   INT           NULL,
-    [Empty_Container_Weight] NVARCHAR (10) NULL,
+    [Container_Max_Volume]   INT           NULL,
+    [Container_Empty_Weight] NVARCHAR (10) NULL,
     [Container_Length]       INT           NULL,
     [Container_Width]        INT           NULL,
     [Container_Height]       INT           NULL,
@@ -22,4 +22,6 @@
     [ProcessLogID]           BIGINT        NULL,
     CONSTRAINT [PK_D_Container] PRIMARY KEY CLUSTERED ([D_Container_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
