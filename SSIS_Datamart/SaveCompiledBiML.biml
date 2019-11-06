@@ -1,12 +1,2 @@
-<Biml xmlns="http://schemas.varigence.com/biml.xsd">  
-  <#string xBiml = RootNode.GetBiml();
-    XmlDocument xmlDoc = new XmlDocument();
-    xmlDoc.LoadXml(xBiml);
-    string sFile = @"\\FDODWHD01\StagingFiles\Biml\xml\myBimlFileDatamart.xml";
-    xmlDoc.Save(sFile);
-    #>
-</Biml>  
-
-<#@ template tier="5"#> 
-<#@ import namespace="Varigence.Hadron.CoreLowerer.SchemaManagement"#> 
-<#@ import namespace="System.Xml"#> 
+<#@ template language ="C#" tier="4"#>
+<#=CallBimlScript(@"..\SSIS_BIML\SaveBiML.biml", "Datamart")#>

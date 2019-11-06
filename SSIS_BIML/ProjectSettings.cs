@@ -21,8 +21,10 @@ string EffectiveDate = "1900-01-01 00:00:00";
 string ExpiryDate = "9999-12-31 23:59:59";
 string AllCharacterDataTypes = "-nvarchar-varchar-nchar-char-String-AnsiString-StringFixedLength-AnsiStringFixedLength-";
 string AllNumericDataTypes = "-decimal-numeric-float-Decimal-Double-";
-string AllIntegerDataTypes = "-INT    -smallint-int-bigint-Int8-Int16-Int32-Int64-";
+string AllIntegerDataTypes = "-INT-smallint-int-bigint-Int8-Int16-Int32-Int64-";
 string AllDateDataTypes = "-date-datetime-smalldatetime-Date-DateTime-";
+string AllBinaryDataTypes = "-varbinary-";
+string AllRealDateTypes = "-float-Real-";
 string AllBooleanDataTypes = "-bit-";
 string ProjectConnectionOption = "CreateInProject=\"true\"";
 string ProjectProtectionLevel = "DontSaveSensitive";
@@ -56,4 +58,30 @@ string varOracleObjectBeginEndCharacter = "&quot;";
 string varODBCObjectBeginEndCharacter = "&quot;";
 
 string varCR = "&#13;";     // carriage return
+
+string varDWHDefaultColumnsWithType = @",[CheckSum]                        VARBINARY(MAX)
+                                            ,[CheckSumSCD1]                    VARBINARY(MAX)
+                                            ,[CheckSumSCD2]                    VARBINARY(MAX)
+                                            ,[IsActual]                        BIT
+                                            ,[IsInferred]                      BIT
+                                            ,[IsDeleted]                       BIT
+                                            ,[EffectiveDate]                   DATETIME2(7)
+                                            ,[ExpiryDate]                      DATETIME2(7)
+                                            ,[InsertDateTime]                  DATETIME2(7)
+                                            ,[UpdateDateTime]                  DATETIME2(7)
+                                            ,[BatchID]                         BIGINT
+                                            ,[ProcessLogID]                    BIGINT";
+
+string varDWHDefaultColumnsList = @",[CheckSum]
+                                            ,[CheckSumSCD1]
+                                            ,[CheckSumSCD2]
+                                            ,[IsActual]
+                                            ,[IsInferred]
+                                            ,[IsDeleted]
+                                            ,[EffectiveDate]
+                                            ,[ExpiryDate]
+                                            ,[InsertDateTime]
+                                            ,[UpdateDateTime]
+                                            ,[BatchID]
+                                            ,[ProcessLogID]";
 #>
