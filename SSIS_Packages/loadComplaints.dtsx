@@ -7,13 +7,13 @@
   DTS:CreatorName="FOREVERDIRECT\beek"
   DTS:DTSID="{9F2171CB-7668-49DA-95E5-4B9EC73213D1}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="14.0.3002.113"
+  DTS:LastModifiedProductVersion="15.0.1301.433"
   DTS:LocaleID="1043"
   DTS:ObjectName="loadComplaints"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="104"
-  DTS:VersionGUID="{2E4B986A-57BD-4F5F-BE3F-180D587B3211}">
+  DTS:VersionBuild="118"
+  DTS:VersionGUID="{C1D45C95-CF80-47A6-9C96-3B0D7384C4AB}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -22,6 +22,8 @@
       DTS:CreationName="EXCEL"
       DTS:DTSID="{8DCFC23A-11EA-4290-8D12-C95BD63B4102}"
       DTS:ObjectName="Excel Connection Manager">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::ComplaintTemplate]</DTS:PropertyExpression>
       <DTS:PropertyExpression
         DTS:Name="ExcelFilePath">@[User::workingfiletemp]</DTS:PropertyExpression>
       <DTS:ObjectData>
@@ -188,7 +190,7 @@
           DTS:LocaleID="-1"
           DTS:ObjectName="Archive"
           DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <FileSystemData
@@ -209,7 +211,7 @@
           DTS:LocaleID="-1"
           DTS:ObjectName="Error"
           DTS:TaskContact="File System Task;Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <FileSystemData
@@ -249,12 +251,6 @@
                       name="Derived Column Input">
                       <inputColumns>
                         <inputColumn
-                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[PosNumber]"
-                          cachedDataType="wstr"
-                          cachedLength="255"
-                          cachedName="PosNumber"
-                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
-                        <inputColumn
                           refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[OrderNr]"
                           cachedDataType="wstr"
                           cachedLength="255"
@@ -290,6 +286,12 @@
                           cachedLength="255"
                           cachedName="Incomplete"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Incomplete]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Inputs[Derived Column Input].Columns[PosNumber]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="PosNumber"
+                          lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]" />
                       </inputColumns>
                       <externalMetadataColumns />
                     </input>
@@ -500,13 +502,13 @@
                               containsID="true"
                               dataType="System.String"
                               description="Derived Column Expression"
-                              name="Expression">#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]}</property>
+                              name="Expression">(DT_WSTR,255)#{Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]}</property>
                             <property
                               containsID="true"
                               dataType="System.String"
                               description="Derived Column Friendly Expression"
                               expressionType="Notify"
-                              name="FriendlyExpression">PosNumber</property>
+                              name="FriendlyExpression">(DT_WSTR,255)PosNumber</property>
                           </properties>
                         </outputColumn>
                       </outputColumns>
@@ -562,7 +564,7 @@
                       dataType="System.String"
                       description="The SQL command to be executed."
                       name="SqlCommand"
-                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                     <property
                       dataType="System.String"
                       description="The variable that contains the SQL command to be executed."
@@ -624,7 +626,7 @@
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
                           dataType="wstr"
                           errorOrTruncationOperation="Conversion"
-                          errorRowDisposition="FailComponent"
+                          errorRowDisposition="IgnoreFailure"
                           externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[PosNumber]"
                           length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[PosNumber]"
@@ -721,10 +723,11 @@
                           truncationRowDisposition="IgnoreFailure" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]"
-                          dataType="r8"
+                          dataType="wstr"
                           errorOrTruncationOperation="Conversion"
                           errorRowDisposition="FailComponent"
                           externalMetadataColumnId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Country]"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]"
                           name="Country"
                           truncationRowDisposition="IgnoreFailure" />
@@ -877,7 +880,8 @@
                           name="QtyReceived" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[Country]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           name="Country" />
                         <externalMetadataColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].ExternalColumns[CustomerServiceOperator]"
@@ -1005,7 +1009,8 @@
                           name="QtyReceived" />
                         <outputColumn
                           refId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Country]"
-                          dataType="r8"
+                          dataType="wstr"
+                          length="255"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Error Output].Columns[Country]"
                           name="Country" />
                         <outputColumn
@@ -1098,7 +1103,7 @@
                       dataType="System.String"
                       description="The SQL command to be executed."
                       name="SqlCommand"
-                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                     <property
                       dataType="System.Int32"
                       description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -1106,7 +1111,7 @@
                     <property
                       dataType="System.Boolean"
                       description="Forces the use of the DefaultCodePage property value when describing character data."
-                      name="AlwaysUseDefaultCodePage">false</property>
+                      name="AlwaysUseDefaultCodePage">true</property>
                     <property
                       dataType="System.Int32"
                       description="Specifies the mode used to access the database."
@@ -1249,13 +1254,6 @@
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Conterminator]"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Conterminator]" />
                         <inputColumn
-                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumberOrig]"
-                          cachedDataType="wstr"
-                          cachedLength="255"
-                          cachedName="PosNumberOrig"
-                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_PosOrig]"
-                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]" />
-                        <inputColumn
                           refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OrderNumberOrig]"
                           cachedDataType="wstr"
                           cachedLength="255"
@@ -1285,7 +1283,8 @@
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[ComplaintDetail]" />
                         <inputColumn
                           refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Country]"
-                          cachedDataType="r8"
+                          cachedDataType="wstr"
+                          cachedLength="255"
                           cachedName="Country"
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Facility]"
                           lineageId="Package\loop through complaints\extract data\Excel Source.Outputs[Excel Source Output].Columns[Country]" />
@@ -1317,6 +1316,13 @@
                           cachedName="ItemOrderedOrig"
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_ItemOrderedOrig]"
                           lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[ItemOrderedOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PosNumberOrig]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="PosNumberOrig"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_PosOrig]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]" />
                       </inputColumns>
                       <externalMetadataColumns
                         isUsed="True">
@@ -1557,35 +1563,14 @@
               ReadOnlyVariables="User::filePath,User::workingfiletemp"
               ReadWriteVariables="User::workingfilename">
               <ProjectItem
-                Name="Properties\AssemblyInfo.cs"
-                Encoding="UTF8"><![CDATA[using System.Reflection;
-using System.Runtime.CompilerServices;
-
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
-[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyCopyright("Copyright @  2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
-
-[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+                Name="Properties\Settings.settings"
+                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.resx"
                 Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
@@ -1885,14 +1870,35 @@ namespace ST_f1b41172c66a4ffbabb05ccfbc392398.Properties {
     }
 }]]></ProjectItem>
               <ProjectItem
-                Name="Properties\Settings.settings"
-                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
-</SettingsFile>]]></ProjectItem>
+                Name="Properties\AssemblyInfo.cs"
+                Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyCopyright("Copyright @  2018")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.Designer.cs"
                 Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
@@ -2091,7 +2097,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           DTS:LocaleID="-1"
           DTS:ObjectName="Send error message"
           DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
+          DTS:ThreadHint="1">
           <DTS:Variables />
           <DTS:ObjectData>
             <SendMailTask:SendMailTaskData
@@ -2112,7 +2118,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           DTS:LocaleID="-1"
           DTS:ObjectName="Send processed message"
           DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="1">
+          DTS:ThreadHint="0">
           <DTS:Variables />
           <DTS:ObjectData>
             <SendMailTask:SendMailTaskData
@@ -2203,7 +2209,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           Id="Package\loop through complaints\extract data"
           TopLeft="135,119" />
         <NodeLayout
-          Size="134,42"
+          Size="131,42"
           Id="Package\loop through complaints\Script Task"
           TopLeft="145,12" />
         <NodeLayout
@@ -2216,30 +2222,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           TopLeft="21,316" />
         <EdgeLayout
           Id="Package\loop through complaints.PrecedenceConstraints[Constraint]"
-          TopLeft="212,54">
+          TopLeft="207,54">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-8.5,65"
+              EndConnector="0,65"
               Start="0,0"
-              End="-8.5,57.5">
+              End="0,57.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,28.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,28.5"
-                    Point2="0,32.5"
-                    Point3="-4,32.5" />
-                  <mssgle:LineSegment
-                    End="-4.5,32.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-4.5,32.5"
-                    Point2="-8.5,32.5"
-                    Point3="-8.5,36.5" />
-                  <mssgle:LineSegment
-                    End="-8.5,57.5" />
+                    End="0,57.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -2402,7 +2396,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="156,42"
+          Size="154,42"
           Id="Package\loop through complaints\extract data\Derived Column"
           TopLeft="199,151" />
         <NodeLayout
@@ -2410,18 +2404,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
           Id="Package\loop through complaints\extract data\OLE DB Destination"
           TopLeft="186,270" />
         <NodeLayout
-          Size="144,42"
+          Size="139,42"
           Id="Package\loop through complaints\extract data\Excel Source"
           TopLeft="216,49" />
         <EdgeLayout
           Id="Package\loop through complaints\extract data.Paths[Excel Source Output]"
-          TopLeft="288,91">
+          TopLeft="285.5,91">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-11,60"
+              EndConnector="-9.5,60"
               Start="0,0"
-              End="-11,52.5">
+              End="-9.5,52.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -2432,13 +2426,13 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
                     Point2="0,30"
                     Point3="-4,30" />
                   <mssgle:LineSegment
-                    End="-7,30" />
+                    End="-5.5,30" />
                   <mssgle:CubicBezierSegment
-                    Point1="-7,30"
-                    Point2="-11,30"
-                    Point3="-11,34" />
+                    Point1="-5.5,30"
+                    Point2="-9.5,30"
+                    Point3="-9.5,34" />
                   <mssgle:LineSegment
-                    End="-11,52.5" />
+                    End="-9.5,52.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -2449,7 +2443,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\loop through complaints\extract data.Paths[Derived Column Output]"
-          TopLeft="274.75,193">
+          TopLeft="274.25,193">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"

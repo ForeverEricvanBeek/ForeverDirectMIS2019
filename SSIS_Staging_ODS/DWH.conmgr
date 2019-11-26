@@ -1,7 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ObjectName="DWH" DTS:DTSID="{0FF3C35A-EA77-46EE-9EAC-E56168EDD3CC}" DTS:refId="Package.ConnectionManagers[DWH]" DTS:CreationName="OLEDB">
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="DWH"
+  DTS:DTSID="{0FF3C35A-EA77-46EE-9EAC-E56168EDD3CC}"
+  DTS:CreationName="OLEDB">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::ConDWH]</DTS:PropertyExpression>
   <DTS:ObjectData>
-    <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:ConnectionString="data source=FDODWHD01\DWHDEV;initial catalog=DWH;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False"></DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=FDODWHD01\DWHDEV;Initial Catalog=DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Locale Identifier=1033;Auto Translate=False;" />
   </DTS:ObjectData>
-  <DTS:PropertyExpression DTS:Name="ConnectionString">@[$Project::ConDWH]</DTS:PropertyExpression>
 </DTS:ConnectionManager>
