@@ -8,14 +8,24 @@ string ImportDir = projectWorkDir + @"\Biml";
 string ExportDir = projectWorkDir + @"\Biml\Output";
 string ArchiveDir = projectWorkDir + @"\Biml\Archive";
 string ErrorDir = projectWorkDir + @"\Biml\Error";
-string projectDatabaseInstanceName = @"DWHDEV"; // Only the instance name, don't include the server name.
+string projectDatabaseInstanceName = @"DWHDEV";
 string SystemConnection = "DWH_Control";
 string StagingConnection = "Staging";
 string projectServerNameAndDatabaseInstanceName = projectServerName + @"\" + projectDatabaseInstanceName;
-string projectAfasToken = "<![CDATA[<token><version>1</version><data>36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74</data></token>]]>"; //<token><version>1</version><data>36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74</data></token>
+string projectAfasToken = "<![CDATA[<token><version>1</version><data>36E1A44E74D248608E5D788DF163B9A5CF0BAA3B4F852FBB230F28AA2E930A74</data></token>]]>";
 string projectAfasOptions = "<![CDATA[<Options><Outputmode>1</Outputmode><Metadata>false</Metadata><Outputoptions>2</Outputoptions></Options>]]>";
 string GeneratorSchemaName = @"generator";
 string conGeneratorConnectionString = @"Data Source=" + projectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + SystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
+
+string IFSstagingProjectName = @"SSIS_StagingIFS";
+string IFSprojectServerName = @"FDODWHP01";
+string IFSprojectWorkDir = @"\\FDODWHP01\StagingFiles";
+string IFSprojectLoadingWhere = @"1";
+string IFSprojectDatabaseInstanceName = @"DWHIFS";
+string IFSSystemConnection = "DWI_Control";
+string IFSStagingConnection = "StagingIFS";
+string IFSprojectServerNameAndDatabaseInstanceName = IFSprojectServerName + @"\" + IFSprojectDatabaseInstanceName;
+string conIFSGeneratorConnectionString = @"Data Source=" + IFSprojectServerNameAndDatabaseInstanceName + @";Initial Catalog=" + IFSSystemConnection + "; Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;";
 
 string EffectiveDate = "1900-01-01 00:00:00";
 string ExpiryDate = "9999-12-31 23:59:59";
