@@ -216,7 +216,7 @@
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
                                             --AND st.IsLoading = 0
-                                            UNION
+                                            /*UNION
                                             SELECT [SourceConnection]
                                             ,[con].[Type]				AS [ConnectionType]
                                             ,[con].[ConnectionString]	AS [ConnectionString]
@@ -229,7 +229,7 @@
                                             on		  [st].[SourceConnection] = [con].[Name]	
                                             WHERE     st.[IsActive] =  1
                                             AND       st.getPK = 1
-                                            AND st.IsLoading = 0
+                                            AND st.IsLoading = 0*/
                                             UNION
                                             SELECT DISTINCT
                                             [TargetConnection]
@@ -242,7 +242,7 @@
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
                                             AND st.IsLoading = 0
-                                            UNION
+                                            /*UNION
                                             SELECT DISTINCT
                                             [TargetConnection]
                                             ,null
@@ -253,7 +253,7 @@
                                             ,'CTRL-PK' AS PackagePrefix
                                             FROM      [Generator].[SourceExtractionTable] st
                                             WHERE     st.[IsActive] =  1
-                                            AND st.IsLoading = 0
+                                            AND st.IsLoading = 0*/
                                             ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conIFSGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {
