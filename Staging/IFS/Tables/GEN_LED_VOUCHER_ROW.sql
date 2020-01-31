@@ -30,12 +30,12 @@
     [CODE_J]                       NVARCHAR (20)   NULL,
     [CODE_J_DESC]                  NVARCHAR (4000) NULL,
     [TRANS_CODE]                   NVARCHAR (100)  NULL,
-    [CURRENCY_DEBET_AMOUNT]        DECIMAL (18, 2) NULL,
-    [CURRENCY_CREDIT_AMOUNT]       DECIMAL (18, 2) NULL,
-    [CURRENCY_AMOUNT]              DECIMAL (18, 2) NULL,
-    [DEBET_AMOUNT]                 DECIMAL (18, 2) NULL,
-    [CREDIT_AMOUNT]                DECIMAL (18, 2) NULL,
-    [AMOUNT]                       DECIMAL (18, 2) NULL,
+    [CURRENCY_DEBET_AMOUNT]        DECIMAL (18, 8) NULL,
+    [CURRENCY_CREDIT_AMOUNT]       DECIMAL (18, 8) NULL,
+    [CURRENCY_AMOUNT]              DECIMAL (18, 8) NULL,
+    [DEBET_AMOUNT]                 DECIMAL (18, 8) NULL,
+    [CREDIT_AMOUNT]                DECIMAL (18, 8) NULL,
+    [AMOUNT]                       DECIMAL (18, 8) NULL,
     [CORRECTION]                   NVARCHAR (1)    NULL,
     [CURRENCY_CODE]                NVARCHAR (3)    NULL,
     [QUANTITY]                     INT             NULL,
@@ -96,6 +96,8 @@
     [BatchID]                      BIGINT          NULL,
     [ProcessLogID]                 BIGINT          NULL
 );
+
+
 
 
 

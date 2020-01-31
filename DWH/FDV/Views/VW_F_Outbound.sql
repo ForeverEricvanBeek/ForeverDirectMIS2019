@@ -1,6 +1,7 @@
 ﻿
 
 
+
 CREATE VIEW [FDV].[VW_F_Outbound]
 AS
 --	1 Orders Shipped
@@ -13,6 +14,7 @@ SELECT
 	, '-1'											AS SKU_Code1
 	, '-1'											AS SKU_Code2
 	, '-1'											AS Contract
+	, '-1'											AS Pickers_ID
 	, '-1'											AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, '-1'											AS FAM_Prod_ID
@@ -48,6 +50,7 @@ SELECT
 	, '-1'											AS SKU_Code1
 	, '-1'											AS SKU_Code2
 	, '-1'											AS Contract
+	, '-1'											AS Pickers_ID
 	, '-1'											AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, '-1'											AS FAM_Prod_ID
@@ -83,6 +86,7 @@ SELECT
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code1
 	, ISNULL(LD.ITEM_ID,'-1')						AS SKU_Code2
 	, ISNULL(INVP.CONTRACT,'-1')					AS Contract
+	,'-1'											AS Pickers_ID
 	, ISNULL(LD.BATCH_NBR,'-1')						AS Lot_Code
 	, ISNULL(OD.DWH_CUSTOMER_ID,'-1')				AS Customer_ID
 	, ISNULL(INVP.PART_PRODUCT_FAMILY,'-1')			AS FAM_Prod_ID
@@ -139,6 +143,10 @@ SELECT
 	, ISNULL(IC.ITEM_ID,'-1')						AS SKU_Code1
 	, ISNULL(IC.ITEM_ID,'-1')						AS SKU_Code2
 	, ISNULL(IP.CONTRACT,'-1')						AS Contract
+	, ISNULL(CASE
+		WHEN (PT.MENU_OPTN_NAME IN ('RF QA incomplete') AND PT.REF_FIELD_1 IS NULL) THEN PT.USER_ID
+		ELSE RIGHT(PT.REF_FIELD_1, LEN(PT.REF_FIELD_1) - 1)
+	    END,'-1')									AS Pickers_ID
 	, '-1'											AS Lot_Code
 	, ISNULL(OD.Order_Customer_ID,'-1')				AS Customer_ID
 	, ISNULL(IP.PART_PRODUCT_FAMILY,'-1')			AS FAM_Prod_ID

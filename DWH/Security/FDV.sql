@@ -1,4 +1,7 @@
 ﻿CREATE SCHEMA [FDV]
+    AUTHORIZATION dbo;
+
+
 
 
 

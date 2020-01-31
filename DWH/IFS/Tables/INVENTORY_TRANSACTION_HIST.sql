@@ -17,7 +17,7 @@
     [REJECT_CODE]                    NVARCHAR (8)    NULL,
     [TRANSACTION]                    NVARCHAR (4000) NULL,
     [PRE_ACCOUNTING_ID]              INT             NULL,
-    [COST]                           DECIMAL (18, 2) NULL,
+    [COST]                           DECIMAL (18, 8) NULL,
     [DATE_APPLIED]                   DATETIME2 (7)   NULL,
     [DIRECTION]                      NVARCHAR (1)    NULL,
     [ORDER_TYPE]                     NVARCHAR (4000) NULL,
@@ -80,6 +80,8 @@
     [ProcessLogID]                   BIGINT          NULL,
     CONSTRAINT [PK_INVENTORY_TRANSACTION_HIST] PRIMARY KEY CLUSTERED ([TRANSACTION_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

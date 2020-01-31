@@ -10,6 +10,7 @@
     [Number_of_Minutes_Cursus]       SMALLINT      NULL,
     [Number_of_Minutes_Feestdag]     SMALLINT      NULL,
     [Number_of_Minutes_Vakantie]     SMALLINT      NULL,
+    [Number_of_Minutes_Verzuim]      SMALLINT      NULL,
     [Number_of_Minutes_TijdvoorTijd] SMALLINT      NULL,
     [Number_of_Minutes_Overwerk110]  SMALLINT      NULL,
     [Number_of_Minutes_Overwerk130]  SMALLINT      NULL,
@@ -21,4 +22,6 @@
     [BatchID]                        BIGINT        NOT NULL,
     [ProcessLogID]                   BIGINT        NULL
 );
+
+
 

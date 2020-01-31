@@ -3,7 +3,7 @@
     [Contract]                           NVARCHAR (5)    NULL,
     [RN]                                 BIGINT          NULL,
     [SKU_Name]                           NVARCHAR (25)   NULL,
-    [Generic_SKU_Name]                   NVARCHAR (100)  NULL,
+    [Purchase_SKU_Code]                  NVARCHAR (100)  NULL,
     [Lot_Code]                           NVARCHAR (20)   NULL,
     [SKU_Description]                    NVARCHAR (65)   NULL,
     [Inventory_Netto_QTY]                DECIMAL (32, 3) NULL,
@@ -33,4 +33,6 @@
     [BatchID]                            BIGINT          NULL,
     [ProcessLogID]                       BIGINT          NULL
 );
+
+
 

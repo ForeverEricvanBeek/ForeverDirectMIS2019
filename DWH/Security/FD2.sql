@@ -1,4 +1,7 @@
 ﻿CREATE SCHEMA [FD2]
+    AUTHORIZATION dbo;
+
+
 
 
 

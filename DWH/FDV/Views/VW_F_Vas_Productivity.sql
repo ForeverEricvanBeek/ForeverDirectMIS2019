@@ -6,6 +6,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_F_Vas_Productivity]
 AS
 
@@ -44,7 +45,7 @@ SELECT
 	,ISNULL(T1.ORDER_TYPE,-1)							AS Order_Type_Code
 	,T1.Vas_Lane_Code									AS Vas_Lane_Code
 	--,T1.MISC_FLAGS										AS MISC_FLAGS
-	,T1.MACHINE											AS Vas_Machine_Code
+	,T1.MACHINE											AS Vas_TI_Code
 	, SUM(VAS_KIT)										AS #VAS_KIT
 	, SUM(VAS_TRI_PAK)									AS #VAS_TRI_PAK
 	, SUM(VAS_SI_PAK)									AS #VAS_SI_PAK

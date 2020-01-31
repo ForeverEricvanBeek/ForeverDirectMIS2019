@@ -552,6 +552,25 @@
     <Build Include="EXTRA\Tables\CANCELLED_LINES.sql" />
     <Build Include="dbo\Views\ORDER_INFO.sql" />
     <Build Include="dbo\Views\CANCELLED_LINES.sql" />
+    <Build Include="WEB\Tables\SystemCodeLink.sql" />
+    <Build Include="WEB\Tables\FormShipmentCallImages.sql" />
+    <Build Include="WEB\Tables\FormShipmentCallCSNList.sql" />
+    <Build Include="WEB\Tables\FormShipmentCall.sql" />
+    <Build Include="WEB\Tables\FormRelationShipRadar.sql" />
+    <Build Include="WEB\Tables\FormIncomingFeedbackFiles.sql" />
+    <Build Include="WEB\Tables\FormIncomingFeedback.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_OH_TRANS_COST.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_OH_HISTORY.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_COST_OVERVIEW.sql" />
+    <Build Include="IFS\Tables\SHOP_ORDER_COST_BUCKET.sql" />
+    <Build Include="IFS\Tables\PART_COST_HISTORY.sql" />
+    <Build Include="IFS\Tables\PART_COST_BUCKET.sql" />
+    <Build Include="IFS\Tables\PART_COST.sql" />
+    <Build Include="IFS\Tables\OPERATION_TRANSACTION_COST.sql" />
+    <Build Include="IFS\Tables\OPERATION_HISTORY.sql" />
+    <Build Include="IFS\Tables\INVENTORY_TRANSACTION_COST.sql" />
+    <Build Include="IFS\Tables\INVENTORY_PART_CONFIG.sql" />
+    <Build Include="IFS\Tables\COST_BUCKET.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DWH\DWH.sqlproj">
@@ -568,11 +587,22 @@
       <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>Datamart</DatabaseSqlCmdVariable>
     </ProjectReference>
+    <ProjectReference Include="..\ForeverData01\ForeverData01.sqlproj">
+      <Name>ForeverData01</Name>
+      <Project>{af4170b1-f978-4d58-b021-be216f7f85a9}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>ForeverData01</DatabaseSqlCmdVariable>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="Datamart">
       <DefaultValue>Datamart</DefaultValue>
       <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ForeverData01">
+      <DefaultValue>ForeverData01</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
     </SqlCmdVariable>
   </ItemGroup>
 </Project>

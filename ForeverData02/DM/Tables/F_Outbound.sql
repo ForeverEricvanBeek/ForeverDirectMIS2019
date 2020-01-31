@@ -10,6 +10,7 @@
     [D_SKU1_Skey]                  BIGINT          NOT NULL,
     [D_SKU2_Skey]                  BIGINT          NOT NULL,
     [D_Contract_Skey]              BIGINT          NOT NULL,
+    [D_Pickers_Skey]               BIGINT          NOT NULL,
     [D_Lot_Skey]                   BIGINT          NOT NULL,
     [D_Customer_Skey]              BIGINT          NOT NULL,
     [D_Product_Family_Skey]        BIGINT          NOT NULL,
@@ -37,7 +38,8 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED COLUMNSTORE INDEX [ClusteredColumnStoreIndex-20191023-124907]
-    ON [DM].[F_Outbound];
+
 

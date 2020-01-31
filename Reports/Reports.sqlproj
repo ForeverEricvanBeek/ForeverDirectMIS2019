@@ -96,6 +96,39 @@
     <Build Include="RT\Tables\Obsolescense.sql" />
     <Build Include="RV\Views\SKU_Expire_Next_15M.sql" />
     <Build Include="RV\Views\Obsolescense.sql" />
+    <Build Include="RT\Tables\Vas_Users.sql" />
+    <Build Include="RT\Tables\Shipped_Orders.sql" />
+    <Build Include="RT\Tables\Shelf_Life.sql" />
+    <Build Include="RT\Tables\Price_Check_old.sql" />
+    <Build Include="RT\Tables\Price_Check_HO_File.sql" />
+    <Build Include="RT\Tables\Price_Check.sql" />
+    <Build Include="RT\Tables\PIX_Messages.sql" />
+    <Build Include="RT\Tables\Order_Profile.sql" />
+    <Build Include="RT\Tables\OF_Allocation_Details.sql" />
+    <Build Include="RT\Tables\Items_Shipped_By_Facility.sql" />
+    <Build Include="RT\Tables\Cross_Reference.sql" />
+    <Build Include="RT\Tables\Activity_tracking.sql" />
+    <Build Include="RC\Tables\Purge.sql" />
+    <Build Include="RV\Views\Vas_Users.sql" />
+    <Build Include="RV\Views\Shipped_Orders.sql" />
+    <Build Include="RV\Views\Shipments_Benelux.sql" />
+    <Build Include="RV\Views\Shelf_Life.sql" />
+    <Build Include="RV\Views\Price_Check_old.sql" />
+    <Build Include="RV\Views\Price_Check_HO_File.sql" />
+    <Build Include="RV\Views\Price_Check.sql" />
+    <Build Include="RV\Views\PIX_Messages.sql" />
+    <Build Include="RV\Views\Order_Profile.sql" />
+    <Build Include="RV\Views\OF_Allocation_Details.sql" />
+    <Build Include="RV\Views\Items_Shipped_By_Facility.sql" />
+    <Build Include="RV\Views\Cross_Reference.sql" />
+    <Build Include="RV\Views\Activity_tracking.sql" />
+    <Build Include="RC\Stored Procedures\runReports.sql" />
+    <Build Include="RC\Stored Procedures\ControlReports.sql" />
+    <Build Include="RV\Views\Price_Check_1.sql" />
+    <Build Include="RV\Views\PIX_Messages_1.sql" />
+    <Build Include="RV\Views\Order_Profile_1.sql" />
+    <Build Include="RC\Stored Procedures\runReports_1.sql" />
+    <Build Include="RC\Stored Procedures\ControlReports_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DWH\DWH.sqlproj">
@@ -140,6 +173,13 @@
       <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>SSISDB</DatabaseSqlCmdVariable>
     </ProjectReference>
+    <ProjectReference Include="..\ForeverAdhoc\ForeverAdhoc.sqlproj">
+      <Name>ForeverAdhoc</Name>
+      <Project>{5b5673ef-2f21-4901-8d7a-db43ed619501}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>ForeverAdhoc</DatabaseSqlCmdVariable>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="Datamart">
@@ -153,6 +193,10 @@
     <SqlCmdVariable Include="DWH_Control">
       <DefaultValue>DWH_Control</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ForeverAdhoc">
+      <DefaultValue>ForeverAdhoc</DefaultValue>
+      <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="ForeverData01">
       <DefaultValue>ForeverData01</DefaultValue>

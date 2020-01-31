@@ -15,6 +15,11 @@
     [OBJID]                    NVARCHAR (4000) NULL,
     [OBJVERSION]               NVARCHAR (2000) NULL,
     [BatchID]                  BIGINT          NULL,
-    [ProcessLogID]             BIGINT          NULL
+    [ProcessLogID]             BIGINT          NULL,
+    [OBJSTATE]                 NVARCHAR (30)   NULL,
+    [OBJEVENTS]                NVARCHAR (4000) NULL,
+    [STATE]                    NVARCHAR (4000) NULL
 );
+
+
 

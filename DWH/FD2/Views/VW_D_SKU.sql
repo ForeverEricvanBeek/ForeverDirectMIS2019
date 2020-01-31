@@ -3,6 +3,7 @@
 
 
 
+
 CREATE VIEW [FD2].[VW_D_SKU]
 AS
 
@@ -55,6 +56,7 @@ SELECT
 	, IC.DESCRIPTION							AS SKU_Description
 	, GI.Generic_SKU_Name						AS SKU_Generic_Name
 	, GI.Generic_SKU_Description				AS SKU_Generic_Description
+	, IP.PART_PRODUCT_FAMILY					AS SKU_Product_Family_ID
 	, IP.SECOND_COMMODITY						AS SKU_Second_Commodity
 	, CG.DESCRIPTION							AS SKU_Commodity_Desc
 	, IP.CONTRACT								AS SKU_Contract
@@ -107,4 +109,4 @@ WHERE			IC.ActInd = 'Y'
 
 UNION ALL
 
-SELECT     '-1', '-1', NULL,NULL,NULL,NULL,'Unknown',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+SELECT     '-1', '-1', NULL,NULL,NULL,NULL,'Unknown',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL

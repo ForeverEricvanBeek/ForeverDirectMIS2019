@@ -9,6 +9,7 @@
     [TargetConnection]        NVARCHAR (50)   NULL,
     [ExtractionType]          NVARCHAR (2)    NULL,
     [Output]                  NVARCHAR (50)   NULL,
+    [Delimiter]               NVARCHAR (50)   NULL,
     [ReportID]                NVARCHAR (500)  NULL,
     [FriendlyName]            NVARCHAR (500)  NULL,
     [Description]             NVARCHAR (4000) NULL,
@@ -24,9 +25,12 @@
     [EmailBCC]                NVARCHAR (500)  NULL,
     [EmailAttachment]         NVARCHAR (1)    NULL,
     [Folder]                  NVARCHAR (500)  NULL,
+    [OrderBy]                 NVARCHAR (4000) NULL,
     [IsActive]                BIT             NOT NULL,
     [Available]               NVARCHAR (500)  NULL
 );
+
+
 
 
 

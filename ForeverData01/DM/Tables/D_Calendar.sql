@@ -32,3 +32,10 @@
     CONSTRAINT [DateKey] PRIMARY KEY CLUSTERED ([DateKey] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [NI_FullDateIndWorkDay]
+    ON [DM].[D_Calendar]([FullDate] ASC, [IndWorkday] ASC);
+

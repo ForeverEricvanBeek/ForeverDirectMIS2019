@@ -21,7 +21,6 @@
             string varName = rowSourceExtractionTable["TargetConnection"].ToString() + "-" + rowSourceExtractionTable["SourceSchema"].ToString() + "-" + rowSourceExtractionTable["SourceTable"].ToString();
             string varTaskName = "Dataflow Load " + varName;
             string varPackageName = rowSourceExtractionTable["PackagePrefix"].ToString() + "-" + varTargetSchema + "-" + varTargetTable;
-            
             string varSourceDatabase = @"StagingPK";
 
     string varSQLPackageTaskColumn = @"SELECT [ColumnName], [ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";

@@ -1,9 +1,4 @@
-﻿
-
-
-
-
-CREATE VIEW [FDV].[VW_D_Vas_Lane] 
+﻿CREATE VIEW [FDV].[VW_D_Vas_Lane] 
 AS
 
 SELECT 
@@ -29,3 +24,5 @@ SELECT
       
   FROM [MANH].[WORK_ORD_HDR]
   WHERE ActInd='Y'
+  UNION ALL 
+  SELECT '-1', NULL

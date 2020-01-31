@@ -9,7 +9,7 @@
     [ROLLBACK_OF_TRANS_ID]      NVARCHAR (20)   NULL,
     [CURR_AMOUNT]               DECIMAL (18, 2) NULL,
     [DOM_AMOUNT]                DECIMAL (18, 2) NULL,
-    [CURR_RATE]                 INT             NULL,
+    [CURR_RATE]                 DECIMAL (18, 6) NULL,
     [DIV_FACTOR]                INT             NULL,
     [CURRENCY]                  NVARCHAR (3)    NULL,
     [MATCHING_ID]               INT             NULL,
@@ -19,7 +19,7 @@
     [USER_ID]                   NVARCHAR (20)   NULL,
     [SELF_BILLING_REF]          NVARCHAR (50)   NULL,
     [PAY_REFERENCE]             NVARCHAR (50)   NULL,
-    [TAX_CURR_RATE]             INT             NULL,
+    [TAX_CURR_RATE]             DECIMAL (18, 6) NULL,
     [PAY_TAX_ID]                INT             NULL,
     [TAX_INVOICE_SERIES_ID]     NVARCHAR (20)   NULL,
     [TAX_INVOICE_NUMBER]        NVARCHAR (50)   NULL,
@@ -43,4 +43,6 @@
     [ProcessLogID]              BIGINT          NULL,
     CONSTRAINT [PK_PAYMENT_TRANSACTION] PRIMARY KEY CLUSTERED ([COMPANY] ASC, [SERIES_ID] ASC, [PAYMENT_ID] ASC, [TRANS_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 

@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Reports"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="104"
-  DTS:VersionGUID="{46EAA957-115E-4BEC-ABA2-4AB828D6C98B}">
+  DTS:VersionBuild="105"
+  DTS:VersionGUID="{2AA5659B-9C4F-4330-AD3D-319F31F879F0}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -2367,6 +2367,16 @@
                       lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[Delimiter]"
                       name="Delimiter"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      length="255"
+                      lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      name="OrderBy"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -2503,6 +2513,11 @@
                       dataType="wstr"
                       length="255"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -2659,6 +2674,12 @@
                       length="255"
                       lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Error Output].Columns[Folder]"
                       name="Folder" />
+                    <outputColumn
+                      refId="Package\Load Reports ACC\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      name="OrderBy" />
                     <outputColumn
                       refId="Package\Load Reports ACC\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -2946,6 +2967,13 @@
                       cachedName="Delimiter"
                       externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Delimiter]"
                       lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[Delimiter]" />
+                    <inputColumn
+                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].Columns[OrderBy]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OrderBy"
+                      externalMetadataColumnId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      lineageId="Package\Load Reports ACC\Connection.Outputs[Excel Source Output].Columns[OrderBy]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3085,6 +3113,11 @@
                       dataType="wstr"
                       length="50"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports ACC\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="4000"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -3459,6 +3492,16 @@
                       lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[Delimiter]"
                       name="Delimiter"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      length="255"
+                      lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      name="OrderBy"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3595,6 +3638,11 @@
                       dataType="wstr"
                       length="255"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -3751,6 +3799,12 @@
                       length="255"
                       lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Error Output].Columns[Folder]"
                       name="Folder" />
+                    <outputColumn
+                      refId="Package\Load Reports DEV\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      name="OrderBy" />
                     <outputColumn
                       refId="Package\Load Reports DEV\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -4038,6 +4092,13 @@
                       cachedName="Delimiter"
                       externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Delimiter]"
                       lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[Delimiter]" />
+                    <inputColumn
+                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].Columns[OrderBy]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OrderBy"
+                      externalMetadataColumnId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      lineageId="Package\Load Reports DEV\Connection.Outputs[Excel Source Output].Columns[OrderBy]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -4177,6 +4238,11 @@
                       dataType="wstr"
                       length="50"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports DEV\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="4000"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -4551,6 +4617,16 @@
                       lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[Delimiter]"
                       name="Delimiter"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      length="255"
+                      lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      name="OrderBy"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -4687,6 +4763,11 @@
                       dataType="wstr"
                       length="255"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -4843,6 +4924,12 @@
                       length="255"
                       lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Error Output].Columns[Folder]"
                       name="Folder" />
+                    <outputColumn
+                      refId="Package\Load Reports PRD\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      name="OrderBy" />
                     <outputColumn
                       refId="Package\Load Reports PRD\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -5130,6 +5217,13 @@
                       cachedName="Delimiter"
                       externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Delimiter]"
                       lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[Delimiter]" />
+                    <inputColumn
+                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].Columns[OrderBy]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OrderBy"
+                      externalMetadataColumnId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      lineageId="Package\Load Reports PRD\Connection.Outputs[Excel Source Output].Columns[OrderBy]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -5269,6 +5363,11 @@
                       dataType="wstr"
                       length="50"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports PRD\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="4000"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -5643,6 +5742,16 @@
                       lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[Delimiter]"
                       name="Delimiter"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      length="255"
+                      lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[OrderBy]"
+                      name="OrderBy"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -5779,6 +5888,11 @@
                       dataType="wstr"
                       length="255"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -5935,6 +6049,12 @@
                       length="255"
                       lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Error Output].Columns[Folder]"
                       name="Folder" />
+                    <outputColumn
+                      refId="Package\Load Reports TST\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Error Output].Columns[OrderBy]"
+                      name="OrderBy" />
                     <outputColumn
                       refId="Package\Load Reports TST\Connection.Outputs[Excel Source Error Output].Columns[IsActive]"
                       dataType="r8"
@@ -6222,6 +6342,13 @@
                       cachedName="Delimiter"
                       externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[Delimiter]"
                       lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[Delimiter]" />
+                    <inputColumn
+                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].Columns[OrderBy]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OrderBy"
+                      externalMetadataColumnId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      lineageId="Package\Load Reports TST\Connection.Outputs[Excel Source Output].Columns[OrderBy]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -6361,6 +6488,11 @@
                       dataType="wstr"
                       length="50"
                       name="Delimiter" />
+                    <externalMetadataColumn
+                      refId="Package\Load Reports TST\Generator_Connection.Inputs[OLE DB Destination Input].ExternalColumns[OrderBy]"
+                      dataType="wstr"
+                      length="4000"
+                      name="OrderBy" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -7617,7 +7749,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata ACC"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="3">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7634,7 +7766,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata DEV"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7651,7 +7783,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata PRD"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7668,7 +7800,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate Metadata TST"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="3">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -8859,6 +8991,19 @@
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Rights PRD\Connection">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load Rights PRD\Generator_Connection">
     <Properties>

@@ -29,6 +29,7 @@
     [Complaint_TrackandTraceOrig]       NVARCHAR (50)   NULL,
     [Complaint_ItemOrderedOrig]         NVARCHAR (50)   NULL,
     [Complaint_Orig]                    NVARCHAR (50)   NULL,
+    [Complaint_Facility_Orig]           NVARCHAR (50)   NULL,
     [Complaint_CreatedDate]             DATETIME2 (7)   NULL,
     [Complaint_CreatedBy]               NVARCHAR (255)  NULL,
     [Complaint_UpdatedDate]             DATETIME2 (7)   NULL,
@@ -37,4 +38,6 @@
     [ProcessLogID]                      BIGINT          NULL,
     CONSTRAINT [PK_Complaints] PRIMARY KEY CLUSTERED ([Complaint_ID] ASC)
 );
+
+
 

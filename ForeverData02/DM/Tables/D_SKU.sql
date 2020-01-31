@@ -8,6 +8,7 @@
     [SKU_Country_of_Origin]     NVARCHAR (2)    NULL,
     [SKU_Description]           NVARCHAR (65)   NULL,
     [SKU_Generic_Name]          NVARCHAR (100)  NULL,
+    [SKU_Product_Family_ID]     NVARCHAR (5)    NULL,
     [SKU_Generic_Description]   NVARCHAR (65)   NULL,
     [SKU_Second_Commodity]      NVARCHAR (5)    NULL,
     [SKU_Commodity_Desc]        NVARCHAR (35)   NULL,
@@ -44,6 +45,8 @@
     [ProcessLogID]              BIGINT          NULL,
     CONSTRAINT [PK_D_SKU] PRIMARY KEY CLUSTERED ([D_SKU_Skey] ASC) WITH (FILLFACTOR = 80)
 );
+
+
 
 
 

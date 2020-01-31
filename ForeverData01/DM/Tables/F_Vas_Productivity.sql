@@ -1,0 +1,27 @@
+﻿CREATE TABLE [DM].[F_Vas_Productivity] (
+    [DateKey]         CHAR (30)       NOT NULL,
+    [Order_Type_Code] VARCHAR (2)     NULL,
+    [D_Vas_TI_Skey]   BIGINT          NOT NULL,
+    [D_Vas_Lane_Skey] BIGINT          NOT NULL,
+    [#VAS_KIT]        NUMERIC (38, 2) NOT NULL,
+    [#VAS_TRI_PAK]    NUMERIC (38, 2) NOT NULL,
+    [#VAS_SI_PAK]     NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M8]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M7]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M6]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M5]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M4]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M3]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M2]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_M1]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_LB_HND]     NUMERIC (38, 2) NOT NULL,
+    [#VAS_OMPAK]      NUMERIC (38, 2) NOT NULL,
+    [#VAS_UITPAK]     NUMERIC (38, 2) NOT NULL,
+    [#VAS_TPA_BULK]   NUMERIC (38, 2) NOT NULL,
+    [#VAS_SPOED]      NUMERIC (38, 2) NOT NULL,
+    [InsertDateTime]  DATETIME2 (7)   NOT NULL,
+    [UpdateDateTime]  DATETIME2 (7)   NOT NULL,
+    [BatchID]         BIGINT          NOT NULL,
+    [ProcessLogID]    BIGINT          NOT NULL
+);
+

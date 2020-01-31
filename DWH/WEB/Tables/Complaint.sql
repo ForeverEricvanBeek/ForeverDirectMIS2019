@@ -27,6 +27,7 @@
     [Complaint_TrackandTraceOrig]       NVARCHAR (50)   NULL,
     [Complaint_ItemOrderedOrig]         NVARCHAR (50)   NULL,
     [Complaint_Orig]                    NVARCHAR (50)   NULL,
+    [Complaint_Facility_Orig]           NVARCHAR (50)   NULL,
     [Complaint_Checked]                 CHAR (1)        NULL,
     [Complaint_Incomplete]              CHAR (1)        NULL,
     [Complaint_CreatedDate]             DATETIME2 (7)   NULL,
@@ -41,6 +42,8 @@
     [ProcessLogID]                      BIGINT          NULL,
     CONSTRAINT [PK_Complaints] PRIMARY KEY CLUSTERED ([Complaint_ID] ASC, [Eff_Date] ASC) ON [DWH_WEB]
 ) ON [DWH_WEB];
+
+
 
 
 

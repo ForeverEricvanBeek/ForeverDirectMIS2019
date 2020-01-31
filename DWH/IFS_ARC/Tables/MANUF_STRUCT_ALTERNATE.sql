@@ -20,8 +20,13 @@
     [IsDeleted]                CHAR (1)        NULL,
     [BatchID]                  BIGINT          NULL,
     [ProcessLogID]             BIGINT          NULL,
+    [OBJSTATE]                 NVARCHAR (30)   NULL,
+    [OBJEVENTS]                NVARCHAR (4000) NULL,
+    [STATE]                    NVARCHAR (4000) NULL,
     CONSTRAINT [PK_MANUF_STRUCT_ALTERNATE] PRIMARY KEY CLUSTERED ([CONTRACT] ASC, [PART_NO] ASC, [ENG_CHG_LEVEL] ASC, [BOM_TYPE_DB] ASC, [ALTERNATIVE_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS_ARC]
 ) ON [DWH_IFS_ARC];
+
+
 
 
 

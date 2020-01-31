@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE VIEW [FD2].[VW_D_Calendar]
 AS
 
@@ -21,7 +22,7 @@ SELECT DateKey
 	,YearMonth
 	,YearQtr
 	,IndWorkday
-FROM dbo.Fun_D_Calendar('20000101', '20200101') AS Fun_Calendar
+FROM dbo.Fun_D_Calendar('20000101', '20300101') AS Fun_Calendar
 
 UNION ALL
 
