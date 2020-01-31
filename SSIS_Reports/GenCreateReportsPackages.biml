@@ -8,7 +8,7 @@
     <Packages>
         <#
         string allSourceTables = "";
-        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT ST.SourceConnection AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[SourceTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.ReportID,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,ST.[Description] AS cDescription, ST.[Html],ST.Delimiter,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
+        string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME) AS (select TC.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, COLUMN_NAME Collate SQL_Latin1_General_CP1_CS_AS from [Reports].[INFORMATION_SCHEMA].[TABLE_CONSTRAINTS] TC JOIN [Reports].[INFORMATION_SCHEMA].[CONSTRAINT_COLUMN_USAGE] CCL ON TC.CONSTRAINT_CATALOG = CCL.CONSTRAINT_CATALOG AND	TC.CONSTRAINT_SCHEMA = CCL.CONSTRAINT_SCHEMA AND TC.CONSTRAINT_NAME = CCL.CONSTRAINT_NAME),CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, PK) AS (select distinct T1.TABLE_SCHEMA Collate SQL_Latin1_General_CP1_CS_AS, T1.TABLE_NAME Collate SQL_Latin1_General_CP1_CS_AS, STUFF((SELECT  ',' + T2.COLUMN_NAME from COLUMN_CONSTRAINTS T2 where T1.TABLE_SCHEMA = T2.TABLE_SCHEMA AND T1.TABLE_NAME = T2.TABLE_NAME FOR XML PATH('')),1 ,1, '') PK from COLUMN_CONSTRAINTS T1) SELECT ST.SourceConnection AS [SourceConnection],ST.[SourceSchema] AS [SourceSchema],ST.[SourceTable] AS [SourceTable],SC.[Type] AS [SourceType],SC.[Options],SC.[ConnectionString],ST.[ExtractionType],'Reports' AS [TargetConnection],ST.[TargetSchema],ST.[TargetTable],CS.PK AS [PrimaryKey],ST.RunSchedule,ST.RunParam1,ST.RunParam2,ST.RunParam3,ST.Output,ST.ReportID,ST.Filename,ST.EmailTo,ST.EmailCC,ST.EmailBCC,ST.EmailAttachment,ST.IgnoreEmpty,ST.FriendlyName,ST.[Description] AS cDescription, ST.[Html],ST.Delimiter,ST.OrderBy,'Reports' AS PackagePrefix FROM [Generator].[LoadReportTables] ST LEFT JOIN [Generator].[Connection] SC ON ST.[SourceConnection] = SC.[Name] LEFT JOIN CONSTRAINTS CS ON ST.[TargetSchema] = CS.[TABLE_SCHEMA] AND ST.[TargetTable] = CS.[TABLE_NAME] WHERE ST.[IsActive] = 1";
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows) {
             allSourceTables = allSourceTables + "'" + rowSourceExtractionTable["ReportID"].ToString() + "',";
@@ -39,6 +39,7 @@
             string varExtractionRunParam2 = rowSourceExtractionTable["RunParam2"].ToString();
             string varExtractionRunParam3 = rowSourceExtractionTable["RunParam3"].ToString();
             string varExtractionDelimiter = rowSourceExtractionTable["Delimiter"].ToString();
+            string varExtractionOrderBy = rowSourceExtractionTable["OrderBy"].ToString();
             int varExtractionIgnoreEmpty = (int)rowSourceExtractionTable["IgnoreEmpty"];
             string varTargetName = varExtractionTargetConnection + "_" + varExtractionTargetSchema + "_" + varExtractionTargetTable;
             string varScriptCoreName = "ST_232feca_" + varExtractionSourceTable + "_script_1";
@@ -597,6 +598,10 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
 		    string vOutputPath = (string)Dts.Variables["DirReports"].Value;
 		    string vReportLink = (string)Dts.Variables["ReportLink"].Value;
 		    string vRequestID = (string)Dts.Variables["varRequestID"].Value;
+		    string vOrderBy = "";
+		    <#if (varExtractionOrderBy.Length > 0) {#>
+		    vOrderBy = " ORDER BY <#=varExtractionOrderBy#>";
+            <#}#>
 		    <#if (varDirectIndirect == "Direct") {#>
 		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
 		    <#}#>
@@ -608,10 +613,11 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
             string vOutPutPathCheck = vOutputPath + @"\<#=varExtractionFilename#>\" + vYear + @"\" + vMonth;
             string mySqlStatement = "<#=sqlStatementScript#>";
             <#if (varDirectIndirect == "Direct") {#>
-            mySqlStatement += vWhereClause;
+            mySqlStatement += vWhereClause + vOrderBy;
             <#} else {#>
-            mySqlStatement += vRequestID;
+            mySqlStatement += vRequestID + vOrderBy;
             <#}#>
+            
             int row_index = 2;
             System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
             myADONETConnection = (SqlConnection)(Dts.Connections["ReportsADO"].AcquireConnection(Dts.Transaction) as SqlConnection);
@@ -716,6 +722,10 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
                 string vOutputPath = (string)Dts.Variables["DirReports"].Value;
                 string vReportLink = (string)Dts.Variables["ReportLink"].Value;
                 string vRequestID = (string)Dts.Variables["varRequestID"].Value;
+                string vOrderBy = "";
+    		    <#if (varExtractionOrderBy.Length > 0) {#>
+    		    vOrderBy = " ORDER BY <#=varExtractionOrderBy#>";
+                <#}#>
                 <#if (varDirectIndirect == "Direct") {#>
     		    string vWhereClause = (string)Dts.Variables["sqlWhereClause"].Value;
     		    <#}#>
@@ -728,9 +738,9 @@ namespace ST_7604ef180b844ecc9d9a43d7036fe914 {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("<#=varExtractionFilename#>");
                 string mySqlStatement = "<#=sqlStatementScript#>";
                 <#if (varDirectIndirect == "Direct") {#>
-                mySqlStatement += vWhereClause;
+                mySqlStatement += vWhereClause + vOrderBy;
                 <#} else {#>
-                mySqlStatement += vRequestID;
+                mySqlStatement += vRequestID + vOrderBy;
                 <#}#>
                 int row_index = 2;
                 System.Data.SqlClient.SqlConnection myADONETConnection = new SqlConnection();
