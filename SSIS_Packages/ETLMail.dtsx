@@ -12,10 +12,22 @@
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="41"
-  DTS:VersionGUID="{0ABAD221-E729-4913-BEE4-A2D1B9C2C5B6}">
+  DTS:VersionBuild="52"
+  DTS:VersionGUID="{4C3016C1-14FC-46AE-9570-F264ED6E99D3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DWH_Control_Package]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{0C0C5B4D-1B9E-4FFB-BEF7-E08709D0061B}"
+      DTS:ObjectName="DWH_Control_Package">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=FDODWHD01\DWHDEV;Initial Catalog=DWH_Control;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
@@ -24,8 +36,16 @@
       DTS:Namespace="User"
       DTS:ObjectName="dwhResult">
       <DTS:VariableValue
-        DTS:DataType="8"
-        xml:space="preserve"></DTS:VariableValue>
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -54,7 +74,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="mailBody">
       <DTS:VariableValue
-        DTS:DataType="8">ETL Status update off DEV on 4-12-2019</DTS:VariableValue>
+        DTS:DataType="8">ETL Status update off DEV on 11-2-2020</DTS:VariableValue>
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
@@ -96,6 +116,24 @@
     </DTS:Variable>
     <DTS:Variable
       DTS:CreationName=""
+      DTS:DTSID="{6FD0ABE5-443D-41C0-92BE-20C2B823556F}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="odsResult">
+      <DTS:VariableValue
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
       DTS:DTSID="{5F5BA222-DE09-4BEE-830C-537F26AC6EDE}"
       DTS:IncludeInDebugDump="2345"
       DTS:Namespace="User"
@@ -120,8 +158,16 @@
       DTS:Namespace="User"
       DTS:ObjectName="stagingResult">
       <DTS:VariableValue
-        DTS:DataType="8"
-        xml:space="preserve"></DTS:VariableValue>
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
@@ -137,9 +183,9 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{76B4230E-15A2-40DA-991D-756993D3E7C5}"
-          SQLTask:SqlStatementSource="select CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'DWH loaded' ELSE 'Staging DWH ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS DWH from Control.JobControl where Source = 'DWH' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;"
-          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          SQLTask:Connection="{0C0C5B4D-1B9E-4FFB-BEF7-E08709D0061B}"
+          SQLTask:SqlStatementSource="select 'DEV ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'DWH loaded' ELSE 'Staging DWH ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS DWH from DWH_Control.Control.JobControl where Source = 'DWH' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'TST ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'DWH loaded' ELSE 'Staging DWH ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS DWH from [FDODWHT01\DWHTST].DWH_Control.Control.JobControl where Source = 'DWH' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'ACC ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'DWH loaded' ELSE 'Staging DWH ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS DWH from [FDODWHA01\DWHACC].DWH_Control.Control.JobControl where Source = 'DWH' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'PRD ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'DWH loaded' ELSE 'Staging DWH ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS DWH from [FDODWHP01\DWHPRD].DWH_Control.Control.JobControl where Source = 'DWH' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;"
+          SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
             SQLTask:ResultName="0"
             SQLTask:DtsVariableName="User::dwhResult" />
@@ -158,13 +204,34 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{76B4230E-15A2-40DA-991D-756993D3E7C5}"
+          SQLTask:Connection="{0C0C5B4D-1B9E-4FFB-BEF7-E08709D0061B}"
           SQLTask:BypassPrepare="False"
-          SQLTask:SqlStatementSource="SELECT&#xA;&#x9;CASE&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS Source&#xA;&#x9;, CASE&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS [Type]&#xA;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionStartDate, 113)&#x9;&#x9;&#x9;AS [Start]&#xA;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionEndDate, 113)&#x9;&#x9;&#x9;AS [End]&#xA;&#x9;, DATEDIFF(MINUTE,T1.ExecutionStartDate,T1.ExecutionEndDate)&#x9;AS [Minutes]&#xA;&#x9;FROM (&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful IS NULL&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Datamart%' &#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ODS%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;&#xA;&#x9;&#x9;UNION ALL&#xA;&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful = 1&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Datamart%' &#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ODS%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;) AS T1&#xA;&#x9;ORDER BY &#xA;&#x9;CASE&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;END&#xA;&#x9;, CASE&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;END"
+          SQLTask:SqlStatementSource="&#xA;WITH CTE_DEV AS (&#xA;&#x9;SELECT&#xA;&#x9;&#x9;1 AS EnvironmentSort&#xA;&#x9;&#x9;, 'DEV' AS Environment&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS Source&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS [Type]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionStartDate, 113)&#x9;&#x9;&#x9;AS [Start]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionEndDate, 113)&#x9;&#x9;&#x9;AS [End]&#xA;&#x9;&#x9;, DATEDIFF(MINUTE,T1.ExecutionStartDate,T1.ExecutionEndDate)&#x9;AS [Minutes]&#xA;&#x9;FROM (&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful IS NULL&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;&#xA;&#x9;&#x9;UNION ALL&#xA;&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful = 1&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;) AS T1&#xA;), CTE_TST AS (&#xA;&#x9;SELECT&#xA;&#x9;&#x9;2 AS EnvironmentSort&#xA;&#x9;&#x9;, 'TST' AS Environment&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS Source&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS [Type]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionStartDate, 113)&#x9;&#x9;&#x9;AS [Start]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionEndDate, 113)&#x9;&#x9;&#x9;AS [End]&#xA;&#x9;&#x9;, DATEDIFF(MINUTE,T1.ExecutionStartDate,T1.ExecutionEndDate)&#x9;AS [Minutes]&#xA;&#x9;FROM (&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful IS NULL&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;&#xA;&#x9;&#x9;UNION ALL&#xA;&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful = 1&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHT01\DWHTST].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;) AS T1&#xA;), CTE_ACC AS (&#xA;&#x9;SELECT&#xA;&#x9;&#x9;3 AS EnvironmentSort&#xA;&#x9;&#x9;, 'ACC' AS Environment&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS Source&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS [Type]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionStartDate, 113)&#x9;&#x9;&#x9;AS [Start]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionEndDate, 113)&#x9;&#x9;&#x9;AS [End]&#xA;&#x9;&#x9;, DATEDIFF(MINUTE,T1.ExecutionStartDate,T1.ExecutionEndDate)&#x9;AS [Minutes]&#xA;&#x9;FROM (&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful IS NULL&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;&#xA;&#x9;&#x9;UNION ALL&#xA;&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful = 1&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHA01\DWHACC].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;) AS T1&#xA;), CTE_PRD AS (&#xA;&#x9;SELECT&#xA;&#x9;&#x9;4 AS EnvironmentSort&#xA;&#x9;&#x9;, 'PRD' AS Environment&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1,(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))+1))-1)-(CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))+1))))&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN SUBSTRING(T1.PackageName,CHARINDEX('-',T1.PackageName)+1,CHARINDEX('-',T1.PackageName, (CHARINDEX('-',T1.PackageName)+1))-CHARINDEX('-',T1.PackageName)-1)&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE T1.PackageName&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS Source&#xA;&#x9;&#x9;, CASE&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%Staging%' THEN 'Staging'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%DWH%' THEN 'DWH'&#xA;&#x9;&#x9;&#x9;WHEN T1.PackageName LIKE '%ODS%' THEN 'ODS'&#xA;&#x9;&#x9;&#x9;ELSE 'Unknown'&#xA;&#x9;&#x9;END&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;AS [Type]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionStartDate, 113)&#x9;&#x9;&#x9;AS [Start]&#xA;&#x9;&#x9;&#x9; , CONVERT(VARCHAR(20), T1.ExecutionEndDate, 113)&#x9;&#x9;&#x9;AS [End]&#xA;&#x9;&#x9;, DATEDIFF(MINUTE,T1.ExecutionStartDate,T1.ExecutionEndDate)&#x9;AS [Minutes]&#xA;&#x9;FROM (&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful IS NULL&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;&#xA;&#x9;&#x9;UNION ALL&#xA;&#xA;&#x9;&#x9;SELECT&#xA;&#x9;&#x9; T1.PackageName&#xA;&#x9;&#x9; , T1.IsSuccessful&#xA;&#x9;&#x9; , T1.ExecutionStartDate&#xA;&#x9;&#x9; , T1.ExecutionEndDate&#xA;&#x9;&#x9; , PM.EventDescription&#xA;&#x9;&#x9;FROM [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessLog AS T1&#xA;&#x9;&#x9;LEFT JOIN [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessMessageLog AS PM ON PM.ProcessLogID = T1.ProcessLogID&#xA;&#x9;&#x9;WHERE T1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND T1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND T1.IsSuccessful = 1&#xA;&#x9;&#x9;AND T1.ProcessLogParentID IS NULL&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%ForeverData%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE '%Reports%'&#xA;&#x9;&#x9;AND&#x9;T1.PackageName NOT LIKE 'CL%'&#xA;&#x9;&#x9;AND NOT EXISTS (SELECT P1.BatchID FROM [FDODWHP01\DWHPRD].DWH_Control.Logging.ProcessLog P1 WHERE P1.ExecutionStartDate &gt;= cast(floor(cast(getdate() as float)) as datetime) AND P1.ExecutionStartDate &lt; cast(floor(cast(getdate()+1 as float)) as datetime)&#xA;&#x9;&#x9;AND P1.BatchID &gt; T1.BatchID AND P1.PackageName = T1.PackageName)&#xA;&#x9;) AS T1&#xA;)&#xA;&#xA;SELECT&#xA;  X.[Environment]&#xA;  , X.[Source]&#xA;  , X.[Type]&#xA;  , X.[Start]&#xA;  , X.[End]&#xA;  , X.[Minutes]&#xA;FROM (&#xA;SELECT * FROM CTE_DEV&#xA;&#xA;UNION ALL&#xA;&#xA;SELECT 2, NULL, NULL, NULL, NULL, NULL, NULL&#xA;&#xA;UNION ALL&#xA;&#xA;SELECT * FROM CTE_TST&#xA;&#xA;UNION ALL&#xA;&#xA;SELECT 3, NULL, NULL, NULL, NULL, NULL, NULL&#xA;&#xA;UNION ALL&#xA;&#xA;SELECT * FROM CTE_ACC&#xA;&#xA;UNION ALL&#xA;&#xA;SELECT 4, NULL, NULL, NULL, NULL, NULL, NULL&#xA;UNION ALL&#xA;&#xA;SELECT * FROM CTE_PRD&#xA;) X&#xA;ORDER BY&#xA;  X.EnvironmentSort&#xA;  , X.Source&#xA;  , X.Type"
           SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
             SQLTask:ResultName="0"
             SQLTask:DtsVariableName="User::etlResult" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\ODS result"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{4ee5af3e-06c3-4f86-8393-5eb162883322}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="ODS result"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{0C0C5B4D-1B9E-4FFB-BEF7-E08709D0061B}"
+          SQLTask:SqlStatementSource="select 'DEV ' + CASE WHEN COUNT(distinct Sourcesystem) = 1 THEN 'ODS loaded' ELSE 'ODS busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from Control.JobControl where Source = 'ODS' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) &#xA;UNION ALL&#xA;select 'TST ' + CASE WHEN COUNT(distinct Sourcesystem) = 1 THEN 'ODS loaded' ELSE 'ODS busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHT01\DWHTST].DWH_Control.Control.JobControl where Source = 'ODS' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) &#xA;UNION ALL&#xA;select 'ACC ' + CASE WHEN COUNT(distinct Sourcesystem) = 1 THEN 'ODS loaded' ELSE 'ODS busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHA01\DWHACC].DWH_Control.Control.JobControl where Source = 'ODS' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) &#xA;UNION ALL&#xA;select 'PRD ' + CASE WHEN COUNT(distinct Sourcesystem) = 1 THEN 'ODS loaded' ELSE 'ODS busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHP01\DWHPRD].DWH_Control.Control.JobControl where Source = 'ODS' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0)&#xA;&#xA;"
+          SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="0"
+            SQLTask:DtsVariableName="User::odsResult" />
         </SQLTask:SqlTaskData>
       </DTS:ObjectData>
     </DTS:Executable>
@@ -184,7 +251,7 @@
           VSTAMajorVersion="14"
           VSTAMinorVersion="0"
           Language="VisualBasic"
-          ReadOnlyVariables="User::dwhResult,User::etlResult,User::mailBody,User::mailCC,User::mailFrom,User::mailSubject,User::mailTo,User::ScriptTaskErrorMsg,User::smtp,User::stagingResult">
+          ReadOnlyVariables="User::dwhResult,User::etlResult,User::mailBody,User::mailCC,User::mailFrom,User::mailSubject,User::mailTo,User::odsResult,User::ScriptTaskErrorMsg,User::smtp,User::stagingResult">
           <ProjectItem
             Name="ST_1e596af4df2d4842bda45cdd53253089.vbproj"
             Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
@@ -431,39 +498,100 @@ Partial Public Class ScriptMain
     Public Sub Main()
         Try
             '' Create a new dataset to store data tables
-            Dim ds As New DataSet
-            Dim oleDA As New OleDbDataAdapter
-            Dim dt1 As New DataTable
-            oleDA.Fill(dt1, Dts.Variables("etlResult").Value)
+            Dim ds1, ds2, ds3, ds4 As New DataSet
+            Dim oleDA1, oleDA2, oleDA3, oleDA4 As New OleDbDataAdapter
+            Dim dt1, dt2, dt3, dt4 As New DataTable
+            oleDA1.Fill(dt1, Dts.Variables("etlResult").Value)
+            oleDA2.Fill(dt2, Dts.Variables("stagingResult").Value)
+            oleDA3.Fill(dt3, Dts.Variables("dwhResult").Value)
+            oleDA4.Fill(dt4, Dts.Variables("odsResult").Value)
 
             '' If data tables have rows then add it to the data set
             If dt1 IsNot Nothing AndAlso dt1.Rows.Count > 0 Then
-                ds.Tables.Add(dt1)
+                ds1.Tables.Add(dt1)
+            End If
+
+            If dt2 IsNot Nothing AndAlso dt2.Rows.Count > 0 Then
+                ds2.Tables.Add(dt2)
+            End If
+
+            If dt3 IsNot Nothing AndAlso dt3.Rows.Count > 0 Then
+                ds3.Tables.Add(dt3)
+            End If
+
+            If dt4 IsNot Nothing AndAlso dt4.Rows.Count > 0 Then
+                ds4.Tables.Add(dt4)
             End If
 
             '' Count the number of tables in the data set
-            Dim dsCount As Integer = ds.Tables.Count
+            Dim dsCount1 As Integer = ds1.Tables.Count
+            Dim dsCount2 As Integer = ds2.Tables.Count
+            Dim dsCount3 As Integer = ds3.Tables.Count
+            Dim dsCount4 As Integer = ds4.Tables.Count
             Dim str As String = String.Empty
             Dim result As String = Dts.Variables("mailBody").Value.ToString()
-            Dim stagingResult As String = Dts.Variables("stagingResult").Value.ToString()
-            Dim dwhResult As String = Dts.Variables("dwhResult").Value.ToString()
+            ''Dim stagingResult As String = Dts.Variables("stagingResult").Value.ToString()
+            ''Dim dwhResult As String = Dts.Variables("dwhResult").Value.ToString()
             ''result = result & ControlChars.NewLine
             '' strBody and strBodyEnd adds the HTML tag information. 
-            Dim strBody As String = "<html><body style='font-family: Arial, Helvetica, sans-serif;font-size: 12px;'>" & result.ToString & "<br><br>" & stagingResult.ToString & "<br>" & dwhResult.ToString & "<br><br>"
+            ''Dim strBody As String = "<html><body style='font-family: Arial, Helvetica, sans-serif;font-size: 12px;'>" & result.ToString & "<br><br>" & stagingResult.ToString & "<br>" & dwhResult.ToString & "<br><br>"
+            Dim strBody As String = "<html><body style='font-family: Arial, Helvetica, sans-serif;font-size: 12px;'>" & result.ToString & "<br><br>"
             Dim strBodyEnd As String = "</body></html>"
 
             '' The following code captures the results of datatables and buils an html string to dispose as an email
-            For x As Integer = 0 To dsCount - 1
-                If ds.Tables(x) IsNot Nothing AndAlso ds.Tables(x).Rows.Count > 0 Then
-                    Dim strText As String = DataTableToHTMLTable(ds.Tables(x))
+            For x As Integer = 0 To dsCount2 - 1
+                If ds2.Tables(x) IsNot Nothing AndAlso ds2.Tables(x).Rows.Count > 0 Then
+                    Dim strText2 As String = DataTableToHTMLTable(ds2.Tables(x))
                     If x = 0 Then
-                        str += strText.ToString()
+                        str += strText2.ToString()
                     Else
                         If x > 0 Then
-                            '' The result sets start with 0 to n-1 (0,1,2,3...Etc.)
-                            '' The below statment replaces the captionname and adds a suffix, which is number of result set
-                            '' For example, for the 2nd result, the caption would become "CaptionName1"
-                            str += "<br>" & Replace(strText.ToString(), "Query Result Set", "Query Result Set" & x)
+                            str += "<br>" & Replace(strText2.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            For x As Integer = 0 To dsCount3 - 1
+                If ds3.Tables(x) IsNot Nothing AndAlso ds3.Tables(x).Rows.Count > 0 Then
+                    Dim strText3 As String = DataTableToHTMLTable(ds3.Tables(x))
+                    If x = 0 Then
+                        str += strText3.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText3.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            For x As Integer = 0 To dsCount4 - 1
+                If ds4.Tables(x) IsNot Nothing AndAlso ds4.Tables(x).Rows.Count > 0 Then
+                    Dim strText4 As String = DataTableToHTMLTable(ds4.Tables(x))
+                    If x = 0 Then
+                        str += strText4.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText4.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            For x As Integer = 0 To dsCount1 - 1
+                If ds1.Tables(x) IsNot Nothing AndAlso ds1.Tables(x).Rows.Count > 0 Then
+                    Dim strText1 As String = DataTableToHTMLTable(ds1.Tables(x))
+                    If x = 0 Then
+                        str += strText1.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText1.ToString(), "Query Result Set", "Query Result Set" & x)
                         End If
                     End If
                 Else
@@ -728,221 +856,212 @@ End Namespace]]></ProjectItem>
           <BinaryItem
             Name="ST_1e596af4df2d4842bda45cdd53253089.dll">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
-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
+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
-ABAAAAAAEAAAEAAAAAAAABAAAAAAAAAAAAAAAIRIAABPAAAAAGAAAEgEAAAAAAAAAAAAAAAAAAAA
+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
-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
+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
-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
-LRIoAgAAKwoCe2UAAAoGb2cAAAoGKkoCKCIAAAoCc2gAAAp9ZQAACioAQlNKQgEAAQAAAAAADAAA
-AHY0LjAuMzAzMTkAAAAABQBsAAAA5AkAACN+AABQCgAARAwAACNTdHJpbmdzAAAAAJQWAABMBQAA
-I1VTAOAbAAAQAAAAI0dVSUQAAADwGwAAWAQAACNCbG9iAAAAAAAAAAIAAAFXHaIJCQ8AAAD6ATMA
-FgAAAQAAAEkAAAAKAAAADQAAAB0AAAAHAAAAaAAAAAIAAAA3AAAABgAAAAQAAAAIAAAACQAAAAgA
-AAABAAAABgAAAAEAAAADAAAAAwAAAAIAAAAAAE4GAQAAAAAABgBkBMUJBgAJBcUJBgA7AwYJDwBr
-CgAABgB8AxoHBgBHBBoHBgDwBBoHBgCEBBoHBgCdBBoHBgDDAxoHBgC4BJMGBgBoA38JBgDkAn8J
-BgAPBBoHBgDeA2MFCgAHAx8ICgC/AigGCgBPAygGDgB0AlUJDgCQCBkJBgD3AwYJDgCTA54JDgCr
-A+IABgBtC5MGDgBPCFUJDgAsBOIABgAnApMGDgABAOwFCgDyAp8GBgAPCOUJBgCHBwUHCgCfAvAG
-BgAeAwYJEgDOBLEFEgBYArEFBgCGBZMGFgCJC68AFgCXAa8ADgAgAuIABgB9B5MGGgCJCvgBBgD9
-B+ILBgDNCPMKFgDHBq8AFgD4C68ACgBeAT4GCgAdCz4GBgCaBpMGBgDFAZMGBgAzDBoHBgAGC8UJ
-BgD+CFIFFgBwCMcAEgAWBrEFGgCwAfgBFgBrB68AFgAsB68AFgCEAq8ABgB/BZMGDgDnCp4JDgCT
-CuIADgAIAeIADgC7AJ4JGgBYCPgBEgA3CLEFFgBAB68ABgC5AZMGCgClCz4GCgByAX4LCgDaBX4L
-CgDGC34LCgBVBz4GBgDnCJMGAAAAAE8AAAAAAAEAAQAAAAAA4gYADE0AAQABAAAAAACOCAAMUQAB
-AAIAAAEQAHQLAAxhAAEAAwAAAAAAJwr2CWEABQAIAAABEACbCisAgQAHAAwAAQAAALwGKwCNAAkA
-DwAFAQAARwkAAGEACgAVAAUBAAAQAAAAYQAKABwAAgEAADELAADBAAsAHgAxAMYH7QExAJ0H9QEx
-ALEH/QExAN8HBQIRAJkIDQIRAEwCEQIRACcFFQIRAGcLGQIBAGoBwgAhAO4LqwEGBqcAHAJWgBUL
-HwJWgCwCHwJQIAAAAAAGGPEIBgABAFggAAAAAAYY8QgGAAEAYCAAAAAAERj3CB4BAQCKIAAAAAAT
-CIEIIwIBAJYgAAAAABMI0gYoAgEAoiAAAAAAEwhLCC0CAQCuIAAAAAATCDcJMgIBALogAAAAAAMY
-8QgGAAEAwiAAAAAAFggLCDcCAQDuIAAAAAAWCDQCPAIBAPUgAAAAABYIQAJBAgEA/SAAAAAAERj3
-CB4BAgAOIQAAAAAGGPEIBgACABghAAAAABYILwVHAgIAdCEAAAAABhjxCAYAAgB8IQAAAAAGAMIG
-BgACADQkAAAAAAYAggFMAgIAjCQAAAAAAQCTB0wCAwAYJQAAAAABACcMTAIEAOAlAAAAAAYASQYG
-AAUA4yYAAAAAxgLUCocBBQDxJgAAAADGAkYBsQAGAPkmAAAAAIMAGAJTAgYABScAAAAAxgJ9BcUA
-BgAQJwAAAAARAJQAWAIGADAnAAAAAAEAgABgAgcAuiAAAAAABhjxCAYACAA8JwAAAAADCC0BSgAI
-AHAnAAAAAAYY8QgGAAgAAAABAEwFAAABAKgBAAABAKEBAAABAKEBAAABAJEHAAABAD0BAAABAD0B
-CQDxCAEAEQDxCAYAGQDxCAoAKQDxCBAAMQDxCBAAOQDxCBAAQQDxCBAASQDxCBAAUQDxCBAAWQDx
-CBUAYQDxCBUAaQDxCBAAcQDxCBAAeQDxCBAAgQDxCBoAkQDxCCAAqQDxCAYAsQDxCAYAuQDxCAYA
-0QDxCCYA6QDxCBAACQHxCAYAEQHxCAYAmQDxCAYAoQDxCAYADADxCAYAFADxCAYAHADxCAYAJADx
-CAYADAAtAUoAFAAtAUoAHAAtAUoAJAAtAUoAwQDxCAYA2QDXAU8A2QAvDFcA8QDxCF0AmQFDBWUA
-AQHxCAYAoQFqCGoAoQGRC2oAGQHxCAYAKQHxCAYAqQHxCAYAMQHxCAYAGQEpC4wAsQGFCpIASQGK
-BpgAuQEvBZ8AqQF2BqMAMQFKC6sAwQG8C7EAKQF6CrUAyQH4ALsA0QG8C7EA2QE8DMIAwQB9BcUA
-2QF9BcUA2QFTC8kAyQGKBs8A2QFTC9YA4QF9BdwA6QEWAeEA2QFTC+0AgQF9BcUAsQGWCwEA+QG9
-CPQAsQFUCPsAAQLUAgEBQQFSAcUAuQE5BQoBSQGLBQYAsQE/Cw8BCQKhCBUB+QGrCB4BUQHxCAYA
-UQEBASIBUQF9BcUAMQHbCjUB0QHZCDsBWQGwC58AYQHpAcUAUQFaC0EBWQHZC0kBGQK3AgYAwQHZ
-CDsBaQGKBlsBeQHxCBAAeQF9BcUAcQHxCCYAIQLxCBAAKQK2Cm0BIQKmCnMBcQF7BhUAcQFYAHoB
-QQL4ABAAIQL8AIABwQDUCocBwQBGAbEASQIeAZQBNADuC6sBPAAvBUoAPAA5BcIBPADxCAYACAAw
-AOMBCAA0AOgBKQCrABIELgALAJACLgATAJkCLgAbALgCLgAjAMECLgArAOoCLgAzAOoCLgA7AMEC
-LgBDAPACLgBLAOoCLgBTAAcDLgBbAOoCLgBjAA0DLgBrADcDLgBzAEQDQACLAOgBQACDAI4DQwB7
-AJcDQwCDAI4DSQCrACMEYwB7AJcDYwCDAI4DaQCrADcEgACLAOgBgwCTAOgBgwCbAOgBgwB7AJcD
-iQCrAEQEoACLAOgBqQCDALgCwACLAOgByQCDALgC4ACLAOgB4wC7AOgB4wBTAOoC6QCzAOgBAwGD
-AI4DAwGjALADIwGDAI4DIwFbAOoCoAKDAI4DoAKLAOgBwAKDAI4DwAKLAOgB4AKDAI4D4AKLAOgB
-AAODAI4DAAOLAOgBIAOLAOgBQAOLAOgBYAOLAOgBYAODAI4DgAOLAOgBoAOLAOgBoAODAI4DbwAp
-AU0BYAGMAZ8BBAABAAUABQAGAAcACQAIAAAAkAhoAgAA5AZtAgAATwhyAgAASQl3AgAADwh8AgAA
-UAKBAgAATAWGAgAAMQGLAgIABAADAAIABQAFAAIABgAHAAIABwAJAAIACQALAAIACgANAAEACwAN
-AAIADgAPAAIAHAARAC4ANQA8AEMAkQGkAbMBugEEgAAAAQAAAAAAAAAAAAAAAAArAAAABAAAAAAA
-AAAAAAAAyAHZAAAAAAAEAAAAAAAAAAAAAADIAZMGAAAAAAoAAAAAAAAAAAAAANEB4gAAAAAADQAA
-AAAAAAAAAAAA2gGSBQAAAAAEAAAAAAAAAAAAAADIAa8AAAAAAA0AAAAAAAAAAAAAANoBXwAAAAAA
-AAAAAAEAAAAzCgAACAAEAAkABAAKAAcAAAAQABIAfgAAABAAMwB+AAAAAAA1AH4AyQCaAckAvQEA
-AAAAAENvbnRleHRWYWx1ZWAxAFRocmVhZFNhZmVPYmplY3RQcm92aWRlcmAxAFNUXzFlNTk2YWY0
-ZGYyZDQ4NDJiZGE0NWNkZDUzMjUzMDg5ADxNb2R1bGU+AGdldF9DQwBNaWNyb3NvZnQuU3FsU2Vy
-dmVyLk1hbmFnZWREVFMAVABEaXNwb3NlX19JbnN0YW5jZV9fAENyZWF0ZV9fSW5zdGFuY2VfXwB2
-YWx1ZV9fAFN5c3RlbS5EYXRhAFByb2plY3REYXRhAFN5c3RlbS5EYXRhLk9sZURiAG1zY29ybGli
-AE1pY3Jvc29mdC5WaXN1YWxCYXNpYwBBZGQAU2VuZABBcHBlbmQAQ29tcGFyZU1ldGhvZABSZXBs
-YWNlAENyZWF0ZUluc3RhbmNlAGdldF9HZXRJbnN0YW5jZQBpbnN0YW5jZQBHZXRIYXNoQ29kZQBn
-ZXRfTWVzc2FnZQBNYWlsTWVzc2FnZQBtZXNzYWdlAENyZWRlbnRpYWxDYWNoZQBEYXRhVGFibGVU
-b0hUTUxUYWJsZQBEYXRhVGFibGUAZFRhYmxlAGluVGFibGUAVmFyaWFibGUASURpc3Bvc2FibGUA
-UnVudGltZVR5cGVIYW5kbGUAR2V0VHlwZUZyb21IYW5kbGUAZ2V0X0NvbHVtbk5hbWUATWljcm9z
-b2Z0LlNxbFNlcnZlci5EdHMuUnVudGltZQBHZXRUeXBlAFZhcmlhbnRUeXBlAEZhaWx1cmUAZ2V0
-X0N1bHR1cmUAc2V0X0N1bHR1cmUAX3Jlc0N1bHR1cmUAVlNUQVJUU2NyaXB0T2JqZWN0TW9kZWxC
-YXNlAEFwcGxpY2F0aW9uQmFzZQBJbnRlcm5hbERhdGFDb2xsZWN0aW9uQmFzZQBBcHBsaWNhdGlv
-blNldHRpbmdzQmFzZQBEaXNwb3NlAEVkaXRvckJyb3dzYWJsZVN0YXRlAExvY2tPbmVGb3JXcml0
-ZQBHdWlkQXR0cmlidXRlAEhlbHBLZXl3b3JkQXR0cmlidXRlAEdlbmVyYXRlZENvZGVBdHRyaWJ1
-dGUARGVidWdnZXJOb25Vc2VyQ29kZUF0dHJpYnV0ZQBEZWJ1Z2dhYmxlQXR0cmlidXRlAEVkaXRv
-ckJyb3dzYWJsZUF0dHJpYnV0ZQBDb21WaXNpYmxlQXR0cmlidXRlAEFzc2VtYmx5VGl0bGVBdHRy
-aWJ1dGUAU3RhbmRhcmRNb2R1bGVBdHRyaWJ1dGUASGlkZU1vZHVsZU5hbWVBdHRyaWJ1dGUAQXNz
-ZW1ibHlUcmFkZW1hcmtBdHRyaWJ1dGUAVGFyZ2V0RnJhbWV3b3JrQXR0cmlidXRlAERlYnVnZ2Vy
-SGlkZGVuQXR0cmlidXRlAEFzc2VtYmx5RmlsZVZlcnNpb25BdHRyaWJ1dGUATXlHcm91cENvbGxl
-Y3Rpb25BdHRyaWJ1dGUAQXNzZW1ibHlEZXNjcmlwdGlvbkF0dHJpYnV0ZQBDb21waWxhdGlvblJl
-bGF4YXRpb25zQXR0cmlidXRlAEFzc2VtYmx5UHJvZHVjdEF0dHJpYnV0ZQBBc3NlbWJseUNvcHly
-aWdodEF0dHJpYnV0ZQBDTFNDb21wbGlhbnRBdHRyaWJ1dGUAU1NJU1NjcmlwdFRhc2tFbnRyeVBv
-aW50QXR0cmlidXRlAEFzc2VtYmx5Q29tcGFueUF0dHJpYnV0ZQBSdW50aW1lQ29tcGF0aWJpbGl0
-eUF0dHJpYnV0ZQBtX1ZhbHVlAGdldF9WYWx1ZQBzZXRfVmFsdWUAR2V0T2JqZWN0VmFsdWUAU3lz
-dGVtLlRocmVhZGluZwBTeXN0ZW0uUnVudGltZS5WZXJzaW9uaW5nAFRvU3RyaW5nAE1hdGgAVW5s
-b2NrAE1pY3Jvc29mdC5TcWxTZXJ2ZXIuU2NyaXB0VGFzawBNaWNyb3NvZnQuU3FsU2VydmVyLkR0
-cy5UYXNrcy5TY3JpcHRUYXNrAE5ldHdvcmtDcmVkZW50aWFsAE1pY3Jvc29mdC5WaXN1YWxCYXNp
-Yy5NeVNlcnZpY2VzLkludGVybmFsAFNjcmlwdE9iamVjdE1vZGVsAFN5c3RlbS5Db21wb25lbnRN
-b2RlbABTeXN0ZW0uTmV0Lk1haWwAU1RfMWU1OTZhZjRkZjJkNDg0MmJkYTQ1Y2RkNTMyNTMwODku
-ZGxsAEZpbGwAc2V0X0lzQm9keUh0bWwAZ2V0X0l0ZW0AU3lzdGVtAEVudW0AU3lzdGVtLkNvbXBv
-bmVudE1vZGVsLkRlc2lnbgBTY3JpcHRNYWluAERhdGFDb2x1bW4AZ2V0X0FwcGxpY2F0aW9uAE15
-QXBwbGljYXRpb24AU3lzdGVtLkNvbmZpZ3VyYXRpb24AU3lzdGVtLkdsb2JhbGl6YXRpb24AU3lz
-dGVtLlJlZmxlY3Rpb24ARGF0YVRhYmxlQ29sbGVjdGlvbgBEYXRhQ29sdW1uQ29sbGVjdGlvbgBN
-YWlsQWRkcmVzc0NvbGxlY3Rpb24ARGF0YVJvd0NvbGxlY3Rpb24ARXhjZXB0aW9uAEN1bHR1cmVJ
-bmZvAEdldEhlYWRlcgBtX0FwcE9iamVjdFByb3ZpZGVyAG1fVXNlck9iamVjdFByb3ZpZGVyAG1f
-Q29tcHV0ZXJPYmplY3RQcm92aWRlcgBtX015V2ViU2VydmljZXNPYmplY3RQcm92aWRlcgBTdHJp
-bmdCdWlsZGVyAGdldF9SZXNvdXJjZU1hbmFnZXIAU3lzdGVtLkNvZGVEb20uQ29tcGlsZXIARXZl
-bnRzT2JqZWN0V3JhcHBlcgBnZXRfVXNlcgBnZXRfVmFyaWFibGVEaXNwZW5zZXIARW50ZXIAT2xl
-RGJEYXRhQWRhcHRlcgBnZXRfQ29tcHV0ZXIATXlDb21wdXRlcgBfcmVzTWdyAEZpcmVFcnJvcgBD
-bGVhclByb2plY3RFcnJvcgBTZXRQcm9qZWN0RXJyb3IASUVudW1lcmF0b3IAR2V0RW51bWVyYXRv
-cgBBY3RpdmF0b3IALmN0b3IALmNjdG9yAE1vbml0b3IAU3lzdGVtLkRpYWdub3N0aWNzAE1pY3Jv
-c29mdC5WaXN1YWxCYXNpYy5EZXZpY2VzAGdldF9XZWJTZXJ2aWNlcwBNeVdlYlNlcnZpY2VzAE1p
-Y3Jvc29mdC5WaXN1YWxCYXNpYy5BcHBsaWNhdGlvblNlcnZpY2VzAFN5c3RlbS5SdW50aW1lLklu
-dGVyb3BTZXJ2aWNlcwBNaWNyb3NvZnQuVmlzdWFsQmFzaWMuQ29tcGlsZXJTZXJ2aWNlcwBTeXN0
-ZW0uUnVudGltZS5Db21waWxlclNlcnZpY2VzAFN5c3RlbS5SZXNvdXJjZXMAU1RfMWU1OTZhZjRk
-ZjJkNDg0MmJkYTQ1Y2RkNTMyNTMwODkuTXkuUmVzb3VyY2VzAE15UmVzb3VyY2VzAFNUXzFlNTk2
-YWY0ZGYyZDQ4NDJiZGE0NWNkZDUzMjUzMDg5LlJlc291cmNlcy5yZXNvdXJjZXMARGVidWdnaW5n
-TW9kZXMAZ2V0X1RhYmxlcwBnZXRfVmFyaWFibGVzAFN0cmluZ3MATXlTZXR0aW5ncwBzZXRfQ3Jl
-ZGVudGlhbHMAZ2V0X0RlZmF1bHROZXR3b3JrQ3JlZGVudGlhbHMARXF1YWxzAGdldF9Db2x1bW5z
-AENvbnZlcnNpb25zAFN5c3RlbS5Db2xsZWN0aW9ucwBSdW50aW1lSGVscGVycwBTdWNjZXNzAE1h
-aWxBZGRyZXNzAGdldF9EdHMAU2NyaXB0UmVzdWx0cwBnZXRfRXZlbnRzAGdldF9Sb3dzAENvbmNh
-dABBcHBlbmRGb3JtYXQAbV9TeW5jT2JqZWN0AE15UHJvamVjdABTeXN0ZW0uTmV0AERhdGFTZXQA
-RXhpdABzZXRfVGFza1Jlc3VsdABTbXRwQ2xpZW50AGdldF9DdXJyZW50AGdldF9Db3VudABJQ3Jl
-ZGVudGlhbHNCeUhvc3QATW92ZU5leHQAU3lzdGVtLlRleHQAbV9Db250ZXh0AERhdGFSb3cAU1Rf
-MWU1OTZhZjRkZjJkNDg0MmJkYTQ1Y2RkNTMyNTMwODkuTXkAR2V0Qm9keQBnZXRfQXNzZW1ibHkA
-RW1wdHkAAAAAMU0AeQAuAFIAZQBzAG8AdQByAGMAZQBzAC4ATQB5AFIAZQBzAG8AdQByAGMAZQBz
-AAATZQB0AGwAUgBlAHMAdQBsAHQAABFtAGEAaQBsAEIAbwBkAHkAABtzAHQAYQBnAGkAbgBnAFIA
-ZQBzAHUAbAB0AAATZAB3AGgAUgBlAHMAdQBsAHQAAICfPABoAHQAbQBsAD4APABiAG8AZAB5ACAA
-cwB0AHkAbABlAD0AJwBmAG8AbgB0AC0AZgBhAG0AaQBsAHkAOgAgAEEAcgBpAGEAbAAsACAASABl
-AGwAdgBlAHQAaQBjAGEALAAgAHMAYQBuAHMALQBzAGUAcgBpAGYAOwBmAG8AbgB0AC0AcwBpAHoA
-ZQA6ACAAMQAyAHAAeAA7ACcAPgABETwAYgByAD4APABiAHIAPgAACTwAYgByAD4AAB08AC8AYgBv
-AGQAeQA+ADwALwBoAHQAbQBsAD4AACFRAHUAZQByAHkAIABSAGUAcwB1AGwAdAAgAFMAZQB0AAAx
-VQBzAGUAcgA6ADoAUwBjAHIAaQBwAHQAVABhAHMAawBFAHIAcgBvAHIATQBzAGcAACdFAHIAcgBv
-AHIAIABEAGUAcwBjAHIAaQBwAHQAaQBvAG4AOgAgAAAXUwBjAHIAaQBwAHQAIABUAGEAcwBrAAAL
-RQByAHIAbwByAACCEzwAcwB0AHkAbABlACAAcwBjAG8AcABlAGQAPgAuAG0AeQBUAGEAYgBsAGUA
-IAB7ACAAYgBhAGMAawBnAHIAbwB1AG4AZAAtAGMAbwBsAG8AcgA6ACMAZgA0AGYANABmADQAOwAg
-AHcAaQBkAHQAaAA6ADkAMAAwAHAAeAA7AGYAbwBuAHQALQBmAGEAbQBpAGwAeQA6ACAAQQByAGkA
-YQBsACwAIABIAGUAbAB2AGUAdABpAGMAYQAsACAAcwBhAG4AcwAtAHMAZQByAGkAZgA7AGYAbwBu
-AHQALQBzAGkAegBlADoAIAAxADIAcAB4ADsAfQAuAG0AeQBUAGEAYgBsAGUAIAB0AGgAIAB7ACAA
-YgBhAGMAawBnAHIAbwB1AG4AZAAtAGMAbwBsAG8AcgA6ACMAZgA0AGYANABmADQAOwBjAG8AbABv
-AHIAOgBiAGwAYQBjAGsAOwB0AGUAeAB0AC0AYQBsAGkAZwBuADoAbABlAGYAdAA7ACAAfQAuAG0A
-eQBUAGEAYgBsAGUAIAB0AGQALAAgAC4AbQB5AFQAYQBiAGwAZQAgAHQAaAAgAHsAIABwAGEAZABk
-AGkAbgBnADoAMABwAHgAOwBiAG8AcgBkAGUAcgA6ADAAcAB4ACAAcwBvAGwAaQBkACAAIwAwADAA
-MAAwADAAMAA7ACAAfQA8AC8AcwB0AHkAbABlAD4AAS08AHQAYQBiAGwAZQAgAGMAbABhAHMAcwA9
-AG0AeQBUAGEAYgBsAGUAPgAgAAARPAAvAHQAYQBiAGwAZQA+AAAXPAB0AGgAZQBhAGQAPgA8AHQA
-cgA+AAAZPAB0AGgAPgB7ADAAfQA8AC8AdABoAD4AABs8AC8AdAByAD4APAAvAHQAaABlAGEAZAA+
-AAAPPAB0AGIAbwBkAHkAPgAACTwAdAByAD4AABk8AHQAZAA+AHsAMAB9ADwALwB0AGQAPgAACzwA
-LwB0AHIAPgAAETwALwB0AGIAbwBkAHkAPgAAEW0AYQBpAGwARgByAG8AbQAADW0AYQBpAGwAVABv
-AAAXbQBhAGkAbABTAHUAYgBqAGUAYwB0AAANbQBhAGkAbABDAEMAAAlzAG0AdABwAAAAAADoWhip
-1EA5SKM8cy24TxsUAAQgAQEIAyAAAQUgAQEREQQgAQEOBCABAQIFIAIBDg4FIAEBEUUHIAQBDg4O
-DgYVEiQBEgwGFRIkARIIBhUSJAESZQYVEiQBEiAEIAATAAcAARJtEYDFBSAAEoDJByACAQ4SgMkE
-AAEcHAQAAQEcHAcQEoCVEoCZCA4ODg4ODg4ICA4RgJ0SgKESgKUFIAASgNkFIAASgKUGIAESgN0c
-AyAAHAcgAggSgJkcBSAAEoDhAyAACAUgABKA5QYgAQESgJkCBg4DIAAOBQABDh0OBiABEoCZCAUA
-Ag4ODgQAAQ4ICwAGDg4ODggIEYD5BgADDg4ODgYAAQESgKEFIAASgQEIIAIBDhASgKUEIAEBHAUg
-ABKBBQggBQIIDg4OCAMAAAEGIAESgKkOCwcDEoCpEoCtEoCxBSAAEoEJBSAAEoCtByACEoCpDhwD
-IAACDQcFEoCpEoCtEoC1CAgEIAEcCAwHBhKAuQ4ODg4SgL0FAAASgRkGIAEBEoEdBSAAEoEhBiAB
-ARKAuQQgAQIcBAcBHgACHgAFEAEAHgAECgEeAAQHARMABhUSJAETAAcGFRJxARMABhUScQETAAIT
-AAQKARMABSABARMACLd6XFYZNOCJCLA/X38R1Qo6CImEXc2AgMyRBAAAAAAEAQAAAAcGFRIkARIM
-BwYVEiQBEggHBhUSJAESZQcGFRIkARIgAwYSeQMGEn0DBhIYAgYcAgYIAwYRKAQAABIMBAAAEggE
-AAASZQQAABIgBAAAEnkEAAASfQUAAQESfQQAABIYBiABDhKAmQQgABJtBxABAR4AHgAHMAEBARAe
-AAQIABIMBAgAEggECAASZQQIABIgBAgAEnkECAASfQQIABIYBCgAEwAIAQAIAAAAAAAeAQABAFQC
-FldyYXBOb25FeGNlcHRpb25UaHJvd3MBCAEAAgAAAAAAKAEAI1NUXzFlNTk2YWY0ZGYyZDQ4NDJi
-ZGE0NWNkZDUzMjUzMDg5AAAFAQAAAAAWAQARQ29weXJpZ2h0IEAgIDIwMTkAAAUBAAEAACkBACRh
-MjI2OTY3Yy0wNDMxLTRkNmYtYTAyNy0xMmM1M2JkMjIxNDUAAAwBAAcxLjAuMC4wAABJAQAaLk5F
-VEZyYW1ld29yayxWZXJzaW9uPXY0LjUBAFQOFEZyYW1ld29ya0Rpc3BsYXlOYW1lEi5ORVQgRnJh
-bWV3b3JrIDQuNQgBAAEAAAAAABgBAApNeVRlbXBsYXRlCDExLjAuMC4wAABhAQA0U3lzdGVtLldl
-Yi5TZXJ2aWNlcy5Qcm90b2NvbHMuU29hcEh0dHBDbGllbnRQcm90b2NvbBJDcmVhdGVfX0luc3Rh
-bmNlX18TRGlzcG9zZV9fSW5zdGFuY2VfXwAAABABAAtNeS5Db21wdXRlcgAAEwEADk15LkFwcGxp
-Y2F0aW9uAAAMAQAHTXkuVXNlcgAAEwEADk15LldlYlNlcnZpY2VzAAC0AAAAzsrvvgEAAACRAAAA
-bFN5c3RlbS5SZXNvdXJjZXMuUmVzb3VyY2VSZWFkZXIsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4w
-LjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSNTeXN0
-ZW0uUmVzb3VyY2VzLlJ1bnRpbWVSZXNvdXJjZVNldAIAAAAAAAAAAAAAAFBBRFBBRFC0AAAArEgA
-AAAAAAAAAAAAxkgAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAALhIAAAAAAAAAAAAAAAAX0NvckRs
-bE1haW4AbXNjb3JlZS5kbGwAAAAAAP8lACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAEAAAABgA
-AIAAAAAAAAAAAAAAAAAAAAEAAQAAADAAAIAAAAAAAAAAAAAAAAAAAAEAAAAAAEgAAABYYAAA7AMA
-AAAAAAAAAAAA7AM0AAAAVgBTAF8AVgBFAFIAUwBJAE8ATgBfAEkATgBGAE8AAAAAAL0E7/4AAAEA
-AAABAAAAAAAAAAEAAAAAAD8AAAAAAAAABAAAAAIAAAAAAAAAAAAAAAAAAABEAAAAAQBWAGEAcgBG
-AGkAbABlAEkAbgBmAG8AAAAAACQABAAAAFQAcgBhAG4AcwBsAGEAdABpAG8AbgAAAAAAAACwBEwD
-AAABAFMAdAByAGkAbgBnAEYAaQBsAGUASQBuAGYAbwAAACgDAAABADAAMAAwADAAMAA0AGIAMAAA
-ABoAAQABAEMAbwBtAG0AZQBuAHQAcwAAAAAAAAAiAAEAAQBDAG8AbQBwAGEAbgB5AE4AYQBtAGUA
-AAAAAAAAAABwACQAAQBGAGkAbABlAEQAZQBzAGMAcgBpAHAAdABpAG8AbgAAAAAAUwBUAF8AMQBl
-ADUAOQA2AGEAZgA0AGQAZgAyAGQANAA4ADQAMgBiAGQAYQA0ADUAYwBkAGQANQAzADIANQAzADAA
-OAA5AAAAMAAIAAEARgBpAGwAZQBWAGUAcgBzAGkAbwBuAAAAAAAxAC4AMAAuADAALgAwAAAAcAAo
-AAEASQBuAHQAZQByAG4AYQBsAE4AYQBtAGUAAABTAFQAXwAxAGUANQA5ADYAYQBmADQAZABmADIA
-ZAA0ADgANAAyAGIAZABhADQANQBjAGQAZAA1ADMAMgA1ADMAMAA4ADkALgBkAGwAbAAAAEgAEgAB
-AEwAZQBnAGEAbABDAG8AcAB5AHIAaQBnAGgAdAAAAEMAbwBwAHkAcgBpAGcAaAB0ACAAQAAgACAA
-MgAwADEAOQAAACoAAQABAEwAZQBnAGEAbABUAHIAYQBkAGUAbQBhAHIAawBzAAAAAAAAAAAAeAAo
-AAEATwByAGkAZwBpAG4AYQBsAEYAaQBsAGUAbgBhAG0AZQAAAFMAVABfADEAZQA1ADkANgBhAGYA
-NABkAGYAMgBkADQAOAA0ADIAYgBkAGEANAA1AGMAZABkADUAMwAyADUAMwAwADgAOQAuAGQAbABs
-AAAAaAAkAAEAUAByAG8AZAB1AGMAdABOAGEAbQBlAAAAAABTAFQAXwAxAGUANQA5ADYAYQBmADQA
-ZABmADIAZAA0ADgANAAyAGIAZABhADQANQBjAGQAZAA1ADMAMgA1ADMAMAA4ADkAAAA0AAgAAQBQ
-AHIAbwBkAHUAYwB0AFYAZQByAHMAaQBvAG4AAAAxAC4AMAAuADAALgAwAAAAOAAIAAEAQQBzAHMA
-ZQBtAGIAbAB5ACAAVgBlAHIAcwBpAG8AbgAAADEALgAwAC4AMAAuADAAAAAAAAAAAAAAAAAAAAAA
+KCkAAArcfgcAAAQqAAEQAAACAB0ADCkAEAAAAAAeAigqAAAKKhswCACuBQAAAQAAEXMrAAAKCnMr
+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
+PQEJAPEIAQARAPEIBgAZAPEICgApAPEIEAAxAPEIEAA5APEIEABBAPEIEABJAPEIEABRAPEIEABZ
+APEIFQBhAPEIFQBpAPEIEABxAPEIEAB5APEIEACBAPEIGgCRAPEIIACpAPEIBgCxAPEIBgC5APEI
+BgDRAPEIJgDpAPEIEAAJAfEIBgARAfEIBgCZAPEIBgChAPEIBgAMAPEIBgAUAPEIBgAcAPEIBgAk
+APEIBgAMAC0BSgAUAC0BSgAcAC0BSgAkAC0BSgDBAPEIBgDZANcBTwDZAC8MVwDxAPEIXQChAUMF
+ZQABAfEIBgCpAWoIagCpAZELagAZAfEIBgApAfEIBgAxAfEIBgA5AfEIBgAZASkLsACxAYUKtgBR
+AYoGvAC5AS8FwwAxAXYGxwA5AUoLzwDBAbwL1QApAXoK2QDJAfgA3wDRAbwL1QDZATwM5gDBAH0F
+6QDZAX0F6QDZAVML7QDJAYoG9ADZAVML+wDhAX0FAQHpARYBBgGJAX0F6QCxAZYLAQD5Ab0IEgGx
+AVQIGQEBAtQCHwFJAVIB6QC5ATkFKAFRAYsFBgCxAT8LLQEJAqEIMwH5AasIPAFZAfEIBgBZAQEB
+QAFZAX0F6QA5AdsKUwHRAdkIWQFhAbALwwBpAekB6QBZAVoLXwFhAdkLZwEZArcCBgDBAdkIWQFx
+AYoGeQGBAfEIEACBAX0F6QB5AfEIJgAhAvEIEAApArYKiwEhAqYKkQF5AXsGFQB5AVgAmAFBAvgA
+EAAhAvwAngHBANQKpQHBAEYB1QBJAh4BsgE0AO4LyQE8AC8FSgA8ADkF4AE8APEIBgAIADAAAQII
+ADQABgIpAKsAMAQuAAsArgIuABMAtwIuABsA1gIuACMA3wIuACsACAMuADMACAMuADsA3wIuAEMA
+DgMuAEsACAMuAFMAJQMuAFsACAMuAGMAKwMuAGsAVQMuAHMAYgNAAIsABgJAAIMArANDAHsAtQND
+AIMArANJAKsAQQRjAHsAtQNjAIMArANpAKsAVQSAAIsABgKDAJMABgKDAJsABgKDAHsAtQOJAKsA
+YgSgAIsABgKpAIMA1gLAAIsABgLJAIMA1gLgAIsABgLjALsABgLjAFMACAPpALMABgIDAYMArAMD
+AaMAzgMjAYMArAMjAVsACAOgAoMArAOgAosABgLAAoMArAPAAosABgLgAoMArAPgAosABgIAA4MA
+rAMAA4sABgIgA4sABgJAA4sABgJgA4sABgJgA4MArAOAA4sABgKgA4sABgKgA4MArANvAEcBawF+
+AaoBvQEEAAEABQAFAAYABwAJAAgAAACQCIYCAADkBosCAABPCJACAABJCZUCAAAPCJoCAABQAp8C
+AABMBaQCAAAxAakCAgAEAAMAAgAFAAUAAgAGAAcAAgAHAAkAAgAJAAsAAgAKAA0AAQALAA0AAgAO
+AA8AAgAcABEALgA1ADwAQwCvAcIB0QHYAQSAAAABAAAAAAAAAAAAAAAAACsAAAAEAAAAAAAAAAAA
+AADmAdkAAAAAAAQAAAAAAAAAAAAAAOYBkwYAAAAACgAAAAAAAAAAAAAA7wHiAAAAAAANAAAAAAAA
+AAAAAAD4AZIFAAAAAAQAAAAAAAAAAAAAAOYBrwAAAAAADQAAAAAAAAAAAAAA+AFfAAAAAAAAAAAA
+AQAAADMKAAAIAAQACQAEAAoABwAAABAAEgB+AAAAEAAzAH4AAAAAADUAfgDHALgBxwDbAQAAAENv
+bnRleHRWYWx1ZWAxAFRocmVhZFNhZmVPYmplY3RQcm92aWRlcmAxAFNUXzFlNTk2YWY0ZGYyZDQ4
+NDJiZGE0NWNkZDUzMjUzMDg5ADxNb2R1bGU+AGdldF9DQwBNaWNyb3NvZnQuU3FsU2VydmVyLk1h
+bmFnZWREVFMAVABEaXNwb3NlX19JbnN0YW5jZV9fAENyZWF0ZV9fSW5zdGFuY2VfXwB2YWx1ZV9f
+AFN5c3RlbS5EYXRhAFByb2plY3REYXRhAFN5c3RlbS5EYXRhLk9sZURiAG1zY29ybGliAE1pY3Jv
+c29mdC5WaXN1YWxCYXNpYwBBZGQAU2VuZABBcHBlbmQAQ29tcGFyZU1ldGhvZABSZXBsYWNlAENy
+ZWF0ZUluc3RhbmNlAGdldF9HZXRJbnN0YW5jZQBpbnN0YW5jZQBHZXRIYXNoQ29kZQBnZXRfTWVz
+c2FnZQBNYWlsTWVzc2FnZQBtZXNzYWdlAENyZWRlbnRpYWxDYWNoZQBEYXRhVGFibGVUb0hUTUxU
+YWJsZQBEYXRhVGFibGUAZFRhYmxlAGluVGFibGUAVmFyaWFibGUASURpc3Bvc2FibGUAUnVudGlt
+ZVR5cGVIYW5kbGUAR2V0VHlwZUZyb21IYW5kbGUAZ2V0X0NvbHVtbk5hbWUATWljcm9zb2Z0LlNx
+bFNlcnZlci5EdHMuUnVudGltZQBHZXRUeXBlAFZhcmlhbnRUeXBlAEZhaWx1cmUAZ2V0X0N1bHR1
+cmUAc2V0X0N1bHR1cmUAX3Jlc0N1bHR1cmUAVlNUQVJUU2NyaXB0T2JqZWN0TW9kZWxCYXNlAEFw
+cGxpY2F0aW9uQmFzZQBJbnRlcm5hbERhdGFDb2xsZWN0aW9uQmFzZQBBcHBsaWNhdGlvblNldHRp
+bmdzQmFzZQBEaXNwb3NlAEVkaXRvckJyb3dzYWJsZVN0YXRlAExvY2tPbmVGb3JXcml0ZQBHdWlk
+QXR0cmlidXRlAEhlbHBLZXl3b3JkQXR0cmlidXRlAEdlbmVyYXRlZENvZGVBdHRyaWJ1dGUARGVi
+dWdnZXJOb25Vc2VyQ29kZUF0dHJpYnV0ZQBEZWJ1Z2dhYmxlQXR0cmlidXRlAEVkaXRvckJyb3dz
+YWJsZUF0dHJpYnV0ZQBDb21WaXNpYmxlQXR0cmlidXRlAEFzc2VtYmx5VGl0bGVBdHRyaWJ1dGUA
+U3RhbmRhcmRNb2R1bGVBdHRyaWJ1dGUASGlkZU1vZHVsZU5hbWVBdHRyaWJ1dGUAQXNzZW1ibHlU
+cmFkZW1hcmtBdHRyaWJ1dGUAVGFyZ2V0RnJhbWV3b3JrQXR0cmlidXRlAERlYnVnZ2VySGlkZGVu
+QXR0cmlidXRlAEFzc2VtYmx5RmlsZVZlcnNpb25BdHRyaWJ1dGUATXlHcm91cENvbGxlY3Rpb25B
+dHRyaWJ1dGUAQXNzZW1ibHlEZXNjcmlwdGlvbkF0dHJpYnV0ZQBDb21waWxhdGlvblJlbGF4YXRp
+b25zQXR0cmlidXRlAEFzc2VtYmx5UHJvZHVjdEF0dHJpYnV0ZQBBc3NlbWJseUNvcHlyaWdodEF0
+dHJpYnV0ZQBDTFNDb21wbGlhbnRBdHRyaWJ1dGUAU1NJU1NjcmlwdFRhc2tFbnRyeVBvaW50QXR0
+cmlidXRlAEFzc2VtYmx5Q29tcGFueUF0dHJpYnV0ZQBSdW50aW1lQ29tcGF0aWJpbGl0eUF0dHJp
+YnV0ZQBtX1ZhbHVlAGdldF9WYWx1ZQBzZXRfVmFsdWUAR2V0T2JqZWN0VmFsdWUAU3lzdGVtLlRo
+cmVhZGluZwBTeXN0ZW0uUnVudGltZS5WZXJzaW9uaW5nAFRvU3RyaW5nAE1hdGgAVW5sb2NrAE1p
+Y3Jvc29mdC5TcWxTZXJ2ZXIuU2NyaXB0VGFzawBNaWNyb3NvZnQuU3FsU2VydmVyLkR0cy5UYXNr
+cy5TY3JpcHRUYXNrAE5ldHdvcmtDcmVkZW50aWFsAE1pY3Jvc29mdC5WaXN1YWxCYXNpYy5NeVNl
+cnZpY2VzLkludGVybmFsAFNjcmlwdE9iamVjdE1vZGVsAFN5c3RlbS5Db21wb25lbnRNb2RlbABT
+eXN0ZW0uTmV0Lk1haWwAU1RfMWU1OTZhZjRkZjJkNDg0MmJkYTQ1Y2RkNTMyNTMwODkuZGxsAEZp
+bGwAc2V0X0lzQm9keUh0bWwAZ2V0X0l0ZW0AU3lzdGVtAEVudW0AU3lzdGVtLkNvbXBvbmVudE1v
+ZGVsLkRlc2lnbgBTY3JpcHRNYWluAERhdGFDb2x1bW4AZ2V0X0FwcGxpY2F0aW9uAE15QXBwbGlj
+YXRpb24AU3lzdGVtLkNvbmZpZ3VyYXRpb24AU3lzdGVtLkdsb2JhbGl6YXRpb24AU3lzdGVtLlJl
+ZmxlY3Rpb24ARGF0YVRhYmxlQ29sbGVjdGlvbgBEYXRhQ29sdW1uQ29sbGVjdGlvbgBNYWlsQWRk
+cmVzc0NvbGxlY3Rpb24ARGF0YVJvd0NvbGxlY3Rpb24ARXhjZXB0aW9uAEN1bHR1cmVJbmZvAEdl
+dEhlYWRlcgBtX0FwcE9iamVjdFByb3ZpZGVyAG1fVXNlck9iamVjdFByb3ZpZGVyAG1fQ29tcHV0
+ZXJPYmplY3RQcm92aWRlcgBtX015V2ViU2VydmljZXNPYmplY3RQcm92aWRlcgBTdHJpbmdCdWls
+ZGVyAGdldF9SZXNvdXJjZU1hbmFnZXIAU3lzdGVtLkNvZGVEb20uQ29tcGlsZXIARXZlbnRzT2Jq
+ZWN0V3JhcHBlcgBnZXRfVXNlcgBnZXRfVmFyaWFibGVEaXNwZW5zZXIARW50ZXIAT2xlRGJEYXRh
+QWRhcHRlcgBnZXRfQ29tcHV0ZXIATXlDb21wdXRlcgBfcmVzTWdyAEZpcmVFcnJvcgBDbGVhclBy
+b2plY3RFcnJvcgBTZXRQcm9qZWN0RXJyb3IASUVudW1lcmF0b3IAR2V0RW51bWVyYXRvcgBBY3Rp
+dmF0b3IALmN0b3IALmNjdG9yAE1vbml0b3IAU3lzdGVtLkRpYWdub3N0aWNzAE1pY3Jvc29mdC5W
+aXN1YWxCYXNpYy5EZXZpY2VzAGdldF9XZWJTZXJ2aWNlcwBNeVdlYlNlcnZpY2VzAE1pY3Jvc29m
+dC5WaXN1YWxCYXNpYy5BcHBsaWNhdGlvblNlcnZpY2VzAFN5c3RlbS5SdW50aW1lLkludGVyb3BT
+ZXJ2aWNlcwBNaWNyb3NvZnQuVmlzdWFsQmFzaWMuQ29tcGlsZXJTZXJ2aWNlcwBTeXN0ZW0uUnVu
+dGltZS5Db21waWxlclNlcnZpY2VzAFN5c3RlbS5SZXNvdXJjZXMAU1RfMWU1OTZhZjRkZjJkNDg0
+MmJkYTQ1Y2RkNTMyNTMwODkuTXkuUmVzb3VyY2VzAE15UmVzb3VyY2VzAFNUXzFlNTk2YWY0ZGYy
+ZDQ4NDJiZGE0NWNkZDUzMjUzMDg5LlJlc291cmNlcy5yZXNvdXJjZXMARGVidWdnaW5nTW9kZXMA
+Z2V0X1RhYmxlcwBnZXRfVmFyaWFibGVzAFN0cmluZ3MATXlTZXR0aW5ncwBzZXRfQ3JlZGVudGlh
+bHMAZ2V0X0RlZmF1bHROZXR3b3JrQ3JlZGVudGlhbHMARXF1YWxzAGdldF9Db2x1bW5zAENvbnZl
+cnNpb25zAFN5c3RlbS5Db2xsZWN0aW9ucwBSdW50aW1lSGVscGVycwBTdWNjZXNzAE1haWxBZGRy
+ZXNzAGdldF9EdHMAU2NyaXB0UmVzdWx0cwBnZXRfRXZlbnRzAGdldF9Sb3dzAENvbmNhdABBcHBl
+bmRGb3JtYXQAbV9TeW5jT2JqZWN0AE15UHJvamVjdABTeXN0ZW0uTmV0AERhdGFTZXQARXhpdABz
+ZXRfVGFza1Jlc3VsdABTbXRwQ2xpZW50AGdldF9DdXJyZW50AGdldF9Db3VudABJQ3JlZGVudGlh
+bHNCeUhvc3QATW92ZU5leHQAU3lzdGVtLlRleHQAbV9Db250ZXh0AERhdGFSb3cAU1RfMWU1OTZh
+ZjRkZjJkNDg0MmJkYTQ1Y2RkNTMyNTMwODkuTXkAR2V0Qm9keQBnZXRfQXNzZW1ibHkARW1wdHkA
+AAAAMU0AeQAuAFIAZQBzAG8AdQByAGMAZQBzAC4ATQB5AFIAZQBzAG8AdQByAGMAZQBzAAATZQB0
+AGwAUgBlAHMAdQBsAHQAABtzAHQAYQBnAGkAbgBnAFIAZQBzAHUAbAB0AAATZAB3AGgAUgBlAHMA
+dQBsAHQAABNvAGQAcwBSAGUAcwB1AGwAdAAAEW0AYQBpAGwAQgBvAGQAeQAAgJ88AGgAdABtAGwA
+PgA8AGIAbwBkAHkAIABzAHQAeQBsAGUAPQAnAGYAbwBuAHQALQBmAGEAbQBpAGwAeQA6ACAAQQBy
+AGkAYQBsACwAIABIAGUAbAB2AGUAdABpAGMAYQAsACAAcwBhAG4AcwAtAHMAZQByAGkAZgA7AGYA
+bwBuAHQALQBzAGkAegBlADoAIAAxADIAcAB4ADsAJwA+AAERPABiAHIAPgA8AGIAcgA+AAAdPAAv
+AGIAbwBkAHkAPgA8AC8AaAB0AG0AbAA+AAAJPABiAHIAPgAAIVEAdQBlAHIAeQAgAFIAZQBzAHUA
+bAB0ACAAUwBlAHQAADFVAHMAZQByADoAOgBTAGMAcgBpAHAAdABUAGEAcwBrAEUAcgByAG8AcgBN
+AHMAZwAAJ0UAcgByAG8AcgAgAEQAZQBzAGMAcgBpAHAAdABpAG8AbgA6ACAAABdTAGMAcgBpAHAA
+dAAgAFQAYQBzAGsAAAtFAHIAcgBvAHIAAIITPABzAHQAeQBsAGUAIABzAGMAbwBwAGUAZAA+AC4A
+bQB5AFQAYQBiAGwAZQAgAHsAIABiAGEAYwBrAGcAcgBvAHUAbgBkAC0AYwBvAGwAbwByADoAIwBm
+ADQAZgA0AGYANAA7ACAAdwBpAGQAdABoADoAOQAwADAAcAB4ADsAZgBvAG4AdAAtAGYAYQBtAGkA
+bAB5ADoAIABBAHIAaQBhAGwALAAgAEgAZQBsAHYAZQB0AGkAYwBhACwAIABzAGEAbgBzAC0AcwBl
+AHIAaQBmADsAZgBvAG4AdAAtAHMAaQB6AGUAOgAgADEAMgBwAHgAOwB9AC4AbQB5AFQAYQBiAGwA
+ZQAgAHQAaAAgAHsAIABiAGEAYwBrAGcAcgBvAHUAbgBkAC0AYwBvAGwAbwByADoAIwBmADQAZgA0
+AGYANAA7AGMAbwBsAG8AcgA6AGIAbABhAGMAawA7AHQAZQB4AHQALQBhAGwAaQBnAG4AOgBsAGUA
+ZgB0ADsAIAB9AC4AbQB5AFQAYQBiAGwAZQAgAHQAZAAsACAALgBtAHkAVABhAGIAbABlACAAdABo
+ACAAewAgAHAAYQBkAGQAaQBuAGcAOgAwAHAAeAA7AGIAbwByAGQAZQByADoAMABwAHgAIABzAG8A
+bABpAGQAIAAjADAAMAAwADAAMAAwADsAIAB9ADwALwBzAHQAeQBsAGUAPgABLTwAdABhAGIAbABl
+ACAAYwBsAGEAcwBzAD0AbQB5AFQAYQBiAGwAZQA+ACAAABE8AC8AdABhAGIAbABlAD4AABc8AHQA
+aABlAGEAZAA+ADwAdAByAD4AABk8AHQAaAA+AHsAMAB9ADwALwB0AGgAPgAAGzwALwB0AHIAPgA8
+AC8AdABoAGUAYQBkAD4AAA88AHQAYgBvAGQAeQA+AAAJPAB0AHIAPgAAGTwAdABkAD4AewAwAH0A
+PAAvAHQAZAA+AAALPAAvAHQAcgA+AAARPAAvAHQAYgBvAGQAeQA+AAARbQBhAGkAbABGAHIAbwBt
+AAANbQBhAGkAbABUAG8AABdtAGEAaQBsAFMAdQBiAGoAZQBjAHQAAA1tAGEAaQBsAEMAQwAACXMA
+bQB0AHAAAAAAAMBlRPZ+2mdJlVRWUoZ895MABCABAQgDIAABBSABARERBCABAQ4EIAEBAgUgAgEO
+DgUgAQERRQcgBAEODg4OBhUSJAESDAYVEiQBEggGFRIkARJlBhUSJAESIAQgABMABwABEm0RgMkF
+IAASgM0HIAIBDhKAzQQAARwcBAABARxAByISgJUSgJUSgJUSgJUSgJkSgJkSgJkSgJ0SgJ0SgJ0S
+gJ0ICAgODg4ODggIDhGAoQgIDggIDggIDhKApRKAqQUgABKA2QUgABKAqQYgARKA3RwDIAAcByAC
+CBKAnRwFIAASgOEDIAAIBSAAEoDlBiABARKAnQIGDgMgAA4GAAMODg4OBiABEoCdCAUAAg4ODgQA
+AQ4ICwAGDg4ODggIEYD5BgABARKApQUgABKBAQggAgEOEBKAqQQgAQEcBSAAEoEFCCAFAggODg4I
+AwAAAQYgARKArQ4LBwMSgK0SgLESgLUFIAASgQkFIAASgLEHIAISgK0OHAMgAAINBwUSgK0SgLES
+gLkICAQgARwIDAcGEoC9Dg4ODhKAwQUAABKBGQYgAQESgR0FIAASgSEGIAEBEoC9BCABAhwEBwEe
+AAIeAAUQAQAeAAQKAR4ABAcBEwAGFRIkARMABwYVEnEBEwAGFRJxARMAAhMABAoBEwAFIAEBEwAI
+t3pcVhk04IkIsD9ffxHVCjoIiYRdzYCAzJEEAAAAAAQBAAAABwYVEiQBEgwHBhUSJAESCAcGFRIk
+ARJlBwYVEiQBEiADBhJ5AwYSfQMGEhgCBhwCBggDBhEoBAAAEgwEAAASCAQAABJlBAAAEiAEAAAS
+eQQAABJ9BQABARJ9BAAAEhgGIAEOEoCdBCAAEm0HEAEBHgAeAAcwAQEBEB4ABAgAEgwECAASCAQI
+ABJlBAgAEiAECAASeQQIABJ9BAgAEhgEKAATAAgBAAgAAAAAAB4BAAEAVAIWV3JhcE5vbkV4Y2Vw
+dGlvblRocm93cwEIAQACAAAAAAAoAQAjU1RfMWU1OTZhZjRkZjJkNDg0MmJkYTQ1Y2RkNTMyNTMw
+ODkAAAUBAAAAABYBABFDb3B5cmlnaHQgQCAgMjAxOQAABQEAAQAAKQEAJGEyMjY5NjdjLTA0MzEt
+NGQ2Zi1hMDI3LTEyYzUzYmQyMjE0NQAADAEABzEuMC4wLjAAAEkBABouTkVURnJhbWV3b3JrLFZl
+cnNpb249djQuNQEAVA4URnJhbWV3b3JrRGlzcGxheU5hbWUSLk5FVCBGcmFtZXdvcmsgNC41CAEA
+AQAAAAAAGAEACk15VGVtcGxhdGUIMTEuMC4wLjAAAGEBADRTeXN0ZW0uV2ViLlNlcnZpY2VzLlBy
+b3RvY29scy5Tb2FwSHR0cENsaWVudFByb3RvY29sEkNyZWF0ZV9fSW5zdGFuY2VfXxNEaXNwb3Nl
+X19JbnN0YW5jZV9fAAAAEAEAC015LkNvbXB1dGVyAAATAQAOTXkuQXBwbGljYXRpb24AAAwBAAdN
+eS5Vc2VyAAATAQAOTXkuV2ViU2VydmljZXMAAAAAtAAAAM7K774BAAAAkQAAAGxTeXN0ZW0uUmVz
+b3VyY2VzLlJlc291cmNlUmVhZGVyLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJl
+PW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkjU3lzdGVtLlJlc291cmNl
+cy5SdW50aW1lUmVzb3VyY2VTZXQCAAAAAAAAAAAAAABQQURQQURQtAAAAPhLAAAAAAAAAAAAABJM
+AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAETAAAAAAAAAAAAAAAAF9Db3JEbGxNYWluAG1zY29y
+ZWUuZGxsAAAAAAD/JQAgABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -950,7 +1069,34 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAADAAAANg4AAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABAAAAAYAACA
+AAAAAAAAAAAAAAAAAAABAAEAAAAwAACAAAAAAAAAAAAAAAAAAAABAAAAAABIAAAAWGAAAOwDAAAA
+AAAAAAAAAOwDNAAAAFYAUwBfAFYARQBSAFMASQBPAE4AXwBJAE4ARgBPAAAAAAC9BO/+AAABAAAA
+AQAAAAAAAAABAAAAAAA/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAARAAAAAEAVgBhAHIARgBp
+AGwAZQBJAG4AZgBvAAAAAAAkAAQAAABUAHIAYQBuAHMAbABhAHQAaQBvAG4AAAAAAAAAsARMAwAA
+AQBTAHQAcgBpAG4AZwBGAGkAbABlAEkAbgBmAG8AAAAoAwAAAQAwADAAMAAwADAANABiADAAAAAa
+AAEAAQBDAG8AbQBtAGUAbgB0AHMAAAAAAAAAIgABAAEAQwBvAG0AcABhAG4AeQBOAGEAbQBlAAAA
+AAAAAAAAcAAkAAEARgBpAGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AAAAAAFMAVABfADEAZQA1
+ADkANgBhAGYANABkAGYAMgBkADQAOAA0ADIAYgBkAGEANAA1AGMAZABkADUAMwAyADUAMwAwADgA
+OQAAADAACAABAEYAaQBsAGUAVgBlAHIAcwBpAG8AbgAAAAAAMQAuADAALgAwAC4AMAAAAHAAKAAB
+AEkAbgB0AGUAcgBuAGEAbABOAGEAbQBlAAAAUwBUAF8AMQBlADUAOQA2AGEAZgA0AGQAZgAyAGQA
+NAA4ADQAMgBiAGQAYQA0ADUAYwBkAGQANQAzADIANQAzADAAOAA5AC4AZABsAGwAAABIABIAAQBM
+AGUAZwBhAGwAQwBvAHAAeQByAGkAZwBoAHQAAABDAG8AcAB5AHIAaQBnAGgAdAAgAEAAIAAgADIA
+MAAxADkAAAAqAAEAAQBMAGUAZwBhAGwAVAByAGEAZABlAG0AYQByAGsAcwAAAAAAAAAAAHgAKAAB
+AE8AcgBpAGcAaQBuAGEAbABGAGkAbABlAG4AYQBtAGUAAABTAFQAXwAxAGUANQA5ADYAYQBmADQA
+ZABmADIAZAA0ADgANAAyAGIAZABhADQANQBjAGQAZAA1ADMAMgA1ADMAMAA4ADkALgBkAGwAbAAA
+AGgAJAABAFAAcgBvAGQAdQBjAHQATgBhAG0AZQAAAAAAUwBUAF8AMQBlADUAOQA2AGEAZgA0AGQA
+ZgAyAGQANAA4ADQAMgBiAGQAYQA0ADUAYwBkAGQANQAzADIANQAzADAAOAA5AAAANAAIAAEAUABy
+AG8AZAB1AGMAdABWAGUAcgBzAGkAbwBuAAAAMQAuADAALgAwAC4AMAAAADgACAABAEEAcwBzAGUA
+bQBiAGwAeQAgAFYAZQByAHMAaQBvAG4AAAAxAC4AMAAuADAALgAwAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAwAAAAkPAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -959,7 +1105,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
         </ScriptProject>
       </DTS:ObjectData>
     </DTS:Executable>
@@ -975,9 +1121,9 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{76B4230E-15A2-40DA-991D-756993D3E7C5}"
-          SQLTask:SqlStatementSource="select CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'Staging loaded' ELSE 'Staging busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from Control.JobControl where Source = 'Staging' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;"
-          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          SQLTask:Connection="{0C0C5B4D-1B9E-4FFB-BEF7-E08709D0061B}"
+          SQLTask:SqlStatementSource="select 'DEV ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'Staging loaded' ELSE 'Staging busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from Control.JobControl where Source = 'Staging' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'TST ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'Staging loaded' ELSE 'Staging busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHT01\DWHTST].DWH_Control.Control.JobControl where Source = 'Staging' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'ACC ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'Staging loaded' ELSE 'Staging busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHA01\DWHACC].DWH_Control.Control.JobControl where Source = 'Staging' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;UNION ALL&#xA;select 'PRD ' + CASE WHEN COUNT(distinct Sourcesystem) = 12 THEN 'Staging loaded' ELSE 'Staging busy ' + CAST(COUNT(distinct Sourcesystem) AS VARCHAR(10)) + ' loaded' END AS Staging from [FDODWHP01\DWHPRD].DWH_Control.Control.JobControl where Source = 'Staging' AND Date &gt;= DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) --11&#xA;"
+          SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
             SQLTask:ResultName="0"
             SQLTask:DtsVariableName="User::stagingResult" />
@@ -997,11 +1143,11 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
       DTS:CreationName=""
-      DTS:DTSID="{EAA73BEA-1233-4C84-8EFC-B0F814F914AC}"
+      DTS:DTSID="{F93E1A2D-F68C-4852-96BA-C4313D77860C}"
       DTS:From="Package\DWH result"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
-      DTS:To="Package\Script Task" />
+      DTS:To="Package\ODS result" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
       DTS:CreationName=""
@@ -1010,6 +1156,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 2"
       DTS:To="Package\Staging result" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{A9A2F031-8795-47AD-867B-6192C72B8F72}"
+      DTS:From="Package\ODS result"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Script Task" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -1022,37 +1176,41 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="172,42"
           Id="Package\DWH result"
-          TopLeft="104,238" />
+          TopLeft="75,208" />
         <NodeLayout
           Size="126,42"
           Id="Package\ETL result"
-          TopLeft="106,61" />
+          TopLeft="94,14" />
+        <NodeLayout
+          Size="129,42"
+          Id="Package\ODS result"
+          TopLeft="91,302" />
         <NodeLayout
           Size="131,42"
           Id="Package\Script Task"
-          TopLeft="189,360" />
+          TopLeft="87,405" />
         <NodeLayout
           Size="172,42"
           Id="Package\Staging result"
-          TopLeft="104,139" />
+          TopLeft="74,103" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="190,181">
+          TopLeft="160.5,145">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,57"
+              EndConnector="0,63"
               Start="0,0"
-              End="0,49.5">
+              End="0,55.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,49.5" />
+                    End="0,55.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1063,30 +1221,18 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="190,280">
+          TopLeft="158.25,250">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="64.5,80"
+              EndConnector="0,52"
               Start="0,0"
-              End="64.5,72.5">
+              End="0,44.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,36" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,36"
-                    Point2="0,40"
-                    Point3="4,40" />
-                  <mssgle:LineSegment
-                    End="60.5,40" />
-                  <mssgle:CubicBezierSegment
-                    Point1="60.5,40"
-                    Point2="64.5,40"
-                    Point3="64.5,44" />
-                  <mssgle:LineSegment
-                    End="64.5,72.5" />
+                    End="0,44.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1097,30 +1243,40 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinaryItem>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="169,103">
+          TopLeft="158.5,56">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="21,36"
+              EndConnector="0,47"
               Start="0,0"
-              End="21,28.5">
+              End="0,39.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,14" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,14"
-                    Point2="0,18"
-                    Point3="4,18" />
+                    End="0,39.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="154,344">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,61"
+              Start="0,0"
+              End="0,53.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
                   <mssgle:LineSegment
-                    End="17,18" />
-                  <mssgle:CubicBezierSegment
-                    Point1="17,18"
-                    Point2="21,18"
-                    Point3="21,22" />
-                  <mssgle:LineSegment
-                    End="21,28.5" />
+                    End="0,53.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
