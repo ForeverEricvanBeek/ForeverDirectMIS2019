@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="86"
-  DTS:VersionGUID="{E2D28CB7-2A9D-451B-A95E-1626379334CD}">
+  DTS:VersionBuild="87"
+  DTS:VersionGUID="{D86473C4-F412-4A1B-B7B9-8AD021128E1D}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -1329,11 +1329,10 @@
                   <outputColumns>
                     <outputColumn
                       refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]"
-                      dataType="wstr"
+                      dataType="r8"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[IsActive]"
-                      length="255"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]"
                       name="IsActive"
                       truncationRowDisposition="FailComponent" />
@@ -1429,11 +1428,10 @@
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
                       refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]"
-                      dataType="wstr"
+                      dataType="r8"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[Generate]"
-                      length="255"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]"
                       name="Generate"
                       truncationRowDisposition="FailComponent" />
@@ -1446,6 +1444,46 @@
                       length="255"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[TableType]"
                       name="TableType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunSchedule]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]"
+                      name="RunSchedule"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam1]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]"
+                      name="RunParam1"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam2]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]"
+                      name="RunParam2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]"
+                      name="RunParam3"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
@@ -1508,6 +1546,26 @@
                       dataType="wstr"
                       length="255"
                       name="TableType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunSchedule]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunSchedule" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam1]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam1" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam2]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam2" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam3" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -1575,6 +1633,30 @@
                       length="255"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Options]"
                       name="Options" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunSchedule]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunSchedule]"
+                      name="RunSchedule" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam1]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam1]"
+                      name="RunParam1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam2]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam2]"
+                      name="RunParam2" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      name="RunParam3" />
                     <outputColumn
                       refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Generate]"
                       dataType="r8"
@@ -1676,8 +1758,7 @@
                   <inputColumns>
                     <inputColumn
                       refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[IsActive]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
+                      cachedDataType="r8"
                       cachedName="IsActive"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]" />
@@ -1746,8 +1827,7 @@
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartTable]" />
                     <inputColumn
                       refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[Generate]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
+                      cachedDataType="r8"
                       cachedName="Generate"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]" />
@@ -1758,6 +1838,34 @@
                       cachedName="TableType"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[TableType]"
                       lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[TableType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunSchedule]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunSchedule"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunSchedule]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam1]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam1"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam1]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam2]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam2"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam2]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam3]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam3"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -1823,6 +1931,26 @@
                       refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
                       dataType="bool"
                       name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunSchedule]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunSchedule" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam1]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam1" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam2]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam2" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam3" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -9593,7 +9721,7 @@
     design-time-name="Package\Load Generator_DataWarehouseTable">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="229,42"
           Id="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable"
@@ -9633,9 +9761,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
