@@ -32,7 +32,8 @@
             string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
             string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
             string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
-            string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
+            //string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
+            string varDatamartSchemaPlus = varSQLServTableBeginCharacter + "Shadow" + varSQLServTableCloseCharacter + ".";
             string varDatamartTablePlus = varSQLServTableBeginCharacter + varDatamartTable + varSQLServTableCloseCharacter;
             string varDatamartTableFull = varDatamartSchemaPlus + varDatamartTablePlus;
             
@@ -173,13 +174,16 @@
             }
         
             string varBKJoinClause = "";
+            string varBKDelete = "";
             if (rowBusinessKeys.Length > 0) {
                 for(int i = 0; i < rowBusinessKeys.Length; i ++) {
                     string varColumnName = (string)rowBusinessKeys[i]["ColumnName"];
                     varColumnName = varSQLServColumnBeginCharacter + varColumnName + varSQLServColumnCloseCharacter;
                     varBKJoinClause += "AND ms." + varColumnName + " = mt." + varColumnName;
+                    varBKDelete += "AND " + varColumnName + " &lt;> -1";
                 }
                 varBKJoinClause = varBKJoinClause.Substring(4, varBKJoinClause.Length - 4); 
+                varBKDelete = varBKDelete.Substring(4, varBKDelete.Length - 4); 
             }
             
             string varUpdateSCD1Clause = "";
@@ -472,6 +476,10 @@
         string varStgRowCountSQLStatement = @"SELECT 1  AS [Total_Stg]";//@"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
         string varDWHRowCountSQLStatement = @"SELECT 1  AS [Total_DWH]";//@"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
         string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total]
+        string varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+                ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+                ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+                DELETE FROM Shadow." + varDatamartTable + @" WHERE " + varBKDelete + @";";
         //, COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual]
         //, COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred]
         //, COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] 
@@ -547,7 +555,7 @@
                             <Results><Result Name="0" VariableName="RC.RowCountSourceDWH" /></Results>
                         </ExecuteSQL>
                         
-                        <#if (varLoadingType == "TI") {#>
+                        <#if (varLoadingType == "XX") {#><!-- "TI") {#>-->
                         <ExecuteSQL Name="SQL Truncate <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
                             <DirectInput>TRUNCATE TABLE <#=varDatamartSchemaPlus#><#=varDatamartTablePlus#></DirectInput>
                         </ExecuteSQL>
@@ -606,6 +614,10 @@
                                 <Result Name="2" VariableName="RC.RowCountTargetInferred" />
                                 <Result Name="3" VariableName="RC.RowCountTargetDeleted" />
                             </Results>
+                        </ExecuteSQL>
+                        
+                        <ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
+                            <DirectInput><#=varSwapSQLStatement#></DirectInput>
                         </ExecuteSQL>
                     </Tasks>
                 </Container>

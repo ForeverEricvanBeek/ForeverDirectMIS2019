@@ -31,7 +31,8 @@
             string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
             string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
             string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
-            string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
+            //string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
+            string varDatamartSchemaPlus = varSQLServTableBeginCharacter + "Shadow" + varSQLServTableCloseCharacter + ".";
             string varDatamartTablePlus = varSQLServTableBeginCharacter + varDatamartTable + varSQLServTableCloseCharacter;
             string varDatamartTableFull = varDatamartSchemaPlus + varDatamartTablePlus;
             string varName = varDatamartConnection + "-" +varDatamartSchema+"-"+varDatamartTable;
@@ -189,7 +190,11 @@
                                                         , 0 AS [Actual]
                                                         , 0 AS [Inferred]
                                                         , 0 AS [Deleted]"; 
-                                                        #>
+            string varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+                    ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+                    ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+                    DELETE FROM Shadow." + varDatamartTable + @";";
+         #>
                                                         
             <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
                 <Parameters>
@@ -257,12 +262,12 @@
                                 <Results><Result Name="0" VariableName="RC.RowCountSourceSTG" /></Results>
                             </ExecuteSQL>
         
-                            <ExecuteSQL Name="DWH Row Count <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <ExecuteSQL Name="DWH Row Count <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
                                 <DirectInput><#=varDWHRowCountSQLStatement#></DirectInput>
                                 <Results><Result Name="0" VariableName="RC.RowCountSourceDWH" /></Results>
                             </ExecuteSQL>
         
-                            <#if (varLoadingType == "TI") {#>
+                            <#if (varLoadingType == "XX") {#> <!--"TI") {#>-->
                                 <ExecuteSQL Name="SQL Truncate <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
                                     <DirectInput>TRUNCATE TABLE <#=varDatamartSchemaPlus#><#=varDatamartTablePlus#></DirectInput>
                                 </ExecuteSQL>
@@ -311,6 +316,10 @@
                                     <Result Name="3" VariableName="RC.RowCountTargetDeleted" />
                                 </Results>
                             </ExecuteSQL>
+                                
+                        <ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false" >
+                            <DirectInput><#=varSwapSQLStatement#></DirectInput>
+                        </ExecuteSQL>
                         </Tasks>
                     </Container>
                     
