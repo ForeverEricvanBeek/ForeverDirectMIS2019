@@ -20,39 +20,104 @@ Partial Public Class ScriptMain
     Public Sub Main()
         Try
             '' Create a new dataset to store data tables
-            Dim ds As New DataSet
-            Dim oleDA As New OleDbDataAdapter
-            Dim dt1 As New DataTable
-            oleDA.Fill(dt1, Dts.Variables("etlResult").Value)
+            Dim ds1, ds2, ds3, ds4 As New DataSet
+            Dim oleDA1, oleDA2, oleDA3, oleDA4 As New OleDbDataAdapter
+            Dim dt1, dt2, dt3, dt4 As New DataTable
+            oleDA1.Fill(dt1, Dts.Variables("etlResult").Value)
+            oleDA2.Fill(dt2, Dts.Variables("stagingResult").Value)
+            oleDA3.Fill(dt3, Dts.Variables("dwhResult").Value)
+            oleDA4.Fill(dt4, Dts.Variables("odsResult").Value)
 
             '' If data tables have rows then add it to the data set
             If dt1 IsNot Nothing AndAlso dt1.Rows.Count > 0 Then
-                ds.Tables.Add(dt1)
+                ds1.Tables.Add(dt1)
+            End If
+
+            If dt2 IsNot Nothing AndAlso dt2.Rows.Count > 0 Then
+                ds2.Tables.Add(dt2)
+            End If
+
+            If dt3 IsNot Nothing AndAlso dt3.Rows.Count > 0 Then
+                ds3.Tables.Add(dt3)
+            End If
+
+            If dt4 IsNot Nothing AndAlso dt4.Rows.Count > 0 Then
+                ds4.Tables.Add(dt4)
             End If
 
             '' Count the number of tables in the data set
-            Dim dsCount As Integer = ds.Tables.Count
+            Dim dsCount1 As Integer = ds1.Tables.Count
+            Dim dsCount2 As Integer = ds2.Tables.Count
+            Dim dsCount3 As Integer = ds3.Tables.Count
+            Dim dsCount4 As Integer = ds4.Tables.Count
             Dim str As String = String.Empty
             Dim result As String = Dts.Variables("mailBody").Value.ToString()
-            Dim stagingResult As String = Dts.Variables("stagingResult").Value.ToString()
-            Dim dwhResult As String = Dts.Variables("dwhResult").Value.ToString()
-            ''result = result & ControlChars.NewLine
-            '' strBody and strBodyEnd adds the HTML tag information. 
-            Dim strBody As String = "<html><body style='font-family: Arial, Helvetica, sans-serif;font-size: 12px;'>" & result.ToString & "<br><br>" & stagingResult.ToString & "<br>" & dwhResult.ToString & "<br><br>"
+            Dim ifsResult As String = Dts.Variables("ifsResult").Value.ToString()
+            Dim strBody As String = "<html><body style='font-family: Arial, Helvetica, sans-serif;font-size: 12px;'>" & result.ToString & "<br><br>" & ifsResult.ToString & "<br><br>"
             Dim strBodyEnd As String = "</body></html>"
 
+            str += "&nbsp;<p>"
+
             '' The following code captures the results of datatables and buils an html string to dispose as an email
-            For x As Integer = 0 To dsCount - 1
-                If ds.Tables(x) IsNot Nothing AndAlso ds.Tables(x).Rows.Count > 0 Then
-                    Dim strText As String = DataTableToHTMLTable(ds.Tables(x))
+            For x As Integer = 0 To dsCount2 - 1
+                If ds2.Tables(x) IsNot Nothing AndAlso ds2.Tables(x).Rows.Count > 0 Then
+                    Dim strText2 As String = DataTableToHTMLTable(ds2.Tables(x))
                     If x = 0 Then
-                        str += strText.ToString()
+                        str += strText2.ToString()
                     Else
                         If x > 0 Then
-                            '' The result sets start with 0 to n-1 (0,1,2,3...Etc.)
-                            '' The below statment replaces the captionname and adds a suffix, which is number of result set
-                            '' For example, for the 2nd result, the caption would become "CaptionName1"
-                            str += "<br>" & Replace(strText.ToString(), "Query Result Set", "Query Result Set" & x)
+                            str += "<br>" & Replace(strText2.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            str += "&nbsp;<p>"
+
+            For x As Integer = 0 To dsCount3 - 1
+                If ds3.Tables(x) IsNot Nothing AndAlso ds3.Tables(x).Rows.Count > 0 Then
+                    Dim strText3 As String = DataTableToHTMLTable(ds3.Tables(x))
+                    If x = 0 Then
+                        str += strText3.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText3.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            str += "&nbsp;<p>"
+
+            For x As Integer = 0 To dsCount4 - 1
+                If ds4.Tables(x) IsNot Nothing AndAlso ds4.Tables(x).Rows.Count > 0 Then
+                    Dim strText4 As String = DataTableToHTMLTable(ds4.Tables(x))
+                    If x = 0 Then
+                        str += strText4.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText4.ToString(), "Query Result Set", "Query Result Set" & x)
+                        End If
+                    End If
+                Else
+                    str += vbEmpty.ToString
+                End If
+            Next x
+
+            str += "&nbsp;<p>"
+
+            For x As Integer = 0 To dsCount1 - 1
+                If ds1.Tables(x) IsNot Nothing AndAlso ds1.Tables(x).Rows.Count > 0 Then
+                    Dim strText1 As String = DataTableToHTMLTable(ds1.Tables(x))
+                    If x = 0 Then
+                        str += strText1.ToString()
+                    Else
+                        If x > 0 Then
+                            str += "<br>" & Replace(strText1.ToString(), "Query Result Set", "Query Result Set" & x)
                         End If
                     End If
                 Else
