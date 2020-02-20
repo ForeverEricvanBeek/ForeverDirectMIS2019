@@ -28,7 +28,7 @@
             string varDatamartSchema = rowDatamartTable["DatamartSchema"].ToString();
             string varDatamartTable = rowDatamartTable["DatamartTable"].ToString();
             string varLoadingType = rowDatamartTable["LoadingType"].ToString();
-            
+                
             string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
             string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
             string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
@@ -240,6 +240,9 @@
         string varSqlSCD1Update = "";
         string varDollarAction = "$action AS [MergeAction]";
         switch (varLoadingType.ToLower()) {
+            case "dm-t1":
+            
+            break;
             case "ui-t2":
                 varSqlSCD1Update += @"
                 DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10))
@@ -475,15 +478,22 @@
         
         string varStgRowCountSQLStatement = @"SELECT 1  AS [Total_Stg]";//@"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
         string varDWHRowCountSQLStatement = @"SELECT 1  AS [Total_DWH]";//@"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
-        string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total]
+        string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total], COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual], COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred], COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] FROM " + varDatamartTableFull;
         string varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-                ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-                ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-                DELETE FROM Shadow." + varDatamartTable + @" WHERE " + varBKDelete + @";";
-        //, COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual]
-        //, COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred]
-        //, COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] 
-        //FROM " + varDatamartTableFull;
+        ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+        ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+        TRUNCATE TABLE Shadow." + varDatamartTable + @";
+        SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON
+        GO
+        INSERT INTO Shadow." + varDatamartTable + @"
+        	( " + varSqlDWHColumns + @"
+                " + varDWHDefaultColumnsList + @"
+        	  )
+        SELECT 
+              " + varSqlDWHColumns + @"
+                " + varDWHDefaultColumnsList + @"
+          FROM " + varDatamartSchema + "." + varDatamartTable + @"
+          SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF";
         #>
         
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
