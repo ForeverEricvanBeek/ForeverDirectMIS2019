@@ -13,7 +13,7 @@
                                         ,[DatamartConnection]
                                         ,[DatamartSchema]
                                         ,[DatamartTable]
-                                        ,[LoadingType] 
+                                        ,[LoadingType]
                                         FROM       [Generator].[" + Schema + @"Table]
                                         WHERE      [TableType] =  'D' 
                                         AND        [IsActive] =  1
@@ -32,7 +32,6 @@
             string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
             string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
             string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
-            //string varDatamartSchemaPlus = varSQLServTableBeginCharacter + varDatamartSchema + varSQLServTableCloseCharacter + ".";
             string varDatamartSchemaPlus = varSQLServTableBeginCharacter + "Shadow" + varSQLServTableCloseCharacter + ".";
             string varDatamartTablePlus = varSQLServTableBeginCharacter + varDatamartTable + varSQLServTableCloseCharacter;
             string varDatamartTableFull = varDatamartSchemaPlus + varDatamartTablePlus;
@@ -106,7 +105,7 @@
             }
         
             string varCheckSumColumn = "";
-            
+            string varCheckSumColumnMS = "";
             if (rowDataColumns.Length > 0) {
                 for(int i = 0; i < rowDataColumns.Length; i ++) {
                     string varColumnName = varSQLServColumnBeginCharacter + rowDataColumns[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
@@ -114,16 +113,21 @@
                     string varColumnDataPrecision = rowDataColumns[i]["ColumnDataPrecision"].ToString();
                     if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
                         varCheckSumColumn += "+ ISNULL(" + varColumnName + ",'')";
+                        varCheckSumColumnMS += "+ ISNULL(ms." + varColumnName + ",'')";
                     } else {
                         varCheckSumColumn += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                        varCheckSumColumnMS += "+ ISNULL(CAST(ms." + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
                     }
                 }
-                varCheckSumColumn = ", HASHBYTES(\'MD5\'," + varCheckSumColumn.Substring(2, varCheckSumColumn.Length - 2) + "+ \'00\') AS [CheckSum]";
+				varCheckSumColumn = ", HASHBYTES(\'MD5\'," + varCheckSumColumn.Substring(2, varCheckSumColumn.Length - 2) + "+ \'00\') AS [CheckSum]";
+				varCheckSumColumnMS = "HASHBYTES(\'MD5\'," + varCheckSumColumnMS.Substring(2, varCheckSumColumnMS.Length - 2) + "+ \'00\')";
             } else {
                 varCheckSumColumn = ", HASHBYTES('MD5','') AS [CheckSum]";
+                varCheckSumColumnMS = "HASHBYTES('MD5','')";
             }
         
             string varCheckSumSCD1Column = "";
+            string varCheckSumSCD1ColumnMS = "";
             if (rowSCD1Columns.Length > 0) {
                 for(int i = 0; i < rowSCD1Columns.Length; i ++) {
                     string varColumnName = varSQLServColumnBeginCharacter + rowSCD1Columns[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
@@ -131,30 +135,39 @@
                     string varColumnDataPrecision = rowSCD1Columns[i]["ColumnDataPrecision"].ToString();
                     if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
                         varCheckSumSCD1Column += "+ ISNULL(" + varColumnName + ",'')";
+                        varCheckSumSCD1ColumnMS += "+ ISNULL(ms." + varColumnName + ",'')";
                     } else {
                         varCheckSumSCD1Column += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                        varCheckSumSCD1ColumnMS += "+ ISNULL(CAST(ms." + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
                     }
                 }
-                varCheckSumSCD1Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD1Column.Substring(2, varCheckSumSCD1Column.Length - 2) + ") AS [CheckSumSCD1]";
+				varCheckSumSCD1Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD1Column.Substring(2, varCheckSumSCD1Column.Length - 2) + ") AS [CheckSumSCD1]";
+				varCheckSumSCD1ColumnMS = "HASHBYTES(\'MD5\'," + varCheckSumSCD1ColumnMS.Substring(2, varCheckSumSCD1ColumnMS.Length - 2) + ")";
             } else {
                 varCheckSumSCD1Column = ", HASHBYTES('MD5','') AS [CheckSumSCD1]";
+                varCheckSumSCD1ColumnMS = "HASHBYTES('MD5','')";
             }
         
             string varCheckSumSCD2Column = "";
+            string varCheckSumSCD2ColumnMS = "";
             if (rowSCD2Columns.Length > 0) {
                 for(int i = 0; i < rowSCD2Columns.Length; i ++) {
                     string varColumnName          = varSQLServColumnBeginCharacter + rowSCD2Columns[i]["ColumnName"].ToString()  + varSQLServColumnCloseCharacter;
                     string varColumnDataType      = rowSCD2Columns[i]["ColumnDataType"].ToString();
                     string varColumnDataPrecision = rowSCD2Columns[i]["ColumnDataPrecision"].ToString();
                     if (AllCharacterDataTypes.ToLower().IndexOf("-"+varColumnDataType.ToLower()+"-") != -1) {
-                        varCheckSumSCD2Column += "+ ISNULL(" + varColumnName + ",'')";
+                        varCheckSumSCD2Column += "+ ISNULL(ms." + varColumnName + ",'')";
+                        varCheckSumSCD2ColumnMS += "+ ISNULL(" + varColumnName + ",'')";
                     } else {
                         varCheckSumSCD2Column += "+ ISNULL(CAST(" + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
+                        varCheckSumSCD2ColumnMS += "+ ISNULL(CAST(ms." + varColumnName + " AS VARCHAR(" + varColumnDataPrecision + ")),'')";
                     }
                 }
-                varCheckSumSCD2Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD2Column.Substring(2, varCheckSumSCD2Column.Length - 2) + " + \'00\') AS [CheckSumSCD2]";
+				varCheckSumSCD2Column = ", HASHBYTES(\'MD5\'," + varCheckSumSCD2Column.Substring(2, varCheckSumSCD2Column.Length - 2) + " + \'00\') AS [CheckSumSCD2]";
+				varCheckSumSCD2ColumnMS = "HASHBYTES(\'MD5\'," + varCheckSumSCD2ColumnMS.Substring(2, varCheckSumSCD2ColumnMS.Length - 2) + " + \'00\')";
             } else {
                 varCheckSumSCD2Column = ", HASHBYTES('MD5','') AS [CheckSumSCD2]";
+                varCheckSumSCD2ColumnMS = "HASHBYTES('MD5','')";
             }
         
             string varSurrogateKey = "";
@@ -239,9 +252,61 @@
         string varSqlMerge = "";
         string varSqlSCD1Update = "";
         string varDollarAction = "$action AS [MergeAction]";
+        //varLoadingType = "ui-t1"; //TEMP
         switch (varLoadingType.ToLower()) {
             case "dm-t1":
-            
+                varSqlMerge += @"
+                -- Update
+                UPDATE mt
+                SET
+                " + varUpdateSCD1Clause + @"
+                ,[CheckSum] = " + varCheckSumColumnMS  + @"
+                ,[CheckSumSCD1] = " + varCheckSumSCD1ColumnMS + @"
+                ,[CheckSumSCD2] = " + varCheckSumSCD2ColumnMS + @"
+                ,[IsActual] = 1
+                ,[IsInferred] = 0
+                ,[IsDeleted] = 0
+                ,[ExpiryDate] = '31-DEC-9999'
+                ,[UpdateDateTime] = SYSDATETIME()
+                ,[BatchID] = ?
+                ,[ProcessLogID] = ?
+                FROM " + varDatamartTableFull + @" mt
+                INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
+                ON " + varBKJoinClause + @"
+                
+                -- Insert
+                INSERT INTO " + varDatamartTableFull + @"
+                SELECT 
+                " + varDWHColumns  + @"
+                , " + varCheckSumColumnMS  + @"
+                , " + varCheckSumSCD1ColumnMS + @"
+                , " + varCheckSumSCD2ColumnMS + @"
+                ,1 AS [IsActual]
+                ,0 AS [IsInferred]
+                ,0 AS [IsDeleted]
+                ,SYSDATETIME() AS [EffectiveDate]
+                ,'31-DEC-9999' AS [ExpiryDate]
+                ,SYSDATETIME() AS [InsertDateTime]
+                ,SYSDATETIME() AS [UpdateDateTime]
+                ,? AS [BatchID]
+                ,? AS [ProcessLogID]
+                FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
+                WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @") 
+                
+                -- Delete
+                UPDATE mt
+                SET
+                [IsActual] = 0
+                ,[IsInferred] = 0
+                ,[IsDeleted] = 1
+                ,[ExpiryDate] = SYSDATETIME()
+                ,[UpdateDateTime] = SYSDATETIME()
+                ,[BatchID] = ?
+                ,[ProcessLogID] = ?
+                FROM " + varDatamartTableFull + @" mt
+                WHERE [IsDeleted] = 0
+                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
+                ";
             break;
             case "ui-t2":
                 varSqlSCD1Update += @"
@@ -689,7 +754,7 @@
             string varName = varDatamartConnection + "-" + varDatamartSchema;
             string sqlDatamartPackages = @"SELECT [DatamartConnection]
                                                 ,[DatamartSchema]
-                                                ,[DatamartTable], st.RunParam1, st.RunParam2, st.RunParam3, st.RunSchedule
+                                                ,[DatamartTable], st.RunParam1, st.RunParam2, st.RunParam3, st.RunSchedule, st.Parents
                                                 FROM [Generator].[" + Schema + @"Table] st 
                                                 WHERE [DatamartConnection] = '" + varDatamartConnection + @"' 
                                                 AND [DatamartSchema]     = '" + varDatamartSchema + @"' 
@@ -747,6 +812,7 @@
                         <Tasks>
                             <#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
                                 string varDatamartTable = rowDatamartPackages["DatamartTable"].ToString();
+                                string varParents = rowDatamartPackages["Parents"].ToString();
                                 string varPackageName = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + varDatamartTable + ".dtsx";
                                 string varRunParam1 = rowDatamartPackages["RunParam1"].ToString();
                                 string varRunParam2 = rowDatamartPackages["RunParam2"].ToString();
@@ -755,10 +821,32 @@
                                 string varPackageRun = "\"" + varRunSchedule + "\" == \"D\" ? FALSE: \"" + varRunSchedule + "\" == \"W\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR,3)((DATEPART(\"DW\",GETDATE()) == 0) ? \"sun\" : (DATEPART(\"DW\",GETDATE()) == 1) ? \"mon\" : (DATEPART(\"DW\",GETDATE()) == 2) ? \"tue\" : (DATEPART(\"DW\",GETDATE()) == 3) ? \"wed\" : (DATEPART(\"DW\",GETDATE()) == 4) ? \"thu\" : (DATEPART(\"DW\",GETDATE()) == 5) ? \"fri\" : (DATEPART(\"DW\",GETDATE()) == 6) ? \"sat\" : \"NULL\"),1) > 0 ? FALSE : \"" + varRunSchedule + "\" == \"M\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2),1) > 0 ? FALSE:  \"" + varRunSchedule + "\" == \"Q\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : \"" + varRunSchedule + "\" == \"Y\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : TRUE";
                                 #>
                                 <ExecutePackage Name="<#=varPackageName#>">
+                                    <#if (varParents.Length > 0 && 1==1) {#>
+                                    <PrecedenceConstraints LogicalType="And">
+                                        <Inputs>
+                                            <#
+                                            // Create array from , seperated list
+                                            // Loop through array and create multiple inputs
+                                            var varParent = varParents.Split(',');
+                                            foreach (string i in varParent) {
+                                                string varParentPackage = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + i + ".dtsx";
+                                            #>
+                                            <Input OutputPathName="<#=varParentPackage#>.Output"/>
+                                            <#}#>
+                                        </Inputs>
+                                    </PrecedenceConstraints>
+                                    <#}#>
                                     <ExternalProjectPackage Package="<#=varPackageName#>"/>
                                     <ParameterBindings>
                                         <ParameterBinding VariableName="Audit.AuditBatchID" Name="BatchID" />
                                         <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="ProcessLogParentID" />
+                                        <#  if (varParents.Length > 0 && 1==2) {
+                                            var varParent = varParents.Split(',');
+                                            foreach (string i in varParent) {
+                                                string varParentPackage = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + i + ".dtsx";
+                                            #>
+                                            <ParameterBinding VariableName="Audit.AuditProcessLogID" Name="<#=varParentPackage#>" />
+                                            <#}}#>
                                     </ParameterBindings>
                                     <Expressions>
                                         <Expression PropertyName="Disable"><#=varPackageRun#></Expression>
