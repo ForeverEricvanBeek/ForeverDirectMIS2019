@@ -15,7 +15,7 @@
                                         ,[DatamartTable]
                                         ,[LoadingType]
                                         FROM       [Generator].[" + Schema + @"Table]
-                                        WHERE      [TableType] =  'D' 
+                                        WHERE      [TableType] IN ('D', 'DF') 
                                         AND        [IsActive] =  1
                                         AND        [Generate] =  1
                                         ";
@@ -253,6 +253,14 @@
         string varSqlSCD1Update = "";
         string varDollarAction = "$action AS [MergeAction]";
         //varLoadingType = "ui-t1"; //TEMP
+        if (varLoadingType.ToLower() == "dm-d1") {
+            varSqlMerge += @"DELETE FROM " + varDatamartTableFull + @" WHERE " + varBKDelete + @";";
+			varLoadingType = "ui-t1";
+        }
+		if (varLoadingType.ToLower() == "dm-d2") {
+            varSqlMerge += @"DELETE FROM " + varDatamartTableFull + @" WHERE " + varBKDelete + @";";
+			varLoadingType = "ui-t2";
+        }
         switch (varLoadingType.ToLower()) {
             case "dm-t1":
                 varSqlMerge += @"
