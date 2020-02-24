@@ -28,7 +28,17 @@
             string varDatamartSchema = rowDatamartTable["DatamartSchema"].ToString();
             string varDatamartTable = rowDatamartTable["DatamartTable"].ToString();
             string varLoadingType = rowDatamartTable["LoadingType"].ToString();
-                
+            string varLoadingTypeDeleteNeeded = "";
+            
+            if (varLoadingType.ToLower() == "dm-d1") {
+                varLoadingTypeDeleteNeeded = "yes";
+                varLoadingType = "dm-t1";
+            }
+            if (varLoadingType.ToLower() == "dm-d2") {
+                varLoadingTypeDeleteNeeded = "yes";
+                varLoadingType = "dm-t2";
+            }
+
             string varDWHSchemaPlus = varSQLServTableBeginCharacter + varDWHSchema + varSQLServTableCloseCharacter + ".";
             string varDWHTablePlus = varSQLServTableBeginCharacter + varDWHTable + varSQLServTableCloseCharacter;
             string varDWHTableFull = varDWHSchemaPlus + varDWHTablePlus;
@@ -74,6 +84,7 @@
 												,ISNULL(col.ColumnNotApplicableValue,col.LookupColum) AS [joinColumn]
 												,col.[LookupColum]
 												,col.[LookupJoin]
+												,dbcol.[is_identity]
 												,ISNULL(col.ColumnDefaultValue,dbcol.[name]) AS [selectColumn]
                                                 FROM       " + Schema + @".sys.all_columns dbcol
                                                 JOIN       " + Schema + @".sys.types dbtyp
@@ -101,8 +112,10 @@
             
             string varDWHColumns = "";
             string varSqlDWHColumns = "";
+            string varIdentityInsert = "--";
             
 			string varLookupJoinClause = "";
+			string varIdentity = "";
             if (rowSurrogateKey.Length > 0) {
                 for(int i = 0; i < rowSurrogateKey.Length; i ++) {
                     string varLookupConnection = rowSurrogateKey[i]["LookupConnection"].ToString();
@@ -113,6 +126,7 @@
                     string varjoinColumn = rowSurrogateKey[i]["joinColumn"].ToString();
                     string varLookupJoin = rowSurrogateKey[i]["LookupJoin"].ToString();
                     string varColumnName = (string)rowSurrogateKey[i]["ColumnName"];
+                    varIdentity += varColumnName + ",";
                     varLookupConnection = varSQLServColumnBeginCharacter + varLookupConnection + varSQLServColumnCloseCharacter;
                     varLookupSchema = varSQLServColumnBeginCharacter + varLookupSchema + varSQLServColumnCloseCharacter;
                     varLookupTable = varSQLServColumnBeginCharacter + varLookupTable + varSQLServColumnCloseCharacter;
@@ -145,6 +159,12 @@
                 string varselectColumn = rowDatamartColumns[i]["selectColumn"].ToString();
                 string varColumnName = rowDatamartColumns[i]["ColumnName"].ToString();
                 string varUnknownValue = rowDatamartColumns[i]["ColumnUnknownValue"].ToString();
+                bool is_identity = (bool)rowDatamartColumns[i]["is_identity"];
+                
+                if (is_identity) {
+                    varIdentityInsert = "";
+                }
+                
                 if (varLookupTable.Length > 0) {
                     varSelectClause += " isnull(" + varLookupTableAlias + "." + varselectColumn +"," + varUnknownValue + ") AS " + varselectColumn + @","; //varColumnName varselectColumn
                 } else {
@@ -311,78 +331,18 @@
         string varSqlMerge = "";
         string varSqlSCD1Update = "";
         string varDollarAction = "$action AS [MergeAction]";
-        //varLoadingType = "ui-t1"; //TEMP
-        if (varLoadingType.ToLower() == "dm-d1") {
-            varSqlMerge += @"DELETE FROM " + varDatamartTableFull + @" WHERE " + varBKDelete + @";";
-			varLoadingType = "ui-t1";
-        }
-		if (varLoadingType.ToLower() == "dm-d2") {
-            varSqlMerge += @"DELETE FROM " + varDatamartTableFull + @" WHERE " + varBKDelete + @";";
-			varLoadingType = "ui-t2";
-        }
         switch (varLoadingType.ToLower()) {
 			case "dm-f1":
 				varSqlMerge += @"
-				-- CTE
-				WITH cte AS (
-				" + varSelectClause + @"
-				SYSDATETIME() AS [InsertDateTime]
-				,SYSDATETIME() AS [UpdateDateTime]
-				,? AS [BatchID]
-				,? AS [ProcessLogID]  
-				FROM " + varDWHConnection + "." + varDWHTableFull + @" ms"
-				+ varLookupJoinClause + @"
-				)
-				
-				UPDATE mt
-                SET
-                " + varUpdateSCD1Clause + @"
-                ,[CheckSum] = " + varCheckSumColumnMS  + @"
-                ,[CheckSumSCD1] = " + varCheckSumSCD1ColumnMS + @"
-                ,[CheckSumSCD2] = " + varCheckSumSCD2ColumnMS + @"
-                ,[IsActual] = 1
-                ,[IsInferred] = 0
-                ,[IsDeleted] = 0
-                ,[ExpiryDate] = '31-DEC-9999'
-                ,[UpdateDateTime] = SYSDATETIME()
-                ,[BatchID] = ?
-                ,[ProcessLogID] = ?
-                FROM cte mt
-                INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
-                ON " + varBKJoinClause + @"
-                
                 -- Insert
-                INSERT INTO cte
+                INSERT INTO " + varDatamartTableFull + @"
                 SELECT 
                 " + varDWHColumns  + @"
-                , " + varCheckSumColumnMS  + @"
-                , " + varCheckSumSCD1ColumnMS + @"
-                , " + varCheckSumSCD2ColumnMS + @"
-                ,1 AS [IsActual]
-                ,0 AS [IsInferred]
-                ,0 AS [IsDeleted]
-                ,SYSDATETIME() AS [EffectiveDate]
-                ,'31-DEC-9999' AS [ExpiryDate]
                 ,SYSDATETIME() AS [InsertDateTime]
                 ,SYSDATETIME() AS [UpdateDateTime]
                 ,? AS [BatchID]
                 ,? AS [ProcessLogID]
                 FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
-                WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @") 
-                
-                -- Delete
-                UPDATE mt
-                SET
-                [IsActual] = 0
-                ,[IsInferred] = 0
-                ,[IsDeleted] = 1
-                ,[ExpiryDate] = SYSDATETIME()
-                ,[UpdateDateTime] = SYSDATETIME()
-                ,[BatchID] = ?
-                ,[ProcessLogID] = ?
-                FROM cte mt
-                WHERE [IsDeleted] = 0
-                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
                 ";
             break;
             case "dm-t1":
@@ -439,60 +399,33 @@
                 AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
                 ";
             break;
-            case "ui-t2":
-                varSqlSCD1Update += @"
-                DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10))
-                ;
+            case "dm-t2":
+                varSqlMerge += @"
+                -- Update
                 UPDATE mt
-                SET " + varUpdateSCD1Clause + @"
-                ,[CheckSum] =  ms.[CheckSum]
-                ,[CheckSumSCD1] =  ms.[CheckSumSCD1]
-                ,[IsDeleted] =  ms.[IsDeleted]
-                ,[IsInferred] =  ms.[IsInferred]
-                ,[UpdateDateTime] =  ms.[UpdateDateTime]
-                ,[BatchID] =  ms.[BatchID]
-                ,[ProcessLogID] =  ms.[ProcessLogID] 
-                OUTPUT 'Update' INTO @OutPutTable
-                FROM " + varDatamartTableFull + @"   mt
-                JOIN (SELECT " + varDWHColumns  + @"
-                " + varCheckSumColumn  + @"
-                " + varCheckSumSCD1Column + @"
-                ,0 AS [IsInferred]
-                ,0 AS [IsDeleted]
-                ,SYSDATETIME() AS [EffectiveDate]
-                ,'31-DEC-9999' AS [ExpiryDate]
-                ,SYSDATETIME() AS [UpdateDateTime]
-                ,? AS [BatchID]
-                ,? AS [ProcessLogID]
-                FROM   " + varDWHConnection + "." + varDWHTableFull + @"
-                ) ms
+                SET
+                " + varUpdateSCD1Clause + @"
+                ,[CheckSum] = " + varCheckSumColumnMS  + @"
+                ,[CheckSumSCD1] = " + varCheckSumSCD1ColumnMS + @"
+                ,[CheckSumSCD2] = " + varCheckSumSCD2ColumnMS + @"
+                ,[IsActual] = 1
+                ,[IsInferred] = 0
+                ,[IsDeleted] = 0
+                ,[ExpiryDate] = '31-DEC-9999'
+                ,[UpdateDateTime] = SYSDATETIME()
+                ,[BatchID] = ?
+                ,[ProcessLogID] = ?
+                FROM " + varDatamartTableFull + @" mt
+                INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
                 ON " + varBKJoinClause + @"
-                AND mt.[CheckSumSCD1] !=  ms.[CheckSumSCD1]
-                ;
-                SELECT [Insert], [Update], [Delete], [NoChange]
-                FROM (SELECT [MergeAction]
-                ,1 AS [RowCount]
-                FROM @OutPutTable
-                UNION
-                SELECT 'NoChange' 
-                ,0
-                ) AS SourceTable
-                PIVOT (SUM([RowCount])
-                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
-                ) AS PivotTable
-                ";
-                varSqlMerge += @"
-                DECLARE @OutPutTableMerge TABLE " + varSqlTableVarClause + @"
-                " + varDWHDefaultColumnsWithType + @"
-                )
-                ;
-                DECLARE @OutPutTableInsert TABLE ([MergeAction] NVARCHAR(10))
-                ;   
-                MERGE " + varDatamartTableFull + @" mt
-                USING (SELECT  " + varDWHColumns  + @"
-                " + varCheckSumColumn  + @"
-                " + varCheckSumSCD1Column + @"
-                " + varCheckSumSCD2Column + @"
+                
+                -- Insert
+                INSERT INTO " + varDatamartTableFull + @"
+                SELECT 
+                " + varDWHColumns  + @"
+                , " + varCheckSumColumnMS  + @"
+                , " + varCheckSumSCD1ColumnMS + @"
+                , " + varCheckSumSCD2ColumnMS + @"
                 ,1 AS [IsActual]
                 ,0 AS [IsInferred]
                 ,0 AS [IsDeleted]
@@ -502,174 +435,24 @@
                 ,SYSDATETIME() AS [UpdateDateTime]
                 ,? AS [BatchID]
                 ,? AS [ProcessLogID]
-                FROM " + varDWHConnection + "." + varDWHTableFull + @"
-                ) ms
-                ON " + varBKJoinClause + @"
-                WHEN NOT MATCHED BY TARGET
-                THEN INSERT (" + varDWHColumns + @"
-                " + varDWHDefaultColumnsList + @"
-                )
-                VALUES        (" + varSqlDWHColumns + @"
-                ,ms.[CheckSum]
-                ,ms.[CheckSumSCD1]
-                ,ms.[CheckSumSCD2]
-                ,ms.[IsActual]
-                ,ms.[IsInferred]
-                ,ms.[IsDeleted]
-                ,ms.[EffectiveDate]
-                ,ms.[ExpiryDate]
-                ,ms.[InsertDateTime]
-                ,NULL
-                ,ms.[BatchID]
-                ,ms.[ProcessLogID]
-                )
-                WHEN MATCHED
-                AND  mt.[CheckSumSCD2] != ms.[CheckSumSCD2]
-                AND  mt.[IsActual] =  1
-                THEN UPDATE SET [IsActual] =  0
-                ,[ExpiryDate] =  SYSDATETIME()
-                ,[UpdateDateTime] =  ms.[UpdateDateTime]
-                WHEN NOT MATCHED BY SOURCE
-                THEN UPDATE SET [IsActual] =  0
-                ,[ExpiryDate] =  SYSDATETIME()
-                ,[UpdateDateTime] =  SYSDATETIME() 
-                OUTPUT " + varDollarAction + @"
-                " + varSqlMergeOutputClause + @"
-                ,ms.[CheckSum]
-                ,ms.[CheckSumSCD1]
-                ,ms.[CheckSumSCD2]
-                ,ms.[IsActual]
-                ,ms.[IsInferred]
-                ,ISNULL(ms.[IsDeleted],1) AS [IsDeleted]
-                ,ms.[EffectiveDate]
-                ,ms.[ExpiryDate]
-                ,ms.[InsertDateTime]
-                ,ms.[UpdateDateTime]
-                ,ms.[BatchID]
-                ,ms.[ProcessLogID]
-                INTO @OutPutTableMerge 
-                ;
+                FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
+                WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @") 
                 
-                INSERT INTO " + varDatamartTableFull + @" 
-                (" + varSqlDWHColumns + @"
-                " + varDWHDefaultColumnsList + @"
-                )
-                OUTPUT 'INSERT' INTO @OutPutTableInsert
-                SELECT  " + varSqlDWHColumns + @"
-                ,ms.[CheckSum]
-                ,ms.[CheckSumSCD1]
-                ,ms.[CheckSumSCD2]
-                ,ms.[IsActual]
-                ,ms.[IsInferred]
-                ,ms.[IsDeleted]
-                ,ms.[EffectiveDate]
-                ,ms.[ExpiryDate]
-                ,ms.[InsertDateTime]
-                ,NULL
-                ,ms.[BatchID]
-                ,ms.[ProcessLogID]
-                FROM        @OutPutTableMerge ms
-                WHERE       ms.[MergeAction] = 'UPDATE'
-                ;
-                SELECT [Insert], [Update], [Delete], [NoChange]
-                FROM  (SELECT [MergeAction]
-                ,1 AS [RowCount]
-                FROM @OutPutTableMerge
-                UNION ALL
-                SELECT [MergeAction]
-                ,1
-                FROM @OutPutTableInsert
-                UNION
-                SELECT 'NoChange' 
-                ,0
-                ) AS SourceTable
-                PIVOT (SUM([RowCount])
-                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
-                ) AS PivotTable
+                -- Delete
+                UPDATE mt
+                SET
+                [IsActual] = 1
+                ,[IsInferred] = 0
+                ,[IsDeleted] = 1
+                ,[ExpiryDate] = SYSDATETIME()
+                ,[UpdateDateTime] = SYSDATETIME()
+                ,[BatchID] = ?
+                ,[ProcessLogID] = ?
+                FROM " + varDatamartTableFull + @" mt
+                WHERE [IsDeleted] = 0
+                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
                 ";
-                break;
-            case "ui-t1":
-            default:
-                varSqlMerge += @"
-                DECLARE @OutPutTable TABLE ([MergeAction] NVARCHAR(10))
-                ;
-                MERGE " + varDatamartTableFull + @" mt
-                USING (SELECT  " + varDWHColumns  + @"
-                " + varCheckSumColumn  + @"
-                " + varCheckSumSCD1Column + @"
-                " + varCheckSumSCD2Column + @"
-                ,1 AS [IsActual]
-                ,0 AS [IsInferred]
-                ,0 AS [IsDeleted]
-                ,SYSDATETIME() AS [EffectiveDate]
-                ,'31-DEC-9999' AS [ExpiryDate]
-                ,SYSDATETIME() AS [InsertDateTime]
-                ,SYSDATETIME() AS [UpdateDateTime]
-                ,? AS [BatchID]
-                ,? AS [ProcessLogID]
-                FROM   " + varDWHConnection + "." + varDWHTableFull + @"
-                ) ms
-                ON    " + varBKJoinClause + @"
-                WHEN NOT MATCHED BY TARGET
-                THEN INSERT   (" + varDWHColumns + @"
-                ,[CheckSum]
-                ,[CheckSumSCD1]
-                ,[CheckSumSCD2]
-                ,[IsActual]
-                ,[IsInferred]
-                ,[IsDeleted]
-                ,[EffectiveDate]
-                ,[ExpiryDate]
-                ,[InsertDateTime]
-                ,[UpdateDateTime]
-                ,[BatchID]
-                ,[ProcessLogID]
-                )
-                VALUES        (" + varSqlDWHColumns + @"
-                ,ms.[CheckSum]
-                ,ms.[CheckSumSCD1]
-                ,ms.[CheckSumSCD2]
-                ,ms.[IsActual]
-                ,ms.[IsInferred]
-                ,ms.[IsDeleted]
-                ,ms.[EffectiveDate]
-                ,ms.[ExpiryDate]
-                ,ms.[InsertDateTime]
-                ,NULL
-                ,ms.[BatchID]
-                ,ms.[ProcessLogID]
-                )
-                WHEN MATCHED
-                AND  mt.[CheckSum] != ms.[CheckSum]
-                AND  mt.[IsActual] =  1
-                THEN UPDATE SET " + varUpdateSCD1Clause + @"
-                ,[CheckSum] =  ms.[CheckSum]
-                ,[CheckSumSCD1] =  ms.[CheckSumSCD1]
-                ,[CheckSumSCD2] =  ms.[CheckSumSCD2]
-                ,[IsDeleted] =  ms.[IsDeleted]
-                ,[IsInferred] =  ms.[IsInferred]
-                ,[UpdateDateTime] =  ms.[UpdateDateTime]
-                ,[BatchID] =  ms.[BatchID]
-                ,[ProcessLogID] =  ms.[ProcessLogID]
-                WHEN NOT MATCHED BY SOURCE
-                THEN UPDATE SET [IsDeleted] =  1
-                ,[UpdateDateTime] =  SYSDATETIME()
-                OUTPUT " + varDollarAction + @"  INTO @OutPutTable
-                ;
-                
-                SELECT [Insert], [Update], [Delete], [NoChange]
-                FROM  (SELECT [MergeAction]
-                ,1 AS [RowCount]
-                FROM    @OutPutTable
-                UNION
-                SELECT 'NoChange' 
-                ,0
-                ) AS SourceTable
-                PIVOT (SUM([RowCount])
-                FOR [MergeAction] IN ([Insert], [Update], [Delete], [NoChange])
-                ) AS PivotTable
-                ";
-                break;
+            break;
         }
         
         string varStgRowCountSQLStatement = @"SELECT 1  AS [Total_Stg]";//@"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
@@ -679,17 +462,23 @@
         ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
         ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
         TRUNCATE TABLE Shadow." + varDatamartTable + @";
-        SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON
-        GO
-        INSERT INTO Shadow." + varDatamartTable + @"
-        	( " + varSqlDWHColumns + @"
+        
+        " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+        " + varIdentityInsert + @"GO
+        
+		INSERT INTO Shadow." + varDatamartTable + @"
+        	(" + varIdentity + @"
+        	" + varDWHColumns + @"
                 " + varDWHDefaultColumnsList + @"
         	  )
         SELECT 
-              " + varSqlDWHColumns + @"
+              " + varIdentity + @"
+        	" + varSqlDWHColumns + @"
                 " + varDWHDefaultColumnsList + @"
-          FROM " + varDatamartSchema + "." + varDatamartTable + @"
-          SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF";
+          FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+          
+		  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+		  " + varIdentityInsert + @"GO";
         #>
         
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -760,54 +549,56 @@
                             <DirectInput><#=varDWHRowCountSQLStatement#></DirectInput>
                             <Results><Result Name="0" VariableName="RC.RowCountSourceDWH" /></Results>
                         </ExecuteSQL>
+ 
+                        <#if (varLoadingType.ToLower() == "dm-f1") {#>
+                            <ExecuteSQL Name="SQL TRUNCATE <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                <DirectInput>TRUNCATE TABLE <#=varDatamartTableFull#></DirectInput>
+                            </ExecuteSQL>
+                        <#}
                         
-                        <#if (varLoadingType == "XX") {#><!-- "TI") {#>-->
-                        <ExecuteSQL Name="SQL Truncate <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
-                            <DirectInput>TRUNCATE TABLE <#=varDatamartSchemaPlus#><#=varDatamartTablePlus#></DirectInput>
-                        </ExecuteSQL>
+                        if (varLoadingTypeDeleteNeeded == "yes") {#>
+                            <ExecuteSQL Name="SQL delete <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                <DirectInput>DELETE FROM <#=varDatamartTableFull#> WHERE <#=varBKDelete#></DirectInput>
+                            </ExecuteSQL>
                         <#}
                         
                         switch (varLoadingType.ToLower()) {
-                            case "ui-t2":#>
-                                <ExecuteSQL Name="SQL Update SCD-1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
-                                    <DirectInput><#=varSqlSCD1Update#></DirectInput>
-                                    <Parameters>
-                                        <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
-                                        <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
-                                    </Parameters>
-                                    <Results>
-                                        <Result Name="0" VariableName="RC.RowCountNew" />
-                                        <Result Name="1" VariableName="RC.RowCountSCD1" />
-                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
-                                    </Results>
-                                </ExecuteSQL>
-                                
-                                <ExecuteSQL Name="SQL Merge SCD-2 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
+                            case "dm-t1":
+                            #>                              
+                                <ExecuteSQL Name="SQL Merge DM-T1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
                                         <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+										<Parameter Name="2"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="3"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+										<Parameter Name="4"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="5"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
                                     </Parameters>
-                                    <Results>
-                                        <Result Name="0" VariableName="RC.RowCountNew" />
-                                        <Result Name="1" VariableName="RC.RowCountSCD2" />
-                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
-                                    </Results>
                                 </ExecuteSQL>
                                 <#break;
-                            case "ui-t1":
-                            default:#>                              
-                                <ExecuteSQL Name="SQL Merge SCD-1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
+                            case "dm-t2":
+                            #>                              
+                                <ExecuteSQL Name="SQL Merge DM-T2 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                    <DirectInput><#=varSqlMerge#></DirectInput>
+                                    <Parameters>
+                                        <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+										<Parameter Name="2"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="3"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+										<Parameter Name="4"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                                        <Parameter Name="5"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
+                                    </Parameters>
+                                </ExecuteSQL>
+                                <#break;
+                            case "dm-f1":
+                            #>                              
+                                <ExecuteSQL Name="SQL INSERT DM-F1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
                                         <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
                                     </Parameters>
-                                    <Results>
-                                        <Result Name="0" VariableName="RC.RowCountNew" />
-                                        <Result Name="1" VariableName="RC.RowCountSCD1" />
-                                        <Result Name="2" VariableName="RC.RowCountDeleted" />
-                                    </Results>
                                 </ExecuteSQL>
                                 <#break;
                         }#>
