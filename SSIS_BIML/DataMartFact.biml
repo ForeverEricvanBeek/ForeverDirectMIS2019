@@ -39,7 +39,7 @@
             string varNameShort = varDatamartSchema + "-" + varDatamartTable;
             string varPackageName = "Load Fact-" + varName;
             string sqlSourceColumn =  @"SELECT dbcol.[name] AS [ColumnName]
-                                            ,dbcol.[Column_id] AS [ColumnPosition]
+                                            ,dbcol.[column_id] AS [ColumnPosition]
                                             ,dbtyp.[name] AS [ColumnDataType]
                                             ,dbcol.[max_length] AS [ColumnDataLength]
                                             ,dbcol.[scale] AS [ColumnDataScale]
@@ -62,7 +62,7 @@
                                             ,dbcol.[scale] AS [ColumnDataScale]
                                             ,dbcol.[precision] AS [ColumnDataPrecision]
                                             ,typcon.[DataTypeExpression]          
-                                            ,dbcol.[Column_ID] AS [ColumnPosition]
+                                            ,dbcol.[column_id] AS [ColumnPosition]
                                             ,dbcol.[is_nullable] AS [ColumnNotNullFlag]
                                             ,col.[ColumnDefaultValue]
                                             ,col.[ColumnUnknownValue]
@@ -87,7 +87,7 @@
                                             WHERE      OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) =  '" + varDatamartSchema + @"' 
                                             AND        OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) =  '" + varDatamartTable + @"' 
                                             AND        dbtyp.[name] != 'sysname'
-                                            ORDER BY   dbcol.[Column_ID]
+                                            ORDER BY   dbcol.[column_id]
                                             ";
             DataTable tableDatamartColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartColumn);
             DataRow[] rowSurrogateKey = tableDatamartColumn.Select((string)"ColumnType like '%sk%'" , (string)"ColumnPosition");
