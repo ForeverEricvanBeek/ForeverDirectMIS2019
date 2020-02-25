@@ -109,8 +109,10 @@
             DataRow[] rowDataColumns = tableDatamartColumn.Select((string)"ColumnType not in ('bk','sk','mt')" , (string)"ColumnPosition");
             DataRow[] rowNonKeyColumns = tableDatamartColumn.Select((string)"ColumnType not in ('sk')" , (string)"ColumnPosition");
             DataRow[] rowDatamartColumns = tableDatamartColumn.Select((string)"ColumnType not in ('mt')" , (string)"ColumnPosition");
+            DataRow[] rowDatamartColumnsAll = tableDatamartColumn.Select((string)"1=1" , (string)"ColumnPosition");
             
             string varDWHColumns = "";
+            string varDatamartColumnsAll = "";
             string varSqlDWHColumns = "";
             string varIdentityInsert = "--";
             
@@ -182,6 +184,17 @@
                 varDWHColumns = varDWHColumns.Substring(2, varDWHColumns.Length - 2);
                 varSqlDWHColumns = varSqlDWHColumns.Substring(2, varSqlDWHColumns.Length - 2);
             }
+            
+            for(int i = 0; i < rowDatamartColumnsAll.Length; i ++) {
+                string varColumnName = varSQLServColumnBeginCharacter + rowDatamartColumnsAll[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
+                varDatamartColumnsAll += ", " + varColumnName + "\n";
+            }
+            
+            if (varDWHColumns.Length > 2) {
+                varDatamartColumnsAll = varDatamartColumnsAll.Substring(2, varDatamartColumnsAll.Length - 2);
+            }
+            
+            
         
             string varCheckSumColumn = "";
             string varCheckSumColumnMS = "";
@@ -336,14 +349,13 @@
 				varSqlMerge += @"
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
-                SELECT 
-                " + varDWHColumns  + @"
-                ,SYSDATETIME() AS [InsertDateTime]
+                " + varSelectClause  + @"
+                SYSDATETIME() AS [InsertDateTime]
                 ,SYSDATETIME() AS [UpdateDateTime]
                 ,? AS [BatchID]
                 ,? AS [ProcessLogID]
                 FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
-                ";
+				"+ varLookupJoinClause + @";";
             break;
             case "dm-t1":
                 varSqlMerge += @"
@@ -457,28 +469,72 @@
         
         string varStgRowCountSQLStatement = @"SELECT 1  AS [Total_Stg]";//@"SELECT COUNT(1) AS [Total_Stg] FROM " + varDWHTableFull;  
         string varDWHRowCountSQLStatement = @"SELECT 1  AS [Total_DWH]";//@"SELECT COUNT(1) AS [Total_DWH] FROM " + varDatamartSchemaPlus + varDatamartTablePlus;                                                    
-        string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total], COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual], COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred], COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] FROM " + varDatamartTableFull;
-        string varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-        ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-        ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-        TRUNCATE TABLE Shadow." + varDatamartTable + @";
-        
-        " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
-        " + varIdentityInsert + @"GO
-        
-		INSERT INTO Shadow." + varDatamartTable + @"
-        	(" + varIdentity + @"
-        	" + varDWHColumns + @"
-                " + varDWHDefaultColumnsList + @"
-        	  )
-        SELECT 
-              " + varIdentity + @"
-        	" + varSqlDWHColumns + @"
-                " + varDWHDefaultColumnsList + @"
-          FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
-          
-		  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
-		  " + varIdentityInsert + @"GO";
+        string varTargetRowCountSQLStatement = @"SELECT 1 AS [Total], 1 AS [Actual], 1 AS [Inferred], 1 AS [Deleted]"; //@"SELECT COUNT(1) AS [Total], COUNT(CASE WHEN [IsActual] = 1 THEN 1 END) AS [Actual], COUNT(CASE WHEN [IsInferred] = 1 THEN 1 END) AS [Inferred], COUNT(CASE WHEN [IsDeleted] = 1 THEN 1 END) AS [Deleted] FROM " + varDatamartTableFull;	
+		string varSwapSQLStatement = "";
+		
+		switch (varLoadingType.ToLower()) {
+			case "dm-f1":
+				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+				TRUNCATE TABLE Shadow." + varDatamartTable + @";
+				
+				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+				" + varIdentityInsert + @"GO
+				
+				INSERT INTO Shadow." + varDatamartTable + @"
+					(" + varDatamartColumnsAll + @"
+					  )
+				SELECT 
+					  " + varDatamartColumnsAll + @"
+				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+				  
+				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+				  " + varIdentityInsert + @"GO";
+			break;
+            case "dm-t1":
+				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+				TRUNCATE TABLE Shadow." + varDatamartTable + @";
+				
+				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+				" + varIdentityInsert + @"GO
+				
+				INSERT INTO Shadow." + varDatamartTable + @"
+					(" + varIdentity + @"
+					" + varDWHColumns + @"
+					  )
+				SELECT 
+					  " + varIdentity + @"
+					" + varSqlDWHColumns + @"
+				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+				  
+				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+				  " + varIdentityInsert + @"GO";
+			break;
+            case "dm-t2":
+				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+				TRUNCATE TABLE Shadow." + varDatamartTable + @";
+				
+				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+				" + varIdentityInsert + @"GO
+				
+				INSERT INTO Shadow." + varDatamartTable + @"
+					(" + varIdentity + @"
+					" + varDWHColumns + @"
+					  )
+				SELECT 
+					  " + varIdentity + @"
+					" + varSqlDWHColumns + @"
+				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+				  
+				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+				  " + varIdentityInsert + @"GO";
+			break;
+		}
         #>
         
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
