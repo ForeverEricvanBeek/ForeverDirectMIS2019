@@ -228,6 +228,10 @@
                 
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
+				(
+				" + varDWHColumns  + @"
+				,[CheckSum],[CheckSumSCD1],[CheckSumSCD2],[IsActual],[IsInferred],[IsDeleted],[EffectiveDate],[ExpiryDate],[InsertDateTime],[UpdateDateTime],[BatchID],[ProcessLogID]
+				)
                 SELECT 
                 " + varDWHColumns  + @"
                 , " + varCheckSumColumn  + @", " + varCheckSumSCD1Column + @", " + varCheckSumSCD2Column + @",1 AS [IsActual],0 AS [IsInferred],0 AS [IsDeleted],SYSDATETIME() AS [EffectiveDate],'31-DEC-9999' AS [ExpiryDate],SYSDATETIME() AS [InsertDateTime],SYSDATETIME() AS [UpdateDateTime],? AS [BatchID],? AS [ProcessLogID]
@@ -305,12 +309,10 @@
 				" + varIdentityInsert + @"GO
 				
 				INSERT INTO Shadow." + varDatamartTable + @"
-					(" + varIdentity + @"
-					" + varDWHColumns + @"
+					(" + varDatamartColumns + @"
 					  )
 				SELECT 
-					  " + varIdentity + @"
-					" + varSqlDWHColumns + @"
+					  " + varDatamartColumns + @"
 				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
 				  
 				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
@@ -326,12 +328,10 @@
 				" + varIdentityInsert + @"GO
 				
 				INSERT INTO Shadow." + varDatamartTable + @"
-					(" + varIdentity + @"
-					" + varDWHColumns + @"
+					(" + varDatamartColumns + @"
 					  )
 				SELECT 
-					  " + varIdentity + @"
-					" + varSqlDWHColumns + @"
+					  " + varDatamartColumns + @"
 				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
 				  
 				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
