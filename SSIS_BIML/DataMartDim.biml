@@ -1,4 +1,4 @@
-<#@ template language="C#" hostspecific="true" tier="3"#>
+<#@ template language="C#" hostspecific="true" tier="2"#>
 <#@ import namespace="System.Data" #>
 <#@ import namespace="Varigence.Languages.Biml.Connection" #>
 <#@ import namespace="Varigence.Biml.Extensions" #>
@@ -437,10 +437,11 @@
                                 </ExecuteSQL>
                                 <#break;
                         }#>
-                        
+                        <#if (varLoadingType == "XX") {#>
                         <ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
                             <DirectInput><#=varSwapSQLStatement#></DirectInput>
                         </ExecuteSQL>
+						<#}#>
                     </Tasks>
                 </Container>
                 

@@ -1,0 +1,203 @@
+<#@ template language="C#" hostspecific="true" tier="2"#>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="Varigence.Languages.Biml.Connection" #>
+<#@ import namespace="Varigence.Biml.Extensions" #>
+<#@ import namespace="Varigence.Biml.CoreLowerer.SchemaManagement"#>
+<#@ property name="Schema" type="String" #>
+<#@ include file="ProjectSettings.cs" #>
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Packages>
+        <#
+        string sqlDatamartSchemas = @"SELECT DISTINCT [DatamartConnection] ,[DatamartSchema] FROM [Generator].[" + Schema + @"Table] WHERE [TableType] IN ('D','DF','F') AND [IsActive] = 1";
+        DataTable tableDatamartSchemas = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartSchemas);
+        foreach (DataRow rowDatamartSchemas in tableDatamartSchemas.Rows) {
+            string varDatamartConnection = rowDatamartSchemas["DatamartConnection"].ToString();
+            string varDatamartSchema = rowDatamartSchemas["DatamartSchema"].ToString();
+            string varOverallPackageName = "CTRL-Swap-" + varDatamartConnection + "-" + varDatamartSchema + "-Total";
+            string varName = varDatamartConnection + "-" + varDatamartSchema;
+			
+            string sqlDatamartPackages = @"SELECT [DatamartConnection],[DatamartSchema],[DatamartTable], st.RunParam1, st.RunParam2, st.RunParam3, st.RunSchedule, st.TableType, st.LoadingType FROM [Generator].[" + Schema + @"Table] st WHERE [DatamartConnection] = '" + varDatamartConnection + @"' AND [DatamartSchema] = '" + varDatamartSchema + @"' AND [TableType] IN ('D','DF','F') AND [IsActive] =  1 ORDER BY [DatamartTable]";
+            DataTable tableDatamartPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartPackages);#>
+    
+            <Package Name="<#=varOverallPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+                <Parameters>
+                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
+                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+                </Parameters>
+    
+                <Variables>
+                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
+                    <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
+                    <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
+                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varOverallPackageName#></Variable>
+                </Variables>
+    
+                <Tasks>
+                    <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
+                            <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
+                            <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
+                            <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
+                            <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
+                        </Parameters>
+                        <Results>
+                            <Result Name="0" VariableName="Audit.AuditBatchID" />
+                            <Result Name="1" VariableName="Audit.AuditProcessLogID" />
+                        </Results>
+                    </ExecuteSQL>
+                    
+                    <Container Name="SC Swap <#=varName#>" ConstraintMode="Parallel">
+                        <Tasks>
+                            <#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
+                                string varDatamartTable = rowDatamartPackages["DatamartTable"].ToString();
+                                string varPackageName = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + varDatamartTable + ".dtsx";
+                                string varRunParam1 = rowDatamartPackages["RunParam1"].ToString();
+                                string varRunParam2 = rowDatamartPackages["RunParam2"].ToString();
+                                string varRunParam3 = rowDatamartPackages["RunParam3"].ToString();
+                                string varRunSchedule = rowDatamartPackages["RunSchedule"].ToString();
+								string varIdentityInsert = "--";
+								string varDatamartColumns = "";
+								string varLoadingType = rowDatamartPackages["LoadingType"].ToString();
+                                string varPackageRun = "\"" + varRunSchedule + "\" == \"D\" ? FALSE: \"" + varRunSchedule + "\" == \"W\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR,3)((DATEPART(\"DW\",GETDATE()) == 0) ? \"sun\" : (DATEPART(\"DW\",GETDATE()) == 1) ? \"mon\" : (DATEPART(\"DW\",GETDATE()) == 2) ? \"tue\" : (DATEPART(\"DW\",GETDATE()) == 3) ? \"wed\" : (DATEPART(\"DW\",GETDATE()) == 4) ? \"thu\" : (DATEPART(\"DW\",GETDATE()) == 5) ? \"fri\" : (DATEPART(\"DW\",GETDATE()) == 6) ? \"sat\" : \"NULL\"),1) > 0 ? FALSE : \"" + varRunSchedule + "\" == \"M\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2),1) > 0 ? FALSE:  \"" + varRunSchedule + "\" == \"Q\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : \"" + varRunSchedule + "\" == \"Y\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : TRUE";
+								
+								string sqlDatamartColumn =  @"SELECT dbcol.[name] AS [ColumnName],ISNULL(col.[ColumnType],'mt') AS [ColumnType],col.[ColumnInferredValue],dbtyp.[name] AS [ColumnDataType],dbcol.[max_length] AS [ColumnDataLength],dbcol.[scale] AS [ColumnDataScale],dbcol.[precision] AS [ColumnDataPrecision],typcon.[DataTypeExpression],dbcol.[column_id] AS [ColumnPosition],dbcol.[is_nullable] AS [ColumnNotNullFlag],col.[ColumnDefaultValue],col.[ColumnUnknownValue],col.[LookupConnection],col.[LookupSchema],col.[LookupTable],ISNULL(col.[ColumnInferredValue],col.[LookupTable]) AS [LookupTableAlias],ISNULL(col.ColumnNotApplicableValue,col.LookupColum) AS [joinColumn],col.[LookupColum],col.[LookupJoin],dbcol.[is_identity],ISNULL(col.ColumnDefaultValue,dbcol.[name]) AS [selectColumn] FROM " + Schema + @".sys.all_columns dbcol INNER JOIN " + Schema + @".sys.types dbtyp ON dbtyp.system_type_id =  dbcol.system_type_id LEFT JOIN [DWH_Control].[Generator].[" + Schema + @"Column] col ON col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartSchema] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[IsActive] =  1 LEFT JOIN  [DWH_Control].[Generator].[DataTypeConversion] typcon ON typcon.[DataType] =  dbtyp.[name]  collate SQL_Latin1_General_CP1_CS_AS WHERE OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartSchema + @"' AND OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartTable + @"' AND dbtyp.[name] != 'sysname' ORDER BY dbcol.[column_id]";
+								DataTable tableDatamartColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartColumn);
+								DataRow[] rowDatamartColumns = tableDatamartColumn.Select((string)"ColumnType not in ('mt')" , (string)"ColumnPosition");
+								DataRow[] rowDatamartColumnsAll = tableDatamartColumn.Select((string)"1=1" , (string)"ColumnPosition");
+																	
+								for(int i = 0; i < rowDatamartColumns.Length; i ++) {
+									bool is_identity = (bool)rowDatamartColumns[i]["is_identity"];
+									
+								if (is_identity) {
+										varIdentityInsert = "";
+									}
+								}
+								
+								for(int i = 0; i < rowDatamartColumnsAll.Length; i ++) {
+									string varColumnName = varSQLServColumnBeginCharacter + rowDatamartColumnsAll[i]["ColumnName"].ToString() + varSQLServColumnCloseCharacter;
+									varDatamartColumns += ", " + varColumnName + "\n";
+								}
+								
+								if (varDatamartColumns.Length > 2) {
+									varDatamartColumns = varDatamartColumns.Substring(2, varDatamartColumns.Length - 2);
+								}
+								
+							
+								string varSwapSQLStatement = "";
+								switch (varLoadingType.ToLower()) {
+									case "dm-f1":
+										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										" + varIdentityInsert + @"GO
+										INSERT INTO Shadow." + varDatamartTable + @"
+											(" + varDatamartColumns + @")
+										SELECT 
+											  " + varDatamartColumns + @"
+										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+										  " + varIdentityInsert + @"GO";
+									break;
+									case "dm-t1":
+										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										" + varIdentityInsert + @"GO
+										INSERT INTO Shadow." + varDatamartTable + @"
+											(" + varDatamartColumns + @")
+										SELECT 
+											  " + varDatamartColumns + @"
+										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+										  " + varIdentityInsert + @"GO";
+									break;
+									case "dm-t2":
+										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										" + varIdentityInsert + @"GO
+										INSERT INTO Shadow." + varDatamartTable + @"
+											(" + varDatamartColumns + @")
+										SELECT 
+											  " + varDatamartColumns + @"
+										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
+										  " + varIdentityInsert + @"GO";
+									break;
+									case "i-ss":
+										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										DELETE FROM Shadow." + varDatamartTable + @";";
+										break;
+									case "ti":
+										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										DELETE FROM Shadow." + varDatamartTable + @";";
+										break;
+								}
+							#>
+								
+							<ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
+								<DirectInput><#=varSwapSQLStatement#></DirectInput>
+							</ExecuteSQL>
+								
+						<#}#>
+                        </Tasks>
+                    </Container>
+                    
+                    <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                        </Parameters>
+                    </ExecuteSQL>
+                </Tasks>
+                
+                <Events>
+                    <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
+                        <Tasks>
+                            <ExecuteSQL Name="SQL Error Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                                <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
+                                    <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
+                                    <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                                </Parameters>
+                            </ExecuteSQL>
+                        </Tasks>
+                    </Event>
+                </Events>
+            </Package>
+        <#}#>
+    </Packages>
+</Biml>

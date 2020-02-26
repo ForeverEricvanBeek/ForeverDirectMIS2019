@@ -170,7 +170,7 @@
                               ,[DatamartTable] AS [Table]
                               ,'Load Dim' AS [PackagePrefix]
                   FROM [Generator].[" + Schema + @"Table]
-                    WHERE [TableType] =  'D' 
+                    WHERE [TableType] IN ('D','DF')
                     AND [IsActive] =  1
                     AND [Generate] =  1
                     UNION
@@ -180,7 +180,7 @@
                              ,'Total'
                              ,'CTRL-Dimensions'
                     FROM [Generator].[" + Schema + @"Table] 
-                    WHERE [TableType] = 'D' 
+                    WHERE [TableType] IN ('D','DF')
                     AND [IsActive] = 1
                    UNION
                    SELECT [DatamartConnection] AS [Connection]
@@ -199,6 +199,15 @@
                              ,'CTRL-Facts'
                     FROM [Generator].[" + Schema + @"Table] 
                     WHERE [TableType] = 'F' 
+                    AND [IsActive] = 1
+					UNION
+                    SELECT DISTINCT 
+                              [DatamartConnection]
+                             ,[DatamartSchema]
+                             ,'Total'
+                             ,'CTRL-Swap'
+                    FROM [Generator].[" + Schema + @"Table] 
+                    WHERE [TableType] IN ('D','DF')
                     AND [IsActive] = 1
                    ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
