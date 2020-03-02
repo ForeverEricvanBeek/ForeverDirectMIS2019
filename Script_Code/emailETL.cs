@@ -1,4 +1,5 @@
-﻿Imports System
+﻿/*
+ * Imports System
 Imports System.Data
 Imports System.Math
 Imports Microsoft.SqlServer.Dts.Runtime
@@ -197,3 +198,4 @@ Partial Public Class ScriptMain
     End Enum
 
 End Class
+*/

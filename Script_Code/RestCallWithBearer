@@ -1,0 +1,166 @@
+using System;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
+using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
+
+[Microsoft.SqlServer.Dts.Pipeline.SSISScriptComponentEntryPointAttribute]
+public class ScriptMain : UserComponent {
+    public override void CreateNewOutputRows() {
+        string Bearer = Variables.Bearer;
+        string wUrl = Variables.Url;
+        string column1 = "";
+        string column2 = "";
+        string column3 = "";
+        string column4 = "";
+        string column5 = "";
+        string column6 = "";
+        try {
+            //string jsonString = "[{\"pageNumber\":1,\"pageSize\":100,\"totalPages\":1,\"totalCount\":2,\"data\":[{\"id\":5050017632282500,\"name\":\"Sheet2\",\"accessLevel\":\"OWNER\",\"permalink\":\"https://app.smartsheet.com/sheets/V5Q5F3GX6hGPXGgr53Rc9PXjrVM7gx5Qp2cGXv71\",\"createdAt\":\"2020-02-27T10:46:25Z\",\"modifiedAt\":\"2020-02-27T10:46:38Z\"},{\"id\":5663691149469572,\"name\":\"Test\",\"accessLevel\":\"OWNER\",\"permalink\":\"https://app.smartsheet.com/sheets/5cQ6chfqxcMxWHWf8xqvw2fmGvrHF2g736RV5m41\",\"createdAt\":\"2020-02-25T05:54:57Z\",\"modifiedAt\":\"2020-02-25T05:55:33Z\"}]}]";
+
+            WorkGroupMetric[] outPutMetrics = GetWebServiceResult(wUrl, Bearer);
+
+            foreach (var sheet in outPutMetrics) {
+                foreach (var row in sheet.rows) {
+                    foreach (var cell in row.cells)  {
+                        if (cell.columnId == 5445942829705092) {
+                            column1 = cell.value;
+                        } else if (cell.columnId == 3194143016019844) {
+                            column2 = cell.value;
+                        } else if (cell.columnId == 7697742643390340) {
+                            column3 = cell.value;
+                        } else if (cell.columnId == 2068243109177220) {
+                            column4 = cell.value;
+                        } else if (cell.columnId == 6571842736547716) {
+                            column5 = cell.value;
+                        } else if (cell.columnId == 4320042922862468)  {
+                            column6 = cell.value;
+                        }
+                    }
+                    Output0Buffer.AddRow();
+                    Output0Buffer.rowNumber = row.rowNumber;
+                    Output0Buffer.column1 = column1;
+                    Output0Buffer.column2 = column2;
+                    Output0Buffer.column3 = column3;
+                    Output0Buffer.column4 = column4;
+                    Output0Buffer.column5 = column5;
+                    Output0Buffer.column6 = column6;
+                }
+            }
+        } catch (Exception e) {
+            FailComponent(e.ToString());
+        }
+    }
+
+    private WorkGroupMetric[] GetWebServiceResult(string wUrl, string Bearer) {
+
+        ServicePointManager.Expect100Continue = true;
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
+        HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(wUrl);
+
+        httpWReq.PreAuthenticate = true;
+        httpWReq.Headers.Add("Authorization", "Bearer " + Bearer);
+        httpWReq.Accept = "application/json";
+
+        HttpWebResponse httpWResp = (HttpWebResponse)httpWReq.GetResponse();
+        WorkGroupMetric[] jsonResponse = null;
+
+        try {
+            if (httpWResp.StatusCode == HttpStatusCode.OK) {
+
+                Stream responseStream = httpWResp.GetResponseStream();
+                string jsonString = null;
+
+                using (StreamReader reader = new StreamReader(responseStream, Encoding.Default)) {
+                    jsonString = "[" + reader.ReadToEnd().Replace("\\", "") + "]";
+                    reader.Close();
+                }
+
+                JavaScriptSerializer sr = new JavaScriptSerializer();
+                jsonResponse = sr.Deserialize<WorkGroupMetric[]>(jsonString.Trim('"'));
+                
+                responseStream.Close();
+                httpWResp.Close();
+
+            } else {
+                FailComponent(httpWResp.StatusCode.ToString());
+
+            }
+        } catch (Exception e) {
+            FailComponent(e.ToString());
+        }
+        return jsonResponse;
+    }
+
+    private void FailComponent(string errorMsg) {
+        bool fail = false;
+        IDTSComponentMetaData100 compMetadata = this.ComponentMetaData;
+        compMetadata.FireError(1, "Error Getting Data From Webservice!", errorMsg, "", 0, out fail);
+    }
+}
+
+public class UserSettings
+{
+    public bool criticalPathEnabled { get; set; }
+    public bool displaySummaryTasks { get; set; }
+}
+
+public class UserPermissions
+{
+    public string summaryPermissions { get; set; }
+}
+
+public class Column
+{
+    public object id { get; set; }
+    public int version { get; set; }
+    public int index { get; set; }
+    public string title { get; set; }
+    public string type { get; set; }
+    public bool primary { get; set; }
+    public bool validation { get; set; }
+    public int width { get; set; }
+}
+
+public class Cell
+{
+    public long columnId { get; set; }
+    public string value { get; set; }
+    public string displayValue { get; set; }
+}
+
+public class Row
+{
+    public long id { get; set; }
+    public int rowNumber { get; set; }
+    public bool expanded { get; set; }
+    public DateTime createdAt { get; set; }
+    public DateTime modifiedAt { get; set; }
+    public List<Cell> cells { get; set; }
+}
+
+public class WorkGroupMetric
+{
+    public long id { get; set; }
+    public string name { get; set; }
+    public int version { get; set; }
+    public int totalRowCount { get; set; }
+    public string accessLevel { get; set; }
+    public List<string> effectiveAttachmentOptions { get; set; }
+    public bool ganttEnabled { get; set; }
+    public bool dependenciesEnabled { get; set; }
+    public bool resourceManagementEnabled { get; set; }
+    public bool cellImageUploadEnabled { get; set; }
+    public UserSettings userSettings { get; set; }
+    public UserPermissions userPermissions { get; set; }
+    public bool hasSummaryFields { get; set; }
+    public string permalink { get; set; }
+    public DateTime createdAt { get; set; }
+    public DateTime modifiedAt { get; set; }
+    public bool isMultiPicklistEnabled { get; set; }
+    public List<Column> columns { get; set; }
+    public List<Row> rows { get; set; }
+}
