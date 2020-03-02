@@ -225,6 +225,7 @@
                 FROM " + varDatamartTableFull + @" mt
                 INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
                 ON " + varBKJoinClause + @"
+				AND mt.[CheckSum] &lt;> " + varCheckSumColumn  + @"
                 
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
@@ -257,6 +258,7 @@
                 FROM " + varDatamartTableFull + @" mt
                 INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
                 ON " + varBKJoinClause + @"
+				AND mt.[CheckSum] &lt;> " + varCheckSumColumn  + @"
                 
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
@@ -276,68 +278,6 @@
                 ";
             break;
         }
-        
-		string varSwapSQLStatement = "";
-		
-		switch (varLoadingType.ToLower()) {
-			case "dm-f1":
-				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-				TRUNCATE TABLE Shadow." + varDatamartTable + @";
-				
-				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
-				" + varIdentityInsert + @"GO
-				
-				INSERT INTO Shadow." + varDatamartTable + @"
-					(" + varDatamartColumns + @"
-					  )
-				SELECT 
-					  " + varDatamartColumns + @"
-				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
-				  
-				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
-				  " + varIdentityInsert + @"GO";
-			break;
-            case "dm-t1":
-				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-				TRUNCATE TABLE Shadow." + varDatamartTable + @";
-				
-				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
-				" + varIdentityInsert + @"GO
-				
-				INSERT INTO Shadow." + varDatamartTable + @"
-					(" + varDatamartColumns + @"
-					  )
-				SELECT 
-					  " + varDatamartColumns + @"
-				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
-				  
-				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
-				  " + varIdentityInsert + @"GO";
-			break;
-            case "dm-t2":
-				varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-				ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-				ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-				TRUNCATE TABLE Shadow." + varDatamartTable + @";
-				
-				" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
-				" + varIdentityInsert + @"GO
-				
-				INSERT INTO Shadow." + varDatamartTable + @"
-					(" + varDatamartColumns + @"
-					  )
-				SELECT 
-					  " + varDatamartColumns + @"
-				  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
-				  
-				  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
-				  " + varIdentityInsert + @"GO";
-			break;
-		}
         #>
         
         <Package Name="<#=varPackageName#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>">
@@ -437,11 +377,6 @@
                                 </ExecuteSQL>
                                 <#break;
                         }#>
-                        <#if (varLoadingType == "XX") {#>
-                        <ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
-                            <DirectInput><#=varSwapSQLStatement#></DirectInput>
-                        </ExecuteSQL>
-						<#}#>
                     </Tasks>
                 </Container>
                 

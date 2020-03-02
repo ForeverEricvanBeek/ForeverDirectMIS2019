@@ -63,19 +63,61 @@
                         </Results>
                     </ExecuteSQL>
                     
-                    <Container Name="SC Swap <#=varName#>" ConstraintMode="Parallel">
+                    <Container Name="SC Swap <#=varName#>" ConstraintMode="Linear">
                         <Tasks>
                             <#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
                                 string varDatamartTable = rowDatamartPackages["DatamartTable"].ToString();
-                                string varPackageName = "Load Dim-" + varDatamartConnection + "-" + varDatamartSchema + "-" + varDatamartTable + ".dtsx";
-                                string varRunParam1 = rowDatamartPackages["RunParam1"].ToString();
-                                string varRunParam2 = rowDatamartPackages["RunParam2"].ToString();
-                                string varRunParam3 = rowDatamartPackages["RunParam3"].ToString();
-                                string varRunSchedule = rowDatamartPackages["RunSchedule"].ToString();
+								string varLoadingType = rowDatamartPackages["LoadingType"].ToString();
+							
+								string varSwapSQLStatement = "";
+								switch (varLoadingType.ToLower()) {
+									case "dm-f1":
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+									break;
+									case "dm-t1":
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+									break;
+									case "dm-t2":
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+									break;
+									case "i-ss":
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										DELETE FROM Shadow." + varDatamartTable + @";";
+										break;
+									case "ti":
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
+										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
+										DELETE FROM Shadow." + varDatamartTable + @";";
+										break;
+								}
+							#>
+								
+							<ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
+								<DirectInput><#=varSwapSQLStatement#></DirectInput>
+							</ExecuteSQL>
+								
+						<#}#>
+                        </Tasks>
+					</Container>
+					<Container Name="SC Insert <#=varName#>" ConstraintMode="Parallel">
+						<Tasks>
+						<#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
+                                string varDatamartTable = rowDatamartPackages["DatamartTable"].ToString();
 								string varIdentityInsert = "--";
 								string varDatamartColumns = "";
 								string varLoadingType = rowDatamartPackages["LoadingType"].ToString();
-                                string varPackageRun = "\"" + varRunSchedule + "\" == \"D\" ? FALSE: \"" + varRunSchedule + "\" == \"W\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR,3)((DATEPART(\"DW\",GETDATE()) == 0) ? \"sun\" : (DATEPART(\"DW\",GETDATE()) == 1) ? \"mon\" : (DATEPART(\"DW\",GETDATE()) == 2) ? \"tue\" : (DATEPART(\"DW\",GETDATE()) == 3) ? \"wed\" : (DATEPART(\"DW\",GETDATE()) == 4) ? \"thu\" : (DATEPART(\"DW\",GETDATE()) == 5) ? \"fri\" : (DATEPART(\"DW\",GETDATE()) == 6) ? \"sat\" : \"NULL\"),1) > 0 ? FALSE : \"" + varRunSchedule + "\" == \"M\" &amp;&amp; FINDSTRING(\"" + varRunParam1 + "\",(DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2),1) > 0 ? FALSE:  \"" + varRunSchedule + "\" == \"Q\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : \"" + varRunSchedule + "\" == \"Y\" &amp;&amp; FINDSTRING(\"" + varRunParam2 + "\",(DT_WSTR,3)( (DATEPART(\"m\",GETDATE()) == 1) ? \"jan\" : (DATEPART(\"m\",GETDATE()) == 2) ? \"feb\" : (DATEPART(\"m\",GETDATE()) == 3) ? \"mar\" : (DATEPART(\"m\",GETDATE()) == 4) ? \"apr\" : (DATEPART(\"m\",GETDATE()) == 5) ? \"may\" : (DATEPART(\"m\",GETDATE()) == 6) ? \"jun\" : (DATEPART(\"m\",GETDATE()) == 7) ? \"jul\" : (DATEPART(\"m\",GETDATE()) == 8) ? \"sep\" : (DATEPART(\"m\",GETDATE()) == 9) ? \"aug\" : (DATEPART(\"m\",GETDATE()) == 10) ? \"okt\" : (DATEPART(\"m\",GETDATE()) == 11) ? \"nov\" : (DATEPART(\"m\",GETDATE()) == 12) ? \"dec\" : \"NULL\"),1) > 0 &amp;&amp; \"" + varRunParam1 + "\" == (DT_WSTR, 2)RIGHT(\"0\" + (DT_STR,4,1252) DATEPART(\"d\",GETDATE()),2) ? FALSE : TRUE";
 								
 								string sqlDatamartColumn =  @"SELECT dbcol.[name] AS [ColumnName],ISNULL(col.[ColumnType],'mt') AS [ColumnType],col.[ColumnInferredValue],dbtyp.[name] AS [ColumnDataType],dbcol.[max_length] AS [ColumnDataLength],dbcol.[scale] AS [ColumnDataScale],dbcol.[precision] AS [ColumnDataPrecision],typcon.[DataTypeExpression],dbcol.[column_id] AS [ColumnPosition],dbcol.[is_nullable] AS [ColumnNotNullFlag],col.[ColumnDefaultValue],col.[ColumnUnknownValue],col.[LookupConnection],col.[LookupSchema],col.[LookupTable],ISNULL(col.[ColumnInferredValue],col.[LookupTable]) AS [LookupTableAlias],ISNULL(col.ColumnNotApplicableValue,col.LookupColum) AS [joinColumn],col.[LookupColum],col.[LookupJoin],dbcol.[is_identity],ISNULL(col.ColumnDefaultValue,dbcol.[name]) AS [selectColumn] FROM " + Schema + @".sys.all_columns dbcol INNER JOIN " + Schema + @".sys.types dbtyp ON dbtyp.system_type_id =  dbcol.system_type_id LEFT JOIN [DWH_Control].[Generator].[" + Schema + @"Column] col ON col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartSchema] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[IsActive] =  1 LEFT JOIN  [DWH_Control].[Generator].[DataTypeConversion] typcon ON typcon.[DataType] =  dbtyp.[name]  collate SQL_Latin1_General_CP1_CS_AS WHERE OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartSchema + @"' AND OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartTable + @"' AND dbtyp.[name] != 'sysname' ORDER BY dbcol.[column_id]";
 								DataTable tableDatamartColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartColumn);
@@ -99,15 +141,10 @@
 									varDatamartColumns = varDatamartColumns.Substring(2, varDatamartColumns.Length - 2);
 								}
 								
-							
-								string varSwapSQLStatement = "";
+								string varInsertSQLStatement = "";
 								switch (varLoadingType.ToLower()) {
 									case "dm-f1":
-										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";
-										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -118,11 +155,7 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "dm-t1":
-										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";
-										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -133,11 +166,7 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "dm-t2":
-										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";
-										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -148,26 +177,26 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "i-ss":
-										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										DELETE FROM Shadow." + varDatamartTable + @";";
+										varInsertSQLStatement = @"INSERT INTO Shadow." + varDatamartTable + @"
+											(" + varDatamartColumns + @")
+										SELECT 
+											  " + varDatamartColumns + @"
+										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms";
 										break;
 									case "ti":
-										varSwapSQLStatement += @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										DELETE FROM Shadow." + varDatamartTable + @";";
+										varInsertSQLStatement = @"INSERT INTO Shadow." + varDatamartTable + @"
+											(" + varDatamartColumns + @")
+										SELECT 
+											  " + varDatamartColumns + @"
+										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms";
 										break;
-								}
-							#>
-								
-							<ExecuteSQL Name="Swap <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
-								<DirectInput><#=varSwapSQLStatement#></DirectInput>
+								}#>					
+						
+							<ExecuteSQL Name="Insert <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false" >
+								<DirectInput><#=varInsertSQLStatement#></DirectInput>
 							</ExecuteSQL>
-								
-						<#}#>
-                        </Tasks>
+							<#}#>
+						</Tasks>
                     </Container>
                     
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
