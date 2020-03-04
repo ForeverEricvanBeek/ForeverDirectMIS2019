@@ -57,6 +57,7 @@
           <SSIS:Package SSIS:Name="Load Fact-Datamart-DM-F_Bom.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Load Fact-Datamart-DM-F_Invoiced_Sales.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Load Fact-Datamart-DM-F_Outbound.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="Load Dim-Datamart-DM-D_Outbound.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="Datamart.conmgr" />
@@ -1622,6 +1623,52 @@
                 <SSIS:Parameter SSIS:Name="ProcessLogParentID">
                   <SSIS:Properties>
                     <SSIS:Property SSIS:Name="ID">{AFA14DF1-0CE5-4DB9-9AE4-ACC5B0ADE24F}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+              </SSIS:Parameters>
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="Load Dim-Datamart-DM-D_Outbound.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{DE6E1BDE-225F-422A-832B-060A0E5C2EC7}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">Load Dim-Datamart-DM-D_Outbound</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{98F66F35-656B-42AF-9C91-0AF0830F4922}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">0</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters>
+                <SSIS:Parameter SSIS:Name="BatchID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{C4F5D0D5-3563-4B51-BA22-F90E61C8C034}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="CreationName">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Description">
+                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">-1</SSIS:Property>
+                    <SSIS:Property SSIS:Name="DataType">11</SSIS:Property>
+                  </SSIS:Properties>
+                </SSIS:Parameter>
+                <SSIS:Parameter SSIS:Name="ProcessLogParentID">
+                  <SSIS:Properties>
+                    <SSIS:Property SSIS:Name="ID">{373D251D-0C94-410E-AA25-815576A50A89}</SSIS:Property>
                     <SSIS:Property SSIS:Name="CreationName">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="Description">
