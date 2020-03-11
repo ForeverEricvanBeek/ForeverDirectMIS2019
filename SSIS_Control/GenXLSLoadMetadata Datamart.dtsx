@@ -12,8 +12,8 @@
   DTS:ObjectName="GenXLSLoadMetadata Datamart"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="92"
-  DTS:VersionGUID="{3B4A8B49-11FF-4461-94EB-90C62BFD40C0}">
+  DTS:VersionBuild="93"
+  DTS:VersionGUID="{40B933FD-9D37-47D7-82BD-E54920B596F9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -218,16 +218,6 @@
                       name="LookupTable"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColum]"
-                      length="255"
-                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]"
-                      name="LookupColum"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
                       refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupJoin]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -276,6 +266,16 @@
                       length="255"
                       lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartTable]"
                       name="DatamartTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColumn]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColumn]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColumn]"
+                      name="LookupColumn"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
@@ -334,11 +334,6 @@
                       length="255"
                       name="LookupTable" />
                     <externalMetadataColumn
-                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColum]"
-                      dataType="wstr"
-                      length="255"
-                      name="LookupColum" />
-                    <externalMetadataColumn
                       refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupJoin]"
                       dataType="wstr"
                       length="255"
@@ -363,6 +358,11 @@
                       dataType="wstr"
                       length="255"
                       name="DatamartTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColumn]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupColumn" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -448,11 +448,11 @@
                       lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupTable]"
                       name="LookupTable" />
                     <outputColumn
-                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColum]"
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColumn]"
                       dataType="wstr"
                       length="255"
-                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColum]"
-                      name="LookupColum" />
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColumn]"
+                      name="LookupColumn" />
                     <outputColumn
                       refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupJoin]"
                       dataType="wstr"
@@ -635,13 +635,6 @@
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupTable]"
                       lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupTable]" />
                     <inputColumn
-                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupColum]"
-                      cachedDataType="wstr"
-                      cachedLength="255"
-                      cachedName="LookupColum"
-                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupColum]"
-                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]" />
-                    <inputColumn
                       refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupJoin]"
                       cachedDataType="wstr"
                       cachedLength="255"
@@ -676,6 +669,13 @@
                       cachedName="DatamartTable"
                       externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTable]"
                       lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupColumn]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupColumn"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupColum]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColumn]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
