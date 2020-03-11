@@ -1,11 +1,14 @@
-﻿  create view FDV.D_Retail 
+﻿
+
+  create view [FDV].[D_Retail] 
   as
-  SELECT 1 as dummy/*RF.[POS_NUM]
-       ,OD.Order_ID
-	   ,OD.D_Order_Skey
+  SELECT RF.[POS_NUM]
+        ,OD.Order_ID
+	    ,OD.D_Order_Skey
+		,OD.Order_Country_Code
 	 
-  FROM [$(ForeverData01)].[DM].[D_Retail] RF
-  join [$(ForeverData01)].[DM].[D_Order] OD
+  FROM [ForeverData01].[DM].[D_Retailt] RF
+  join [ForeverData01].[DM].[D_Order] OD
   on
   RF.POS_NUM=OD.Order_Pos_Number
-  and OD.IsDeleted='0'*/
+  and OD.IsDeleted='0'

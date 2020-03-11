@@ -5,6 +5,8 @@
     [Complaint_Order]                   NVARCHAR (50)   NULL,
     [Complaint_Complaint]               NVARCHAR (255)  NULL,
     [Complaint_Details]                 NVARCHAR (4000) NULL,
+    [Complaint_DetailsShort]            NVARCHAR (4000) NULL,
+    [Complaint_DetailsTranslated]       NVARCHAR (4000) NULL,
     [Complaint_ItemOrdered]             NVARCHAR (50)   NULL,
     [Complaint_ItemReceived]            NVARCHAR (50)   NULL,
     [Complaint_QuantityOrdered]         INT             NULL,
@@ -30,6 +32,7 @@
     [Complaint_Facility_Orig]           NVARCHAR (50)   NULL,
     [Complaint_Checked]                 CHAR (1)        NULL,
     [Complaint_Incomplete]              CHAR (1)        NULL,
+    [Complaint_IncompleteDesc]          NVARCHAR (4000) NULL,
     [Complaint_CreatedDate]             DATETIME2 (7)   NULL,
     [Complaint_CreatedBy]               NVARCHAR (255)  NULL,
     [Complaint_UpdatedDate]             DATETIME2 (7)   NULL,
@@ -42,6 +45,8 @@
     [ProcessLogID]                      BIGINT          NULL,
     CONSTRAINT [PK_Complaints] PRIMARY KEY CLUSTERED ([Complaint_ID] ASC, [Eff_Date] ASC) ON [DWH_WEB]
 ) ON [DWH_WEB];
+
+
 
 
 

@@ -4,6 +4,8 @@
 
 
 
+
+
 CREATE VIEW [FDV].[VW_D_Cash_Flows]
 AS
 
@@ -46,7 +48,7 @@ AS
 	  ,MP.[TEXT]  Omschrijving
 		,'MANUAL' as Pay_Flow 
         from
-		[IFS].[MIXED_PAYMENT_LUMP_SUM] MP
+		[DWH].[IFS].[MIXED_PAYMENT_LUMP_SUM] MP
 		where 1=1 
 		and MP.ActInd='Y'
 		and MP.IsDeleted ='N'
@@ -55,7 +57,7 @@ AS
 		and SHORT_NAME in ('ABNA','DB')
 		and cast(MP.LUMP_SUM_TRANS_DATE as date) >'2018-01-01'
 		--Onderstaand is om een foute salaris uitbetaling uit te sluiten
-		and concat(MP.MIXED_PAYMENT_ID,MP.LUMP_SUM_TRANS_ID) not in (Select concat(MP1.MIXED_PAYMENT_ID,MP1.LUMP_SUM_TRANS_ID) from [IFS].[MIXED_PAYMENT_LUMP_SUM] MP1
+		and concat(MP.MIXED_PAYMENT_ID,MP.LUMP_SUM_TRANS_ID) not in (Select concat(MP1.MIXED_PAYMENT_ID,MP1.LUMP_SUM_TRANS_ID) from DWH.[IFS].[MIXED_PAYMENT_LUMP_SUM] MP1
 																	where 1=1 
 																	and MP1.CODE_A='1500'
 																	and MP1.PARTY_TYPE_DB is not null
@@ -86,7 +88,7 @@ AS
 	  ,SP.UNSTRUCT_INFO as Omschrijving
 	  ,'SEPA' as Pay_Flow
 	  from
-	  [IFS].[SEPA_PAYMENT_TRANS] SP
+	  [DWH].[IFS].[SEPA_PAYMENT_TRANS] SP
 	  where SP.ActInd='Y'
 	  and SP.IsDeleted='N'
 	  --and SP.COMPANY='3001'

@@ -23,8 +23,8 @@
     [COMPLETE_DATE]            DATETIME2 (7)   NULL,
     [CLOSE_DATE]               DATETIME2 (7)   NULL,
     [CLOSE_TOLERANCE]          INT             NULL,
-    [ORG_QTY_DUE]              INT             NULL,
-    [REVISED_QTY_DUE]          INT             NULL,
+    [ORG_QTY_DUE]              DECIMAL (18, 8) NULL,
+    [REVISED_QTY_DUE]          DECIMAL (18, 8) NULL,
     [QTY_ON_ORDER]             INT             NULL,
     [QTY_RELEASED]             INT             NULL,
     [QTY_COMPLETE]             INT             NULL,
@@ -128,6 +128,8 @@
     [ProcessLogID]             BIGINT          NULL,
     CONSTRAINT [PK_SHOP_ORD] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [RELEASE_NO] ASC, [SEQUENCE_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

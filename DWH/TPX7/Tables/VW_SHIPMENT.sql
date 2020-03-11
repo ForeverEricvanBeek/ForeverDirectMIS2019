@@ -181,8 +181,11 @@
     [IsDeleted]                        CHAR (1)         NULL,
     [BatchID]                          BIGINT           NULL,
     [ProcessLogID]                     BIGINT           NULL,
+    [SHIPMENT_EVENT_TS]                DATETIME         NULL,
     CONSTRAINT [PK_SHIPMENT] PRIMARY KEY CLUSTERED ([SHIPMENT_ID] ASC, [Eff_Date] ASC) WITH (FILLFACTOR = 90) ON [DWH_TPX7]
 ) ON [DWH_TPX7];
+
+
 
 
 

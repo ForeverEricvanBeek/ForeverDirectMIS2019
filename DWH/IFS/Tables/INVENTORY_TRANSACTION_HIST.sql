@@ -23,11 +23,9 @@
     [ORDER_TYPE]                     NVARCHAR (4000) NULL,
     [ORDER_TYPE_DB]                  NVARCHAR (20)   NULL,
     [PARTSTAT_FLAG]                  NVARCHAR (1)    NULL,
-    [QUANTITY]                       INT             NULL,
     [SOURCE]                         NVARCHAR (2000) NULL,
     [USERID]                         NVARCHAR (30)   NULL,
     [VALUESTAT_FLAG]                 NVARCHAR (1)    NULL,
-    [QTY_REVERSED]                   INT             NULL,
     [DEL_TYPE]                       NVARCHAR (2)    NULL,
     [TRANSACTION_CODE]               NVARCHAR (10)   NULL,
     [ORIGINAL_TRANSACTION_ID]        INT             NULL,
@@ -78,8 +76,12 @@
     [IsDeleted]                      CHAR (1)        NULL,
     [BatchID]                        BIGINT          NULL,
     [ProcessLogID]                   BIGINT          NULL,
+    [QUANTITY]                       DECIMAL (18, 8) NULL,
+    [QTY_REVERSED]                   DECIMAL (18, 8) NULL,
     CONSTRAINT [PK_INVENTORY_TRANSACTION_HIST] PRIMARY KEY CLUSTERED ([TRANSACTION_ID] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

@@ -1,55 +1,54 @@
 ﻿
-
 CREATE VIEW [FDV].[VW_F_Verzuim]
 AS
 WITH CTE_INT
 AS
-(SELECT distinct(VL.[Medewerker])
-      ,VL.[VerzuimmeldingID] 
-      ,VL.[DatumTijd] --Aanvang_Periode
-      ,VL.[Aanwezigheid]
-      ,VL.[AanwezigheidAT]
-      ,VL.[Omschrijving]
-      ,VL.[EinddatumVerzuim]
+(SELECT distinct(VL.Medewerker)
+      ,VL.VerzuimmeldingID 
+      ,VL.DatumTijd --Aanvang_Periode
+      ,VL.Aanwezigheid
+      ,VL.AanwezigheidAT
+      ,VL.Omschrijving
+      ,VL.EinddatumVerzuim
 	
-  FROM AFAS.DWH_Medewerker_verzuimverloop VL
-  where VL.ActInd='Y'
+  FROM DWH.AFAS.DWH_Medewerker_verzuimverloop VL
+  WHERE VL.ActInd='Y'
 
 )
-,CTE_1 as 
-(SELECT C_INT.[Medewerker]
-      ,C_INT.[VerzuimmeldingID] 
-      ,C_INT.[DatumTijd] -- Aanvang_Periode
+,CTE_1 AS 
+(SELECT C_INT.Medewerker
+      ,C_INT.VerzuimmeldingID 
+      ,C_INT.DatumTijd -- Aanvang_Periode
 	  ,LEAD(C_INT.DatumTijd,1,C_INT.DatumTijd)
-	  over
-	  (partition by C_INT.[VerzuimmeldingID] order by C_INT.DatumTijd) as Eind_periode 
-	  ,VM.VerwachteEinddatum as VerwachteEinddatum 
-      ,C_INT.[Aanwezigheid]
-      ,C_INT.[AanwezigheidAT]
+	  OVER
+	  (PARTITION BY C_INT.VerzuimmeldingID ORDER BY C_INT.DatumTijd) AS Eind_periode 
+	  ,VM.VerwachteEinddatum AS VerwachteEinddatum 
+      ,C_INT.Aanwezigheid
+      ,C_INT.AanwezigheidAT
       ,VM.Vangnetregeling
-      ,C_INT.[EinddatumVerzuim]
-      ,ROW_NUMBER() over (partition by  C_INT.[VerzuimmeldingID] order by C_INT.DatumTijd) as RN  
+      ,C_INT.EinddatumVerzuim
+      ,ROW_NUMBER() OVER (PARTITION BY  C_INT.VerzuimmeldingID ORDER BY C_INT.DatumTijd) AS RN  
 	
   FROM  CTE_INT C_INT
   
-  join AFAS.DWH_Medewerker_verzuimmelding VM
-  on 
-  C_INT.VerzuimmeldingID=VM.VerzuimmeldingID
-  and VM.ActInd='Y'
- 
-  where 1=1 
+  INNER JOIN DWH.AFAS.DWH_Medewerker_verzuimmelding VM
+  ON
+  C_INT.VerzuimmeldingID = VM.VerzuimmeldingID
+  AND VM.ActInd='Y' 
   )
+ -- select * from CTE_1 
 
- ,CTE_2 as
-  (select C1.Medewerker
+
+ ,CTE_2 AS
+  (SELECT C1.Medewerker
   ,C1.VerzuimmeldingID
   ,C1.Vangnetregeling
-  ,C1.DatumTijd as Start_periode
-   ,Case when C1.EinddatumVerzuim is null and C1.DatumTijd=C1.Eind_periode and RN<>1 or C1.Eind_periode>cast(getdate() as date) then cast(getdate() as date) 
-        when C1.EinddatumVerzuim is null and C1.DatumTijd=C1.Eind_periode and RN=1 and max(RN) over (partition by VerzuimmeldingID)>1 then C1.Eind_periode
-		when C1.EinddatumVerzuim is null and C1.DatumTijd=C1.Eind_periode and RN=1 and max(RN) over (partition by VerzuimmeldingID)=1 then cast(getdate() as date)
-		when C1.EinddatumVerzuim is null and C1.DatumTijd=C1.Eind_periode and RN<>1 and max(RN) over (partition by VerzuimmeldingID)>1 then cast(getdate() as date)
-   else C1.Eind_periode end as Eind_periode
+  ,C1.DatumTijd AS Start_periode
+   ,CASE WHEN C1.EinddatumVerzuim IS NULL AND C1.DatumTijd = C1.Eind_periode AND RN <> 1 or C1.Eind_periode > CAST(getdate() AS DATE) THEN CAST(getdate() AS DATE) 
+         WHEN C1.EinddatumVerzuim IS NULL AND C1.DatumTijd = C1.Eind_periode AND RN = 1 AND MAX(RN) OVER (PARTITION BY VerzuimmeldingID) > 1 THEN C1.Eind_periode
+		 WHEN C1.EinddatumVerzuim IS NULL AND C1.DatumTijd = C1.Eind_periode AND RN = 1 AND MAX(RN) OVER (PARTITION BY VerzuimmeldingID) = 1 THEN CAST(getdate() AS DATE)
+		 WHEN C1.EinddatumVerzuim IS NULL AND C1.DatumTijd = C1.Eind_periode AND RN <> 1 AND MAX(RN) OVER (PARTITION BY VerzuimmeldingID) > 1 THEN CAST(getdate() AS DATE)
+   ELSE C1.Eind_periode END AS Eind_periode
   ,C1.VerwachteEinddatum
   ,C1.EinddatumVerzuim
   ,C1.Aanwezigheid*0.01 AS Aanwezigheid
@@ -62,27 +61,27 @@ AS
   ,ROW_NUMBER() OVER (PARTITION BY C1.VerzuimmeldingID ORDER BY C1.DatumTijd) AS RN
   ,MAX(C1.RN) OVER (PARTITION BY VerzuimmeldingID) AS M_RN
  
-  from CTE_1 C1 
+  FROM CTE_1 C1 
   
-  left join [AFAS].[DWH_Medewerker_Roosters] MR
-  on
+  LEFT JOIN DWH.AFAS.DWH_Medewerker_Roosters MR
+  ON
   MR.Medewerker=C1.Medewerker
-  and
-  C1.DatumTijd between MR.BegindatumRooster and isnull(MR.EinddatumRooster, cast(getdate() as date)) 
-  and MR.ActInd='Y'
+  AND
+  C1.DatumTijd BETWEEN MR.BegindatumRooster AND ISNULL(MR.EinddatumRooster,CAST(GETDATE() AS DATE)) 
+  AND MR.ActInd='Y'
   
-  left join [AFAS].[DWH_Medewerker_Orgeenheid_functie] MF
-  on
+  LEFT JOIN DWH.AFAS.DWH_Medewerker_Orgeenheid_functie MF
+  ON
   C1.Medewerker=MF.Medewerker
-  and C1.DatumTijd between MF.Begindatum and ISNULL(MF.Einddatum,cast(getdate() as date))
-  and MF.ActInd='Y' 
+  AND C1.DatumTijd BETWEEN MF.Begindatum AND ISNULL(MF.Einddatum,CAST(GETDATE() AS DATE))
+  AND MF.ActInd='Y' 
  
-  left join [AFAS].[DWH_Medewerker_Contracten] MC
-  on
+  LEFT JOIN DWH.AFAS.DWH_Medewerker_Contracten MC
+  ON
   C1.Medewerker=MC.Medewerker
-  and C1.DatumTijd between  MC.DatumBeginContract and isnull(MC.DatumEindContract,cast(getdate() as date)))
+  AND C1.DatumTijd BETWEEN  MC.DatumBeginContract AND ISNULL(MC.DatumEindContract,CAST(GETDATE() AS DATE)))
   
-  select  C2.Medewerker
+  SELECT  C2.Medewerker
   ,C2.VerzuimmeldingID
   ,C2.Vangnetregeling
   ,C2.Start_periode
@@ -97,9 +96,9 @@ AS
   ,C2.FunctieCode
   ,C2.DienstbetrekkingCode 
 
-  from CTE_2 C2
+  FROM CTE_2 C2
 
-  group by 
+  GROUP BY 
    C2.Medewerker
   ,C2.VerzuimmeldingID
   ,C2.Vangnetregeling

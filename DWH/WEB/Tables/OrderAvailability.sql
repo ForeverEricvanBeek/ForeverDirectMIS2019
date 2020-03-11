@@ -12,6 +12,8 @@
     [DATE]             DATETIME       NULL,
     [BatchID]          BIGINT         NULL,
     [ProcessLogID]     BIGINT         NULL,
-    CONSTRAINT [PK_OrderAvailability_1] PRIMARY KEY CLUSTERED ([ID] ASC) ON [DWH_WEB]
+    CONSTRAINT [PK_OrderAvailability] PRIMARY KEY CLUSTERED ([ID] ASC) ON [DWH_WEB]
 ) ON [DWH_WEB];
+
+
 

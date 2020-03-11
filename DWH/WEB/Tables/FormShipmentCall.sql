@@ -7,7 +7,7 @@
     [FormShipmentCall_CallDate]                              DATE           NULL,
     [FormShipmentCall_ETAStartDateTime]                      DATETIME       NULL,
     [FormShipmentCall_ETAStopDateTime]                       DATETIME       NULL,
-    [FormShipmentCall_ATADate]                               DATE           NULL,
+    [FormShipmentCall_ATADate]                               DATETIME       NULL,
     [FormShipmentCall_QuestionShipmentOnTime_Answer]         INT            NULL,
     [FormShipmentCall_QuestionShipmentOnTime_Comment]        NVARCHAR (MAX) NULL,
     [FormShipmentCall_QuestionShipmentComplete_Answer]       INT            NULL,
@@ -33,4 +33,6 @@
     [ProcessLogID]                                           BIGINT         NULL,
     CONSTRAINT [PK_web.FormShipmentCall] PRIMARY KEY CLUSTERED ([FormShipmentCall_ID] ASC, [Eff_Date] ASC) ON [DWH_WEB]
 ) ON [DWH_WEB] TEXTIMAGE_ON [DWH_WEB];
+
+
 

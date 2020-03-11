@@ -4,7 +4,7 @@
     [VerwachteEinddatum]  DATE            NULL,
     [Einddatum]           DATE            NULL,
     [Omschrijving]        NVARCHAR (2000) NULL,
-    [Aanwezigheid]        DECIMAL (18, 2) NULL,
+    [Aanwezigheid]        INT             NULL,
     [Vangnetregeling]     BIT             NULL,
     [Dienstverband]       BIGINT          NULL,
     [VerzuimmeldingID]    BIGINT          NOT NULL,
@@ -19,6 +19,8 @@
     [ProcessLogID]        BIGINT          NULL,
     CONSTRAINT [PK_DWH_Medewerker_verzuimmelding] PRIMARY KEY CLUSTERED ([VerzuimmeldingID] ASC, [Eff_Date] ASC) ON [DWH_AFAS]
 ) ON [DWH_AFAS];
+
+
 
 
 

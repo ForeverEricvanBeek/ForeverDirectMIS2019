@@ -2,6 +2,7 @@
 
 
 
+
 CREATE VIEW [FDV].[VW_D_Vas] 
 AS
 
@@ -26,7 +27,7 @@ SELECT
 		  ELSE UPPER(CODE_DESC)
 		  END AS Vas_Machine_Description
      
-  FROM [MANH].[SYS_CODE]
+  FROM [DWH].[MANH].[SYS_CODE]
   WHERE CODE_TYPE='VAT'
   AND ActInd='Y'
   UNION ALL

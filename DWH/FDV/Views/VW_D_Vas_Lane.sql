@@ -1,4 +1,5 @@
-﻿CREATE VIEW [FDV].[VW_D_Vas_Lane] 
+﻿
+CREATE VIEW [FDV].[VW_D_Vas_Lane] 
 AS
 
 SELECT 
@@ -22,7 +23,7 @@ SELECT
 			ELSE 'UNKNOWN'
    		    END AS Vas_Lane_Description
       
-  FROM [MANH].[WORK_ORD_HDR]
+  FROM [DWH].[MANH].[WORK_ORD_HDR]
   WHERE ActInd='Y'
   UNION ALL 
   SELECT '-1', NULL

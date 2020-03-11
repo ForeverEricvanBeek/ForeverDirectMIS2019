@@ -1,12 +1,6 @@
 ﻿
 
 
-
-
-
-
-
-
 CREATE VIEW [FDV].[VW_F_Vas_Productivity]
 AS
 
@@ -106,7 +100,7 @@ SELECT
 			ON			WD.ITEM_ID = IC.ITEM_ID
 			AND			IC.ActInd = 'Y'
 
-			LEFT JOIN [MANH].[SYS_CODE] SC
+			LEFT JOIN [DWH].[MANH].[SYS_CODE] SC
 			on
 			CAST(WH.TRANS_INVN_TYPE AS NVARCHAR (20))=SC.CODE_ID
 			AND SC.CODE_TYPE='VAT'

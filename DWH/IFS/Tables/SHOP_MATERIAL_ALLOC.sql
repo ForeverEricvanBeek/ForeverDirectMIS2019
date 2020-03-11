@@ -15,13 +15,13 @@
     [LAST_ISSUE_DATE]         DATETIME2 (7)   NULL,
     [LEADTIME_OFFSET]         INT             NULL,
     [PRIORITY_NO]             INT             NULL,
-    [QTY_ASSIGNED]            DECIMAL (18, 4) NULL,
-    [QTY_ISSUED]              DECIMAL (18, 4) NULL,
-    [QTY_ON_ORDER]            DECIMAL (18, 4) NULL,
-    [QTY_PER_ASSEMBLY]        DECIMAL (18, 4) NULL,
-    [SHRINKAGE_FACTOR]        DECIMAL (18, 4) NULL,
-    [COMPONENT_SCRAP]         DECIMAL (18, 4) NULL,
-    [QTY_REQUIRED]            DECIMAL (18, 4) NULL,
+    [QTY_ASSIGNED]            DECIMAL (18, 8) NULL,
+    [QTY_ISSUED]              DECIMAL (18, 8) NULL,
+    [QTY_ON_ORDER]            DECIMAL (18, 8) NULL,
+    [QTY_PER_ASSEMBLY]        DECIMAL (18, 8) NULL,
+    [SHRINKAGE_FACTOR]        DECIMAL (18, 8) NULL,
+    [COMPONENT_SCRAP]         DECIMAL (18, 8) NULL,
+    [QTY_REQUIRED]            DECIMAL (18, 8) NULL,
     [SUPPLY_CODE]             NVARCHAR (200)  NULL,
     [SUPPLY_CODE_DB]          NVARCHAR (20)   NULL,
     [NOTE_TEXT]               NVARCHAR (2000) NULL,
@@ -63,6 +63,8 @@
     [ProcessLogID]            BIGINT          NULL,
     CONSTRAINT [PK_SHOP_MATERIAL_ALLOC] PRIMARY KEY CLUSTERED ([ORDER_NO] ASC, [RELEASE_NO] ASC, [SEQUENCE_NO] ASC, [LINE_ITEM_NO] ASC, [Eff_Date] ASC) ON [DWH_IFS]
 ) ON [DWH_IFS];
+
+
 
 
 

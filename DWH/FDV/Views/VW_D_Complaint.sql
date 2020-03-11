@@ -6,7 +6,6 @@
 
 
 
-
 CREATE VIEW [FDV].[VW_D_Complaint]
 AS
 
@@ -47,7 +46,7 @@ SELECT
       ,[Complaint_UpdatedDate]
       ,[Complaint_UpdatedBy]
 
- FROM [WEB].[Complaint]
+ FROM [DWH].[WEB].[Complaint]
 	 WHERE ActInd = 'Y'
 			AND IsDeleted = 'N'
 UNION ALL
