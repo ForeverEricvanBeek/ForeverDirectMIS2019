@@ -97,9 +97,15 @@
             switch (varLoadingType.ToLower()) {
                 case "i-ss":
                     varSqlMerge += @"
-                    DECLARE @SelectionDate nvarchar(10) = ?
-                    DELETE FROM " + varDatamartTableFull + @" WHERE DateKey = rtrim(convert(char,cast( @SelectionDate As Date),112))
-                    INSERT INTO " + varDatamartTableFull + @" 
+					-- Declare
+					DECLARE @CountDelete INT = 0;
+					DECLARE @CountInsert INT = 0;
+                    DECLARE @SelectionDate nvarchar(10) = ?;
+                    
+					DELETE FROM " + varDatamartTableFull + @" WHERE DateKey = rtrim(convert(char,cast( @SelectionDate As Date),112))
+                    SELECT @CountDelete = @@ROWCOUNT;
+					
+					INSERT INTO " + varDatamartTableFull + @" 
                     " + varSelectClause + @"
                     SYSDATETIME() AS [InsertDateTime]
                     ,SYSDATETIME() AS [UpdateDateTime]
@@ -107,10 +113,14 @@
                     ,? AS [ProcessLogID]                
                     FROM "+ varDWHConnection  +@". "+ varDWHSchema  +@". "+ varDWHTable  +@" ms 
                     "+ varLookupJoinClause + @"
-                    ";       
+                    SELECT @CountInsert = @@ROWCOUNT;
+					SELECT @CountInsert, @CountDelete;";       
                     break;
                 case "ti":
                     varSqlMerge += @"
+					-- Declare
+					DECLARE @CountInsert INT = 0;
+					
                     INSERT INTO " + varDatamartTableFull + @" 
                     " + varSelectClause + @"
                     SYSDATETIME() AS [InsertDateTime]
@@ -119,7 +129,8 @@
                     ,? AS [ProcessLogID]                
                     FROM "+ varDWHConnection  +@". "+ varDWHSchema  +@". "+ varDWHTable  +@" ms 
                     "+ varLookupJoinClause + @"
-                    ";       
+                    SELECT @CountInsert = @@ROWCOUNT;
+					SELECT @CountInsert;";       
                     break;
             }
             
@@ -145,6 +156,8 @@
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
                     <Variable Name="LoadingType" DataType="String" Namespace="User"><#=varLoadingType#></Variable>
                     <Variable Name="SelectionDate" DataType="String" Namespace="User">2000-01-01 00:00:00</Variable>
+					<Variable Name="CountInserted" DataType="Int64" Namespace="Count">0</Variable>
+					<Variable Name="CountDeleted" DataType="Int64" Namespace="Count">0</Variable>
                 </Variables>
                 
                 <Tasks>
@@ -185,28 +198,37 @@
                             switch (varLoadingType.ToLower()) {
                                 case "i-ss":
                                 default:#>                              
-                                    <ExecuteSQL Name="SQL Get Selection Date  <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None" Disabled="false" >
+                                    <ExecuteSQL Name="SQL Get Selection Date  <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow" Disabled="false" >
                                         <DirectInput><#=varSQLSelectionDate#></DirectInput>
                                         <Results><Result Name="0" VariableName="User.SelectionDate" /></Results>
-                                        <Parameters><Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" /></Parameters>
+                                        <Parameters>
+											<Parameter Name="0" VariableName="Audit.AuditBatchID" DataType="Int64" />
+										</Parameters>
                                     </ExecuteSQL>
                                     
-                                    <ExecuteSQL Name="SQL Merge I-SS <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                    <ExecuteSQL Name="SQL Merge I-SS <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                         <DirectInput><#=varSqlMerge#></DirectInput>
                                         <Parameters>
                                             <Parameter Name="0"  VariableName="User.SelectionDate" DataType="String" />
                                             <Parameter Name="1"  VariableName="BatchID" Direction="Input" DataType="Int64"/>
                                             <Parameter Name="2"  VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
                                         </Parameters>
+										<Results>
+											<Result Name="0" VariableName="Count.CountInserted" />
+											<Result Name="1" VariableName="Count.CountDeleted" />
+										</Results>
                                     </ExecuteSQL>
                                     <#break;
                                 case "ti":#>                              
-                                    <ExecuteSQL Name="SQL Insert TI <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                    <ExecuteSQL Name="SQL Insert TI <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                         <DirectInput><#=varSqlMerge#></DirectInput>
                                         <Parameters>
                                             <Parameter Name="0"  VariableName="BatchID" Direction="Input" DataType="Int64"/>
                                             <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
                                         </Parameters>
+										<Results>
+											<Result Name="0" VariableName="Count.CountInserted" />
+										</Results>
                                     </ExecuteSQL>
                                     <#break;
                             }#>
@@ -219,12 +241,14 @@
                     </Container>
                     
                     <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@RowCountNew = ?,@RowCountDeleted = ?</DirectInput>
                         <Parameters>
                             <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
                             <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
                             <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+							<Parameter Name="4" VariableName="Count.CountInserted" Direction="Input" DataType="Int64"/>
+							<Parameter Name="5" VariableName="Count.CountDeleted" Direction="Input" DataType="Int64"/>
                         </Parameters>
                     </ExecuteSQL>
                 </Tasks>

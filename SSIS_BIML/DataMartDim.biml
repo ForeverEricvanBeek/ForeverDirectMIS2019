@@ -39,13 +39,13 @@
             
             string sqlDatamartColumn =  @"SELECT dbcol.[name] AS [ColumnName],ISNULL(col.[ColumnType],'mt') AS [ColumnType],col.[ColumnInferredValue],dbtyp.[name] AS [ColumnDataType],dbcol.[max_length] AS [ColumnDataLength],dbcol.[scale] AS [ColumnDataScale],dbcol.[precision] AS [ColumnDataPrecision],typcon.[DataTypeExpression],dbcol.[column_id] AS [ColumnPosition],dbcol.[is_nullable] AS [ColumnNotNullFlag],col.[ColumnDefaultValue],col.[ColumnUnknownValue],col.[LookupConnection],col.[LookupSchema],col.[LookupTable],ISNULL(col.[ColumnInferredValue],col.[LookupTable]) AS [LookupTableAlias],ISNULL(col.ColumnNotApplicableValue,col.LookupColum) AS [joinColumn],col.[LookupColum],col.[LookupJoin],dbcol.[is_identity],ISNULL(col.ColumnDefaultValue,dbcol.[name]) AS [selectColumn] FROM " + Schema + @".sys.all_columns dbcol INNER JOIN " + Schema + @".sys.types dbtyp ON dbtyp.system_type_id =  dbcol.system_type_id LEFT JOIN [DWH_Control].[Generator].[" + Schema + @"Column] col ON col.[ColumnName]  collate SQL_Latin1_General_CP1_CS_AS =  dbcol.[name] collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartTable] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[DatamartSchema] collate SQL_Latin1_General_CP1_CS_AS =  OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) collate SQL_Latin1_General_CP1_CS_AS AND col.[IsActive] =  1 LEFT JOIN  [DWH_Control].[Generator].[DataTypeConversion] typcon ON typcon.[DataType] =  dbtyp.[name]  collate SQL_Latin1_General_CP1_CS_AS WHERE OBJECT_SCHEMA_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartSchema + @"' AND OBJECT_NAME(dbcol.object_id,DB_ID('" + Schema + @"')) = '" + varDatamartTable + @"' AND dbtyp.[name] != 'sysname' ORDER BY dbcol.[column_id]";
             DataTable tableDatamartColumn = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlDatamartColumn);
-            DataRow[] rowSurrogateKey = tableDatamartColumn.Select((string)"ColumnType like '%sk%'" , (string)"ColumnPosition");
+            DataRow[] rowSurrogateKey = tableDatamartColumn.Select((string)"ColumnType like '%-sk%'" , (string)"ColumnPosition");
             DataRow[] rowBusinessKeys = tableDatamartColumn.Select((string)"ColumnType like '%bk%'" , (string)"ColumnPosition");
             DataRow[] rowSCD1Columns = tableDatamartColumn.Select((string)"ColumnType = 't1'" , (string)"ColumnPosition");
             DataRow[] rowSCD2Columns = tableDatamartColumn.Select((string)"ColumnType = 't2'" , (string)"ColumnPosition");
             DataRow[] rowDataColumns = tableDatamartColumn.Select((string)"ColumnType not in ('bk','sk','mt')" , (string)"ColumnPosition");
-            DataRow[] rowDatamartColumns = tableDatamartColumn.Select((string)"ColumnType not in ('mt')" , (string)"ColumnPosition");
-            DataRow[] rowDatamartColumnsAll = tableDatamartColumn.Select((string)"1=1" , (string)"ColumnPosition");
+            DataRow[] rowDatamartColumns = tableDatamartColumn.Select((string)"ColumnType not in ('mt','sk')" , (string)"ColumnPosition");
+            DataRow[] rowDatamartColumnsAll = tableDatamartColumn.Select((string)"ColumnType not in ('sk')" , (string)"ColumnPosition");
             
             string varDWHColumns = "";
             string varDatamartColumns = "";
@@ -207,16 +207,29 @@
         switch (varLoadingType.ToLower()) {
 			case "dm-f1":
 				varSqlMerge += @"
+				-- Declare
+				DECLARE @CountInsert INT = 0;
+				
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
+				(
+				" + varDatamartColumns  + @"
+				)
                 SELECT
                 " + varSelectClause  + @"
-                SYSDATETIME() AS [InsertDateTime],SYSDATETIME() AS [UpdateDateTime],? AS [BatchID],? AS [ProcessLogID]
+                1 AS IsActual,0 AS IsInferred,0 AS IsDeleted,SYSDATETIME() AS EffectiveDate,'31-DEC-9999' AS ExpiryDate,SYSDATETIME() AS [InsertDateTime],SYSDATETIME() AS [UpdateDateTime],? AS [BatchID],? AS [ProcessLogID]
                 FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
-				"+ varLookupJoinClause + @";";
+				"+ varLookupJoinClause + @";
+				SELECT @CountInsert = @@ROWCOUNT;
+				SELECT @CountInsert;";
             break;
             case "dm-t1":
                 varSqlMerge += @"
+				-- Declare
+				DECLARE @CountUpdate INT = 0;
+				DECLARE @CountInsert INT = 0;
+				DECLARE @CountDelete INT = 0; 
+
                 -- Update
                 UPDATE mt
                 SET
@@ -225,7 +238,8 @@
                 FROM " + varDatamartTableFull + @" mt
                 INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
                 ON " + varBKJoinClause + @"
-				AND mt.[CheckSum] &lt;> " + varCheckSumColumn  + @"
+				AND (mt.[CheckSum] &lt;> " + varCheckSumColumn  + @" OR mt.IsDeleted = 1);
+				SELECT @CountUpdate = @@ROWCOUNT;
                 
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
@@ -237,16 +251,18 @@
                 " + varDWHColumns  + @"
                 , " + varCheckSumColumn  + @", " + varCheckSumSCD1Column + @", " + varCheckSumSCD2Column + @",1 AS [IsActual],0 AS [IsInferred],0 AS [IsDeleted],SYSDATETIME() AS [EffectiveDate],'31-DEC-9999' AS [ExpiryDate],SYSDATETIME() AS [InsertDateTime],SYSDATETIME() AS [UpdateDateTime],? AS [BatchID],? AS [ProcessLogID]
                 FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
-                WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @") 
-                
+                WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @"); 
+                SELECT @CountInsert = @@ROWCOUNT;
+				
                 -- Delete
                 UPDATE mt
                 SET
                 [IsActual] = 0,[IsInferred] = 0,[IsDeleted] = 1,[ExpiryDate] = SYSDATETIME(),[UpdateDateTime] = SYSDATETIME(),[BatchID] = ?,[ProcessLogID] = ?
                 FROM " + varDatamartTableFull + @" mt
                 WHERE [IsDeleted] = 0
-                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
-                ";
+                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @");
+                SELECT @CountDelete = @@ROWCOUNT;
+				SELECT @CountUpdate, @CountInsert, @CountDelete";
             break;
             case "dm-t2":
                 varSqlMerge += @"
@@ -258,7 +274,8 @@
                 FROM " + varDatamartTableFull + @" mt
                 INNER JOIN " + varDWHConnection + "." + varDWHTableFull + @" ms
                 ON " + varBKJoinClause + @"
-				AND mt.[CheckSum] &lt;> " + varCheckSumColumn  + @"
+				AND (mt.[CheckSum] &lt;> " + varCheckSumColumn  + @" OR mt.IsDeleted = 1);
+				SELECT @CountUpdate = @@ROWCOUNT;
                 
                 -- Insert
                 INSERT INTO " + varDatamartTableFull + @"
@@ -267,15 +284,17 @@
                 , " + varCheckSumColumn  + @", " + varCheckSumSCD1Column + @", " + varCheckSumSCD2Column + @",1 AS [IsActual],0 AS [IsInferred],0 AS [IsDeleted],SYSDATETIME() AS [EffectiveDate],'31-DEC-9999' AS [ExpiryDate],SYSDATETIME() AS [InsertDateTime],SYSDATETIME() AS [UpdateDateTime],? AS [BatchID],? AS [ProcessLogID]
                 FROM " + varDWHConnection + "." + varDWHTableFull + @" ms
                 WHERE NOT EXISTS (SELECT NULL FROM " + varDatamartTableFull + @" mt WHERE " + varBKJoinClause + @") 
-                
+                SELECT @CountInsert = @@ROWCOUNT;
+				
                 -- Delete
                 UPDATE mt
                 SET
                 [IsActual] = 1,[IsInferred] = 0,[IsDeleted] = 1,[ExpiryDate] = SYSDATETIME(),[UpdateDateTime] = SYSDATETIME(),[BatchID] = ?,[ProcessLogID] = ?
                 FROM " + varDatamartTableFull + @" mt
                 WHERE [IsDeleted] = 0
-                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @")
-                ";
+                AND NOT EXISTS (SELECT NULL FROM " + varDWHConnection + "." + varDWHTableFull + @" ms WHERE " + varBKJoinClause + @");
+                SELECT @CountDelete = @@ROWCOUNT;
+				SELECT @CountUpdate, @CountInsert, @CountDelete";
             break;
         }
         #>
@@ -295,6 +314,9 @@
                 <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit">0</Variable>
                 <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
                 <Variable Name="LoadingType" DataType="String" Namespace="User"><#=varLoadingType#></Variable>
+				<Variable Name="CountInserted" DataType="Int64" Namespace="Count">0</Variable>
+				<Variable Name="CountUpdated" DataType="Int64" Namespace="Count">0</Variable>
+				<Variable Name="CountDeleted" DataType="Int64" Namespace="Count">0</Variable>
             </Variables>
             
             <Tasks>
@@ -340,7 +362,7 @@
                         switch (varLoadingType.ToLower()) {
                             case "dm-t1":
                             #>                              
-                                <ExecuteSQL Name="SQL Merge DM-T1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                <ExecuteSQL Name="SQL Merge DM-T1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
@@ -350,11 +372,16 @@
 										<Parameter Name="4"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
                                         <Parameter Name="5"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
                                     </Parameters>
+									<Results>
+										<Result Name="0" VariableName="Count.CountUpdated" />
+										<Result Name="1" VariableName="Count.CountInserted" />
+										<Result Name="2" VariableName="Count.CountDeleted" />
+									</Results>
                                 </ExecuteSQL>
                                 <#break;
                             case "dm-t2":
                             #>                              
-                                <ExecuteSQL Name="SQL Merge DM-T2 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                <ExecuteSQL Name="SQL Merge DM-T2 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
@@ -364,16 +391,24 @@
 										<Parameter Name="4"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
                                         <Parameter Name="5"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
                                     </Parameters>
+									<Results>
+										<Result Name="0" VariableName="Count.CountUpdated" />
+										<Result Name="1" VariableName="Count.CountInserted" />
+										<Result Name="2" VariableName="Count.CountDeleted" />
+									</Results>
                                 </ExecuteSQL>
                                 <#break;
                             case "dm-f1":
                             #>                              
-                                <ExecuteSQL Name="SQL INSERT DM-F1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="None" Disabled="false">
+                                <ExecuteSQL Name="SQL INSERT DM-F1 <#=varDatamartTable#>" ConnectionName ="<#=varDatamartConnection#>" ResultSet="SingleRow" Disabled="false">
                                     <DirectInput><#=varSqlMerge#></DirectInput>
                                     <Parameters>
                                         <Parameter Name="0"  VariableName="BatchID" Direction="Input"   DataType="Int64"/>
                                         <Parameter Name="1"  VariableName="Audit.AuditProcessLogID" Direction="Input"   DataType="Int64"/>
                                     </Parameters>
+									<Results>
+										<Result Name="0" VariableName="Count.CountInserted" />
+									</Results>
                                 </ExecuteSQL>
                                 <#break;
                         }#>
@@ -381,12 +416,15 @@
                 </Container>
                 
                 <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
-                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
+                    <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?,@RowCountInferred = ?,@RowCountNew = ?,@RowCountDeleted = ?</DirectInput>
                     <Parameters>
                         <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
                         <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
                         <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
                         <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+						<Parameter Name="4" VariableName="Count.CountUpdated" Direction="Input" DataType="Int64"/>
+						<Parameter Name="5" VariableName="Count.CountInserted" Direction="Input" DataType="Int64"/>
+						<Parameter Name="6" VariableName="Count.CountDeleted" Direction="Input" DataType="Int64"/>
                     </Parameters>
                 </ExecuteSQL>
             </Tasks>
