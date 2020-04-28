@@ -1,0 +1,1785 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="2/18/2015 9:36:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SR-BIT"
+  DTS:CreatorName="DMLINDERS\bi-dev"
+  DTS:DTSID="{4109AD15-19B9-4C3F-820F-5A5D6E9D3947}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1900.78"
+  DTS:LocaleID="1043"
+  DTS:ObjectName="GenXLSLoadMetadata ForeverData01"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="95"
+  DTS:VersionGUID="{69047500-E17D-4C84-BD40-171E9E22AB25}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[BIML Metadata]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{2A2B6187-3001-4C3C-ABE8-C8BCF7868F0C}"
+      DTS:ObjectName="BIML Metadata">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\fdodwhd01\StagingFiles\BimlBI\BiML metadata - ForeverData01.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{258426A9-AC33-4BBB-8C49-5CB37F20F916}"
+      DTS:ObjectName="BiMLMetadata_ConnectionString"
+      DTS:Required="True">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\\sr-bit.sk.janlinders.nl\DWH Work\Import\BiML metadata.xls;Extended Properties="Excel 8.0;HDR=YES";</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Generator_DataWarehouseColumn"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{F14D7EC3-7DA9-43B2-A78A-A9F22A9F4F02}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Generator_DataWarehouseColumn"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="DatawarehouseColumn"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">DatamartColumn$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[BIML Metadata]"
+                  connectionManagerRefId="Package.ConnectionManagers[BIML Metadata]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnName]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnName]"
+                      name="ColumnName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnType]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnType]"
+                      name="ColumnType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnPosition]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnPosition]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnPosition]"
+                      name="ColumnPosition"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnDefaultValue]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnDefaultValue]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnDefaultValue]"
+                      name="ColumnDefaultValue"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnInferredValue]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnInferredValue]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnInferredValue]"
+                      name="ColumnInferredValue"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnNotApplicableValue]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnNotApplicableValue]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnNotApplicableValue]"
+                      name="ColumnNotApplicableValue"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnUnknownValue]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnUnknownValue]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnUnknownValue]"
+                      name="ColumnUnknownValue"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupConnection]"
+                      name="LookupConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupSchema]"
+                      name="LookupSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupTable]"
+                      name="LookupTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupJoin]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupJoin]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupJoin]"
+                      name="LookupJoin"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupHasInferredMechanism]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupHasInferredMechanism]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupHasInferredMechanism]"
+                      name="LookupHasInferredMechanism"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartConnection]"
+                      name="DatamartConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartSchema]"
+                      name="DatamartSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartTable]"
+                      name="DatamartTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColum]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]"
+                      name="LookupColum"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnPosition]"
+                      dataType="r8"
+                      name="ColumnPosition" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnDefaultValue]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnDefaultValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnInferredValue]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnInferredValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnNotApplicableValue]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnNotApplicableValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[ColumnUnknownValue]"
+                      dataType="wstr"
+                      length="255"
+                      name="ColumnUnknownValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupJoin]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupJoin" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupHasInferredMechanism]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupHasInferredMechanism" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[DatamartTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].ExternalColumns[LookupColum]"
+                      dataType="wstr"
+                      length="255"
+                      name="LookupColum" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartConnection]"
+                      name="DatamartConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartSchema]"
+                      name="DatamartSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[DatamartTable]"
+                      name="DatamartTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnName]"
+                      name="ColumnName" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnType]"
+                      name="ColumnType" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnPosition]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnPosition]"
+                      name="ColumnPosition" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnDefaultValue]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnDefaultValue]"
+                      name="ColumnDefaultValue" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnInferredValue]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnInferredValue]"
+                      name="ColumnInferredValue" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnNotApplicableValue]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnNotApplicableValue]"
+                      name="ColumnNotApplicableValue" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnUnknownValue]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ColumnUnknownValue]"
+                      name="ColumnUnknownValue" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupConnection]"
+                      name="LookupConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupSchema]"
+                      name="LookupSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupTable]"
+                      name="LookupTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColum]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupColum]"
+                      name="LookupColum" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupJoin]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupJoin]"
+                      name="LookupJoin" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupHasInferredMechanism]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[LookupHasInferredMechanism]"
+                      name="LookupHasInferredMechanism" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_DatawarehouseColumn"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[ForeverData01Column]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Connections[OleDbConnection]"
+                  connectionManagerID="{F38DA573-C3D5-432C-A2CE-74F9D6909FC4}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWH_Control_DEV]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnName"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnName]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnType"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnType]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnPosition]"
+                      cachedDataType="r8"
+                      cachedName="ColumnPosition"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnPosition]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnPosition]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnDefaultValue]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnDefaultValue"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnDefaultValue]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnDefaultValue]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnInferredValue]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnInferredValue"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnInferredValue]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnInferredValue]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnNotApplicableValue]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnNotApplicableValue"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnNotApplicableValue]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnNotApplicableValue]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[ColumnUnknownValue]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ColumnUnknownValue"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnUnknownValue]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[ColumnUnknownValue]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupConnection"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupConnection]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupSchema"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupSchema]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupTable"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupTable]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupJoin]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupJoin"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupJoin]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupJoin]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupHasInferredMechanism]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupHasInferredMechanism"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupHasInferredMechanism]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupHasInferredMechanism]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[DatamartConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartConnection"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartConnection]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[DatamartSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartSchema"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartSchema]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[DatamartTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartTable"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTable]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[DatamartTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].Columns[LookupColum]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LookupColum"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupColum]"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output].Columns[LookupColum]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                      dataType="wstr"
+                      length="128"
+                      name="ColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnType]"
+                      dataType="wstr"
+                      length="10"
+                      name="ColumnType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnPosition]"
+                      dataType="i4"
+                      name="ColumnPosition" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnDefaultValue]"
+                      dataType="wstr"
+                      length="300"
+                      name="ColumnDefaultValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnInferredValue]"
+                      dataType="wstr"
+                      length="300"
+                      name="ColumnInferredValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnNotApplicableValue]"
+                      dataType="wstr"
+                      length="300"
+                      name="ColumnNotApplicableValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[ColumnUnknownValue]"
+                      dataType="wstr"
+                      length="300"
+                      name="ColumnUnknownValue" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="LookupConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="LookupSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="LookupTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupColum]"
+                      dataType="wstr"
+                      length="128"
+                      name="LookupColum" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupJoin]"
+                      dataType="wstr"
+                      length="300"
+                      name="LookupJoin" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[LookupHasInferredMechanism]"
+                      dataType="bool"
+                      name="LookupHasInferredMechanism" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartColumnID]"
+                      dataType="i2"
+                      name="DatamartColumnID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="DatamartConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="DatamartSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="DatamartTable" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Generator_DataWarehouseColumn.Paths[Excel Source Output]"
+              endId="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Generator_DataWarehouseTable"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{613FA982-4584-4A93-9A22-D94CF132817C}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Generator_DataWarehouseTable"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="DataWarehouseTable"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">DatamartTable$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[BIML Metadata]"
+                  connectionManagerRefId="Package.ConnectionManagers[BIML Metadata]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]"
+                      name="IsActive"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[LoadingType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[LoadingType]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[LoadingType]"
+                      name="LoadingType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHConnection]"
+                      name="DWHConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHSchema]"
+                      name="DWHSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHTable]"
+                      name="DWHTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[SourceType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[SourceType]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[SourceType]"
+                      name="SourceType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartConnection]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartConnection]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartConnection]"
+                      name="DatamartConnection"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartSchema]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartSchema]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartSchema]"
+                      name="DatamartSchema"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartTable]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartTable]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartTable]"
+                      name="DatamartTable"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[Generate]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]"
+                      name="Generate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[TableType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[TableType]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[TableType]"
+                      name="TableType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunSchedule]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]"
+                      name="RunSchedule"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam1]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]"
+                      name="RunParam1"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam2]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]"
+                      name="RunParam2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]"
+                      name="RunParam3"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Parent]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Parent]"
+                      name="Parent"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[IsActive]"
+                      dataType="r8"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[LoadingType]"
+                      dataType="wstr"
+                      length="255"
+                      name="LoadingType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="DWHConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="DWHSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DWHTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="DWHTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[SourceType]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartConnection]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartSchema]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[DatamartTable]"
+                      dataType="wstr"
+                      length="255"
+                      name="DatamartTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[Generate]"
+                      dataType="r8"
+                      name="Generate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[TableType]"
+                      dataType="wstr"
+                      length="255"
+                      name="TableType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunSchedule]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunSchedule" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam1]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam1" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam2]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam2" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[RunParam3]"
+                      dataType="wstr"
+                      length="255"
+                      name="RunParam3" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].ExternalColumns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      name="Parent" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHConnection]"
+                      name="DWHConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHSchema]"
+                      name="DWHSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DWHTable]"
+                      name="DWHTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[SourceType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[SourceType]"
+                      name="SourceType" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[TableType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[TableType]"
+                      name="TableType" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartConnection]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartConnection]"
+                      name="DatamartConnection" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartSchema]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartSchema]"
+                      name="DatamartSchema" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartTable]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[DatamartTable]"
+                      name="DatamartTable" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[LoadingType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[LoadingType]"
+                      name="LoadingType" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Parent]"
+                      name="Parent" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunSchedule]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunSchedule]"
+                      name="RunSchedule" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam1]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam1]"
+                      name="RunParam1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam2]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam2]"
+                      name="RunParam2" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[RunParam3]"
+                      name="RunParam3" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Generate]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[Generate]"
+                      name="Generate" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      dataType="r8"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[IsActive]"
+                      name="IsActive" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Generator_datawarehousetable"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Generator].[ForeverData01Table]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Connections[OleDbConnection]"
+                  connectionManagerID="{F38DA573-C3D5-432C-A2CE-74F9D6909FC4}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DWH_Control_DEV]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[IsActive]"
+                      cachedDataType="r8"
+                      cachedName="IsActive"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[IsActive]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[LoadingType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LoadingType"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[LoadingType]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[LoadingType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DWHConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DWHConnection"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHConnection]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DWHSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DWHSchema"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHSchema]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DWHTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DWHTable"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHTable]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DWHTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[SourceType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceType"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[SourceType]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[SourceType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DatamartConnection]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartConnection"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartConnection]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartConnection]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DatamartSchema]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartSchema"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartSchema]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartSchema]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[DatamartTable]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DatamartTable"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTable]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[DatamartTable]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[Generate]"
+                      cachedDataType="r8"
+                      cachedName="Generate"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Generate]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[TableType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TableType"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[TableType]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[TableType]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunSchedule]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunSchedule"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunSchedule]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunSchedule]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam1]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam1"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam1]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam1]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam2]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam2"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam2]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam2]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[RunParam3]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="RunParam3"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[RunParam3]" />
+                    <inputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].Columns[Parent]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Parent"
+                      externalMetadataColumnId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[Parents]"
+                      lineageId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output].Columns[Parent]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTableID]"
+                      dataType="i2"
+                      name="DatamartTableID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="DWHConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="DWHSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DWHTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="DWHTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[SourceType]"
+                      dataType="wstr"
+                      length="128"
+                      name="SourceType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[TableType]"
+                      dataType="wstr"
+                      length="1"
+                      name="TableType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartConnection]"
+                      dataType="wstr"
+                      length="50"
+                      name="DatamartConnection" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartSchema]"
+                      dataType="wstr"
+                      length="128"
+                      name="DatamartSchema" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[DatamartTable]"
+                      dataType="wstr"
+                      length="128"
+                      name="DatamartTable" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[LoadingType]"
+                      dataType="wstr"
+                      length="8"
+                      name="LoadingType" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[Generate]"
+                      dataType="bool"
+                      name="Generate" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[IsActive]"
+                      dataType="bool"
+                      name="IsActive" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunSchedule]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunSchedule" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam1]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam1" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam2]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam2" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[RunParam3]"
+                      dataType="wstr"
+                      length="256"
+                      name="RunParam3" />
+                    <externalMetadataColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input].ExternalColumns[Parents]"
+                      dataType="wstr"
+                      length="1000"
+                      name="Parents" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Generator_DataWarehouseTable.Paths[Excel Source Output]"
+              endId="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable.Inputs[OLE DB Destination Input]"
+              name="Excel Source Output"
+              startId="Package\Load Generator_DataWarehouseTable\DataWarehouseTable.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Metadata Tables"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{EA370054-A569-435E-9B05-DF5DFED4D175}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Metadata Tables"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F38DA573-C3D5-432C-A2CE-74F9D6909FC4}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE [Generator].[ForeverData01Column];&#xA;TRUNCATE TABLE [Generator].[ForeverData01Table];&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{85450DBB-0ADC-4594-9F5B-B554EE66B02A}"
+      DTS:From="Package\Truncate Metadata Tables"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Load Generator_DataWarehouseColumn" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{AE513000-D226-4BF2-8525-41AA5AB5B7BD}"
+      DTS:From="Package\Load Generator_DataWarehouseColumn"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Load Generator_DataWarehouseTable" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="270,42"
+          Id="Package\Load Generator_DataWarehouseColumn"
+          TopLeft="453,230.6" />
+        <NodeLayout
+          Size="260,42"
+          Id="Package\Load Generator_DataWarehouseTable"
+          TopLeft="453,320.4" />
+        <NodeLayout
+          Size="272,42"
+          Id="Package\Truncate Metadata Tables"
+          TopLeft="453,51" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="588.5,93">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,137.6"
+              Start="0,0"
+              End="0,130.1">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,130.1" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="585.5,272.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,47.8"
+              Start="0,0"
+              End="0,40.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,40.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load Generator_DataWarehouseColumn">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="240,42"
+          Id="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn"
+          TopLeft="522,139" />
+        <NodeLayout
+          Size="240,42"
+          Id="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn"
+          TopLeft="522,53" />
+        <EdgeLayout
+          Id="Package\Load Generator_DataWarehouseColumn.Paths[Excel Source Output]"
+          TopLeft="642,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_DataWarehouseColumn\DatawarehouseColumn">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_DataWarehouseColumn\Generator_DatawarehouseColumn">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Generator_DataWarehouseTable">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="232,42"
+          Id="Package\Load Generator_DataWarehouseTable\DataWarehouseTable"
+          TopLeft="522,53" />
+        <NodeLayout
+          Size="229,42"
+          Id="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable"
+          TopLeft="583,187" />
+        <EdgeLayout
+          Id="Package\Load Generator_DataWarehouseTable.Paths[Excel Source Output]"
+          TopLeft="638,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="59.5,92"
+              Start="0,0"
+              End="59.5,84.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,42" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,42"
+                    Point2="0,46"
+                    Point3="4,46" />
+                  <mssgle:LineSegment
+                    End="55.5,46" />
+                  <mssgle:CubicBezierSegment
+                    Point1="55.5,46"
+                    Point2="59.5,46"
+                    Point3="59.5,50" />
+                  <mssgle:LineSegment
+                    End="59.5,84.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_DataWarehouseTable\DataWarehouseTable">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Generator_DataWarehouseTable\Generator_datawarehousetable">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
