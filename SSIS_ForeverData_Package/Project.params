@@ -1,10 +1,31 @@
 <?xml version="1.0"?>
 <SSIS:Parameters xmlns:SSIS="www.microsoft.com/SqlServer/SSIS">
   <SSIS:Parameter
+    SSIS:Name="ConDWH">
+    <SSIS:Properties>
+      <SSIS:Property
+        SSIS:Name="ID">{af773523-8ae0-45c2-b113-9ca39c5733fb}</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="CreationName"></SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Description"></SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Required">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Sensitive">0</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="Value">Data Source=FDODWHD01\DWHDEV;Initial Catalog=DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
+      <SSIS:Property
+        SSIS:Name="DataType">18</SSIS:Property>
+    </SSIS:Properties>
+  </SSIS:Parameter>
+  <SSIS:Parameter
     SSIS:Name="ConDWH_Control">
     <SSIS:Properties>
       <SSIS:Property
-        SSIS:Name="ID">{e5f81731-6614-4217-ac29-9cad8bb9f260}</SSIS:Property>
+        SSIS:Name="ID">{09af2bee-e70c-4567-8932-d807b9ebace8}</SSIS:Property>
       <SSIS:Property
         SSIS:Name="CreationName"></SSIS:Property>
       <SSIS:Property
@@ -22,10 +43,10 @@
     </SSIS:Properties>
   </SSIS:Parameter>
   <SSIS:Parameter
-    SSIS:Name="ConStaging">
+    SSIS:Name="ConForeverData01">
     <SSIS:Properties>
       <SSIS:Property
-        SSIS:Name="ID">{42622bac-dd97-4008-b5d0-280fb9d64f6e}</SSIS:Property>
+        SSIS:Name="ID">{fc967133-532a-4ae9-86fa-c8828f5f9cc8}</SSIS:Property>
       <SSIS:Property
         SSIS:Name="CreationName"></SSIS:Property>
       <SSIS:Property
@@ -37,16 +58,16 @@
       <SSIS:Property
         SSIS:Name="Sensitive">0</SSIS:Property>
       <SSIS:Property
-        SSIS:Name="Value">Data Source=FDODWHD01\DWHDEV;Initial Catalog=Staging;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
+        SSIS:Name="Value">Data Source=FDODWHD01\DWHDEV;Initial Catalog=ForeverData01;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
       <SSIS:Property
         SSIS:Name="DataType">18</SSIS:Property>
     </SSIS:Properties>
   </SSIS:Parameter>
   <SSIS:Parameter
-    SSIS:Name="ServerName">
+    SSIS:Name="ConForeverData02">
     <SSIS:Properties>
       <SSIS:Property
-        SSIS:Name="ID">{24ddbaf6-cee8-457d-8dd0-6d16db2acfcb}</SSIS:Property>
+        SSIS:Name="ID">{9e4aa7db-26f7-4b03-9ccf-ee6b96a58f8d}</SSIS:Property>
       <SSIS:Property
         SSIS:Name="CreationName"></SSIS:Property>
       <SSIS:Property
@@ -58,16 +79,16 @@
       <SSIS:Property
         SSIS:Name="Sensitive">0</SSIS:Property>
       <SSIS:Property
-        SSIS:Name="Value">FDODWHD01</SSIS:Property>
+        SSIS:Name="Value">Data Source=FDODWHD01\DWHDEV;Initial Catalog=ForeverData02;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;</SSIS:Property>
       <SSIS:Property
         SSIS:Name="DataType">18</SSIS:Property>
     </SSIS:Properties>
   </SSIS:Parameter>
   <SSIS:Parameter
-    SSIS:Name="WaitTimes_1">
+    SSIS:Name="DWH_ServerName">
     <SSIS:Properties>
       <SSIS:Property
-        SSIS:Name="ID">{56f5efb3-66b8-421a-9861-e52aaa061b21}</SSIS:Property>
+        SSIS:Name="ID">{70e4519f-64e0-466b-8558-5f5cb21354db}</SSIS:Property>
       <SSIS:Property
         SSIS:Name="CreationName"></SSIS:Property>
       <SSIS:Property
@@ -79,70 +100,7 @@
       <SSIS:Property
         SSIS:Name="Sensitive">0</SSIS:Property>
       <SSIS:Property
-        SSIS:Name="Value">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">9</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="WaitTimes_2">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{e71675e1-0a89-4dba-aeef-36f0c9a39da3}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">9</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="WaitTimes_3">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{38858153-2337-4e27-ac4a-4442459266fc}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="DataType">9</SSIS:Property>
-    </SSIS:Properties>
-  </SSIS:Parameter>
-  <SSIS:Parameter
-    SSIS:Name="conSmartsheet">
-    <SSIS:Properties>
-      <SSIS:Property
-        SSIS:Name="ID">{7eb4483a-1203-4ebc-be70-0a507c8b2173}</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="CreationName"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Description"></SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Required">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Sensitive">0</SSIS:Property>
-      <SSIS:Property
-        SSIS:Name="Value">DSN=Smartsheet;Server=Smartsheet:bi@foreverdirect.eu;UID=bi@foreverdirect.eu;OPTIONS=8188;TYPERULE=1;PATHNAME=1;PWD=isl_smAIo6jucdw26rS94Ch</SSIS:Property>
+        SSIS:Name="Value">FDODWHD01\DWHDEV</SSIS:Property>
       <SSIS:Property
         SSIS:Name="DataType">18</SSIS:Property>
     </SSIS:Properties>

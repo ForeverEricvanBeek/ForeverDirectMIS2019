@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="DWH_Control"
+  DTS:DTSID="{42110862-18F7-4506-8F8A-128B0F779B3D}"
+  DTS:CreationName="OLEDB">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::ConDWH_Control]</DTS:PropertyExpression>
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="data source=FDODWHD01\DWHDEV;initial catalog=DWH_Control;provider=SQLNCLI11.1;integrated security=SSPI;auto translate=False;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>
