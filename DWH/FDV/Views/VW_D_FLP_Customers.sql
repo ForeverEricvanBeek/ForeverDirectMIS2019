@@ -13,8 +13,8 @@ SELECT CI.[CUSTOMER_ID] Customer_ID
 	  ,isnull(CP.Eff_Date,'1965-04-26') as Start_Date_Price_List
       ,CI.[PARTY] Party
      
-      FROM [DWH].[IFS].[CUSTOMER_INFO] CI
-	  left join [DWH].[IFS].[CUSTOMER_PRICELIST] CP
+      FROM [IFS].[CUSTOMER_INFO] CI
+	  left join [IFS].[CUSTOMER_PRICELIST] CP
 	  on CP.CUSTOMER_NO=CI.CUSTOMER_ID
 	  and CP.ActInd='Y'
 	  and CP.IsDeleted='N'

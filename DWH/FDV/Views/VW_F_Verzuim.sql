@@ -11,7 +11,7 @@ AS
       ,VL.Omschrijving
       ,VL.EinddatumVerzuim
 	
-  FROM DWH.AFAS.DWH_Medewerker_verzuimverloop VL
+  FROM AFAS.DWH_Medewerker_verzuimverloop VL
   WHERE VL.ActInd='Y'
 
 )
@@ -31,7 +31,7 @@ AS
 	
   FROM  CTE_INT C_INT
   
-  INNER JOIN DWH.AFAS.DWH_Medewerker_verzuimmelding VM
+  INNER JOIN AFAS.DWH_Medewerker_verzuimmelding VM
   ON
   C_INT.VerzuimmeldingID = VM.VerzuimmeldingID
   AND VM.ActInd='Y' 
@@ -63,20 +63,20 @@ AS
  
   FROM CTE_1 C1 
   
-  LEFT JOIN DWH.AFAS.DWH_Medewerker_Roosters MR
+  LEFT JOIN AFAS.DWH_Medewerker_Roosters MR
   ON
   MR.Medewerker=C1.Medewerker
   AND
   C1.DatumTijd BETWEEN MR.BegindatumRooster AND ISNULL(MR.EinddatumRooster,CAST(GETDATE() AS DATE)) 
   AND MR.ActInd='Y'
   
-  LEFT JOIN DWH.AFAS.DWH_Medewerker_Orgeenheid_functie MF
+  LEFT JOIN AFAS.DWH_Medewerker_Orgeenheid_functie MF
   ON
   C1.Medewerker=MF.Medewerker
   AND C1.DatumTijd BETWEEN MF.Begindatum AND ISNULL(MF.Einddatum,CAST(GETDATE() AS DATE))
   AND MF.ActInd='Y' 
  
-  LEFT JOIN DWH.AFAS.DWH_Medewerker_Contracten MC
+  LEFT JOIN AFAS.DWH_Medewerker_Contracten MC
   ON
   C1.Medewerker=MC.Medewerker
   AND C1.DatumTijd BETWEEN  MC.DatumBeginContract AND ISNULL(MC.DatumEindContract,CAST(GETDATE() AS DATE)))

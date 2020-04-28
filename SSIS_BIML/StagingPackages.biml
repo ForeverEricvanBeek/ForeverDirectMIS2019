@@ -11,6 +11,7 @@
     <!-- declare packages -->
     <Packages>
         <# // PrimaryKey constraint wordt per tabel opgehaald.
+		int packageToDo = 0;
         string sqlSourceExtractionTable = @"with COLUMN_CONSTRAINTS(TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
                                             AS (
                                                 select TC.TABLE_SCHEMA COLLATE SQL_Latin1_General_CP1_CS_AS, TC.TABLE_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  , COLUMN_NAME COLLATE SQL_Latin1_General_CP1_CS_AS  
@@ -60,6 +61,7 @@
         DataTable tableSourceExtractionTable = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlSourceExtractionTable);
         foreach (DataRow rowSourceExtractionTable in tableSourceExtractionTable.Rows)
         {
+			packageToDo = packageToDo + 1;
             string varExtractionSourceConnection = rowSourceExtractionTable["SourceConnection"].ToString();
             string varExtractionSourceSchema = rowSourceExtractionTable["SourceSchema"].ToString();
             string varExtractionSourceTable = rowSourceExtractionTable["SourceTable"].ToString();
@@ -311,7 +313,7 @@
                         <Parameters>
                             <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
                             <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
-                            <Parameter Name="2" VariableName="BatchID" Direction="Input"   DataType="Int64"/>
+                            <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
                             <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
@@ -348,7 +350,7 @@
                             <#string varTaskName = "Dataflow Extract " + varName;
                             string varSQLPackageTaskColumn = @"SELECT [ColumnName],[ColumnId] FROM [dbo].[PackageTaskColumn] WHERE [PackageName] = '" + varPackageName + @"' AND [TaskName] = '" + varTaskName + @"'";
     
-                            if (varExtractionSourceType == "CSV_L" | varExtractionSourceType == "XML_Kewill") {
+                            if (varExtractionSourceType == "CSV_L" || varExtractionSourceType == "XML_Kewill") {
                                 string ConnectionStringCSV =  @"@[$Project::DirImport]" + @"+"""+ varExtractionConnectionString.Replace("\\","\\\\") + @"""";
                                 string folder =  ConnectionStringCSV.Substring(0,ConnectionStringCSV.LastIndexOf("\\")+1) + @"""";
                                 string file =  @""""+ConnectionStringCSV.Substring(ConnectionStringCSV.LastIndexOf("\\")+1 );
@@ -743,7 +745,7 @@
                         </Parameters>
                     </ExecuteSQL>
                 </Tasks>
-                <#if (varExtractionSourceType == "XML_Kewill" | varExtractionSourceType == "XML_AFAS") {#>
+                <#if (varExtractionSourceType == "XML_Kewill" || varExtractionSourceType == "XML_AFAS") {#>
                     <Connections>
                         <Connection ConnectionName="<#=varExtractionSourceConnection#>_XSD">
                             <Expressions><Expression PropertyName="<#=varExtractionSourceConnection#>_XSD.ConnectionString"><#=ConnectionStringXSD2#></Expression></Expressions>
@@ -809,6 +811,8 @@
                     <Variable Name="AuditProcessLogID" DataType="Int64" Namespace="Audit">0</Variable>
                     <Variable Name="AuditBatchID" DataType="Int64" Namespace="Audit" >-1</Variable>
                     <Variable Name="PackageName" DataType="String" Namespace="User"><#=varPackageName#></Variable>
+					<Variable Name="packageToDo" DataType="Int32" Namespace="User"><#=packageToDo#></Variable>
+					<Variable Name="packageDone" DataType="Int32" Namespace="User">0</Variable>
                 </Variables>
                 
                 <Tasks>

@@ -28,7 +28,7 @@ SELECT
 		  ELSE UPPER(CODE_DESC)
 		  END AS Vas_TI_Description
      
-  FROM [DWH].[MANH].[SYS_CODE]
+  FROM [MANH].[SYS_CODE]
   WHERE CODE_TYPE = 'VAT'
   AND ActInd = 'Y'
   UNION ALL

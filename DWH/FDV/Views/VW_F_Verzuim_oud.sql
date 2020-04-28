@@ -13,7 +13,7 @@ AS
       ,VL.[Omschrijving]
       ,VL.[EinddatumVerzuim]
 	
-  FROM DWH.AFAS.DWH_Medewerker_verzuimverloop VL
+  FROM AFAS.DWH_Medewerker_verzuimverloop VL
   where VL.ActInd='Y'
 
 )
@@ -33,7 +33,7 @@ AS
 	
   FROM  CTE_INT C_INT
   
-  join DWH.AFAS.DWH_Medewerker_verzuimmelding VM
+  join AFAS.DWH_Medewerker_verzuimmelding VM
   on 
   C_INT.VerzuimmeldingID=VM.VerzuimmeldingID
   and VM.ActInd='Y'
@@ -65,20 +65,20 @@ AS
  
   from CTE_1 C1 
   
-  left join [DWH].[AFAS].[DWH_Medewerker_Roosters] MR
+  left join [AFAS].[DWH_Medewerker_Roosters] MR
   on
   MR.Medewerker=C1.Medewerker
   and
   C1.DatumTijd between MR.BegindatumRooster and isnull(MR.EinddatumRooster, cast(getdate() as date)) 
   and MR.ActInd='Y'
   
-  left join [DWH].[AFAS].[DWH_Medewerker_Orgeenheid_functie] MF
+  left join [AFAS].[DWH_Medewerker_Orgeenheid_functie] MF
   on
   C1.Medewerker=MF.Medewerker
   and C1.DatumTijd between MF.Begindatum and ISNULL(MF.Einddatum,cast(getdate() as date))
   and MF.ActInd='Y' 
  
-  left join [DWH].[AFAS].[DWH_Medewerker_Contracten] MC
+  left join [AFAS].[DWH_Medewerker_Contracten] MC
   on
   C1.Medewerker=MC.Medewerker
   and C1.DatumTijd between  MC.DatumBeginContract and isnull(MC.DatumEindContract,cast(getdate() as date)))

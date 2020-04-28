@@ -46,7 +46,7 @@ SELECT
       ,[Complaint_UpdatedDate]
       ,[Complaint_UpdatedBy]
 
- FROM [DWH].[WEB].[Complaint]
+ FROM [WEB].[Complaint]
 	 WHERE ActInd = 'Y'
 			AND IsDeleted = 'N'
 UNION ALL

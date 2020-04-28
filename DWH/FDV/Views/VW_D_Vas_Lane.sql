@@ -23,7 +23,7 @@ SELECT
 			ELSE 'UNKNOWN'
    		    END AS Vas_Lane_Description
       
-  FROM [DWH].[MANH].[WORK_ORD_HDR]
+  FROM [MANH].[WORK_ORD_HDR]
   WHERE ActInd='Y'
   UNION ALL 
   SELECT '-1', NULL

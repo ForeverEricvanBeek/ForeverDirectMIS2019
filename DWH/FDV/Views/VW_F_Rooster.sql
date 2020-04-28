@@ -23,8 +23,8 @@ SELECT MF.[Medewerker]
 	  ,sum([VolgnummerOrganisatorischeEenheidFunctie]) over (partition by MF.Medewerker) as RN
 	  
       
-  FROM [DWH].[AFAS].[DWH_Medewerker_Orgeenheid_functie] MF
-  full outer join [DWH].[AFAS].[DWH_Medewerker_Roosters] MR
+  FROM [AFAS].[DWH_Medewerker_Orgeenheid_functie] MF
+  full outer join [AFAS].[DWH_Medewerker_Roosters] MR
   on 
   MF.Medewerker=MR.Medewerker
  
@@ -64,7 +64,7 @@ SELECT MF.[Medewerker]
   ,MC.SoortMedewerkerCode 
    
   from CTE_1 C1
-  left join [DWH].[AFAS].[DWH_Medewerker_Contracten] MC
+  left join [AFAS].[DWH_Medewerker_Contracten] MC
 		on
 		C1.Medewerker=MC.Medewerker
 		and case when C1.Begindatum <= C1.BegindatumRooster  then C1.BegindatumRooster else C1.Begindatum end >=  MC.DatumBeginContract
