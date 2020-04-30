@@ -14,6 +14,7 @@
             string varDatamartConnection = rowDatamartSchemas["DatamartConnection"].ToString();
             string varDatamartSchema = rowDatamartSchemas["DatamartSchema"].ToString();
             string varOverallPackageName = "CTRL-Swap-" + varDatamartConnection + "-" + varDatamartSchema + "-Total";
+			string varOverallPackageName2 = "CTRL-Update-" + varDatamartConnection + "-" + varDatamartSchema + "-Total";
             string varName = varDatamartConnection + "-" + varDatamartSchema;
 			
             string sqlDatamartPackages = @"SELECT [DatamartConnection],[DatamartSchema],[DatamartTable], st.RunParam1, st.RunParam2, st.RunParam3, st.RunSchedule, st.TableType, st.LoadingType FROM [Generator].[" + Schema + @"Table] st WHERE [DatamartConnection] = '" + varDatamartConnection + @"' AND [DatamartSchema] = '" + varDatamartSchema + @"' AND [TableType] IN ('D','DF','F') AND [IsActive] =  1 ORDER BY [DatamartTable]";
@@ -74,32 +75,27 @@
 									case "dm-f1":
 										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
 										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "dm-t1":
 										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
 										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "dm-t2":
 										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
 										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										TRUNCATE TABLE Shadow." + varDatamartTable + @";";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "i-ss":
 										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
 										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										DELETE FROM Shadow." + varDatamartTable + @";";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 										break;
 									case "ti":
 										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
 										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
-										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";
-										DELETE FROM Shadow." + varDatamartTable + @";";
+										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 										break;
 								}
 							#>
@@ -111,6 +107,77 @@
 						<#}#>
                         </Tasks>
 					</Container>
+                    <ExecuteSQL Name="SQL Finish Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditActionFinish" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                        </Parameters>
+                    </ExecuteSQL>
+                </Tasks>
+                
+                <Events>
+                    <Event Name="Package Error" ConstraintMode="Linear" EventType="OnError">
+                        <Tasks>
+                            <ExecuteSQL Name="SQL Error Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="None">
+                                <DirectInput>exec [Logging].[PrcLogMessage]@ProcessLogID = ?,@BatchID = ?,@SourceName = ?,@EventCode = ?,@EventDescription = ?</DirectInput>
+                                <Parameters>
+                                    <Parameter Name="0" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="1" VariableName="Audit.AuditBatchID" Direction="Input" DataType="Int64"/>
+                                    <Parameter Name="2" VariableName="System.PackageName" Direction="Input" DataType="String"/>
+                                    <Parameter Name="3" VariableName="System.ErrorCode" Direction="Input" DataType="Int32"/>
+                                    <Parameter Name="4" VariableName="System.ErrorDescription" Direction="Input" DataType="String" />
+                                </Parameters>
+                            </ExecuteSQL>
+                        </Tasks>
+                    </Event>
+                </Events>
+            </Package>
+			<Package Name="<#=varOverallPackageName2#>" ConstraintMode="Linear" AutoCreateConfigurationsType="None" ProtectionLevel="<#=ProjectProtectionLevel#>" >
+                <Parameters>
+                    <Parameter Name="BatchID" DataType="Int64">-1</Parameter>
+                    <Parameter Name="ProcessLogParentID" DataType="Int64">0</Parameter>
+                </Parameters>
+    
+                <Variables>
+                    <Variable Name="AuditActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionStart" DataType="String" Namespace="Audit">S</Variable>
+                    <Variable Name="AuditBatchActionNone" DataType="String" Namespace="Audit">N</Variable>
+                    <Variable Name="AuditBatchActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditBatchActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionFinish" DataType="String" Namespace="Audit">F</Variable>
+                    <Variable Name="AuditActionError" DataType="String" Namespace="Audit">E</Variable>
+                    <Variable Name="AuditProcessLogID" DataType="Int64"  Namespace="Audit">0</Variable>
+                    <Variable Name="AuditBatchID" DataType="Int64"  Namespace="Audit">-1</Variable>
+                    <Variable Name="PackageName" DataType="String" Namespace="User"><#=varOverallPackageName2#></Variable>
+                </Variables>
+    
+                <Tasks>
+                    <ExecuteSQL Name="SQL Start Audit Package <#=varName#>" ConnectionName ="<#=SystemConnection#>" ResultSet="SingleRow">
+                        <DirectInput>EXECUTE [Logging].[PrcLoggingPackageExecution] @Action = ?,@BatchAction = ?,@BatchID = ?,@ProcessLogParentID = ?,@ProcessLogID = ?,@PackageName = ?,@SysPkgID = ?,@SysPkgName = ?,@SysPkgVersionGUID = ?	,@SysPkgVersionMajor = ?,@SysPkgVersionMinor = ?,@SysPkgExecutionMachineName = ?,@SysPkgExecutionUserName = ?,@SysPkgExecutionInstanceGUID = ?</DirectInput>
+                        <Parameters>
+                            <Parameter Name="0" VariableName="Audit.AuditActionStart" Direction="Input" DataType="String"/>
+                            <Parameter Name="1" VariableName="Audit.AuditBatchActionNone" Direction="Input" DataType="String"/>
+                            <Parameter Name="2" VariableName="BatchID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="3" VariableName="ProcessLogParentID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="4" VariableName="Audit.AuditProcessLogID" Direction="Input" DataType="Int64"/>
+                            <Parameter Name="5" VariableName="User.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="6" VariableName="System.PackageID" Direction="Input" DataType="String" />
+                            <Parameter Name="7" VariableName="System.PackageName" Direction="Input" DataType="String" />
+                            <Parameter Name="8" VariableName="System.VersionGUID" Direction="Input" DataType="String" />
+                            <Parameter Name="9" VariableName="System.VersionMajor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="10" VariableName="System.VersionMinor" Direction="Input" DataType="Int32" />
+                            <Parameter Name="11" VariableName="System.MachineName" Direction="Input" DataType="String" />
+                            <Parameter Name="12" VariableName="System.UserName" Direction="Input" DataType="String" />
+                            <Parameter Name="13" VariableName="System.ExecutionInstanceGUID" Direction="Input" DataType="String" />
+                        </Parameters>
+                        <Results>
+                            <Result Name="0" VariableName="Audit.AuditBatchID" />
+                            <Result Name="1" VariableName="Audit.AuditProcessLogID" />
+                        </Results>
+                    </ExecuteSQL>
 					<Container Name="SC Insert <#=varName#>" ConstraintMode="Parallel">
 						<Tasks>
 						<#foreach (DataRow rowDatamartPackages in tableDatamartPackages.Rows) { 
@@ -144,7 +211,8 @@
 								string varInsertSQLStatement = "";
 								switch (varLoadingType.ToLower()) {
 									case "dm-f1":
-										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = @"TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -155,7 +223,8 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "dm-t1":
-										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = @"TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -166,7 +235,8 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "dm-t2":
-										varInsertSQLStatement = varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
+										varInsertSQLStatement = @"TRUNCATE TABLE Shadow." + varDatamartTable + @";
+										" + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" ON;
 										" + varIdentityInsert + @"GO
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
@@ -177,14 +247,16 @@
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "i-ss":
-										varInsertSQLStatement = @"INSERT INTO Shadow." + varDatamartTable + @"
+										varInsertSQLStatement = @"DELETE FROM Shadow." + varDatamartTable + @";
+										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
 										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms";
 										break;
 									case "ti":
-										varInsertSQLStatement = @"INSERT INTO Shadow." + varDatamartTable + @"
+										varInsertSQLStatement = @"DELETE FROM Shadow." + varDatamartTable + @";
+										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"

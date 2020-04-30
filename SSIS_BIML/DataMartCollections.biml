@@ -209,6 +209,15 @@
                     FROM [Generator].[" + Schema + @"Table] 
                     WHERE [TableType] IN ('D','DF')
                     AND [IsActive] = 1
+					UNION
+                    SELECT DISTINCT 
+                              [DatamartConnection]
+                             ,[DatamartSchema]
+                             ,'Total'
+                             ,'CTRL-Update'
+                    FROM [Generator].[" + Schema + @"Table] 
+                    WHERE [TableType] IN ('D','DF')
+                    AND [IsActive] = 1
                    ";
                 DataTable SSISPackages = ExternalDataAccess.GetDataTable(conGeneratorConnectionString, sqlPackage);
                 foreach (DataRow SSISPackage in SSISPackages.Rows) {
