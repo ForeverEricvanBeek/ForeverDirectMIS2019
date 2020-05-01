@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="Smartsheet"
+  DTS:DTSID="{E419D1F3-FEF2-4C45-8C57-EFB20B32BB82}"
+  DTS:CreationName="ODBC">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::ConSmartsheet]</DTS:PropertyExpression>
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="server=Smartsheet: bi@foreverdirect.eu;uid=bi@foreverdirect.eu;Dsn=Smartsheet;options=8188;typerule=1;pathname=1;">
+      <DTS:Password
+        DTS:Name="pwd"
+        Sensitive="1"></DTS:Password>
+    </DTS:ConnectionManager>
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

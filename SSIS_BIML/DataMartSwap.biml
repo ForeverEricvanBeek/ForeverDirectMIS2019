@@ -73,28 +73,28 @@
 								string varSwapSQLStatement = "";
 								switch (varLoadingType.ToLower()) {
 									case "dm-f1":
-										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER DM." + varDatamartTable + @";
+										ALTER SCHEMA DM TRANSFER Shadow." + varDatamartTable + @";
 										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "dm-t1":
-										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER DM." + varDatamartTable + @";
+										ALTER SCHEMA DM TRANSFER Shadow." + varDatamartTable + @";
 										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "dm-t2":
-										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER DM." + varDatamartTable + @";
+										ALTER SCHEMA DM TRANSFER Shadow." + varDatamartTable + @";
 										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 									break;
 									case "i-ss":
-										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER DM." + varDatamartTable + @";
+										ALTER SCHEMA DM TRANSFER Shadow." + varDatamartTable + @";
 										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 										break;
 									case "ti":
-										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER " + varDatamartSchema + "." + varDatamartTable + @";
-										ALTER SCHEMA " + varDatamartSchema + @" TRANSFER Shadow." + varDatamartTable + @";
+										varSwapSQLStatement = @"ALTER SCHEMA Swap TRANSFER DM." + varDatamartTable + @";
+										ALTER SCHEMA DM TRANSFER Shadow." + varDatamartTable + @";
 										ALTER SCHEMA Shadow TRANSFER Swap." + varDatamartTable + @";";
 										break;
 								}
@@ -218,7 +218,7 @@
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
-										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  FROM DM." + varDatamartTable + @" ms
 										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
 										  " + varIdentityInsert + @"GO";
 									break;
@@ -230,7 +230,7 @@
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
-										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  FROM DM." + varDatamartTable + @" ms
 										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
 										  " + varIdentityInsert + @"GO";
 									break;
@@ -242,25 +242,25 @@
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
-										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms
+										  FROM DM." + varDatamartTable + @" ms
 										  " + varIdentityInsert + @"SET IDENTITY_INSERT Shadow." + varDatamartTable + @" OFF;
 										  " + varIdentityInsert + @"GO";
 									break;
 									case "i-ss":
-										varInsertSQLStatement = @"DELETE FROM Shadow." + varDatamartTable + @";
+										varInsertSQLStatement = @"TRUNCATE TABLE Shadow." + varDatamartTable + @";
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
-										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms";
+										  FROM DM." + varDatamartTable + @" ms";
 										break;
 									case "ti":
-										varInsertSQLStatement = @"DELETE FROM Shadow." + varDatamartTable + @";
+										varInsertSQLStatement = @"TRUNCATE TABLE Shadow." + varDatamartTable + @";
 										INSERT INTO Shadow." + varDatamartTable + @"
 											(" + varDatamartColumns + @")
 										SELECT 
 											  " + varDatamartColumns + @"
-										  FROM " + varDatamartSchema + "." + varDatamartTable + @" ms";
+										  FROM DM." + varDatamartTable + @" ms";
 										break;
 								}#>					
 						
