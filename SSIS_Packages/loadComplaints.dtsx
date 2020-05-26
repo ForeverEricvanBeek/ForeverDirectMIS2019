@@ -12,8 +12,8 @@
   DTS:ObjectName="loadComplaints"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="119"
-  DTS:VersionGUID="{6DD171D9-8AB3-43C1-9477-36ACC77CB10D}">
+  DTS:VersionBuild="120"
+  DTS:VersionGUID="{E29806CA-B833-4CA8-86F3-04785231DB39}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -499,6 +499,28 @@
                               description="Derived Column Friendly Expression"
                               expressionType="Notify"
                               name="FriendlyExpression">(DT_WSTR,255)PosNumber</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Updated_Date]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Updated_Date]"
+                          name="Updated_Date"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[GETDATE]()</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">GETDATE()</property>
                           </properties>
                         </outputColumn>
                       </outputColumns>
@@ -1313,6 +1335,12 @@
                           cachedName="PosNumberOrig"
                           externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_PosOrig]"
                           lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[PosNumberOrig]" />
+                        <inputColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Updated_Date]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="Updated_Date"
+                          externalMetadataColumnId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_UpdatedDate]"
+                          lineageId="Package\loop through complaints\extract data\Derived Column.Outputs[Derived Column Output].Columns[Updated_Date]" />
                       </inputColumns>
                       <externalMetadataColumns
                         isUsed="True">
@@ -1490,6 +1518,26 @@
                           dataType="wstr"
                           length="255"
                           name="Complaint_UpdatedBy" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_DetailsShort]"
+                          dataType="wstr"
+                          length="4000"
+                          name="Complaint_DetailsShort" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_DetailsTranslated]"
+                          dataType="wstr"
+                          length="4000"
+                          name="Complaint_DetailsTranslated" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_Facility_Orig]"
+                          dataType="wstr"
+                          length="50"
+                          name="Complaint_Facility_Orig" />
+                        <externalMetadataColumn
+                          refId="Package\loop through complaints\extract data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Complaint_IncompleteDesc]"
+                          dataType="wstr"
+                          length="4000"
+                          name="Complaint_IncompleteDesc" />
                       </externalMetadataColumns>
                     </input>
                   </inputs>
@@ -1552,36 +1600,6 @@
               Language="CSharp"
               ReadOnlyVariables="User::filePath,User::workingfiletemp"
               ReadWriteVariables="User::workingfilename">
-              <ProjectItem
-                Name="Properties\AssemblyInfo.cs"
-                Encoding="UTF8"><![CDATA[using System.Reflection;
-using System.Runtime.CompilerServices;
-
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
-[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
-[assembly: AssemblyCopyright("Copyright @  2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
-
-[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Resources.resx"
                 Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
@@ -1701,6 +1719,35 @@ using System.Runtime.CompilerServices;
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 </root>]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Settings.Designer.cs"
+                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_f1b41172c66a4ffbabb05ccfbc392398.Properties.Settings.get_Default():ST_f1b41172c66a4ffbabb05ccfbc392398.Properties.Sett" +
+    "ings")]
+
+namespace ST_f1b41172c66a4ffbabb05ccfbc392398.Properties {
+    
+    
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
+        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+        private static Settings defaultInstance = new Settings();
+        
+        public static Settings Default {
+            get {
+                return defaultInstance;
+            }
+        }
+    }
+}]]></ProjectItem>
               <ProjectItem
                 Name="ScriptMain.cs"
                 Encoding="UTF8"><![CDATA[using System;
@@ -1852,34 +1899,35 @@ namespace ST_f1b41172c66a4ffbabb05ccfbc392398
 	</msb:ItemGroup>
 </c:Project>]]></ProjectItem>
               <ProjectItem
-                Name="Properties\Settings.Designer.cs"
-                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
-// <auto-generated>
-//     This code was generated by a tool.
+                Name="Properties\AssemblyInfo.cs"
+                Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
 //
-//     Changes to this file may cause incorrect behavior and will be lost if
-//     the code is regenerated.
-// </auto-generated>
-//------------------------------------------------------------------------------
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_f1b41172c66a4ffbabb05ccfbc392398")]
+[assembly: AssemblyCopyright("Copyright @  2018")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
 
-[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_f1b41172c66a4ffbabb05ccfbc392398.Properties.Settings.get_Default():ST_f1b41172c66a4ffbabb05ccfbc392398.Properties.Sett" +
-    "ings")]
-
-namespace ST_f1b41172c66a4ffbabb05ccfbc392398.Properties {
-    
-    
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
-        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        private static Settings defaultInstance = new Settings();
-        
-        public static Settings Default {
-            get {
-                return defaultInstance;
-            }
-        }
-    }
-}]]></ProjectItem>
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
               <ProjectItem
                 Name="Properties\Settings.settings"
                 Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
